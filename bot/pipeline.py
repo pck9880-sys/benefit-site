@@ -229,6 +229,8 @@ def benefit_ready():
 def tick():
     from . import contest
     st = load_state()
+    st["check"] = {"telegram_token_loaded": telegram.enabled(),  # 값은 기록하지 않고 읽혔는지만
+                   "anthropic_key_loaded": bool(config.ANTHROPIC_API_KEY), "at": now().isoformat(timespec="minutes")}
     try:
         handle_updates(st)  # 텔레그램 주인 등록·명령어는 항상 처리
         if benefit_ready():
