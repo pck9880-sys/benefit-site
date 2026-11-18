@@ -5,15 +5,28 @@
  "paused": false,
  "force_generate": false,
  "cost": {
-  "2026-11": 1.89585
+  "2026-11": 2.28326
  },
  "used_ids": [],
- "contest_seen": [],
- "contest_force": true,
+ "contest_seen": [
+  "202611180019",
+  "202611170025",
+  "202611120010",
+  "202611110048",
+  "202611100046",
+  "202611100043",
+  "202611020048",
+  "202611090006",
+  "202611080007",
+  "202611080006",
+  "202611050027",
+  "202611040021"
+ ],
+ "contest_force": false,
  "check": {
   "telegram_token_loaded": true,
   "anthropic_key_loaded": true,
-  "at": "2026-11-18T21:48+09:00"
+  "at": "2026-11-18T22:00+09:00"
  },
- "contest_limit_once": 1
+ "contest_last_date": "2026-11-18"
 }
