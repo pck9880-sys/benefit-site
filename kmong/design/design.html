@@ -21,6 +21,19 @@ img.c{display:block;border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.45)}
 #main .cards{position:absolute;right:-30px;bottom:-40px;width:330px;height:330px}
 #main .cards img{position:absolute;width:150px}
 
+
+/* ===== 정사각 대표 이미지 600x600 ===== */
+#mainsq{width:600px;height:600px;background:#0d0d0d;color:#fff;position:relative;overflow:hidden}
+#mainsq .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:30px 30px}
+#mainsq .txt{position:absolute;left:0;right:0;top:40px;text-align:center;z-index:2}
+#mainsq .logo{display:inline-flex;align-items:center;gap:8px;font-size:15px;color:#bbb;margin-bottom:16px}
+#mainsq .logo b{width:28px;height:28px;border-radius:50%;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-size:12px}
+#mainsq h1{font-size:50px;line-height:1.16;font-weight:900}
+#mainsq h1 em{font-style:normal;background:#fff;color:#000;padding:0 8px;border-radius:6px}
+#mainsq p{margin-top:14px;font-size:17px;color:#bdbdbd;font-weight:600}
+#mainsq .cards{position:absolute;left:0;right:0;bottom:-70px;height:330px}
+#mainsq .cards img{position:absolute;width:190px}
+
 /* ===== 상세 이미지 (860 폭) ===== */
 .sec{width:860px;padding:90px 70px;position:relative;overflow:hidden}
 .dark{background:#0d0d0d;color:#fff}.light{background:#fff;color:#111}.gray{background:#f3f3f3;color:#111}
@@ -101,6 +114,21 @@ table.price{width:100%;border-collapse:separate;border-spacing:0;margin-top:40px
     <img class="c" src="A1.png" style="left:0;top:60px;transform:rotate(-10deg)">
     <img class="c" src="C1.png" style="left:150px;top:70px;transform:rotate(9deg)">
     <img class="c" src="B1.png" style="left:72px;top:20px;z-index:2">
+  </div>
+</div>
+
+
+<div id="mainsq">
+  <div class="grid"></div>
+  <div class="txt">
+    <div class="logo"><b class="wm">m</b><span class="wm" style="font-size:19px;color:#fff">modeun</span> · 6년차 디자이너</div>
+    <h1>인스타 카드뉴스<br><em>원고까지</em> 한 번에</h1>
+    <p>기획 · 원고 · 누끼 · 디자인 · 24시간 내 초안</p>
+  </div>
+  <div class="cards">
+    <img class="c" src="A1.png" style="left:55px;top:50px;transform:rotate(-12deg)">
+    <img class="c" src="C1.png" style="right:55px;top:50px;transform:rotate(12deg)">
+    <img class="c" src="B1.png" style="left:205px;top:0;z-index:2">
   </div>
 </div>
 
