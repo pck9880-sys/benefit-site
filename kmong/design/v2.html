@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&family=Archivo+Black&family=Gaegu:wght@700&display=swap">
+<style>
+@page{size:1080px 1350px;margin:0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Pretendard,sans-serif;background:#666;letter-spacing:-0.03em;word-break:keep-all}
+.s{width:1080px;height:1350px;position:relative;overflow:hidden;margin:20px;break-after:page}
+@media print{body{background:none}.s{margin:0}}
+.abs{position:absolute}
+.ph{background-size:cover;background-position:center}
+.disp{font-family:"Black Han Sans",Pretendard,sans-serif;font-weight:400;letter-spacing:-0.01em}
+.pen{font-family:"Nanum Pen Script",cursive;letter-spacing:0}
+.gaegu{font-family:Gaegu,cursive;font-weight:700;letter-spacing:-0.02em}
+.en{font-family:"Archivo Black",sans-serif;letter-spacing:-0.02em}
+.cut{position:absolute;filter:drop-shadow(7px 0 0 #fff) drop-shadow(-7px 0 0 #fff) drop-shadow(0 7px 0 #fff) drop-shadow(0 -7px 0 #fff) drop-shadow(0 24px 30px rgba(0,0,0,.28))}
+.cut.lime{filter:drop-shadow(7px 0 0 #c6ff1a) drop-shadow(-7px 0 0 #c6ff1a) drop-shadow(0 7px 0 #c6ff1a) drop-shadow(0 -7px 0 #c6ff1a) drop-shadow(0 24px 30px rgba(0,0,0,.5))}
+svg.d{position:absolute;overflow:visible}
+.ol{text-shadow:-5px -5px 0 #111,5px -5px 0 #111,-5px 5px 0 #111,5px 5px 0 #111,0 -6px 0 #111,0 6px 0 #111,-6px 0 0 #111,6px 0 0 #111,10px 12px 0 #111}
+
+/* ===== A. 옐로 교육 ===== */
+.A{background:#ffd60a;color:#111}
+.A .dots{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.55) 3px,transparent 3.5px);background-size:34px 34px;mask-image:linear-gradient(160deg,#000 0%,transparent 45%)}
+.A .logo{position:absolute;right:56px;top:56px;background:#111;color:#fff;border-radius:999px;padding:12px 28px 12px 20px;font-size:32px;display:flex;align-items:center;gap:12px}
+.A .logo i{width:26px;height:26px;border-radius:50%;background:#2ee66b;display:inline-block}
+.A .box{display:inline-block;background:#fff;border:7px solid #111;border-radius:28px;padding:4px 30px 14px;box-shadow:12px 12px 0 #111}
+.A .bubble{position:absolute;background:#fff;border:6px solid #111;border-radius:40px;padding:22px 34px;font-size:40px;font-weight:900;box-shadow:8px 8px 0 #111}
+.A .bubble::after{content:"";position:absolute;width:40px;height:40px;background:#fff;border-right:6px solid #111;border-bottom:6px solid #111;bottom:-26px;left:60px;transform:rotate(45deg)}
+.A .cta{display:inline-flex;align-items:center;gap:22px;background:#111;color:#fff;border-radius:999px;padding:26px 48px;font-size:42px;font-weight:900}
+.A .cta b{background:#ffd60a;color:#111;border-radius:50%;width:56px;height:56px;display:flex;align-items:center;justify-content:center}
+.A .band{position:absolute;left:0;right:0;top:0;height:120px;background:#111;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 56px;font-size:30px;font-weight:800}
+.A .band span:last-child{background:#ffd60a;color:#111;border-radius:999px;padding:6px 20px}
+.A .panel{background:#fff;border:7px solid #111;border-radius:44px;box-shadow:12px 12px 0 #111;padding:48px}
+.A .hlr{background:linear-gradient(transparent 60%,#ff8a7a 60%)}
+.A .mini{border-radius:30px;padding:30px;text-align:center}
+.A .mini .ic{font-size:110px;line-height:1.1}
+.A .mini h4{font-size:44px;margin:10px 0}
+.A .mini p{font-size:32px;font-weight:700;line-height:1.4}
+.A .step{display:flex;gap:30px;align-items:center;background:#fff;border:6px solid #111;border-radius:34px;padding:26px 30px;box-shadow:8px 8px 0 #111}
+.A .step .n{flex:none;width:96px;height:96px;border-radius:28px;background:#ffd60a;border:5px solid #111;display:flex;align-items:center;justify-content:center;font-size:56px}
+.A .step h4{font-size:46px}.A .step p{font-size:32px;font-weight:700;color:#555;margin-top:4px}
+.A .bar{height:46px;border:6px solid #111;border-radius:999px;background:#fff;overflow:hidden}
+.A .bar i{display:block;height:100%;width:62%;background:repeating-linear-gradient(-45deg,#2ee66b 0 22px,#21c95a 22px 44px)}
+
+/* ===== B. 다크 라임 인터뷰 ===== */
+.B{background:#1f1f1f;color:#fff}
+.B .grain{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1.2px,transparent 1.2px),radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);background-size:7px 7px,11px 11px;background-position:0 0,3px 5px}
+.B .torn{position:absolute;background:#c6ff1a;clip-path:polygon(0 4%,6% 0,13% 3%,21% 0,30% 4%,38% 1%,47% 4%,55% 0,63% 3%,72% 0,80% 4%,88% 1%,95% 4%,100% 1%,100% 97%,94% 100%,86% 96%,78% 100%,70% 97%,61% 100%,52% 96%,44% 100%,36% 97%,27% 100%,19% 96%,10% 100%,3% 97%,0 100%)}
+.B .lbox{display:inline-block;background:#c6ff1a;color:#111;font-size:66px;font-weight:900;line-height:1.2;padding:10px 26px;margin:6px 0}
+.B .wbox{display:inline-block;background:#fff;color:#111;font-size:66px;font-weight:900;line-height:1.2;padding:10px 26px;margin:6px 0}
+.B .pola{position:absolute;background:#f4f1ea;padding:24px 24px 90px;box-shadow:0 30px 60px rgba(0,0,0,.55)}
+.B .q{font-family:Georgia,serif;font-weight:900;color:#c6ff1a;position:absolute;line-height:.7}
+.B .track{display:flex;gap:22px;align-items:center;background:#111;border:2px solid #3a3a3a;border-radius:20px;padding:16px 24px 16px 16px;font-size:32px;font-weight:800}
+.B .track .art{width:84px;height:84px;border-radius:12px;flex:none}
+.B .track small{display:block;font-size:24px;color:#888;font-weight:600;margin-top:4px}
+.B .track .pl{margin-left:auto;width:58px;height:58px;border-radius:50%;background:#c6ff1a;color:#111;display:flex;align-items:center;justify-content:center;font-size:26px}
+.B .chip{position:absolute;font-size:28px;font-weight:800;color:#888;letter-spacing:.06em}
+.B .app{background:#111;border:2px solid #3a3a3a;border-radius:36px;padding:34px}
+.B .grid4{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:250px;height:250px;flex:none}
+.B .grid4 div{border-radius:10px}
+.B .prog{height:10px;background:#333;border-radius:10px;margin:26px 0 10px}.B .prog i{display:block;height:100%;width:40%;background:#c6ff1a;border-radius:10px}
+
+/* ===== C. 블루 위클리 ===== */
+.C{background:#eaf3ff;color:#1b3a8a}
+.C .gridbg{position:absolute;inset:0;background-image:linear-gradient(#cfe0ff 2px,transparent 2px),linear-gradient(90deg,#cfe0ff 2px,transparent 2px);background-size:54px 54px}
+.C .logo{position:absolute;left:56px;top:52px;font-size:34px;font-weight:900;display:flex;gap:14px;align-items:center;color:#1b3a8a}
+.C .logo i{width:48px;height:48px;border-radius:50%;background:#1b5cff;display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;font-style:normal}
+.C .pgc{position:absolute;right:56px;top:56px;font-size:28px;background:#fff;border:3px solid #1b3a8a;border-radius:999px;padding:6px 20px;font-weight:900}
+.C .title{font-size:150px;line-height:.98;color:#1b5cff;text-shadow:-6px -6px 0 #fff,6px -6px 0 #fff,-6px 6px 0 #fff,6px 6px 0 #fff,0 -7px 0 #fff,0 7px 0 #fff,-7px 0 0 #fff,7px 0 0 #fff,12px 14px 0 #1b3a8a}
+.C .pl{position:absolute;background:#fff;padding:16px 16px 64px;box-shadow:0 18px 36px rgba(27,58,138,.22)}
+.C .pl .ph{width:100%;height:100%}
+.C .pl span{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:48px;color:#1b3a8a}
+.C .tape{position:absolute;width:150px;height:46px;background:rgba(255,120,170,.7);z-index:3}
+.C .tape.y{background:rgba(255,214,10,.75)}.C .tape.g{background:rgba(46,230,107,.6)}
+.C .day{font-size:230px;line-height:.85;color:#1b5cff}
+.C .chk div{display:flex;align-items:center;gap:26px;font-size:46px;font-weight:800;padding:24px 0;border-bottom:3px dashed #9cb8f5}
+.C .chk b{width:60px;height:60px;border:5px solid #1b3a8a;border-radius:14px;background:#fff;flex:none;position:relative}
+.C .cal{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.C .cal div{background:#fff;border:4px solid #1b3a8a;border-radius:26px;padding:22px 10px;text-align:center}
+.C .cal .en{font-size:34px;color:#1b5cff}.C .cal .ic{font-size:76px;margin:10px 0}.C .cal p{font-size:28px;font-weight:800;line-height:1.3}
+.C .stamp{position:absolute;width:250px;height:250px;border-radius:50%;border:8px solid #ff4f8b;color:#ff4f8b;display:flex;align-items:center;justify-content:center;text-align:center;font-size:44px;transform:rotate(-14deg);line-height:1.1}
+</style></head><body>
+
+<!-- 공용 낙서 심볼 -->
+<svg width="0" height="0" style="position:absolute">
+ <defs>
+  <symbol id="sparkle" viewBox="0 0 100 100"><path d="M50 0 C55 35 65 45 100 50 C65 55 55 65 50 100 C45 65 35 55 0 50 C35 45 45 35 50 0Z"/></symbol>
+  <symbol id="star" viewBox="0 0 100 100"><path d="M50 4 L62 38 L98 38 L69 60 L80 95 L50 74 L20 95 L31 60 L2 38 L38 38Z"/></symbol>
+  <symbol id="heart" viewBox="0 0 100 100"><path d="M50 90 C10 60 0 35 20 20 C35 8 50 20 50 32 C50 20 65 8 80 20 C100 35 90 60 50 90Z"/></symbol>
+  <symbol id="arrow" viewBox="0 0 200 120"><path d="M10 100 C40 20 120 0 175 45" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><path d="M150 30 L180 48 L155 75" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="squig" viewBox="0 0 300 30"><path d="M5 18 Q 25 2 45 18 T 85 18 T 125 18 T 165 18 T 205 18 T 245 18 T 285 18" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/></symbol>
+  <symbol id="loop" viewBox="0 0 260 130"><path d="M30 70 C25 20 230 5 240 60 C250 115 40 125 18 80 C8 55 70 25 150 22" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/></symbol>
+  <symbol id="clip" viewBox="0 0 60 170"><path d="M40 45 L40 140 C40 160 12 160 12 140 L12 25 C12 0 50 0 50 25 L50 120 C50 132 28 132 28 120 L28 45" fill="none" stroke="#c9c9c9" stroke-width="7" stroke-linecap="round"/></symbol>
+  <symbol id="burst" viewBox="0 0 100 100"><path d="M50 0 L58 30 L85 15 L70 42 L100 50 L70 58 L85 85 L58 70 L50 100 L42 70 L15 85 L30 58 L0 50 L30 42 L15 15 L42 30Z"/></symbol>
+  <symbol id="check" viewBox="0 0 100 100"><path d="M10 55 L40 82 L95 10" fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="lines" viewBox="0 0 100 100"><path d="M20 70 L5 85 M45 60 L45 95 M70 70 L88 86" stroke="currentColor" stroke-width="9" stroke-linecap="round"/></symbol>
+ </defs>
+</svg>
+
+<!-- ================= A1 ================= -->
+<div class="s A" id="A1"><div class="dots"></div>
+  <div class="logo disp"><i></i>talk up</div>
+  <div class="abs pen" style="left:64px;top:150px;font-size:66px;color:#e8341c;transform:rotate(-3deg)">영어 울렁증 탈출한 사람들이 알려주는</div>
+  <svg class="d" style="left:70px;top:225px;width:520px;height:40px;color:#e8341c"><use href="#squig"/></svg>
+  <div class="abs" style="left:64px;top:300px">
+    <div class="box disp" style="font-size:136px;transform:rotate(-2deg)">영어회화</div>
+    <div class="disp ol" style="font-size:150px;line-height:1.05;color:#fff;margin-top:30px">완전정복</div>
+    <div class="disp" style="font-size:130px;line-height:1.05;margin-top:10px">하는 법! <span style="font-size:100px">💡</span></div>
+  </div>
+  <img class="cut" src="photos/cut_1494790108377.png" style="right:-60px;bottom:-30px;height:680px">
+  <div class="bubble" style="right:400px;top:900px;transform:rotate(-4deg)">한 달이면<br>충분해요!</div>
+  <svg class="d" style="right:70px;top:680px;width:90px;height:90px;fill:#fff;stroke:#111;stroke-width:6"><use href="#sparkle"/></svg>
+  <svg class="d" style="right:330px;top:720px;width:50px;height:50px;fill:#e8341c"><use href="#sparkle"/></svg>
+  <svg class="d" style="left:560px;top:330px;width:110px;height:110px;color:#111;transform:rotate(-20deg)"><use href="#lines"/></svg>
+  <div class="abs" style="left:64px;bottom:90px"><span class="cta">지금 바로 확인하기 <b>→</b></span></div>
+</div>
+
+<!-- ================= A2 ================= -->
+<div class="s A" id="A2"><div class="dots"></div>
+  <div class="band"><span class="disp">talk up · 영어회화 완전정복</span><span>02 / 07</span></div>
+  <div class="abs disp" style="left:60px;top:180px;font-size:84px;color:#e8341c">#첫째!</div>
+  <div class="abs disp" style="left:60px;top:270px;font-size:110px;line-height:1.08"><span class="hlr">통문장</span>으로<br>외우기</div>
+  <svg class="d" style="left:560px;top:250px;width:160px;height:100px;color:#111;transform:rotate(30deg)"><use href="#arrow"/></svg>
+  <div class="panel abs" style="left:60px;right:60px;top:560px">
+    <div style="font-size:40px;font-weight:800;line-height:1.55">단어 하나씩보다 <b style="background:#ffd60a;padding:0 8px">상황 문장을 통째로</b> 익히면<br>말할 때 바로 꺼내 쓸 수 있어요.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:40px">
+      <div class="mini" style="background:#f2f2f2"><div class="ic">🙅</div><h4 class="disp">단어만 외우기</h4><p>coffee = 커피<br>get = 얻다</p></div>
+      <div class="mini" style="background:#fff3b0;border:6px solid #111"><div class="ic">🙆</div><h4 class="disp">통문장 외우기</h4><p>"Can I get<br>a coffee?"</p></div>
+    </div>
+  </div>
+  <img class="cut" src="photos/cut_1544005313-94.png" style="right:30px;bottom:-40px;height:330px">
+  <div class="bubble" style="right:290px;bottom:120px;font-size:36px;transform:rotate(3deg)">이게 핵심!</div>
+  <svg class="d" style="left:80px;bottom:90px;width:80px;height:80px;fill:#e8341c"><use href="#sparkle"/></svg>
+</div>
+
+<!-- ================= A3 ================= -->
+<div class="s A" id="A3"><div class="dots"></div>
+  <div class="band"><span class="disp">talk up · 영어회화 완전정복</span><span>03 / 07</span></div>
+  <div class="abs disp" style="left:60px;top:180px;font-size:84px;color:#e8341c">#둘째!</div>
+  <div class="abs disp" style="left:60px;top:270px;font-size:110px;line-height:1.08">하루 <span class="hlr">10분</span><br>섀도잉</div>
+  <img class="cut" src="photos/cut_1517841905240.png" style="right:40px;top:150px;height:440px">
+  <div class="bubble" style="right:300px;top:170px;font-size:34px;transform:rotate(-5deg)">출퇴근길에<br>딱 좋아요</div>
+  <div class="abs" style="left:60px;right:60px;top:600px;display:flex;flex-direction:column;gap:24px">
+    <div class="step"><div class="n">🎧</div><div><h4 class="disp">1분짜리 영상 고르기</h4><p>좋아하는 드라마·유튜브 한 장면</p></div></div>
+    <div class="step"><div class="n">🗣️</div><div><h4 class="disp">자막 보며 3번 따라 말하기</h4><p>속도·억양까지 그대로 흉내 내기</p></div></div>
+    <div class="step"><div class="n">🎙️</div><div><h4 class="disp">자막 없이 녹음해서 비교</h4><p>달라진 내 발음을 직접 확인</p></div></div>
+  </div>
+  <div class="abs" style="left:60px;right:60px;bottom:80px">
+    <div style="display:flex;justify-content:space-between;font-size:34px;font-weight:900;margin-bottom:14px"><span>30일 챌린지</span><span>D+18</span></div>
+    <div class="bar"><i></i></div>
+  </div>
+</div>
+
+<!-- ================= B1 ================= -->
+<div class="s B" id="B1"><div class="grain"></div>
+  <div class="torn" style="left:-20px;right:-20px;top:860px;height:520px;transform:rotate(-3deg)"></div>
+  <div class="pola" style="left:500px;top:230px;width:520px;height:620px;transform:rotate(5deg)"><div class="ph" style="width:100%;height:100%;background:#2b2b2b"></div></div>
+  <img class="cut lime" src="photos/cut_1507003211169.png" style="left:530px;top:140px;height:720px">
+  <svg class="d" style="left:550px;top:180px;width:60px;height:170px;transform:rotate(5deg)"><use href="#clip"/></svg>
+  <div class="q" style="right:40px;top:120px;font-size:300px">“</div>
+  <div class="chip" style="left:64px;top:70px">ROHA · YEAR-END Q&amp;A</div>
+  <div class="chip" style="right:64px;top:70px">@roha_music</div>
+  <div class="abs" style="left:64px;top:200px"><span class="lbox" style="transform:rotate(-4deg);font-size:44px">2026 연말 결산</span></div>
+  <div class="abs disp" style="left:64px;top:300px;font-size:124px;line-height:1.02;text-shadow:0 8px 24px rgba(0,0,0,.6);z-index:5">올해의<br>로하에게<br>묻다</div>
+  <div class="abs" style="left:64px;right:64px;top:960px;color:#111;transform:rotate(-3deg)">
+    <div class="disp" style="font-size:96px;line-height:1.05">8개의 질문,<br>솔직한 대답</div>
+    <div style="font-size:36px;font-weight:800;margin-top:20px">새 앨범 비하인드부터 팬들에게 하고 싶은 말까지</div>
+  </div>
+  <svg class="d" style="left:330px;top:640px;width:70px;height:70px;fill:#c6ff1a"><use href="#sparkle"/></svg>
+  <svg class="d" style="left:380px;top:720px;width:36px;height:36px;fill:#c6ff1a"><use href="#sparkle"/></svg>
+  <div class="abs disp" style="right:60px;bottom:60px;width:190px;height:190px"><svg class="d" style="inset:0;width:190px;height:190px;fill:#111"><use href="#burst"/></svg><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#c6ff1a;font-size:46px;text-align:center;line-height:1">Q&amp;A<br>8</div></div>
+</div>
+
+<!-- ================= B2 ================= -->
+<div class="s B" id="B2"><div class="grain"></div>
+  <div class="chip" style="left:64px;top:60px">ROHA · YEAR-END Q&amp;A</div><div class="chip" style="right:64px;top:60px">04 / 09</div>
+  <div class="q" style="right:50px;top:150px;font-size:260px">“</div>
+  <div class="abs" style="left:64px;top:150px">
+    <div class="en" style="font-size:96px;color:#c6ff1a;line-height:1">Q4.</div>
+    <div style="margin-top:20px"><span class="lbox" style="transform:rotate(-2deg)">올해 음악을 가장 많이</span></div>
+    <div><span class="lbox" style="transform:rotate(-2deg)">들었던 순간과 이유</span></div>
+  </div>
+  <div class="pola" style="left:64px;top:560px;width:430px;height:540px;transform:rotate(-5deg)"><div class="ph" style="width:100%;height:100%;background:#c6ff1a"></div></div>
+  <img class="cut" src="photos/cut_1511671782779.png" style="left:120px;top:540px;height:470px;transform:rotate(-8deg)">
+  <svg class="d" style="left:110px;top:500px;width:60px;height:170px;transform:rotate(-5deg)"><use href="#clip"/></svg>
+  <div class="abs" style="left:560px;right:64px;top:580px;font-size:38px;line-height:1.75;font-weight:600;color:#e5e5e5">새 앨범 작업을 하던 여름이요. 밤마다 데모를 반복해서 듣다 보니 <b style="color:#c6ff1a">하루에 같은 곡을 스무 번</b>도 넘게 들었어요.</div>
+  <div class="abs pen" style="left:600px;top:930px;font-size:54px;color:#c6ff1a;transform:rotate(-4deg)">이 두 곡이에요!</div>
+  <svg class="d" style="left:860px;top:900px;width:140px;height:90px;color:#c6ff1a;transform:rotate(80deg)"><use href="#arrow"/></svg>
+  <div class="abs" style="left:560px;right:64px;bottom:90px;display:flex;flex-direction:column;gap:16px">
+    <div class="track"><div class="art ph" style="background-image:url(photos/u1493225457124-a3eb161ffa5f.jpg)"></div><div>여름 데모 #07<small>ROHA</small></div><div class="pl">▶</div></div>
+    <div class="track"><div class="art ph" style="background-image:url(photos/u1511671782779-c97d3d27a1d4.jpg)"></div><div>Night Drive (Live)<small>ROHA</small></div><div class="pl">▶</div></div>
+  </div>
+</div>
+
+<!-- ================= B3 ================= -->
+<div class="s B" id="B3"><div class="grain"></div>
+  <div class="chip" style="left:64px;top:60px">ROHA · YEAR-END Q&amp;A</div><div class="chip" style="right:64px;top:60px">05 / 09</div>
+  <div class="abs" style="left:64px;top:150px">
+    <div class="en" style="font-size:96px;color:#c6ff1a;line-height:1">Q5.</div>
+    <div style="margin-top:20px"><span class="wbox" style="transform:rotate(1.5deg)">팬들에게 추천하는</span></div>
+    <div><span class="lbox" style="transform:rotate(-1.5deg)">연말 플레이리스트</span></div>
+  </div>
+  <div class="app abs" style="left:64px;right:64px;top:560px">
+    <div style="display:flex;gap:34px;align-items:center">
+      <div class="grid4"><div class="ph" style="background-image:url(photos/u1493225457124-a3eb161ffa5f.jpg)"></div><div style="background:#c6ff1a"></div><div style="background:#ff4fa0"></div><div class="ph" style="background-image:url(photos/u1509042239860-f550ce710b93.jpg)"></div></div>
+      <div><div style="font-size:26px;color:#888;font-weight:800;letter-spacing:.1em">PLAYLIST</div><div class="disp" style="font-size:66px;line-height:1.1;margin-top:8px">로하의<br>겨울 밤 리스트</div><div style="font-size:28px;color:#999;margin-top:12px;font-weight:700">4곡 · 15분</div></div>
+    </div>
+    <div class="prog"><i></i></div>
+    <div style="display:flex;justify-content:space-between;font-size:24px;color:#777;font-weight:700"><span>1:52</span><span>4:31</span></div>
+    <div style="margin-top:24px;display:flex;flex-direction:column;gap:6px;font-size:36px;font-weight:800">
+      <div style="display:flex;gap:26px;padding:14px 0;color:#c6ff1a"><span>01</span>첫눈 오는 밤</div>
+      <div style="display:flex;gap:26px;padding:14px 0;border-top:1px solid #333"><span style="color:#666">02</span>Home, Again</div>
+      <div style="display:flex;gap:26px;padding:14px 0;border-top:1px solid #333"><span style="color:#666">03</span>우리 둘의 겨울</div>
+    </div>
+  </div>
+  <img class="cut lime" src="photos/cut_1507003211169.png" style="right:30px;bottom:-30px;height:300px">
+  <div class="q" style="left:40px;bottom:-40px;font-size:220px">”</div>
+</div>
+
+<!-- ================= C1 ================= -->
+<div class="s C" id="C1"><div class="gridbg"></div>
+  <div class="logo"><i>L</i>LUMI FIT</div><div class="pgc">1 / 7</div>
+  <div class="abs pen" style="left:0;right:0;top:150px;text-align:center;font-size:70px;color:#1b5cff">어떤 날, 어떤 컨디션이어도</div>
+  <div class="abs disp title" style="left:0;right:0;top:240px;text-align:center">매일매일<br>루미 루틴</div>
+  <svg class="d" style="left:110px;top:270px;width:80px;height:80px;fill:#ffd60a;stroke:#1b3a8a;stroke-width:5"><use href="#star"/></svg>
+  <svg class="d" style="right:110px;top:420px;width:70px;height:70px;fill:#ff4f8b"><use href="#heart"/></svg>
+  <div class="pl" style="left:50px;top:640px;width:270px;height:340px;transform:rotate(-9deg)"><div class="ph" style="background-image:url(photos/u1438761681033-6461ffad8d80.jpg)"></div><span class="pen">MON</span></div>
+  <div class="tape" style="left:110px;top:620px;transform:rotate(-15deg)"></div>
+  <div class="pl" style="left:300px;top:930px;width:250px;height:320px;transform:rotate(6deg)"><div class="ph" style="background-image:url(photos/u1518611012118-696072aa579a.jpg)"></div><span class="pen">TUE</span></div>
+  <div class="tape y" style="left:360px;top:910px;transform:rotate(8deg)"></div>
+  <div class="pl" style="right:50px;top:640px;width:270px;height:340px;transform:rotate(8deg)"><div class="ph" style="background-image:url(photos/u1544005313-94ddf0286df2.jpg)"></div><span class="pen">WED</span></div>
+  <div class="tape g" style="right:110px;top:615px;transform:rotate(12deg)"></div>
+  <div class="pl" style="right:290px;top:960px;width:240px;height:300px;transform:rotate(-7deg)"><div class="ph" style="background-image:url(photos/u1524504388940-b1c1722653e1.jpg)"></div><span class="pen">THU</span></div>
+  <img class="cut" src="photos/cut_1517841905240.png" style="left:370px;top:560px;height:620px">
+  <div class="abs pen" style="left:60px;top:1010px;font-size:58px;color:#1b5cff;transform:rotate(-8deg)">월요병 탈출!</div>
+  <svg class="d" style="left:60px;top:990px;width:260px;height:120px;color:#ff4f8b"><use href="#loop"/></svg>
+  <div class="abs pen" style="right:50px;top:1250px;font-size:52px;color:#1b5cff;transform:rotate(6deg)">스트레칭 데이 ✨</div>
+  <svg class="d" style="right:60px;top:540px;width:56px;height:56px;fill:#1b5cff"><use href="#sparkle"/></svg>
+</div>
+
+<!-- ================= C2 ================= -->
+<div class="s C" id="C2"><div class="gridbg"></div>
+  <div class="logo"><i>L</i>LUMI FIT</div><div class="pgc">2 / 7</div>
+  <div class="abs" style="left:60px;top:170px"><div class="day en" style="font-size:180px">MON</div>
+    <svg class="d" style="left:-30px;top:-20px;width:430px;height:200px;color:#ff4f8b"><use href="#loop"/></svg>
+    <div class="disp" style="font-size:96px;line-height:1.1;margin-top:30px;color:#1b3a8a">월요일은<br>가볍게<br>깨우기</div></div>
+  <div class="pl" style="right:60px;top:200px;width:360px;height:460px;transform:rotate(6deg)"><div class="ph" style="background:#cfe0ff"></div></div>
+  <div class="tape y" style="right:180px;top:165px;transform:rotate(-6deg)"></div>
+  <img class="cut" src="photos/cut_1517841905240.png" style="right:80px;top:170px;height:530px">
+  <div class="abs pen" style="right:420px;top:640px;font-size:56px;color:#ff4f8b;transform:rotate(-6deg)">무리하지 않기!</div>
+  <svg class="d" style="right:420px;top:560px;width:110px;height:70px;color:#ff4f8b;transform:scaleX(-1) rotate(10deg)"><use href="#arrow"/></svg>
+  <div class="chk abs" style="left:60px;right:60px;top:780px">
+    <div><b><svg class="d" style="left:4px;top:-8px;width:56px;height:56px;color:#ff4f8b"><use href="#check"/></svg></b>🧘 전신 스트레칭<span style="margin-left:auto;color:#1b5cff">10분</span></div>
+    <div><b><svg class="d" style="left:4px;top:-8px;width:56px;height:56px;color:#ff4f8b"><use href="#check"/></svg></b>🚶 가벼운 걷기<span style="margin-left:auto;color:#1b5cff">20분</span></div>
+    <div style="border:0"><b></b>💧 물 2L 마시기<span style="margin-left:auto;color:#1b5cff">하루</span></div>
+  </div>
+  <svg class="d" style="left:70px;bottom:60px;width:60px;height:60px;fill:#ffd60a;stroke:#1b3a8a;stroke-width:5"><use href="#star"/></svg>
+</div>
+
+<!-- ================= C3 ================= -->
+<div class="s C" id="C3"><div class="gridbg"></div>
+  <div class="logo"><i>L</i>LUMI FIT</div><div class="pgc">7 / 7</div>
+  <div class="abs disp" style="left:60px;top:170px;font-size:110px;line-height:1.05;color:#1b3a8a">이번 주<br><span style="color:#1b5cff">루틴 한눈에</span></div>
+  <div class="stamp disp" style="right:70px;top:150px">GOOD<br>JOB!</div>
+  <div class="cal abs" style="left:60px;right:60px;top:470px">
+    <div><div class="en">MON</div><div class="ic">🧘</div><p>스트레칭<br>10분</p></div>
+    <div><div class="en">TUE</div><div class="ic">🏋️</div><p>필라테스<br>50분</p></div>
+    <div><div class="en">WED</div><div class="ic">🚴</div><p>유산소<br>30분</p></div>
+    <div><div class="en">THU</div><div class="ic">🤸</div><p>코어<br>20분</p></div>
+    <div><div class="en">FRI</div><div class="ic">😴</div><p>휴식 &amp;<br>폼롤러</p></div>
+  </div>
+  <div class="abs" style="left:60px;right:60px;top:850px;background:#1b5cff;color:#fff;border-radius:40px;padding:50px 50px;display:flex;align-items:center;gap:30px">
+    <div style="flex:1"><div class="disp" style="font-size:66px;line-height:1.15">첫 체험 수업<br>무료 예약</div><div style="font-size:32px;font-weight:700;margin-top:16px;opacity:.85">프로필 링크에서 바로 신청하세요</div></div>
+    <img class="cut" src="photos/cut_1438761681033.png" style="position:static;height:260px">
+  </div>
+  <div class="abs pen" style="left:70px;bottom:70px;font-size:56px;color:#1b5cff;transform:rotate(-4deg)">저장해두고 매일 체크 ✔</div>
+  <svg class="d" style="right:80px;bottom:80px;width:70px;height:70px;fill:#ff4f8b"><use href="#heart"/></svg>
+</div>
+</body></html>
