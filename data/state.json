@@ -37,5 +37,10 @@
  ],
  "contest_force": false,
  "contest_last_date": "2026-11-18",
- "contest_last_error": "telegram "
+ "contest_last_error": "telegram ",
+ "check": {
+  "telegram_token_loaded": false,
+  "anthropic_key_loaded": true,
+  "at": "2026-11-18T21:41+09:00"
+ }
 }
