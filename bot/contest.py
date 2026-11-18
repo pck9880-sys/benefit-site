@@ -120,20 +120,36 @@ def prize_value(d):
 
 
 # ---------- Claude ----------
-class Entry(BaseModel):
-    text: str = Field(description="출품작 본문 (슬로건/네이밍/아이디어 제목 등)")
-    explanation: str = Field(description="작품 설명. 공고에 설명 분량 제한이 있으면 그 안으로")
-    why: str = Field(description="심사위원에게 어필할 포인트 한 줄")
+WEB_SEARCH_USD = 0.01  # 웹 검색 1회 비용 (1,000회당 $10)
 
 
-class Ideas(BaseModel):
-    format_rules: str = Field(description="공고에서 찾은 제출 형식·글자수·개수 제한 요약. 없으면 '명시 없음'")
-    ai_policy: str = Field(description="공고의 AI 사용 관련 규정 요약. 언급이 없으면 '언급 없음'")
-    entries: List[Entry] = Field(description="서로 다른 방향의 출품안 5개")
-    tip: str = Field(description="제출 전에 사람이 꼭 확인할 점 한 줄")
+class Candidate(BaseModel):
+    text: str = Field(description="출품작 본문 (슬로건/네이밍 등). 공고의 글자 수 제한 준수")
+    angle: str = Field(description="방향: 감성/직관/언어유희/지역·역사성/미래지향 중 하나 또는 그 외")
+    explanation: str = Field(description="제출용 작품 설명. 공고의 설명 분량 제한 안에서, 주제 키워드와 연결해 논리적으로")
+    fit: int = Field(description="주제적합도·대표성 1~5")
+    originality: int = Field(description="창의성·독창성 1~5")
+    symbolism: int = Field(description="상징성·함축성 1~5")
+    memorability: int = Field(description="대중성·전달성 1~5")
+    usability: int = Field(description="활용성 1~5")
+    why: str = Field(description="어떤 심사 기준을 노렸는지 한 줄")
 
 
-SYSTEM = """당신은 공모전 수상 경험이 많은 카피라이터입니다. 한국어 공모전 공고를 읽고 출품안 후보를 만듭니다.
+class Package(BaseModel):
+    keywords: List[str] = Field(description="공고에서 뽑은 핵심 키워드 3~6개")
+    format_rules: str = Field(description="제출물 형식·글자 수·설명 분량 제한 요약 (공고 기준)")
+    per_person_limit: str = Field(description="1인 접수 가능 개수 (없으면 '명시 없음')")
+    ai_policy: str = Field(description="AI 사용 관련 규정 (없으면 '언급 없음')")
+    submit_method: str = Field(description="접수 방법: 온라인 폼/이메일/홈페이지 게시판/우편 등과 접수처(URL·이메일 주소)")
+    required_docs: List[str] = Field(description="제출해야 하는 서류·파일 목록 (신청서, 개인정보 동의서 등)")
+    personal_fields: List[str] = Field(description="응모자가 직접 입력해야 할 개인정보 항목")
+    email_template: str = Field(description="이메일 접수일 때 제목과 본문 틀 (개인정보는 [이름] 같은 자리표시자). 이메일 접수가 아니면 빈 문자열")
+    announce: str = Field(description="발표일·발표 방법 (없으면 '명시 없음')")
+    candidates: List[Candidate] = Field(description="서로 다른 방향의 후보 12개 (자체 채점 포함)")
+    caution: str = Field(description="제출 전에 사람이 꼭 확인할 점 한 줄")
+
+
+SYSTEM = """당신은 공모전 수상 경험이 많은 카피라이터입니다. 한국어 공모전 공고와 사전 조사 자료를 읽고 출품안과 제출 패키지를 만듭니다.
 
 심사에서 흔히 보는 기준에 맞춰 만듭니다:
 - 주제적합도·대표성: 공고가 말한 정체성·비전·특성을 정확히 담는다 (공고의 핵심 키워드를 먼저 뽑는다)
@@ -143,50 +159,145 @@ SYSTEM = """당신은 공모전 수상 경험이 많은 카피라이터입니다
 - 활용성: 현수막·로고·홍보물에 바로 쓸 수 있게 짧고 단단하게
 
 결격 사유는 반드시 피합니다:
-- 기존 유명 슬로건·광고 문구·상표·다른 수상작과 같거나 비슷한 표현
+- 조사 자료에 나온 기존 슬로건·이전 수상작·광고 문구·상표와 같거나 비슷한 표현
 - 실존 브랜드명, 정치적·종교적 편향, 특정 집단 비하
 - 공고의 글자 수·형식 제한 위반 (직접 세어서 확인)
 
-다섯 개 후보는 서로 다른 방향(감성 / 직관 / 언어유희 / 지역·역사성 / 미래지향)으로 만들고,
-why 에는 어떤 심사 기준을 노렸는지 적습니다. 공고에 없는 사실은 지어내지 않습니다."""
+후보 12개는 서로 다른 방향으로 만들고, 각 항목을 엄격하게 채점합니다 (뻔한 표현은 독창성 2 이하).
+조사 자료의 사실(역사, 지역 특색, 기관 비전)을 활용하되, 자료와 공고에 없는 사실은 지어내지 않습니다."""
 
 
-def make_ideas(d):
-    if config.MOCK or not config.ANTHROPIC_API_KEY:
-        return Ideas(format_rules="(테스트)", ai_policy="언급 없음",
-                     entries=[Entry(text=f"테스트 출품안 {i}", explanation="설명", why="포인트") for i in range(1, 6)],
-                     tip="공고 확인"), 0.0
+def _client():
     import anthropic
-    client = anthropic.Anthropic(api_key=config.ANTHROPIC_API_KEY, max_retries=4)
-    info = f"공모전: {d['title']}\n주최: {d['organizer']}\n분야: {d['category']}\n시상: {d['prize']}\n\n[세부요강]\n{d['detail']}"
-    res = client.messages.parse(
-        model=config.CLAUDE_MODEL, max_tokens=8000, system=SYSTEM,
-        output_config={"effort": "medium"}, output_format=Ideas,
-        messages=[{"role": "user", "content": info}],
-    )
+    return anthropic.Anthropic(api_key=config.ANTHROPIC_API_KEY, max_retries=4)
+
+
+def _cost(usage):
+    pin, pout = config.PRICES.get(config.CLAUDE_MODEL, (4.0, 20.0))
+    c = (usage.input_tokens * pin + usage.output_tokens * pout) / 1_000_000
+    stu = getattr(usage, "server_tool_use", None)
+    if stu is not None:
+        c += (getattr(stu, "web_search_requests", 0) or 0) * WEB_SEARCH_USD
+    return c
+
+
+def _search_call(prompt, max_uses):
+    """웹 검색을 쓰는 호출. (텍스트, 비용)"""
+    client = _client()
+    tools = [{"type": "web_search_20260209", "name": "web_search", "max_uses": max_uses}]
+    messages = [{"role": "user", "content": prompt}]
+    cost, res = 0.0, None
+    for _ in range(4):  # pause_turn 이어받기
+        res = client.messages.create(model=config.CLAUDE_MODEL, max_tokens=6000, tools=tools,
+                                     output_config={"effort": "medium"}, messages=messages)
+        cost += _cost(res.usage)
+        if res.stop_reason != "pause_turn":
+            break
+        messages = [messages[0], {"role": "assistant", "content": res.content}]
+    text = "\n".join(b.text for b in res.content if getattr(b, "type", "") == "text").strip()
+    return text, cost
+
+
+def research(d):
+    prompt = f"""다음 공모전의 출품작을 만들기 전에 웹 검색으로 사전 조사를 해주세요.
+
+공모전: {d['title']} / 주최: {d['organizer']}
+공고 요약: {d['detail'][:1500]}
+
+조사할 것:
+1. 주최 기관·행사·지역의 배경 (역사, 특색, 비전, 최근 이슈) - 출품작에 녹일 수 있는 구체적 사실
+2. 이 기관·행사가 예전에 썼던 슬로건이나 이전 회차 수상작 (겹치면 안 되므로)
+3. 비슷한 공모전의 최근 수상작 경향
+
+결과는 한국어로 간결하게:
+[배경 사실] 5~8줄
+[기존 슬로건·이전 수상작] 찾은 것 그대로 나열 (없으면 '찾지 못함')
+[수상작 경향] 2~3줄
+[출처] 참고한 URL 3~5개"""
+    return _search_call(prompt, 5)
+
+
+def generate(d, notes):
+    client = _client()
+    info = (f"공모전: {d['title']}\n주최: {d['organizer']}\n분야: {d['category']}\n시상: {d['prize']}\n"
+            f"접수기간: {d['period']}\n접수방법(사이트 표기): {d['method']}\n\n[세부요강]\n{d['detail']}\n\n[사전 조사]\n{notes}")
+    res = client.messages.parse(model=config.CLAUDE_MODEL, max_tokens=16000, system=SYSTEM,
+                                output_config={"effort": "high"}, output_format=Package,
+                                messages=[{"role": "user", "content": info}])
     if res.stop_reason == "refusal" or res.parsed_output is None:
         raise RuntimeError(f"출품안 생성 실패 (stop_reason={res.stop_reason})")
-    pin, pout = config.PRICES.get(config.CLAUDE_MODEL, (4.0, 20.0))
-    return res.parsed_output, (res.usage.input_tokens * pin + res.usage.output_tokens * pout) / 1_000_000
+    return res.parsed_output, _cost(res.usage)
+
+
+def dup_check(cands):
+    """상위 후보가 이미 쓰이는 문구인지 웹 검색. {번호: (결과, 근거)}"""
+    listing = "\n".join(f"{i}. {c.text}" for i, c in enumerate(cands, 1))
+    prompt = f"""아래 문구들이 이미 다른 곳에서 슬로건·광고 문구·상호·상표·공모전 수상작으로 쓰이고 있는지 웹 검색으로 확인해주세요.
+똑같거나 거의 같은 문구가 있으면 '유사', 없으면 'OK'.
+
+{listing}
+
+답변은 문구마다 한 줄씩, 정확히 이 형식으로만:
+번호|OK 또는 유사|근거(유사면 URL, OK면 -)"""
+    text, cost = _search_call(prompt, max(3, len(cands)))
+    result = {}
+    for line in text.splitlines():
+        m = re.match(r"\s*(\d+)\s*\|\s*(OK|유사)\s*\|\s*(.*)", line)
+        if m:
+            result[int(m.group(1))] = (m.group(2), m.group(3).strip())
+    return result, cost
+
+
+def make_package(d):
+    """조사 → 생성(12개, 자체 채점) → 상위 7개 중복 검사 → 최종 5개. (결과 dict, 비용)"""
+    if config.MOCK or not config.ANTHROPIC_API_KEY:
+        cands = [Candidate(text=f"테스트 출품안 {i}", angle="직관", explanation="설명", fit=4, originality=4,
+                           symbolism=3, memorability=4, usability=4, why="포인트") for i in range(1, 6)]
+        pkg = Package(keywords=["테스트"], format_rules="(테스트)", per_person_limit="1개", ai_policy="언급 없음",
+                      submit_method="온라인 폼", required_docs=["신청서"], personal_fields=["이름", "연락처"],
+                      email_template="", announce="명시 없음", candidates=cands, caution="공고 확인")
+        return {"pkg": pkg, "top": cands, "dups": {}, "notes": "(테스트 조사)"}, 0.0
+    notes, c1 = research(d)
+    pkg, c2 = generate(d, notes)
+    ranked = sorted(pkg.candidates, key=lambda c: c.fit + c.originality + c.symbolism + c.memorability + c.usability,
+                    reverse=True)[:7]
+    dups, c3 = dup_check(ranked)
+    top = [c for i, c in enumerate(ranked, 1) if dups.get(i, ("OK", ""))[0] != "유사"][:5]
+    return {"pkg": pkg, "top": top, "dups": {ranked[i - 1].text: v for i, v in dups.items() if i <= len(ranked)},
+            "notes": notes}, c1 + c2 + c3
 
 
 def _len_ko(s):
     return len(re.sub(r"[\s\.,!?~'\"“”‘’·…\-]", "", s))
 
 
-def format_message(d, ideas, cost):
-    lines = [f"🏆 {d['title']}", f"주최: {d['organizer']} · 참가대상: {d['target'][:40]}", f"마감: {d['deadline']} · 시상: {d['prize'][:60]}",
-             f"형식: {ideas.format_rules}", f"AI 규정: {ideas.ai_policy}", ""]
-    for i, e in enumerate(ideas.entries, 1):
-        lines.append(f"{i}) {e.text}  ({_len_ko(e.text)}자, 공백·부호 제외)")
-        lines.append(f"   └ {e.why}")
-    lines += ["", f"📝 1번 작품설명 예시: {ideas.entries[0].explanation}" if ideas.entries else "",
-              "", f"⚠️ {ideas.tip}", "제출 전 공고의 AI 사용 규정과 1인 접수 개수를 꼭 확인하세요.",
-              f"공고: {d['url']}"]
-    if d["home"]:
-        lines.append(f"주최사 공고: {d['home']}")
-    lines.append(f"(생성 비용 ${cost:.3f})")
-    return "\n".join(lines)
+def format_messages(d, r, cost):
+    """텔레그램 메시지 3개: ①공모전·조사 요약 ②추천 출품작 ③제출 패키지"""
+    pkg, top = r["pkg"], r["top"]
+    m1 = [f"🏆 {d['title']}", f"주최: {d['organizer']}", f"마감: {d['deadline']} · 시상: {d['prize'][:70]}",
+          f"핵심 키워드: {', '.join(pkg.keywords)}", "", "🔎 사전 조사", r["notes"][:2500]]
+    m2 = [f"✍️ 추천 출품작 TOP {len(top)} — {d['title'][:30]}", f"형식: {pkg.format_rules}", ""]
+    for i, c in enumerate(top, 1):
+        score = c.fit + c.originality + c.symbolism + c.memorability + c.usability
+        m2 += [f"{i}) {c.text}", f"   {_len_ko(c.text)}자(공백·부호 제외) · {c.angle} · 자체점수 {score}/25",
+               f"   노린 점: {c.why}", f"   작품설명: {c.explanation}", ""]
+    dropped = [t for t, (v, _) in r["dups"].items() if v == "유사"]
+    if dropped:
+        m2.append("🚫 기존 문구와 비슷해 뺀 후보: " + " / ".join(dropped))
+    m3 = ["📮 제출 패키지", f"접수: {pkg.submit_method}", f"1인 접수: {pkg.per_person_limit}",
+          f"AI 규정: {pkg.ai_policy}", f"제출 서류: {', '.join(pkg.required_docs) or '없음'}",
+          f"직접 입력할 정보: {', '.join(pkg.personal_fields) or '-'}", f"발표: {pkg.announce}"]
+    if pkg.email_template:
+        m3 += ["", "✉️ 이메일 틀", pkg.email_template]
+    m3 += ["", f"⚠️ {pkg.caution}", "제출 전: ①출품작 인터넷 검색 ②글자 수 ③1인 접수 개수 확인",
+           f"공고: {d['url']}"] + ([f"주최사 공고: {d['home']}"] if d["home"] else []) + [f"(조사·생성 비용 ${cost:.3f})"]
+    return ["\n".join(m1), "\n".join(m2), "\n".join(m3)]
+
+
+def needs_document(d):
+    """제안서·기획서 같은 문서를 요구하는 공모전인지 (출품안만으로 제출 불가)."""
+    return bool(re.search(r"제안서|기획서|계획서|PPT|ppt|발표자료|보고서", d["detail"])) and not re.search(
+        r"네이밍|슬로건|표어|명칭|이름", d["title"])
 
 
 def should_run(st):
@@ -229,6 +340,8 @@ def run(st, notify):
                 print(f"[contest] 상세 실패 {sid}: {e}")
                 continue
             ok, why = eligible(d)
+            if ok and needs_document(d):
+                ok, why = False, "제안서 등 문서 필요"
             print(f"[contest] {sid} {d['title'][:30]} → {why}")
             if ok:
                 candidates.append(d)
@@ -239,18 +352,18 @@ def run(st, notify):
     sent = 0
     for d in candidates[:config.CONTESTS_PER_DAY]:
         try:
-            ideas, cost = make_ideas(d)
+            r, cost = make_package(d)
         except Exception as e:
             print(f"[contest] 생성 실패 {d['id']}: {e}")
             st["contest_last_error"] = f"{type(e).__name__}: {str(e)[:400]}"
             continue
         st.setdefault("cost", {})[month] = round(st["cost"].get(month, 0) + cost, 5)
         st.pop("contest_last_error", None)
-        msg = format_message(d, ideas, cost)
-        if config.MOCK:
-            print(msg)
-        else:
-            notify(st, msg)
+        for msg in format_messages(d, r, cost):
+            if config.MOCK:
+                print(msg)
+            else:
+                notify(st, msg[:4000])
         sent += 1
     print(f"[contest] 후보 {len(candidates)}개 중 {sent}개 전송")
     if not config.MOCK:
