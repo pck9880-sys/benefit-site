@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Pretendard,sans-serif;background:#777;letter-spacing:-0.03em;word-break:keep-all}
+.s{width:1080px;height:1350px;position:relative;overflow:hidden;margin:20px}
+.acc{font-size:26px;font-weight:700;opacity:.6}
+
+/* ========== 1. 채팅형 ========== */
+.chat{background:#b2c7da;padding:0}
+.chat .bar{height:150px;background:#a9bdd0;display:flex;align-items:center;gap:24px;padding:0 50px;font-size:38px;font-weight:800;color:#222}
+.chat .bar .av{width:80px;height:80px;border-radius:30px;background:#ffe14d;display:flex;align-items:center;justify-content:center;font-size:44px}
+.chat .room{padding:50px 50px;display:flex;flex-direction:column;gap:30px}
+.chat .b{max-width:780px;font-size:40px;line-height:1.45;padding:26px 34px;border-radius:34px;font-weight:600;position:relative}
+.chat .l{background:#fff;align-self:flex-start;border-top-left-radius:6px}
+.chat .r{background:#ffeb33;align-self:flex-end;border-top-right-radius:6px}
+.chat .name{font-size:28px;color:#4a5a6a;font-weight:700;margin-bottom:-18px}
+.chat .time{font-size:22px;color:#556;align-self:flex-end;margin-top:-20px}
+.chat .big{position:absolute;left:50px;right:50px;bottom:70px;background:#1e1e1e;color:#fff;border-radius:40px;padding:50px 54px}
+.chat .big h1{font-size:76px;line-height:1.2;font-weight:900}
+.chat .big h1 em{font-style:normal;color:#ffeb33}
+.chat .big p{font-size:34px;color:#bbb;margin-top:20px;font-weight:600}
+.chat .tip{background:#fff;border-radius:34px;padding:44px 46px;margin-top:10px}
+.chat .tip h3{font-size:44px;font-weight:900;margin-bottom:22px}
+.chat .tip li{font-size:38px;line-height:1.5;margin:14px 0 14px 40px;font-weight:600}
+
+/* ========== 2. 노트/메모형 ========== */
+.note{background:#fbfaf6;background-image:repeating-linear-gradient(transparent 0 78px,#cfe0f0 78px 80px);padding:140px 110px}
+.note::before{content:"";position:absolute;left:90px;top:0;bottom:0;width:3px;background:#f0a5a5}
+.note .tape{position:absolute;width:260px;height:70px;background:rgba(255,214,102,.75);transform:rotate(-6deg)}
+.note .hl{background:linear-gradient(transparent 55%,#ffe066 55%)}
+.note .hl2{background:linear-gradient(transparent 55%,#a6e3c4 55%)}
+.note h1{font-size:110px;line-height:1.25;font-weight:900;color:#222;margin-top:120px}
+.note .sub{font-size:44px;line-height:1.8;color:#555;margin-top:40px;font-weight:600}
+.note .post{position:absolute;width:380px;height:380px;background:#ffd6e7;box-shadow:0 18px 30px rgba(0,0,0,.12);padding:46px;font-size:44px;font-weight:800;line-height:1.4;color:#5b2340;transform:rotate(5deg)}
+.note h2{font-size:76px;font-weight:900;line-height:1.3;margin-bottom:50px}
+.note .row{font-size:46px;line-height:80px;font-weight:600;color:#333;display:flex;gap:24px}
+.note .row b{color:#e25b5b;font-weight:900}
+.note .circle{display:inline-block;border:5px solid #e25b5b;border-radius:50%;padding:0 18px;transform:rotate(-3deg)}
+
+/* ========== 3. 신문형 ========== */
+.news{background:#f1ede4;color:#141414;padding:70px 80px}
+.news .mast{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:8px double #141414;padding-bottom:20px}
+.news .mast h1{font-size:96px;font-weight:900;letter-spacing:-0.04em}
+.news .mast span{font-size:26px;font-weight:700;text-align:right;line-height:1.4}
+.news .brk{display:inline-block;background:#d62828;color:#fff;font-size:34px;font-weight:900;padding:10px 22px;margin:50px 0 30px;letter-spacing:.05em}
+.news .head{font-size:112px;line-height:1.12;font-weight:900;letter-spacing:-0.05em}
+.news .deck{font-size:40px;line-height:1.55;margin-top:36px;font-weight:600;color:#333;border-left:8px solid #141414;padding-left:30px}
+.news .photo{margin-top:50px;height:380px;background:repeating-linear-gradient(45deg,#ddd5c5 0 20px,#e7e0d2 20px 40px);display:flex;align-items:center;justify-content:center;font-size:140px}
+.news .cols{display:grid;grid-template-columns:1fr 1fr;gap:50px;margin-top:40px}
+.news .cols h3{font-size:46px;font-weight:900;border-top:4px solid #141414;padding-top:20px;margin-bottom:16px}
+.news .cols p{font-size:34px;line-height:1.6;color:#333;font-weight:500}
+.news .box{margin-top:50px;border:4px solid #141414;padding:40px 46px}
+.news .box h3{font-size:44px;font-weight:900;margin-bottom:20px}
+.news .box p{font-size:36px;line-height:1.7;font-weight:600}
+
+/* ========== 4. 랭킹 TOP5 ========== */
+.rank{background:#0f1f3d;color:#fff;padding:110px 90px}
+.rank .glow{position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,#3a7bff88,transparent 65%);right:-300px;top:-300px}
+.rank .tag{display:inline-block;font-size:34px;font-weight:800;border:3px solid #7fb0ff;color:#bcd4ff;border-radius:999px;padding:10px 28px}
+.rank h1{font-size:120px;line-height:1.1;font-weight:900;margin-top:40px}
+.rank h1 .t{display:block;font-size:300px;line-height:.95;background:linear-gradient(180deg,#fff,#7fb0ff);-webkit-background-clip:text;color:transparent;letter-spacing:-0.06em}
+.rank .sub{font-size:40px;color:#a9bde0;margin-top:30px;font-weight:600}
+.rank .item{display:flex;gap:40px;align-items:center}
+.rank .num{font-size:340px;font-weight:900;line-height:.85;background:linear-gradient(180deg,#7fb0ff,#3a7bff22);-webkit-background-clip:text;color:transparent;letter-spacing:-0.08em}
+.rank .card{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.14);border-radius:40px;padding:50px;margin-top:50px}
+.rank .card h3{font-size:62px;font-weight:900;margin-bottom:20px}
+.rank .card p{font-size:38px;line-height:1.6;color:#c9d6ee}
+.rank .meta{display:flex;gap:16px;margin-top:30px;flex-wrap:wrap}
+.rank .meta span{font-size:30px;background:#3a7bff;border-radius:14px;padding:8px 20px;font-weight:700}
+.rank .mini{display:flex;flex-direction:column;gap:22px;margin-top:50px}
+.rank .mini div{display:flex;align-items:center;gap:30px;font-size:46px;font-weight:800;background:rgba(255,255,255,.06);border-radius:30px;padding:30px 36px}
+.rank .mini b{font-size:56px;color:#7fb0ff;width:60px}
+
+/* ========== 5. 영수증형 ========== */
+.rcpt{background:#e9e4dc;display:flex;justify-content:center;align-items:center}
+.rcpt .paper{width:820px;background:#fff;padding:70px 70px 90px;position:relative;box-shadow:0 30px 60px rgba(0,0,0,.15);font-variant-numeric:tabular-nums}
+.rcpt .paper::after{content:"";position:absolute;left:0;right:0;bottom:-30px;height:30px;background:radial-gradient(circle at 15px -2px,transparent 16px,#fff 17px) 0 0/30px 30px repeat-x}
+.rcpt .c{text-align:center}
+.rcpt .shop{font-size:54px;font-weight:900;letter-spacing:.06em}
+.rcpt .small{font-size:28px;color:#777;margin-top:10px;line-height:1.5}
+.rcpt hr{border:0;border-top:4px dashed #bbb;margin:36px 0}
+.rcpt .ln{display:flex;justify-content:space-between;font-size:40px;font-weight:600;margin:20px 0}
+.rcpt .ln.minus span:last-child{color:#d62828}
+.rcpt .tot{display:flex;justify-content:space-between;font-size:56px;font-weight:900}
+.rcpt h1{font-size:84px;line-height:1.2;font-weight:900;margin:24px 0 10px}
+.rcpt .bc{height:110px;margin-top:40px;background:repeating-linear-gradient(90deg,#111 0 4px,#fff 4px 7px,#111 7px 9px,#fff 9px 15px,#111 15px 21px,#fff 21px 24px)}
+.rcpt .stamp{position:absolute;right:50px;top:330px;border:8px solid #d62828;color:#d62828;font-size:46px;font-weight:900;padding:14px 26px;transform:rotate(-14deg);border-radius:14px;opacity:.85}
+
+/* ========== 6. 레트로 OS 창 ========== */
+.os{background:#c7e3ff;background-image:radial-gradient(#9cc8f5 2px,transparent 2px);background-size:40px 40px;padding:120px 80px}
+.os .win{background:#fff;border:5px solid #111;border-radius:22px;box-shadow:16px 16px 0 #111;overflow:hidden}
+.os .tb{background:#ff8fc7;border-bottom:5px solid #111;height:80px;display:flex;align-items:center;padding:0 28px;gap:16px;font-size:30px;font-weight:800}
+.os .tb i{width:30px;height:30px;border-radius:50%;border:4px solid #111;background:#fff}
+.os .tb span{margin-left:auto}
+.os .wb{padding:60px 60px}
+.os h1{font-size:104px;line-height:1.15;font-weight:900}
+.os .search{margin-top:50px;border:5px solid #111;border-radius:999px;padding:24px 40px;font-size:40px;font-weight:700;display:flex;justify-content:space-between}
+.os .key{display:inline-block;border:5px solid #111;border-bottom-width:12px;border-radius:18px;padding:8px 22px;font-size:44px;font-weight:900;background:#fff;margin-right:12px}
+.os .kr{display:flex;align-items:center;justify-content:space-between;padding:34px 0;border-bottom:4px dashed #ccc}
+.os .kr p{font-size:42px;font-weight:700}
+.os .cursor{position:absolute;font-size:110px;right:120px;bottom:150px}
+.os .sticker{position:absolute;right:70px;top:70px;background:#fff35c;border:5px solid #111;border-radius:50%;width:220px;height:220px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:38px;font-weight:900;transform:rotate(10deg)}
+
+/* ========== 7. 미니멀 타이포 ========== */
+.mini{background:#f6f3ef;color:#1a1a1a;padding:110px 100px;display:flex;flex-direction:column;justify-content:space-between}
+.mini .top{display:flex;justify-content:space-between;font-size:28px;font-weight:700;letter-spacing:.12em}
+.mini h1{font-size:150px;line-height:1.08;font-weight:300;letter-spacing:-0.06em}
+.mini h1 b{font-weight:900}
+.mini h1 em{font-style:normal;color:#c46a4a;font-weight:900}
+.mini .rule{height:3px;background:#1a1a1a}
+.mini .foot{display:flex;justify-content:space-between;align-items:flex-end;font-size:34px;font-weight:600;color:#666}
+.mini .big{font-size:520px;font-weight:900;line-height:.8;color:#c46a4a;letter-spacing:-0.08em}
+.mini h2{font-size:78px;line-height:1.25;font-weight:800}
+.mini p{font-size:42px;line-height:1.7;color:#555;font-weight:500}
+
+/* ========== 8. Y2K 팝 ========== */
+.y2k{background:#ff4fa3;background-image:linear-gradient(45deg,#ff6bb5 25%,transparent 25%,transparent 75%,#ff6bb5 75%),linear-gradient(45deg,#ff6bb5 25%,transparent 25%,transparent 75%,#ff6bb5 75%);background-size:120px 120px;background-position:0 0,60px 60px;padding:110px 80px;color:#111}
+.y2k .panel{background:#fff;border:6px solid #111;border-radius:50px;padding:70px 60px;position:relative;box-shadow:14px 14px 0 #111}
+.y2k h1{font-size:120px;line-height:1.05;font-weight:900;letter-spacing:-0.05em}
+.y2k h1 span{color:#ff4fa3;-webkit-text-stroke:4px #111}
+.y2k .star{position:absolute;font-size:150px;line-height:1}
+.y2k .pill{display:inline-block;background:#c8ff3d;border:5px solid #111;border-radius:999px;padding:12px 30px;font-size:38px;font-weight:900;margin-bottom:30px}
+.y2k .sub{font-size:42px;font-weight:700;margin-top:30px;line-height:1.5}
+.y2k .chk{display:flex;flex-direction:column;gap:26px;margin-top:40px}
+.y2k .chk div{display:flex;gap:26px;align-items:center;font-size:46px;font-weight:800}
+.y2k .chk i{flex:none;width:66px;height:66px;border:5px solid #111;border-radius:18px;background:#c8ff3d;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:40px}
+.y2k .chk i.off{background:#fff}
+.y2k h2{font-size:84px;font-weight:900;line-height:1.15}
+
+.pg{position:absolute;bottom:50px;right:70px;font-size:26px;font-weight:800;opacity:.55}
+</style></head><body>
+
+<!-- 1. 채팅형 -->
+<div class="s chat" id="chat1">
+  <div class="bar"><div class="av">💼</div>입사 동기 단톡방 <span class="acc" style="margin-left:auto">@work_daily</span></div>
+  <div class="room">
+    <div class="name">민지</div><div class="b l">나 오늘 팀장님한테 회의록 다시 써오라는 말 들었어… 😭</div>
+    <div class="name">준호</div><div class="b l">ㅠㅠ 회의록 대체 어떻게 써야 돼?</div>
+    <div class="b r">나도 처음엔 받아쓰기만 했는데<br>이 3가지만 바꾸니까 칭찬받았어 👀</div>
+    <div class="time">오전 9:41</div>
+  </div>
+  <div class="big"><h1>신입이 몰래 보는<br><em>회의록 잘 쓰는 법</em></h1><p>받아쓰기 말고, 이렇게 정리하세요 →</p></div>
+</div>
+<div class="s chat" id="chat2">
+  <div class="bar"><div class="av">💼</div>입사 동기 단톡방</div>
+  <div class="room">
+    <div class="b r">첫 번째! 결론부터 써 ✍️</div>
+    <div class="tip"><h3>📌 회의록 맨 위 3줄</h3><ul><li>결정된 것</li><li>해야 할 일 · 담당자 · 기한</li><li>다음 회의 날짜</li></ul></div>
+    <div class="name">민지</div><div class="b l">헐 대화 내용을 다 적는 게 아니었구나</div>
+    <div class="b r">응! 대화는 아래에 요약만 하면 돼</div>
+  </div>
+  <div class="pg">2 / 6</div>
+</div>
+
+<!-- 2. 노트형 -->
+<div class="s note" id="note1">
+  <div class="tape" style="left:120px;top:90px"></div>
+  <div class="acc" style="position:absolute;right:110px;top:110px">@study_lab</div>
+  <h1>공부 잘하는 애들은<br><span class="hl">노트를 이렇게</span><br>정리한다</h1>
+  <div class="sub">시험 기간마다 다시 찾아보게 되는<br>노트 정리법 4가지 ✏️</div>
+  <div class="post" style="right:90px;bottom:120px">저장해두고<br>시험 전에<br>꼭 보기!! 📌</div>
+</div>
+<div class="s note" id="note2">
+  <div class="tape" style="right:140px;top:80px;transform:rotate(5deg);background:rgba(166,227,196,.8)"></div>
+  <h2 style="margin-top:60px">① <span class="hl2">코넬식</span>으로 나누기</h2>
+  <div class="row"><b>왼쪽</b> 키워드 · 질문</div>
+  <div class="row"><b>오른쪽</b> 수업 내용 필기</div>
+  <div class="row"><b>아래</b> 3줄 요약</div>
+  <div class="row" style="margin-top:80px">→ 복습할 땐 <span class="circle">오른쪽을 가리고</span></div>
+  <div class="row">왼쪽 질문에 답해보기!</div>
+  <div class="post" style="right:90px;bottom:110px;background:#fff3a6;color:#5a4a00;transform:rotate(-4deg)">색깔 펜은<br>3개까지만 🖍️</div>
+  <div class="pg">2 / 6</div>
+</div>
+
+<!-- 3. 신문형 -->
+<div class="s news" id="news1">
+  <div class="mast"><h1>망원 위클리</h1><span>VOL. 48<br>2026. 12. 05 SAT</span></div>
+  <div class="brk">속보</div>
+  <div class="head">망원천 따라<br>겨울 플리마켓<br>열린다</div>
+  <div class="deck">동네 작가 40팀이 모이는 연말 장터,<br>이번 주말 단 이틀만</div>
+  <div class="photo">🎪</div>
+</div>
+<div class="s news" id="news2">
+  <div class="mast"><h1>망원 위클리</h1><span>VOL. 48<br>2 / 6</span></div>
+  <div class="cols">
+    <div><h3>언제?</h3><p>12월 6일(토) – 7일(일)<br>오전 11시 – 오후 6시</p></div>
+    <div><h3>어디서?</h3><p>망원천 산책로 입구 광장<br>(우천 시 실내 장소 공지)</p></div>
+    <div><h3>무엇을?</h3><p>핸드메이드 소품, 빈티지 의류, 겨울 간식 부스</p></div>
+    <div><h3>누가?</h3><p>동네 작가와 소상공인 40팀</p></div>
+  </div>
+  <div class="box"><h3>📢 편집자 한마디</h3><p>개인 텀블러를 가져오면 음료 부스에서 할인해 준대요. 따뜻하게 입고 오세요!</p></div>
+</div>
+
+<!-- 4. 랭킹 -->
+<div class="s rank" id="rank1">
+  <div class="glow"></div>
+  <div class="tag">겨울 제주 여행</div>
+  <h1><span class="t">TOP 5</span>통창 너머<br>바다 보는 카페</h1>
+  <div class="sub">이번 겨울, 저장해두고 하나씩 가보세요 🌊</div>
+  <div class="acc" style="position:absolute;left:90px;bottom:70px">@jeju_slow</div>
+</div>
+<div class="s rank" id="rank2">
+  <div class="item"><div class="num">01</div><div style="font-size:40px;color:#a9bde0;font-weight:700">애월 · 해안도로</div></div>
+  <div class="card"><h3>노을 맛집 통창 카페</h3><p>2층 전체가 통유리라 어느 자리에서나 바다가 보여요. 해 질 무렵 방문을 추천해요.</p>
+    <div class="meta"><span>☕ 시그니처 라떼</span><span>🅿️ 주차 가능</span><span>🐶 반려견 동반</span></div></div>
+  <div class="mini"><div><b>02</b>함덕 · 모래사장 앞 루프탑</div><div><b>03</b>성산 · 일출 보는 아침 카페</div></div>
+  <div class="pg" style="color:#fff">2 / 7</div>
+</div>
+
+<!-- 5. 영수증형 -->
+<div class="s rcpt" id="rcpt1">
+  <div class="paper">
+    <div class="c"><div class="shop">MONEY CHECK</div><div class="small">12월 고정지출 점검 영수증<br>@money_routine</div></div>
+    <hr>
+    <h1>매달 새는 돈<br>여기서 찾았다 🧾</h1>
+    <div class="small" style="text-align:left">안 쓰는데 나가는 돈, 한 번에 정리하기</div>
+    <hr>
+    <div class="ln"><span>OTT 구독 3개</span><span>?</span></div>
+    <div class="ln"><span>안 가는 헬스장</span><span>?</span></div>
+    <div class="ln"><span>잊고 있던 앱 결제</span><span>?</span></div>
+    <hr>
+    <div class="tot"><span>TOTAL</span><span>확인 필요</span></div>
+    <div class="bc"></div>
+  </div>
+</div>
+<div class="s rcpt" id="rcpt2">
+  <div class="paper">
+    <div class="c"><div class="shop">STEP 01</div><div class="small">구독 서비스 정리하기</div></div>
+    <hr>
+    <div class="ln"><span>① 카드 명세서 3개월치 열기</span></div>
+    <div class="ln"><span>② '정기결제' 항목 표시</span></div>
+    <div class="ln"><span>③ 최근 한 달 안 쓴 것 체크</span></div>
+    <div class="ln"><span>④ 바로 해지 or 다음 달 해지</span></div>
+    <hr>
+    <div class="ln minus"><span>해지한 구독</span><span>- 내 돈 지킴</span></div>
+    <hr>
+    <div class="tot" style="font-size:44px"><span>TIP</span><span>알림 설정 ON</span></div>
+    <div class="stamp">CHECK!</div>
+    <div class="bc"></div>
+  </div>
+</div>
+
+<!-- 6. OS 창 -->
+<div class="s os" id="os1">
+  <div class="win"><div class="tb"><i></i><i></i><i></i><span>shortcut.exe</span></div>
+    <div class="wb"><h1>일 잘하는 사람은<br>마우스를<br>덜 씁니다</h1>
+      <div class="search"><span>🔍 퇴근 빨리 하는 법</span><span>↵</span></div></div></div>
+  <div class="sticker">윈도우<br>단축키<br>6선</div>
+  <div class="cursor">👆</div>
+  <div class="acc" style="position:absolute;left:80px;bottom:60px">@office_hack</div>
+</div>
+<div class="s os" id="os2">
+  <div class="win"><div class="tb"><i></i><i></i><i></i><span>01 – 03</span></div>
+    <div class="wb">
+      <div class="kr"><div><span class="key">Win</span><span class="key">Shift</span><span class="key">S</span></div><p>화면 캡처</p></div>
+      <div class="kr"><div><span class="key">Win</span><span class="key">V</span></div><p>클립보드 기록</p></div>
+      <div class="kr" style="border:0"><div><span class="key">Ctrl</span><span class="key">Shift</span><span class="key">T</span></div><p>닫은 탭 열기</p></div>
+    </div></div>
+  <div class="pg">2 / 4</div>
+</div>
+
+<!-- 7. 미니멀 타이포 -->
+<div class="s mini" id="mini1">
+  <div class="top"><span>SKIN NOTE</span><span>@less_skin</span></div>
+  <h1>피부는<br><b>더하는 것</b>보다<br><em>덜어내는 것</em></h1>
+  <div><div class="rule"></div><div class="foot" style="margin-top:30px"><span>겨울철 스킨케어 루틴 정리</span><span>01</span></div></div>
+</div>
+<div class="s mini" id="mini2">
+  <div class="top"><span>STEP</span><span>02 / 05</span></div>
+  <div><div class="big">2</div><h2>세안은<br>미온수로 짧게</h2></div>
+  <div><div class="rule" style="margin-bottom:34px"></div><p>뜨거운 물은 피부를 더 건조하게 만들 수 있어요. 미지근한 물로 1분 안에 끝내 보세요.</p></div>
+</div>
+
+<!-- 8. Y2K -->
+<div class="s y2k" id="y2k1">
+  <div class="panel" style="margin-top:120px">
+    <div class="pill">🎉 PARTY TIME</div>
+    <h1>연말 홈파티<br><span>완벽</span> 준비<br>체크리스트</h1>
+    <div class="sub">이것만 챙기면 분위기 끝 ✨</div>
+  </div>
+  <div class="star" style="right:60px;top:40px">⭐</div>
+  <div class="star" style="left:40px;bottom:60px;font-size:120px">💖</div>
+  <div class="acc" style="position:absolute;right:80px;bottom:70px;color:#111;opacity:.8">@party_mood</div>
+</div>
+<div class="s y2k" id="y2k2" style="background-color:#7a5cff;background-image:linear-gradient(45deg,#8c72ff 25%,transparent 25%,transparent 75%,#8c72ff 75%),linear-gradient(45deg,#8c72ff 25%,transparent 25%,transparent 75%,#8c72ff 75%)">
+  <div class="panel" style="margin-top:60px">
+    <div class="pill" style="background:#ffd23f">STEP 1 · 분위기</div>
+    <h2>조명이<br>반은 한다 💡</h2>
+    <div class="chk">
+      <div><i>✓</i>전구 줄조명 2m 이상</div>
+      <div><i>✓</i>향초 or 무드등</div>
+      <div><i class="off"></i>테이블 러너</div>
+      <div><i class="off"></i>폴라로이드 포토존</div>
+    </div>
+  </div>
+  <div class="star" style="right:50px;bottom:50px">🪩</div>
+  <div class="pg" style="color:#fff;opacity:.9;left:80px;right:auto">2 / 6</div>
+</div>
+
+</body></html>
