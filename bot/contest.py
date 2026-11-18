@@ -183,7 +183,7 @@ def format_message(d, ideas, cost):
 def should_run(st):
     if st.get("contest_off") or st.get("paused"):
         return False
-    if st.get("contest_force"):
+    if st.get("contest_force") or st.get("contest_retry"):
         return True
     t = now()
     return t.hour >= config.CONTEST_HOUR_KST and st.get("contest_last_date") != t.strftime("%Y-%m-%d")
@@ -223,6 +223,7 @@ def run(st, notify):
             print(f"[contest] {sid} {d['title'][:30]} → {why}")
             if ok:
                 candidates.append(d)
+    candidates = st.pop("contest_retry", []) + candidates
     st["contest_last_date"] = now().strftime("%Y-%m-%d")
     st["contest_seen"] = st["contest_seen"][-1000:]
     candidates.sort(key=prize_value, reverse=True)
@@ -232,6 +233,7 @@ def run(st, notify):
             ideas, cost = make_ideas(d)
         except Exception as e:
             print(f"[contest] 생성 실패 {d['id']}: {e}")
+            st["contest_last_error"] = f"{type(e).__name__}: {str(e)[:400]}"
             continue
         st.setdefault("cost", {})[month] = round(st["cost"].get(month, 0) + cost, 5)
         msg = format_message(d, ideas, cost)
@@ -241,5 +243,9 @@ def run(st, notify):
             notify(st, msg)
         sent += 1
     print(f"[contest] 후보 {len(candidates)}개 중 {sent}개 전송")
-    if sent == 0 and not config.MOCK:
-        notify(st, "🏆 오늘은 조건에 맞는 새 공모전이 없어요.")
+    if not config.MOCK:
+        if candidates and sent == 0:
+            st["contest_retry"] = candidates[:config.CONTESTS_PER_DAY]  # 다음 실행 때 다시 시도
+            notify(st, "⚠️ 공모전 출품안 생성 중 오류가 나서 다음 실행 때 다시 시도합니다.\n" + st.get("contest_last_error", ""))
+        elif not candidates:
+            notify(st, "🏆 오늘은 조건에 맞는 새 공모전이 없어요.")
