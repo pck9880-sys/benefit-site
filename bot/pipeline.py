@@ -46,9 +46,9 @@ def drafts():
     return sorted(config.DRAFTS_DIR.glob("*.json"))
 
 
-def notify(st, text, buttons=None):
+def notify(st, text, buttons=None, html=False):
     if st.get("owner_chat_id"):
-        return telegram.send(st["owner_chat_id"], text, buttons)
+        return telegram.send(st["owner_chat_id"], text, buttons, html=html)
     return None
 
 

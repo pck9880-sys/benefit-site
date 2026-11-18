@@ -23,8 +23,7 @@ KST = timezone(timedelta(hours=9))
 BASE = "https://www.contestkorea.com/sub"
 UA = {"User-Agent": "Mozilla/5.0 (compatible; contest-helper/1.0)"}
 CATEGORIES = {
-    "030210001": "네이밍·슬로건",
-    "031410001": "아이디어·창업",
+    "030210001": "네이밍·슬로건",  # 문구와 짧은 설명만으로 제출이 끝나는 분야만
 }
 # 개인 경험을 지어내야 하거나, AI로 만들기 부적절한 유형은 제외
 EXCLUDE_WORDS = ["해커톤", "솔버톤", "수기", "체험담", "사연", "사진", "영상", "UCC", "웹툰", "그림", "포스터", "디자인", "캐릭터",
@@ -145,6 +144,7 @@ class Package(BaseModel):
     personal_fields: List[str] = Field(description="응모자가 직접 입력해야 할 개인정보 항목")
     email_template: str = Field(description="이메일 접수일 때 제목과 본문 틀 (개인정보는 [이름] 같은 자리표시자). 이메일 접수가 아니면 빈 문자열")
     announce: str = Field(description="발표일·발표 방법 (없으면 '명시 없음')")
+    text_only: bool = Field(description="출품작 문구와 짧은 작품설명만으로 제출이 끝나면 true. 제안서·기획서·이미지·영상·별도 파일 작성이 필요하면 false")
     candidates: List[Candidate] = Field(description="서로 다른 방향의 후보 12개 (자체 채점 포함)")
     caution: str = Field(description="제출 전에 사람이 꼭 확인할 점 한 줄")
 
@@ -255,7 +255,7 @@ def make_package(d):
                            symbolism=3, memorability=4, usability=4, why="포인트") for i in range(1, 6)]
         pkg = Package(keywords=["테스트"], format_rules="(테스트)", per_person_limit="1개", ai_policy="언급 없음",
                       submit_method="온라인 폼", required_docs=["신청서"], personal_fields=["이름", "연락처"],
-                      email_template="", announce="명시 없음", candidates=cands, caution="공고 확인")
+                      email_template="", announce="명시 없음", text_only=True, candidates=cands, caution="공고 확인")
         return {"pkg": pkg, "top": cands, "dups": {}, "notes": "(테스트 조사)"}, 0.0
     notes, c1 = research(d)
     pkg, c2 = generate(d, notes)
@@ -272,26 +272,32 @@ def _len_ko(s):
 
 
 def format_messages(d, r, cost):
-    """텔레그램 메시지 3개: ①공모전·조사 요약 ②추천 출품작 ③제출 패키지"""
+    """휴대폰용 텔레그램 메시지 2개: ①추천 1순위 요약 ②탭해서 복사 + 접수 링크 (HTML)"""
+    from html import escape as e
     pkg, top = r["pkg"], r["top"]
-    m1 = [f"🏆 {d['title']}", f"주최: {d['organizer']}", f"마감: {d['deadline']} · 시상: {d['prize'][:70]}",
-          f"핵심 키워드: {', '.join(pkg.keywords)}", "", "🔎 사전 조사", r["notes"][:2500]]
-    m2 = [f"✍️ 추천 출품작 TOP {len(top)} — {d['title'][:30]}", f"형식: {pkg.format_rules}", ""]
-    for i, c in enumerate(top, 1):
-        score = c.fit + c.originality + c.symbolism + c.memorability + c.usability
-        m2 += [f"{i}) {c.text}", f"   {_len_ko(c.text)}자(공백·부호 제외) · {c.angle} · 자체점수 {score}/25",
-               f"   노린 점: {c.why}", f"   작품설명: {c.explanation}", ""]
+    best = top[0]
+    score = lambda c: c.fit + c.originality + c.symbolism + c.memorability + c.usability
+    notes = "\n".join(l for l in r["notes"].splitlines() if l.strip())[:600]
+    m1 = [f"🏆 {d['title']}", f"마감 {d['deadline']} · {d['prize'][:60]}", "",
+          f"⭐ 추천 1순위 ({score(best)}/25점)", best.text, f"노린 점: {best.why}", ""]
+    if len(top) > 1:
+        m1.append("다른 후보: " + " / ".join(c.text for c in top[1:]))
     dropped = [t for t, (v, _) in r["dups"].items() if v == "유사"]
     if dropped:
-        m2.append("🚫 기존 문구와 비슷해 뺀 후보: " + " / ".join(dropped))
-    m3 = ["📮 제출 패키지", f"접수: {pkg.submit_method}", f"1인 접수: {pkg.per_person_limit}",
-          f"AI 규정: {pkg.ai_policy}", f"제출 서류: {', '.join(pkg.required_docs) or '없음'}",
-          f"직접 입력할 정보: {', '.join(pkg.personal_fields) or '-'}", f"발표: {pkg.announce}"]
+        m1.append("🚫 기존 문구와 비슷해 뺀 후보: " + " / ".join(dropped))
+    m1 += ["", f"형식: {pkg.format_rules}", f"1인 접수: {pkg.per_person_limit} · AI 규정: {pkg.ai_policy}",
+           f"발표: {pkg.announce}", "", "🔎 조사 요약", notes, f"(비용 ${cost:.3f})"]
+    link = d["home"] or d["url"]
+    m2 = ["📮 <b>제출하기</b> (회색 글자를 탭하면 복사돼요)", "",
+          "① 출품작", f"<code>{e(best.text)}</code>", f"({_len_ko(best.text)}자, 공백·부호 제외)", "",
+          "② 작품설명", f"<code>{e(best.explanation)}</code>", "",
+          f"③ 접수 링크: {e(link)}", f"   접수 방법: {e(pkg.submit_method)}",
+          f"④ 직접 입력: {e(', '.join(pkg.personal_fields) or '-')}",
+          f"⑤ 제출 서류: {e(', '.join(pkg.required_docs) or '없음')}", "",
+          "✅ 제출 전: 1인 접수 개수 · 글자 수 · 출품작 인터넷 검색"]
     if pkg.email_template:
-        m3 += ["", "✉️ 이메일 틀", pkg.email_template]
-    m3 += ["", f"⚠️ {pkg.caution}", "제출 전: ①출품작 인터넷 검색 ②글자 수 ③1인 접수 개수 확인",
-           f"공고: {d['url']}"] + ([f"주최사 공고: {d['home']}"] if d["home"] else []) + [f"(조사·생성 비용 ${cost:.3f})"]
-    return ["\n".join(m1), "\n".join(m2), "\n".join(m3)]
+        m2 += ["", "✉️ 이메일 접수 틀 (탭하면 복사)", f"<code>{e(pkg.email_template)}</code>"]
+    return [("\n".join(m1), False), ("\n".join(m2), True)]
 
 
 def needs_document(d):
@@ -351,7 +357,11 @@ def run(st, notify):
     candidates.sort(key=prize_value, reverse=True)
     sent = 0
     limit = st.pop("contest_limit_once", None) or config.CONTESTS_PER_DAY
-    for d in candidates[:limit]:
+    tried = 0
+    for d in candidates:
+        if sent >= limit or tried >= limit + 2:  # 문서형으로 판정돼 건너뛰는 경우 대비 최대 2개 더 시도
+            break
+        tried += 1
         try:
             r, cost = make_package(d)
         except Exception as e:
@@ -360,16 +370,19 @@ def run(st, notify):
             continue
         st.setdefault("cost", {})[month] = round(st["cost"].get(month, 0) + cost, 5)
         st.pop("contest_last_error", None)
+        if not r["pkg"].text_only or not r["top"]:
+            print(f"[contest] {d['id']} 문서·파일 필요 또는 후보 없음 → 건너뜀")
+            continue
         try:
             msgs = format_messages(d, r, cost)
         except Exception as e:
             st["contest_last_error"] = f"format {type(e).__name__}: {str(e)[:300]}"
             print("[contest]", st["contest_last_error"])
             continue
-        for msg in msgs:
+        for msg, html in msgs:
             if config.MOCK:
                 print(msg)
-            elif notify(st, msg[:3900]) is None:
+            elif notify(st, msg[:3900], html=html) is None:
                 st["contest_last_error"] = "telegram " + telegram.last_error
         sent += 1
     print(f"[contest] 후보 {len(candidates)}개 중 {sent}개 전송")

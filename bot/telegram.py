@@ -30,8 +30,10 @@ def _call(method, **payload):
         return None
 
 
-def send(chat_id, text, buttons=None):
+def send(chat_id, text, buttons=None, html=False):
     payload = {"chat_id": chat_id, "text": text[:4000], "disable_web_page_preview": True}
+    if html:
+        payload["parse_mode"] = "HTML"
     if buttons:
         payload["reply_markup"] = {"inline_keyboard": buttons}
     res = _call("sendMessage", **payload)
