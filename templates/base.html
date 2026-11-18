@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}{{ site_name }}{% endblock %}</title>
+<meta name="description" content="{% block desc %}{{ site_desc }}{% endblock %}">
+<link rel="canonical" href="{{ canonical }}">
+<meta property="og:site_name" content="{{ site_name }}">
+<meta property="og:title" content="{{ self.title() }}">
+<meta property="og:description" content="{{ self.desc() }}">
+<meta property="og:url" content="{{ canonical }}">
+<meta property="og:type" content="{% block ogtype %}website{% endblock %}">
+{% if google_verify %}<meta name="google-site-verification" content="{{ google_verify }}">{% endif %}
+{% if naver_verify %}<meta name="naver-site-verification" content="{{ naver_verify }}">{% endif %}
+<link rel="stylesheet" href="{{ base }}/static/style.css">
+{% if adsense %}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ adsense }}" crossorigin="anonymous"></script>{% endif %}
+{% block head %}{% endblock %}
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="{{ base }}/">{{ site_name }}</a>
+    <input id="q" type="search" placeholder="지원금 검색 (예: 청년, 출산)" aria-label="검색">
+  </div>
+  <div id="results" class="wrap"></div>
+</header>
+<nav class="cats wrap">
+  {% for slug, name, n in categories %}<a href="{{ base }}/c/{{ slug }}/">{{ name }} <small>{{ n }}</small></a>{% endfor %}
+</nav>
+<main class="wrap">{% block main %}{% endblock %}</main>
+<footer class="wrap">
+  <p>본 사이트의 정보는 행정안전부 「대한민국 공공서비스 정보」 공공데이터를 바탕으로 작성되었습니다. 지원 조건과 일정은 변경될 수 있으니 신청 전 반드시 공식 안내를 확인하세요.</p>
+  <p><a href="{{ base }}/about.html">소개</a> · <a href="{{ base }}/privacy.html">개인정보처리방침</a> · © {{ year }} {{ site_name }}</p>
+</footer>
+<script>window.BASE="{{ base }}";</script>
+<script src="{{ base }}/static/search.js" defer></script>
+</body>
+</html>

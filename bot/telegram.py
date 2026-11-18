@@ -1,0 +1,42 @@
+"""텔레그램 승인 봇 - 서버 없이 동작 (매시간 getUpdates로 버튼 클릭을 확인)."""
+import requests
+
+from . import config
+
+
+def enabled():
+    return bool(config.TELEGRAM_BOT_TOKEN) and not config.MOCK
+
+
+def _call(method, **payload):
+    if not enabled():
+        return None
+    try:
+        r = requests.post(
+            f"https://api.telegram.org/bot{config.TELEGRAM_BOT_TOKEN}/{method}", json=payload, timeout=30
+        )
+        data = r.json()
+        return data.get("result") if data.get("ok") else None
+    except requests.RequestException:
+        return None
+
+
+def send(chat_id, text, buttons=None):
+    payload = {"chat_id": chat_id, "text": text[:4000], "disable_web_page_preview": True}
+    if buttons:
+        payload["reply_markup"] = {"inline_keyboard": buttons}
+    res = _call("sendMessage", **payload)
+    return res.get("message_id") if res else None
+
+
+def edit(chat_id, message_id, text):
+    _call("editMessageText", chat_id=chat_id, message_id=message_id, text=text[:4000],
+          disable_web_page_preview=True)
+
+
+def get_updates(offset):
+    return _call("getUpdates", offset=offset, timeout=0, allowed_updates=["message", "callback_query"]) or []
+
+
+def answer_callback(cb_id, text):
+    _call("answerCallbackQuery", callback_query_id=cb_id, text=text)

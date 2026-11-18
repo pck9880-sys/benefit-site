@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ a.title }} | {{ site_name }}{% endblock %}
+{% block desc %}{{ a.description }}{% endblock %}
+{% block ogtype %}article{% endblock %}
+{% block head %}
+<script type="application/ld+json">{{ {"@context":"https://schema.org","@type":"Article","headline":a.title,"description":a.description,"datePublished":post.published_at,"dateModified":post.published_at,"mainEntityOfPage":canonical,"publisher":{"@type":"Organization","name":site_name}} | tojson }}</script>
+{% if faq_ld %}<script type="application/ld+json">{{ faq_ld | safe }}</script>{% endif %}
+{% endblock %}
+{% block main %}
+<article class="post">
+  <p class="crumb"><a href="{{ base }}/">홈</a> › <a href="{{ base }}/c/{{ post.field_slug }}/">{{ post.source.field }}</a></p>
+  <h1>{{ a.title }}</h1>
+  <p class="meta">{{ post.source.org }} · 게시 {{ post.date }}{% if post.source.deadline %} · 신청기한: {{ post.source.deadline }}{% endif %}</p>
+  <div class="summary"><strong>핵심 요약</strong><ul>{% for p in a.summary_points %}<li>{{ p }}</li>{% endfor %}</ul></div>
+  {% if adsense %}<ins class="adsbygoogle" style="display:block" data-ad-client="{{ adsense }}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>{% endif %}
+  <div class="body">{{ body | safe }}</div>
+  {% if a.faq %}<h2>자주 묻는 질문</h2>
+  {% for f in a.faq %}<details><summary>{{ f.q }}</summary><p>{{ f.a }}</p></details>{% endfor %}{% endif %}
+  <div class="source">
+    <strong>공식 안내 · 신청</strong>
+    <ul>
+      {% if post.source.url %}<li><a href="{{ post.source.url }}" target="_blank" rel="noopener">정부24 상세 안내 바로가기</a></li>{% endif %}
+      {% if post.source.apply_url %}<li><a href="{{ post.source.apply_url }}" target="_blank" rel="noopener nofollow">온라인 신청 사이트</a></li>{% endif %}
+      {% if post.source.contact %}<li>문의: {{ post.source.contact }}</li>{% endif %}
+    </ul>
+    <small>※ 공공데이터를 바탕으로 정리한 글입니다. 실제 지원 여부는 담당 기관에 확인하세요.</small>
+  </div>
+  <p class="tags">{% for t in a.tags %}<span>#{{ t }}</span>{% endfor %}</p>
+  {% if related %}<h2>함께 보면 좋은 혜택</h2><ul class="list">{% for r in related %}<li><a href="{{ base }}/{{ r.url }}">{{ r.article.title }}</a></li>{% endfor %}</ul>{% endif %}
+</article>
+{% endblock %}

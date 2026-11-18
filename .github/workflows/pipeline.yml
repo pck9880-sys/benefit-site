@@ -1,0 +1,76 @@
+name: auto-pipeline
+
+on:
+  schedule:
+    - cron: "17 * * * *"   # 매시간 17분 (텔레그램 승인 확인 + 하루 1회 글 생성)
+  workflow_dispatch: {}      # Actions 탭에서 수동 실행 가능
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pipeline
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      SITE_NAME: ${{ vars.SITE_NAME }}
+      SITE_URL: ${{ vars.SITE_URL }}
+      CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
+      POSTS_PER_DAY: ${{ vars.POSTS_PER_DAY }}
+      GENERATE_HOUR_KST: ${{ vars.GENERATE_HOUR_KST }}
+      AUTO_APPROVE_HOURS: ${{ vars.AUTO_APPROVE_HOURS }}
+      MAX_MONTHLY_USD: ${{ vars.MAX_MONTHLY_USD }}
+      ADSENSE_CLIENT: ${{ vars.ADSENSE_CLIENT }}
+      GOOGLE_SITE_VERIFICATION: ${{ vars.GOOGLE_SITE_VERIFICATION }}
+      NAVER_SITE_VERIFICATION: ${{ vars.NAVER_SITE_VERIFICATION }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: 승인 처리 + 글 생성
+        run: python -m bot tick
+
+      - name: 변경사항 저장
+        run: |
+          git config user.name "auto-bot"
+          git config user.email "auto-bot@users.noreply.github.com"
+          git add data
+          if ! git diff --cached --quiet; then
+            git commit -m "auto: $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push
+          fi
+
+      - name: 사이트 빌드
+        if: always()
+        run: |
+          if [ -z "$SITE_URL" ]; then export SITE_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}"; fi
+          python -m bot build
+
+      - uses: actions/configure-pages@v5
+        if: always()
+      - uses: actions/upload-pages-artifact@v3
+        if: always()
+        with:
+          path: _site
+      - id: deploy
+        if: always()
+        uses: actions/deploy-pages@v4

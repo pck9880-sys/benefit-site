@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}{% if title %}{{ title }} 지원금·혜택 모음 | {% endif %}{{ site_name }}{% if page > 1 %} ({{ page }}페이지){% endif %}{% endblock %}
+{% block main %}
+{% if title %}<h1>{{ title }} 분야 지원금·혜택</h1>{% else %}<h1 class="hero">{{ site_desc }}</h1>{% endif %}
+<ul class="cards">
+{% for p in posts %}
+  <li><a href="{{ base }}/{{ p.url }}"><strong>{{ p.article.title }}</strong><span>{{ p.article.description }}</span><small>{{ p.source.org }} · {{ p.date }}</small></a></li>
+{% else %}
+  <li>아직 게시된 글이 없습니다. 곧 업데이트됩니다.</li>
+{% endfor %}
+</ul>
+{% if pages > 1 %}<p class="pager">{% for n in range(1, pages + 1) %}{% if n == page %}<b>{{ n }}</b>{% else %}<a href="{{ base }}/{{ prefix }}{% if n > 1 %}page/{{ n }}.html{% endif %}">{{ n }}</a>{% endif %} {% endfor %}</p>{% endif %}
+{% endblock %}

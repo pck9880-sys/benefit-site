@@ -1,0 +1,102 @@
+"""data/posts/*.json → 정적 사이트(_site/) 생성."""
+import json
+import re
+import shutil
+from datetime import datetime
+from html import escape
+from urllib.parse import urlparse
+
+import markdown
+from jinja2 import Environment, FileSystemLoader
+
+from . import config
+
+PER_PAGE = 30
+
+
+def slugify(s):
+    return re.sub(r"[^\w가-힣]+", "-", s).strip("-") or "etc"
+
+
+def load_posts():
+    posts = []
+    for p in config.POSTS_DIR.glob("*.json"):
+        d = json.loads(p.read_text("utf-8"))
+        d["url"] = f"posts/{d['id']}.html"
+        d["field_slug"] = slugify(d["source"].get("field") or "기타")
+        d["date"] = d["published_at"][:10]
+        posts.append(d)
+    posts.sort(key=lambda d: d["published_at"], reverse=True)
+    return posts
+
+
+def build():
+    base_path = urlparse(config.SITE_URL).path.rstrip("/")  # GitHub Pages 하위경로 대응
+    env = Environment(loader=FileSystemLoader(config.ROOT / "templates"), autoescape=True)
+    env.globals.update(
+        site_name=config.SITE_NAME, site_url=config.SITE_URL, site_desc=config.SITE_DESCRIPTION,
+        base=base_path, adsense=config.ADSENSE_CLIENT, year=datetime.now().year,
+        google_verify=config.GOOGLE_SITE_VERIFICATION, naver_verify=config.NAVER_SITE_VERIFICATION,
+    )
+    out = config.OUT_DIR
+    if out.exists():
+        shutil.rmtree(out)
+    (out / "posts").mkdir(parents=True)
+    (out / "c").mkdir()
+    shutil.copytree(config.ROOT / "static", out / "static")
+
+    posts = load_posts()
+    fields = {}
+    for d in posts:
+        fields.setdefault(d["field_slug"], {"name": d["source"].get("field") or "기타", "posts": []})["posts"].append(d)
+    cats = sorted(fields.items(), key=lambda kv: -len(kv[1]["posts"]))
+    env.globals["categories"] = [(k, v["name"], len(v["posts"])) for k, v in cats]
+
+    def write(rel, html):
+        (out / rel).parent.mkdir(parents=True, exist_ok=True)
+        (out / rel).write_text(html, "utf-8")
+
+    md = markdown.Markdown(extensions=["tables", "sane_lists"])
+    for d in posts:
+        md.reset()
+        body_html = md.convert(d["article"]["body_markdown"].replace("<", "&lt;"))  # 원시 HTML 차단
+        faq_ld = json.dumps({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": f["q"], "acceptedAnswer": {"@type": "Answer", "text": f["a"]}}
+            for f in d["article"]["faq"]]}, ensure_ascii=False).replace("</", "<\\/") if d["article"]["faq"] else ""
+        related = [x for x in fields[d["field_slug"]]["posts"] if x["id"] != d["id"]][:5]
+        write(d["url"], env.get_template("post.html").render(post=d, a=d["article"], body=body_html,
+                                                             related=related, faq_ld=faq_ld, canonical=f"{config.SITE_URL}/{d['url']}"))
+
+    # 목록 페이지 (페이지네이션)
+    def paginate(items, prefix, title, tmpl_name="list.html"):
+        pages = max(1, -(-len(items) // PER_PAGE))
+        for i in range(pages):
+            rel = f"{prefix}index.html" if i == 0 else f"{prefix}page/{i + 1}.html"
+            write(rel, env.get_template(tmpl_name).render(
+                posts=items[i * PER_PAGE:(i + 1) * PER_PAGE], title=title, page=i + 1, pages=pages,
+                prefix=prefix, canonical=f"{config.SITE_URL}/{rel}".replace("index.html", "")))
+
+    paginate(posts, "", None)
+    for slug, v in cats:
+        paginate(v["posts"], f"c/{slug}/", v["name"])
+
+    for name in ("about", "privacy"):
+        write(f"{name}.html", env.get_template(f"{name}.html").render(canonical=f"{config.SITE_URL}/{name}.html"))
+    write("404.html", env.get_template("404.html").render(canonical=config.SITE_URL))
+
+    # 검색용 인덱스
+    write("search.json", json.dumps(
+        [{"t": d["article"]["title"], "u": d["url"], "k": " ".join(d["article"]["tags"])} for d in posts],
+        ensure_ascii=False))
+
+    # SEO 파일
+    urls = [f"{config.SITE_URL}/"] + [f"{config.SITE_URL}/c/{s}/" for s, _ in cats]
+    urls += [f"{config.SITE_URL}/{d['url']}" for d in posts]
+    write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+          + "\n".join(f"<url><loc>{escape(u)}</loc></url>" for u in urls) + "\n</urlset>\n")
+    write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {config.SITE_URL}/sitemap.xml\n")
+    if config.ADSENSE_CLIENT:
+        pub = config.ADSENSE_CLIENT.replace("ca-", "")
+        write("ads.txt", f"google.com, {pub}, DIRECT, f08c47fec0942fa0\n")
+    (out / ".nojekyll").write_text("")
+    print(f"built {len(posts)} posts → {out}")
