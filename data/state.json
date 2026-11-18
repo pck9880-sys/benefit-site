@@ -1,0 +1,9 @@
+{
+ "owner_chat_id": null,
+ "tg_offset": 0,
+ "last_generate_date": "",
+ "paused": false,
+ "force_generate": false,
+ "cost": {},
+ "used_ids": []
+}
