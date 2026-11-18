@@ -143,8 +143,8 @@ def should_generate(st):
 def generate(st):
     month = now().strftime("%Y-%m")
     st["force_generate"] = False
-    st["last_generate_date"] = now().strftime("%Y-%m-%d")
     if st["cost"].get(month, 0) >= config.MAX_MONTHLY_USD:
+        st["last_generate_date"] = now().strftime("%Y-%m-%d")
         notify(st, f"⚠️ 이번 달 비용 상한(${config.MAX_MONTHLY_USD:g})에 도달해 생성을 건너뜁니다.")
         return
 
@@ -152,6 +152,7 @@ def generate(st):
     services = [s for s in gov24.list_services() if s.get("서비스ID") and s["서비스ID"] not in used
                 and s.get("지원내용") and s.get("지원대상")]
     services.sort(key=lambda s: int(s.get("조회수") or 0), reverse=True)  # 많이 찾는 것부터
+    st["last_generate_date"] = now().strftime("%Y-%m-%d")  # 목록 조회 성공 후에만 '오늘 완료' 처리
 
     made = 0
     for svc in services:
