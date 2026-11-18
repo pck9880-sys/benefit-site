@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>카드뉴스 메이커</title>
+<link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:#eef0f4;color:#1f2328}
+.app{display:grid;grid-template-columns:400px 1fr;min-height:100vh}
+@media(max-width:900px){.app{grid-template-columns:1fr}}
+.panel{background:#fff;padding:20px;border-right:1px solid #e3e6ea;display:flex;flex-direction:column;gap:12px}
+.panel h1{font-size:20px;margin:0}
+.panel label{font-size:13px;font-weight:600;color:#555}
+textarea{width:100%;height:340px;font:13px/1.5 ui-monospace,Menlo,monospace;padding:10px;border:1px solid #d0d7de;border-radius:8px}
+select,input[type=text]{width:100%;padding:8px;border:1px solid #d0d7de;border-radius:8px;font-size:14px}
+.row{display:flex;gap:8px}.row>*{flex:1}
+button{padding:12px;border:0;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}
+.primary{background:#1a5fd0;color:#fff}.secondary{background:#e9edf3;color:#222}
+.msg{font-size:13px;color:#c0392b;white-space:pre-wrap}
+.ok{color:#1e8e3e}
+.preview{padding:24px;display:flex;flex-wrap:wrap;gap:20px;align-content:flex-start}
+.thumb{width:324px;height:405px;overflow:hidden;border-radius:6px;box-shadow:0 4px 18px rgba(0,0,0,.12);position:relative;background:#fff}
+.thumb.sq{height:324px}
+.thumb>.card{transform:scale(.3);transform-origin:0 0;position:absolute;top:0;left:0}
+details summary{cursor:pointer;font-size:13px;color:#1a5fd0}
+pre.prompt{white-space:pre-wrap;font-size:12px;background:#f6f8fa;padding:10px;border-radius:8px;max-height:260px;overflow:auto}
+
+/* ===== 카드 공통 ===== */
+.card{width:1080px;height:1350px;position:relative;overflow:hidden;font-family:Pretendard,sans-serif;
+  --c:#1a5fd0;--bg:#ffffff;--fg:#16181d;--sub:#5b6270;--soft:#f2f5fb;padding:110px 96px 150px;display:flex;flex-direction:column;justify-content:center;letter-spacing:-0.02em;word-break:keep-all;background:var(--bg);color:var(--fg)}
+.card.sq{height:1080px;padding:90px 90px}
+.card .brand{position:absolute;left:96px;right:96px;bottom:64px;display:flex;justify-content:space-between;font-size:28px;color:var(--sub);font-weight:600}
+.card .page{font-variant-numeric:tabular-nums}
+.card .kicker{display:inline-block;align-self:flex-start;background:var(--c);color:#fff;font-size:34px;font-weight:700;padding:12px 26px;border-radius:999px;margin-bottom:44px}
+.card h2{font-size:92px;line-height:1.22;margin:0 0 36px;font-weight:800}
+.card .lead{font-size:44px;line-height:1.5;color:var(--sub);font-weight:500}
+.card .no{font-size:150px;font-weight:900;color:var(--c);line-height:1;margin-bottom:30px;opacity:.95}
+.card h3{font-size:70px;line-height:1.3;margin:0 0 40px;font-weight:800}
+.card .body{font-size:44px;line-height:1.65;color:var(--fg);font-weight:500}
+.card .body b,.card .body strong{color:var(--c)}
+.card ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:26px}
+.card li{font-size:44px;line-height:1.45;background:var(--soft);border-radius:24px;padding:28px 34px 28px 92px;position:relative;font-weight:600}
+.card li::before{content:"✓";position:absolute;left:30px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:var(--c);color:#fff;font-size:28px;display:flex;align-items:center;justify-content:center}
+.card .quote{font-size:66px;line-height:1.45;font-weight:700;margin-top:40px}
+.card .quote::before{content:"“";display:block;font-size:200px;line-height:.6;color:var(--c);font-family:Georgia,serif}
+.card .by{font-size:38px;color:var(--sub);margin-top:36px}
+.card .btn{display:inline-block;margin-top:56px;background:var(--c);color:#fff;font-size:42px;font-weight:800;padding:26px 48px;border-radius:20px}
+.card .center{}
+.card .deco{position:absolute;border-radius:50%;background:var(--c);opacity:.1}
+
+/* 테마 */
+.t-dark{--bg:#111318;--fg:#f4f5f7;--sub:#a3a9b6;--soft:#1d2129}
+.t-pastel{--bg:#fff6ee;--fg:#3a2e2a;--sub:#8a756b;--soft:#ffffff}
+.t-mag .h-line{height:10px;width:140px;background:var(--c);margin-bottom:50px}
+.t-mag h2{font-size:104px;font-weight:900}
+.t-mag.cover{background:var(--c);color:#fff;--sub:rgba(255,255,255,.85)}
+.t-mag.cover .kicker{background:#fff;color:var(--c)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="panel">
+    <h1>🎴 카드뉴스 메이커</h1>
+    <label>① 원고 (Claude가 만든 JSON 붙여넣기)</label>
+    <textarea id="src" spellcheck="false"></textarea>
+    <div class="row">
+      <div><label>테마</label>
+        <select id="theme"><option value="clean">클린 (화이트)</option><option value="dark">다크</option><option value="pastel">파스텔</option><option value="mag">매거진</option></select></div>
+      <div><label>크기</label>
+        <select id="size"><option value="4x5">1080×1350 (인스타 세로)</option><option value="1x1">1080×1080 (정사각)</option></select></div>
+    </div>
+    <div class="row">
+      <div><label>포인트 색상</label><input type="color" id="color" value="#1a5fd0" style="width:100%;height:38px;border:0"></div>
+      <div><label>브랜드명/계정 (하단 표시)</label><input type="text" id="brand" placeholder="@my_brand"></div>
+    </div>
+    <button class="secondary" id="render">② 미리보기</button>
+    <button class="primary" id="dl">③ PNG 전체 다운로드 (zip)</button>
+    <div class="msg" id="msg"></div>
+    <details><summary>Claude에게 원고 받는 프롬프트 (복사해서 사용)</summary>
+<pre class="prompt" id="prompt">아래 고객 요청으로 인스타그램 카드뉴스 원고를 만들어줘.
+- 6~8장 구성: 첫 장 cover, 마지막 장 cta, 중간은 point / list / quote 를 섞어서
+- 한 장에 글자는 적게 (제목 20자 이내, 본문 80자 이내, list 항목 4개 이하, 항목당 25자 이내)
+- 강조할 단어는 &lt;b&gt;단어&lt;/b&gt; 로 감싸기
+- 사실이 불확실한 수치는 지어내지 말 것
+- 아래 JSON 형식으로만 답하고 다른 말은 쓰지 마
+
+{"slides":[
+ {"type":"cover","kicker":"짧은 태그","title":"표지 제목","subtitle":"부제"},
+ {"type":"point","no":"01","title":"소제목","body":"설명"},
+ {"type":"list","title":"소제목","items":["항목1","항목2","항목3"]},
+ {"type":"quote","text":"인용/핵심 문장","by":"출처"},
+ {"type":"cta","title":"마무리 문구","body":"설명","button":"버튼 문구"}
+]}
+
+[고객 요청]
+(여기에 고객이 보낸 주제/자료를 붙여넣기)</pre>
+    <button class="secondary" id="copyPrompt">프롬프트 복사</button>
+    </details>
+  </div>
+  <div class="preview" id="preview"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script>
+const SAMPLE = {"slides":[
+ {"type":"cover","kicker":"직장인 필독","title":"월급 외 수입,\n이렇게 시작하세요","subtitle":"부업 초보를 위한 현실 가이드 5가지"},
+ {"type":"point","no":"01","title":"작게 시작하기","body":"처음부터 큰돈을 노리기보다 <b>한 달 1만 원</b>을 목표로 시작하는 게 오래 갑니다."},
+ {"type":"list","title":"시작 전 체크리스트","items":["회사 겸업 규정 확인","하루 투자 가능 시간","초기 비용 한도 정하기","수익 기록 방법"]},
+ {"type":"point","no":"02","title":"잘하는 것부터","body":"이미 아는 분야에서 시작하면 <b>첫 수익까지의 시간</b>이 확 줄어듭니다."},
+ {"type":"quote","text":"완벽한 계획보다\n오늘의 작은 실행","by":"부업 성공자들의 공통점"},
+ {"type":"cta","title":"저장해두고\n하나씩 해보세요","body":"도움이 됐다면 팔로우하고 다음 편도 받아보세요","button":"팔로우하기"}
+]};
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+// <b>만 허용, 줄바꿈 → <br>
+const rich = s => esc(s).replace(/&lt;(\/?)(b|strong)&gt;/g, "<$1b>").replace(/\n/g, "<br>");
+
+function parse(text){
+  text = text.trim().replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
+  const s = text.indexOf("{"), e = text.lastIndexOf("}");
+  if (s < 0 || e < 0) throw new Error("JSON을 찾을 수 없습니다. Claude 답변 전체를 붙여넣어 주세요.");
+  const data = JSON.parse(text.slice(s, e + 1));
+  if (!Array.isArray(data.slides) || !data.slides.length) throw new Error('"slides" 목록이 비어 있습니다.');
+  return data;
+}
+
+function slideHTML(sl, i, n, opt){
+  const t = sl.type || "point";
+  let inner = "";
+  if (t === "cover") inner = `<div class="center">${opt.theme==="mag"?'<div class="h-line" style="background:#fff"></div>':""}
+      ${sl.kicker?`<div class="kicker">${rich(sl.kicker)}</div>`:""}<h2>${rich(sl.title)}</h2><div class="lead">${rich(sl.subtitle)}</div></div>
+      <div class="deco" style="width:520px;height:520px;right:-160px;top:-160px"></div>`;
+  else if (t === "list") inner = `${opt.theme==="mag"?'<div class="h-line"></div>':""}<h3>${rich(sl.title)}</h3><ul>${(sl.items||[]).map(x=>`<li>${rich(x)}</li>`).join("")}</ul>`;
+  else if (t === "quote") inner = `<div class="center"><div class="quote">${rich(sl.text)}</div>${sl.by?`<div class="by">— ${rich(sl.by)}</div>`:""}</div>`;
+  else if (t === "cta") inner = `<div class="center">${opt.theme==="mag"?'<div class="h-line"></div>':""}<h2>${rich(sl.title)}</h2><div class="lead">${rich(sl.body)}</div>${sl.button?`<div class="btn">${rich(sl.button)}</div>`:""}</div>
+      <div class="deco" style="width:600px;height:600px;left:-220px;bottom:-260px"></div>`;
+  else inner = `${sl.no?`<div class="no">${esc(sl.no)}</div>`:(opt.theme==="mag"?'<div class="h-line"></div>':"")}<h3>${rich(sl.title)}</h3><div class="body">${rich(sl.body)}</div>`;
+  const cls = ["card", "t-"+opt.theme, opt.sq?"sq":"", t==="cover"?"cover":""].join(" ");
+  return `<div class="${cls}" style="--c:${opt.color}">${inner}
+    <div class="brand"><span>${esc(opt.brand)}</span><span class="page">${i+1} / ${n}</span></div></div>`;
+}
+
+function render(){
+  $("#msg").textContent = ""; $("#msg").className = "msg";
+  let data;
+  try { data = parse($("#src").value); } catch(e){ $("#msg").textContent = "⚠️ " + e.message; return false; }
+  const opt = {theme:$("#theme").value, sq:$("#size").value==="1x1", color:$("#color").value, brand:$("#brand").value};
+  const n = data.slides.length;
+  $("#preview").innerHTML = data.slides.map((sl,i)=>`<div class="thumb ${opt.sq?"sq":""}">${slideHTML(sl,i,n,opt)}</div>`).join("");
+  return true;
+}
+
+async function download(){
+  if (!render()) return;
+  const btn = $("#dl"); btn.disabled = true; btn.textContent = "만드는 중...";
+  try {
+    await document.fonts.ready;
+    const zip = new JSZip();
+    const cards = [...document.querySelectorAll("#preview .card")];
+    for (let i = 0; i < cards.length; i++){
+      const c = cards[i];
+      const holder = document.createElement("div");           // 축소 없이 원본 크기로 캡처
+      holder.style.cssText = "position:fixed;left:-99999px;top:0";
+      const clone = c.cloneNode(true); clone.style.transform = "none"; clone.style.position = "static";
+      holder.appendChild(clone); document.body.appendChild(holder);
+      const url = await htmlToImage.toPng(clone, {pixelRatio:1, cacheBust:true, width:1080, height:clone.offsetHeight});
+      holder.remove();
+      zip.file(String(i+1).padStart(2,"0") + ".png", url.split(",")[1], {base64:true});
+      btn.textContent = `만드는 중... ${i+1}/${cards.length}`;
+    }
+    const blob = await zip.generateAsync({type:"blob"});
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "cardnews.zip"; a.click();
+    $("#msg").className = "msg ok"; $("#msg").textContent = `✅ ${cards.length}장 다운로드 완료`;
+  } catch(e){ $("#msg").textContent = "⚠️ 이미지 생성 실패: " + e.message; }
+  btn.disabled = false; btn.textContent = "③ PNG 전체 다운로드 (zip)";
+}
+
+$("#src").value = JSON.stringify(SAMPLE, null, 1);
+$("#render").onclick = render; $("#dl").onclick = download;
+["#theme","#size","#color","#brand"].forEach(s => $(s).addEventListener("input", render));
+$("#copyPrompt").onclick = () => { navigator.clipboard.writeText($("#prompt").textContent); $("#copyPrompt").textContent = "복사됨 ✓"; };
+render();
+</script>
+</body>
+</html>

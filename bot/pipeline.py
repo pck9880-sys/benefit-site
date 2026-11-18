@@ -212,6 +212,9 @@ def auto_approve(st):
 
 
 def tick():
+    if not config.MOCK and not (config.DATA_GO_KR_KEY and config.ANTHROPIC_API_KEY):
+        print("API 키가 아직 등록되지 않아 건너뜁니다.")
+        return
     st = load_state()
     try:
         handle_updates(st)
