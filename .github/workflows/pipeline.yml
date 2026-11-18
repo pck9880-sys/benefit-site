@@ -49,6 +49,9 @@ jobs:
 
       - run: pip install -r requirements.txt
 
+      - name: API 키 진단
+        run: python -m bot.diag
+
       - name: 승인 처리 + 글 생성
         run: python -m bot tick
 
