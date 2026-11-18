@@ -6,7 +6,7 @@ from bot import config, pipeline, telegram
 
 sent, edits, queue = [], [], []
 telegram.enabled = lambda: True
-telegram.send = lambda chat, text, buttons=None: sent.append((chat, text, buttons)) or len(sent)
+telegram.send = lambda chat, text, buttons=None, html=False: sent.append((chat, text, buttons)) or len(sent)
 telegram.edit = lambda chat, mid, text: edits.append((mid, text))
 telegram.answer_callback = lambda *a: None
 telegram.get_updates = lambda offset: [u for u in queue if u["update_id"] >= offset]
