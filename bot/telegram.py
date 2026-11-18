@@ -3,6 +3,8 @@ import requests
 
 from . import config
 
+last_error = ""
+
 
 def enabled():
     return bool(config.TELEGRAM_BOT_TOKEN) and not config.MOCK
@@ -16,8 +18,15 @@ def _call(method, **payload):
             f"https://api.telegram.org/bot{config.TELEGRAM_BOT_TOKEN}/{method}", json=payload, timeout=30
         )
         data = r.json()
-        return data.get("result") if data.get("ok") else None
-    except requests.RequestException:
+        if not data.get("ok"):
+            global last_error
+            last_error = f"{method}: {data.get('error_code')} {data.get('description')}"
+            print("[telegram]", last_error)
+            return None
+        return data.get("result")
+    except requests.RequestException as e:
+        last_error = f"{method}: {type(e).__name__}"
+        print("[telegram]", last_error)
         return None
 
 

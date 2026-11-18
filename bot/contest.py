@@ -350,7 +350,8 @@ def run(st, notify):
     st["contest_seen"] = st["contest_seen"][-1000:]
     candidates.sort(key=prize_value, reverse=True)
     sent = 0
-    for d in candidates[:config.CONTESTS_PER_DAY]:
+    limit = st.pop("contest_limit_once", None) or config.CONTESTS_PER_DAY
+    for d in candidates[:limit]:
         try:
             r, cost = make_package(d)
         except Exception as e:
@@ -359,11 +360,17 @@ def run(st, notify):
             continue
         st.setdefault("cost", {})[month] = round(st["cost"].get(month, 0) + cost, 5)
         st.pop("contest_last_error", None)
-        for msg in format_messages(d, r, cost):
+        try:
+            msgs = format_messages(d, r, cost)
+        except Exception as e:
+            st["contest_last_error"] = f"format {type(e).__name__}: {str(e)[:300]}"
+            print("[contest]", st["contest_last_error"])
+            continue
+        for msg in msgs:
             if config.MOCK:
                 print(msg)
-            else:
-                notify(st, msg[:4000])
+            elif notify(st, msg[:3900]) is None:
+                st["contest_last_error"] = "telegram " + telegram.last_error
         sent += 1
     print(f"[contest] 후보 {len(candidates)}개 중 {sent}개 전송")
     if not config.MOCK:
