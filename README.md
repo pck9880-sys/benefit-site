@@ -55,3 +55,13 @@
 pip install -r requirements.txt
 MOCK=1 python -m tests.test_flow
 ```
+
+## 🏆 공모전 출품안 자동 생성
+매일 오전 8시(한국시간) 콘테스트코리아의 **네이밍·슬로건 / 아이디어** 공모전을 확인해서,
+조건(접수 중 · 무료 · 온라인 접수 · 일반인 참가 · AI 사용 금지 문구 없음)에 맞는 것 중 상금이 큰 순으로
+하루 최대 3개를 골라 Claude가 출품안 5개씩 만들어 텔레그램으로 보냅니다. **제출은 직접** 합니다.
+
+- 필요한 키: `ANTHROPIC_API_KEY`, `TELEGRAM_BOT_TOKEN` (공공데이터 키는 필요 없음)
+- 텔레그램 명령어: `/contest` 지금 받기 · `/contestoff` 끄기 · `/conteston` 켜기
+- 설정(Variables): `CONTESTS_PER_DAY`(기본 3), `CONTEST_HOUR_KST`(기본 8)
+- 개인 경험이 필요한 수기·사연, 사진·영상·디자인 공모전은 제외합니다.

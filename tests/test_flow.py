@@ -33,7 +33,8 @@ assert (config.POSTS_DIR / f"{ids[0]}.json").exists()
 assert not (config.POSTS_DIR / f"{ids[1]}.json").exists()
 assert len(pipeline.drafts()) == 1
 
-# 3) 12시간 지나면 남은 초안 자동 게시
+# 3) 12시간 지나면 남은 초안 자동 게시 (실행 시각과 무관하게: 새 글 생성은 막아둠)
+config.GENERATE_HOUR_KST = 24
 real_now = pipeline.now
 pipeline.now = lambda: real_now() + timedelta(hours=13)
 queue[:] = []

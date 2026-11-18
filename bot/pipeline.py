@@ -12,7 +12,8 @@ HELP = (
     "매일 새 글 초안이 오면 ✅ 승인 / ❌ 거절 버튼만 눌러주세요.\n"
     f"응답이 없으면 {config.AUTO_APPROVE_HOURS:g}시간 후 자동 게시됩니다 (0이면 자동 게시 안 함).\n"
     "버튼은 최대 1시간 이내에 반영됩니다.\n\n"
-    "명령어\n/status 현황\n/pause 일시정지\n/resume 재개\n/now 다음 실행 때 바로 글 생성\n/approveall 대기 초안 전부 승인"
+    "명령어\n/status 현황\n/pause 일시정지\n/resume 재개\n/now 다음 실행 때 바로 글 생성\n/approveall 대기 초안 전부 승인\n"
+    "/contest 다음 실행 때 공모전 출품안 받기\n/contestoff 공모전 알림 끄기 · /conteston 켜기"
 )
 
 
@@ -114,6 +115,15 @@ def handle_updates(st):
             for p in drafts():
                 publish(st, p, "일괄 승인")
             notify(st, f"✅ {n}개 승인했습니다.")
+        elif text == "/contest":
+            st["contest_force"] = True
+            notify(st, "🏆 다음 실행(1시간 이내) 때 공모전 출품안을 보내드릴게요.")
+        elif text == "/contestoff":
+            st["contest_off"] = True
+            notify(st, "🏆 공모전 알림을 껐습니다. /conteston 으로 다시 켜기")
+        elif text == "/conteston":
+            st["contest_off"] = False
+            notify(st, "🏆 공모전 알림을 켰습니다.")
         elif text == "/status":
             notify(st, status_text(st))
         else:
@@ -126,7 +136,8 @@ def status_text(st):
     return (
         f"📊 현황\n게시글: {n_posts}개\n승인 대기: {len(drafts())}개\n"
         f"이번 달 API 비용: ${st['cost'].get(month, 0):.3f} (상한 ${config.MAX_MONTHLY_USD:g})\n"
-        f"상태: {'⏸ 일시정지' if st['paused'] else '▶️ 동작 중'}\n사이트: {config.SITE_URL}"
+        f"상태: {'⏸ 일시정지' if st['paused'] else '▶️ 동작 중'}\n사이트: {config.SITE_URL}\n"
+        f"공모전: {'꺼짐' if st.get('contest_off') else '켜짐'} · 지금까지 {len(st.get('contest_seen', []))}건 확인"
     )
 
 
@@ -211,16 +222,22 @@ def auto_approve(st):
             publish(st, p, "자동")
 
 
+def benefit_ready():
+    return config.MOCK or bool(config.DATA_GO_KR_KEY and config.ANTHROPIC_API_KEY)
+
+
 def tick():
-    if not config.MOCK and not (config.DATA_GO_KR_KEY and config.ANTHROPIC_API_KEY):
-        print("API 키가 아직 등록되지 않아 건너뜁니다.")
-        return
+    from . import contest
     st = load_state()
     try:
-        handle_updates(st)
-        if should_generate(st):
-            generate(st)
-        auto_approve(st)
+        handle_updates(st)  # 텔레그램 주인 등록·명령어는 항상 처리
+        if benefit_ready():
+            if should_generate(st):
+                generate(st)
+            auto_approve(st)
+        else:
+            print("지원금 사이트: API 키가 없어 글 생성은 건너뜁니다.")
+        contest.run(st, notify)
     except Exception:
         err = traceback.format_exc()
         print(err)
