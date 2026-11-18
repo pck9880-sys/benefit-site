@@ -16,7 +16,7 @@
 ### 1. API 키 3개 받기
 | 키 이름 | 받는 곳 | 비용 |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | https://console.anthropic.com → API Keys (크레딧 $5 충전) | Haiku 기준 글 1개 약 2원 |
+| `ANTHROPIC_API_KEY` | https://console.anthropic.com → API Keys (크레딧 $5 충전) | Sonnet 기준 글 1개 약 40원 (월 약 6천 원) |
 | `DATA_GO_KR_KEY` | https://www.data.go.kr/data/15113968/openapi.do → 활용신청 → 마이페이지의 **일반 인증키(Decoding)** | 무료 |
 | `TELEGRAM_BOT_TOKEN` | 텔레그램에서 `@BotFather` → `/newbot` → 받은 토큰 | 무료 |
 
@@ -42,11 +42,11 @@
 |---|---|---|
 | `SITE_NAME` | 정부혜택 한눈에 | 사이트 이름 |
 | `SITE_URL` | 자동 (github.io 주소) | 도메인 연결 시 변경 |
-| `CLAUDE_MODEL` | claude-haiku-5-5 | 품질을 올리려면 `claude-sonnet-5-5` |
+| `CLAUDE_MODEL` | claude-sonnet-5-5 | 비용을 줄이려면 `claude-haiku-5-5`, 품질을 더 올리려면 `claude-opus-5-5` |
 | `POSTS_PER_DAY` | 5 | 하루 생성 글 수 |
 | `GENERATE_HOUR_KST` | 7 | 생성 시각 (한국시간) |
 | `AUTO_APPROVE_HOURS` | 12 | 무응답 시 자동 게시까지 시간 (0 = 승인해야만 게시) |
-| `MAX_MONTHLY_USD` | 5 | 월 API 비용 상한 (넘으면 자동 중단) |
+| `MAX_MONTHLY_USD` | 8 | 월 API 비용 상한 (넘으면 자동 중단) |
 | `ADSENSE_CLIENT` | - | 애드센스 승인 후 `ca-pub-...` |
 | `GOOGLE_SITE_VERIFICATION` / `NAVER_SITE_VERIFICATION` | - | 검색엔진 소유 확인 코드 |
 

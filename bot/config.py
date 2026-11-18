@@ -30,11 +30,11 @@ SITE_DESCRIPTION = _env(
     "SITE_DESCRIPTION",
     "내가 받을 수 있는 정부 지원금·혜택을 쉽게 정리합니다. 지원 대상, 금액, 신청 방법까지 한눈에.",
 )
-CLAUDE_MODEL = _env("CLAUDE_MODEL", "claude-haiku-5-5")
+CLAUDE_MODEL = _env("CLAUDE_MODEL", "claude-sonnet-5-5")
 POSTS_PER_DAY = int(_env("POSTS_PER_DAY", "5"))
 GENERATE_HOUR_KST = int(_env("GENERATE_HOUR_KST", "7"))
 AUTO_APPROVE_HOURS = float(_env("AUTO_APPROVE_HOURS", "12"))  # 0이면 승인 없이는 게시 안 함
-MAX_MONTHLY_USD = float(_env("MAX_MONTHLY_USD", "5"))  # 월 API 비용 상한
+MAX_MONTHLY_USD = float(_env("MAX_MONTHLY_USD", "8"))  # 월 API 비용 상한
 ADSENSE_CLIENT = _env("ADSENSE_CLIENT")  # 예: ca-pub-1234567890123456
 GOOGLE_SITE_VERIFICATION = _env("GOOGLE_SITE_VERIFICATION")
 NAVER_SITE_VERIFICATION = _env("NAVER_SITE_VERIFICATION")
