@@ -35,7 +35,7 @@
  ],
  "contest_force": false,
  "contest_last_date": "2026-11-18",
- "contest_last_error": "APIConnectionError: Connection error.",
+ "contest_last_error": "AuthenticationError: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011ChAMr7qZT7f8wAahD8DFA'}",
  "contest_retry": [
   {
    "id": "202611160021",
