@@ -236,6 +236,7 @@ def run(st, notify):
             st["contest_last_error"] = f"{type(e).__name__}: {str(e)[:400]}"
             continue
         st.setdefault("cost", {})[month] = round(st["cost"].get(month, 0) + cost, 5)
+        st.pop("contest_last_error", None)
         msg = format_message(d, ideas, cost)
         if config.MOCK:
             print(msg)
