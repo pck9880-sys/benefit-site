@@ -1,9 +1,0 @@
-{
- "length": 391,
- "length_stripped": 391,
- "starts_with_sk_ant": false,
- "ascii_only": true,
- "has_inner_whitespace": true,
- "has_newline": true,
- "error": "InvalidHeader: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'curl https://api.anthropic.com/v1/messages \\\\\\n  --header \"x-api-key: sk-ant-usr-1h59BooYmc9ynybA90GG5z1GaOd"
-}

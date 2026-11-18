@@ -19,8 +19,7 @@ try:
     r = requests.get("https://api.anthropic.com/v1/models", timeout=20,
                      headers={"x-api-key": k.strip(), "anthropic-version": "2023-06-01"})
     info["http_status"] = r.status_code
-    info["body"] = r.text[:200] if r.status_code != 200 else "ok"
+    info["body"] = "ok" if r.status_code == 200 else "error"
 except Exception as e:
-    info["error"] = f"{type(e).__name__}: {str(e)[:200]}"
-(config.DATA_DIR / "diag.json").write_text(json.dumps(info, ensure_ascii=False, indent=1), "utf-8")
-print(info)
+    info["error"] = type(e).__name__  # 오류 메시지에 키가 섞일 수 있어 종류만 기록
+print(info)  # 저장소에는 저장하지 않고 실행 로그에만 출력
