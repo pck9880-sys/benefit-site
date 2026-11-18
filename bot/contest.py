@@ -109,6 +109,8 @@ def eligible(d):
         return False, "마감 임박"
     if AI_BAN.search(d["detail"]):
         return False, "AI 사용 금지"
+    if re.search(r"회원\s*가입|로그인\s*후|로그인하여|로그인 후", d["detail"]):
+        return False, "회원가입·로그인 필요"
     return True, f"D-{days}"
 
 
@@ -144,6 +146,7 @@ class Package(BaseModel):
     personal_fields: List[str] = Field(description="응모자가 직접 입력해야 할 개인정보 항목")
     email_template: str = Field(description="이메일 접수일 때 제목과 본문 틀 (개인정보는 [이름] 같은 자리표시자). 이메일 접수가 아니면 빈 문자열")
     announce: str = Field(description="발표일·발표 방법 (없으면 '명시 없음')")
+    no_signup: bool = Field(description="회원가입·로그인 없이 바로 제출 가능하면 true (이메일 접수, 구글폼, 로그인 없는 신청 폼 등). 주최 사이트 회원가입이나 로그인이 필요하면 false. 공고만으로 알 수 없으면 false")
     text_only: bool = Field(description="출품작 문구와 짧은 작품설명만으로 제출이 끝나면 true. 제안서·기획서·이미지·영상·별도 파일 작성이 필요하면 false")
     candidates: List[Candidate] = Field(description="서로 다른 방향의 후보 12개 (자체 채점 포함)")
     caution: str = Field(description="제출 전에 사람이 꼭 확인할 점 한 줄")
@@ -255,7 +258,7 @@ def make_package(d):
                            symbolism=3, memorability=4, usability=4, why="포인트") for i in range(1, 6)]
         pkg = Package(keywords=["테스트"], format_rules="(테스트)", per_person_limit="1개", ai_policy="언급 없음",
                       submit_method="온라인 폼", required_docs=["신청서"], personal_fields=["이름", "연락처"],
-                      email_template="", announce="명시 없음", text_only=True, candidates=cands, caution="공고 확인")
+                      email_template="", announce="명시 없음", no_signup=True, text_only=True, candidates=cands, caution="공고 확인")
         return {"pkg": pkg, "top": cands, "dups": {}, "notes": "(테스트 조사)"}, 0.0
     notes, c1 = research(d)
     pkg, c2 = generate(d, notes)
@@ -354,7 +357,8 @@ def run(st, notify):
     candidates = st.pop("contest_retry", []) + candidates
     st["contest_last_date"] = now().strftime("%Y-%m-%d")
     st["contest_seen"] = st["contest_seen"][-1000:]
-    candidates.sort(key=prize_value, reverse=True)
+    easy = lambda d: 1 if re.search(r"[\w.+-]+@[\w-]+\.[\w.]+|구글\s*폼|google\s*form|forms\.gle|네이버\s*폼|form\.naver", d["detail"], re.I) else 0
+    candidates.sort(key=lambda d: (easy(d), prize_value(d)), reverse=True)
     sent = 0
     limit = st.pop("contest_limit_once", None) or config.CONTESTS_PER_DAY
     tried = 0
@@ -372,6 +376,9 @@ def run(st, notify):
         st.pop("contest_last_error", None)
         if not r["pkg"].text_only or not r["top"]:
             print(f"[contest] {d['id']} 문서·파일 필요 또는 후보 없음 → 건너뜀")
+            continue
+        if not r["pkg"].no_signup:
+            print(f"[contest] {d['id']} 회원가입·로그인 필요 → 건너뜀")
             continue
         try:
             msgs = format_messages(d, r, cost)
