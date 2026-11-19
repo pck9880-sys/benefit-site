@@ -478,15 +478,12 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
             parts = [b.narration] if p.caption_style in ("epic", "variety", "meme") else chunks(b.narration)
             total_chars = sum(len(x) for x in parts) or 1
             caps, t = [], 0.0
-            if i:
-                events.append((t_beat, "whoosh"))  # 장면 전환 '휙'
-            if getattr(b, "twist", False):
-                events.append((t_beat + 0.05, "ding"))  # 반전 '띵'
+            twist = getattr(b, "twist", False)
             for j, text in enumerate(parts):
                 d = dur * len(text) / total_chars
                 caps.append((r.png(caption_html(text, p.caption_style, b.impact, i, getattr(b, "sticker", "")),
                                    work / f"c{i}_{j}.png"), t, t + d))
-                events.append((t_beat + t, "pop"))  # 자막 뜰 때 '뽁'
+                events.append((t_beat + t, "ding" if twist and not j else "pop"))  # 자막 뜰 때 '똑' (반전 자막은 '띵')
                 t += d
             t_beat += dur
             mi = media[i] if i < len(media) and media[i] else (None, None)
