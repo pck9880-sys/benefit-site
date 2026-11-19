@@ -312,11 +312,14 @@ def make_video(p, media, work):
     out = work / "shorts.mp4"
     # 오디오 믹스: 음성 + 배경음악(옅게) + 효과음
     inputs, chains, labels = ["-i", joined], [], ["[0:a]"]
-    bgms = sorted((config.ROOT / "assets" / "bgm").glob("*.mp3"))
+    bgms = sorted(f for ext in ("*.mp3", "*.wav", "*.m4a") for f in (config.ROOT / "assets" / "bgm").glob(ext))
     k = 1
     if bgms:
-        inputs += ["-stream_loop", "-1", "-i", random.choice(bgms)]
-        chains.append(f"[{k}:a]volume={config.SHORTS_BGM_VOLUME}[bg]")
+        bgm = random.choice(bgms)
+        bl = duration(bgm)
+        off = random.uniform(bl * 0.15, bl * 0.45) if bl > 60 else 0  # 긴 곡은 인트로를 건너뛰고 신나는 부분부터
+        inputs += ["-stream_loop", "-1", "-ss", f"{off:.1f}", "-i", bgm]
+        chains.append(f"[{k}:a]volume={config.SHORTS_BGM_VOLUME},afade=t=in:d=0.3[bg]")
         labels.append("[bg]")
         k += 1
     sfx_dir = config.ROOT / "assets" / "sfx"
