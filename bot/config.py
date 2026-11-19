@@ -38,6 +38,7 @@ MAX_MONTHLY_USD = float(_env("MAX_MONTHLY_USD", "50"))  # 월 API 비용 상한
 ADSENSE_CLIENT = _env("ADSENSE_CLIENT")  # 예: ca-pub-1234567890123456
 GOOGLE_SITE_VERIFICATION = _env("GOOGLE_SITE_VERIFICATION")
 NAVER_SITE_VERIFICATION = _env("NAVER_SITE_VERIFICATION")
+BLOG_PER_DAY = int(_env("BLOG_PER_DAY", "2"))  # 하루에 보낼 네이버 블로그용 글 수 (0이면 끔)
 CONTESTS_PER_DAY = int(_env("CONTESTS_PER_DAY", "3"))  # 하루에 출품안 만들 공모전 수
 CONTEST_HOUR_KST = int(_env("CONTEST_HOUR_KST", "8"))
 MOCK = _env("MOCK") == "1"  # 테스트용: 외부 API 호출 없이 동작

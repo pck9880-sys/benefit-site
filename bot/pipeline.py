@@ -239,6 +239,8 @@ def tick():
             if should_generate(st):
                 generate(st)
             auto_approve(st)
+            from . import blog
+            blog.run(st, notify)
         else:
             print("지원금 사이트: API 키가 없어 글 생성은 건너뜁니다.")
         contest.run(st, notify)
