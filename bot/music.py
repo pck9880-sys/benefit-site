@@ -28,8 +28,11 @@ def _query(**params):
 
 
 def _ok(t):
-    return t.get("audiodownload_allowed", True) and "-nc" not in (t.get("license_ccurl") or "") \
-        and (t.get("audiodownload") or t.get("audio"))
+    """영상 배경음악으로 안전한 곡: CC BY (출처 표기만 하면 상업적 이용·영상 결합 가능).
+    NC(비상업), ND(변경 금지), SA(영상에도 같은 라이선스 요구), 라이선스 정보 없음은 제외."""
+    lic = t.get("license_ccurl") or ""
+    return bool(t.get("audiodownload_allowed", True) and "/licenses/by/" in lic
+                and (t.get("audiodownload") or t.get("audio")))
 
 
 def search(tag=None, n=3):
@@ -121,7 +124,8 @@ def by_name(name):
 def calm_candidates(n=3):
     """가수 없는(연주곡) 잔잔한 곡 후보: 상업적 이용 가능 + musicinfo 로 연주곡·느린 템포 확인."""
     out = []
-    for tag in ["lofi", "chill", "ambient", "piano", "acoustic", "jazz"]:
+    seen = set()
+    for tag in ["lofi", "chill", "piano", "acoustic", "ambient", "jazz", "relaxing"]:
         try:
             res = _query(tags=tag, limit=50, vocalinstrumental="instrumental", order="popularity_total",
                          durationbetween="90_300", include="licenses musicinfo")
@@ -130,7 +134,10 @@ def calm_candidates(n=3):
             continue
         for t in res:
             mi = t.get("musicinfo") or {}
+            if t["id"] in seen:
+                continue
             if _ok(t) and mi.get("vocalinstrumental") == "instrumental" and mi.get("speed") in ("verylow", "low", "medium"):
+                seen.add(t["id"])
                 out.append(t)
                 print(f"[music] 후보 {t['id']} | {t['name']} - {t['artist_name']} | {tag} | speed={mi.get('speed')} "
                       f"| {t.get('license_ccurl')}")
