@@ -76,11 +76,11 @@ JAMENDO_CLIENT_ID = _env("JAMENDO_CLIENT_ID")  # 무료 배경음악 API (없으
 PEXELS_API_KEY = _env("PEXELS_API_KEY")  # 무료 실사 사진 (없으면 Openverse CC 사진)
 TYPECAST_API_KEY = _env("TYPECAST_API_KEY")  # 타입캐스트 음성 (없으면 무료 음성)
 TYPECAST_VOICE_ID = _env("TYPECAST_VOICE_ID")  # 타입캐스트 voice_id (비우면 이름으로 검색)
-TYPECAST_VOICE_NAME = _env("TYPECAST_VOICE_NAME", "태우")
-SHORTS_VOICE_CHAR = _env("SHORTS_VOICE_CHAR", "태우")  # 숏츠 기본 목소리 (태우: 다들 ~하자! / 박창수: 다들 ~해요잉~)
+TYPECAST_VOICE_NAME = _env("TYPECAST_VOICE_NAME", "용식")
+SHORTS_VOICE_CHAR = _env("SHORTS_VOICE_CHAR", "용식")  # 숏츠 기본 목소리 (용식·박창수: 다들 ~해요잉~ / 태우: 다들 ~하자!)
 TYPECAST_ONLY = _env("TYPECAST_ONLY", "1") == "1"  # 1이면 항상 타입캐스트(박창수)만 — 실패하면 무료 음성으로 바꾸지 않고 중단
 TYPECAST_CREDIT = _env("TYPECAST_CREDIT", "0") == "1"  # 무료 플랜일 때만 출처 표기 필요 (베이직 유료라 끔)
-VOICE_FILE_TEMPO = float(_env("VOICE_FILE_TEMPO", "1.0"))  # 직접 만든 음성 파일(1.0배속)을 이 배속으로
+VOICE_FILE_TEMPO = float(_env("VOICE_FILE_TEMPO", "1.4"))  # 직접 만든 음성 파일(1.0배속)을 이 배속으로
 TTS_WORKERS = int(_env("TTS_WORKERS", "2"))  # 음성 동시 생성 수 (타입캐스트 무료 플랜 최대 2)
 TYPECAST_TEMPO = float(_env("TYPECAST_TEMPO", "1.0"))  # 목소리 배속 (1.0 = 원래 속도)
 HIGGSFIELD_SECONDS = int(_env("HIGGSFIELD_SECONDS", "5"))

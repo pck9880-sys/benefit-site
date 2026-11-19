@@ -31,7 +31,7 @@ WebSearch + web-fetch 에이전트로 기사 본문 2~4개. 확인할 것: 숫�
 - 제목 2줄: `title_top`(상황, 13자 내외) / `title_bottom`(노란색, 궁금증·ㄷㄷ).
 - beats 5개: 반말 썰 말투("~라는데", "~거든", "~했다고 함"), 문장당 24자 이내, '~입니다/~해요' 금지.
 - 카드: beats 중 2~3개에 `overlay`: `headline`(기사 제목 원문, `overlay_source`=언론사) / `comment`(실제 반응, source="온라인 반응") / `quote`. 강조는 `**굵게**`.
-- 목소리: 기본 **태우** → `outro` = "다들 ~하자!" / 요청 시 **박창수** → "다들 ~해요잉~". `voice` 필드에 이름.
+- 목소리: 기본 **용식** → `outro` = "다들 ~해요잉~" / 요청 시 **박창수**(해요잉~) 또는 **태우**("다들 ~하자!"). `voice` 필드에 이름.
 - 폴더: `assets/samples/<영문슬러그>/plan.json` (형식은 `assets/samples/suneung_alert/plan.json` 참고. 필드: topic,title_top,title_bottom,character,hook_video,photo_fallbacks,beats[narration,card,twist,visual,query,ai_prompt,overlay,overlay_text,overlay_source],voice,outro,yt_title(#shorts),description,tags,sources).
 
 ## 4. 이미지 5장 (Figma GPT 이미지)
@@ -41,9 +41,9 @@ WebSearch + web-fetch 에이전트로 기사 본문 2~4개. 확인할 것: 숫�
 
 ## 5. 더빙 (사용자 → 타입캐스트 웹, 베이직 요금제)
 타입캐스트 API는 무료 계정 차단(403 UNUSUAL_ACTIVITY) 상태 — 호출하지 말 것. 사용자에게 Chrome Claude 프롬프트 제공:
-"캐릭터 <태우|박창수>, 아래 6줄을 한 줄에 한 문장씩, 속도 등 전부 기본값(1.0), 전체 합치기 mp3 다운로드, 업그레이드 창 뜨면 결제 금지" + 6줄(beats 5 + outro).
+"캐릭터 <용식|박창수|태우>, 아래 6줄을 한 줄에 한 문장씩, 속도 등 전부 기본값(1.0), 전체 합치기 mp3 다운로드, 업그레이드 창 뜨면 결제 금지" + 6줄(beats 5 + outro).
 사용자가 mp3를 첨부하면 경로는 `/root/.claude/uploads/<session>/...mp3` → `assets/samples/<slug>/voice.mp3` 로 복사.
-(속도 변경은 `VOICE_FILE_TEMPO`, 기본 1.0. 녹음은 자르지 않고 통째로 깔고 문장 경계는 글자 수 비율+무음으로 자동 탐지.)
+(사용자는 1.0배로 녹음 → 코드가 `VOICE_FILE_TEMPO`=**1.4배**로 변환 후 타이밍 맞춤. 녹음은 자르지 않고 통째로 깔고 문장 경계는 글자 수 비율+무음으로 자동 탐지.)
 
 ## 6. 합성·미리보기
 배경음악(Born Free, Jamendo)은 로컬에 키가 없으므로 한 번 받아 임시로 둔다:
