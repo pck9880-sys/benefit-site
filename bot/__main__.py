@@ -49,6 +49,11 @@ elif cmd == "typecast-test":  # 타입캐스트 음성 1문장만 실제로 만�
         print(f"✅ 타입캐스트 음성 정상 ({f.stat().st_size // 1024}KB)")
     except Exception as e:
         print("❌", str(e)[:600])
+elif cmd == "bgm-get":  # 즐겨찾기 배경음악 파일 받기 (확인용): python -m bot bgm-get
+    from pathlib import Path
+    from . import music
+    f, credit = music.pick(Path("."))
+    print(f, credit)
 elif cmd == "shorts-due":  # 워크플로에서 숏츠를 만들 차례인지 확인 (0=만들기)
     from . import shorts
     sys.exit(0 if shorts.due(pipeline.load_state()) else 1)
