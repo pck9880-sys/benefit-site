@@ -10,7 +10,29 @@
   "url": "https://plus.gov.kr/portal/benefitV2/benefitTotalSrvcList/benefitSrvcDtl?svcSeq=797786&bnefType=all&svcId=149200005007",
   "apply_url": "https://www.work24.go.kr",
   "contact": "고용노동부 고객상담센터/1350",
-  "updated": "20261029112340"
+  "updated": "20261029112340",
+  "cond": {
+   "codes": [
+    "JA0101",
+    "JA0102",
+    "JA0201",
+    "JA0202",
+    "JA0203",
+    "JA0204",
+    "JA0327",
+    "JA0401",
+    "JA0402",
+    "JA0403",
+    "JA0404",
+    "JA0410",
+    "JA0411",
+    "JA0412",
+    "JA0413",
+    "JA0414"
+   ],
+   "age_min": 15,
+   "age_max": 70
+  }
  },
  "article": {
   "title": "국민취업지원제도 지원대상·신청방법 총정리",

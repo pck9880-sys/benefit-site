@@ -10,7 +10,35 @@
   "url": "https://plus.gov.kr/portal/benefitV2/benefitTotalSrvcList/benefitSrvcDtl?svcSeq=999071&bnefType=all&svcId=B55140800003",
   "apply_url": "https://enhuf.molit.go.kr",
   "contact": "국토교통부/1599-0001||주택도시보증공사/1566-9009||한국주택금융공사/1688-8114||우리은행/1599-0800||국민은행/1599-1771||기업은행/1566-2566||농협은행/1588-2100||신한은행/1599-8000",
-  "updated": "20260508153257"
+  "updated": "20260508153257",
+  "cond": {
+   "codes": [
+    "JA0101",
+    "JA0102",
+    "JA0201",
+    "JA0202",
+    "JA0203",
+    "JA0204",
+    "JA0205",
+    "JA0301",
+    "JA0302",
+    "JA0303",
+    "JA0313",
+    "JA0314",
+    "JA0315",
+    "JA0316",
+    "JA0320",
+    "JA0322",
+    "JA0326",
+    "JA0327",
+    "JA0328",
+    "JA0329",
+    "JA0330",
+    "JA0412"
+   ],
+   "age_min": 19,
+   "age_max": 120
+  }
  },
  "article": {
   "title": "내집마련 디딤돌 대출 지원대상·신청방법",

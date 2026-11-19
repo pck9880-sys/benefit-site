@@ -10,7 +10,35 @@
   "url": "https://plus.gov.kr/portal/benefitV2/benefitTotalSrvcList/benefitSrvcDtl?svcSeq=2126303&bnefType=all&svcId=161300000103",
   "apply_url": "https://gg24.gg.go.kr",
   "contact": "국토교통부/1599-0001",
-  "updated": "20260508152745"
+  "updated": "20260508152745",
+  "cond": {
+   "codes": [
+    "JA0101",
+    "JA0102",
+    "JA0201",
+    "JA0202",
+    "JA0203",
+    "JA0204",
+    "JA0205",
+    "JA0301",
+    "JA0302",
+    "JA0303",
+    "JA0313",
+    "JA0314",
+    "JA0315",
+    "JA0316",
+    "JA0320",
+    "JA0322",
+    "JA0326",
+    "JA0327",
+    "JA0328",
+    "JA0329",
+    "JA0330",
+    "JA0412"
+   ],
+   "age_min": 19,
+   "age_max": 120
+  }
  },
  "article": {
   "title": "전세보증금반환보증 보증료 지원 대상·신청방법 총정리",

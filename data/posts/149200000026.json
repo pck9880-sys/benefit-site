@@ -10,7 +10,41 @@
   "url": "https://plus.gov.kr/portal/benefitV2/benefitTotalSrvcList/benefitSrvcDtl?svcSeq=754680&bnefType=all&svcId=149200000026",
   "apply_url": "https://www.work24.go.kr",
   "contact": "고용노동부 고객상담센터/1350",
-  "updated": "20261104155710"
+  "updated": "20261104155710",
+  "cond": {
+   "codes": [
+    "JA0101",
+    "JA0102",
+    "JA0201",
+    "JA0202",
+    "JA0203",
+    "JA0204",
+    "JA0301",
+    "JA0302",
+    "JA0303",
+    "JA0313",
+    "JA0314",
+    "JA0315",
+    "JA0316",
+    "JA0322",
+    "JA0326",
+    "JA0327",
+    "JA0328",
+    "JA0329",
+    "JA0330",
+    "JA0401",
+    "JA0402",
+    "JA0403",
+    "JA0404",
+    "JA0410",
+    "JA0411",
+    "JA0412",
+    "JA0413",
+    "JA0414"
+   ],
+   "age_min": 15,
+   "age_max": 75
+  }
  },
  "article": {
   "title": "국민내일배움카드 지원대상·신청방법 총정리",
