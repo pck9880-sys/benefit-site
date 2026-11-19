@@ -184,4 +184,4 @@ gh workflow run shorts-upload.yml --ref main -f folder=assets/samples/<slug> \
 - 예시: `assets/samples/gta6_launch/`.
 
 ## 효과음
-- 사용하지 않는다 (사용자 요청으로 전부 삭제, SHORTS_SFX=0).
+- 기본은 넣지 않는다 (SHORTS_SFX=0). 소리 파일(똑 pop.wav / 띵 ding.wav)은 assets/sfx 에 보관 — 요청할 때만 `SHORTS_SFX=1`.
