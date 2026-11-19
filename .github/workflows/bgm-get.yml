@@ -1,6 +1,10 @@
 name: bgm-get
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "비우면 즐겨찾기 곡, calm 이면 잔잔한 연주곡 후보"
+        default: ""
 permissions:
   contents: read
 jobs:
@@ -14,7 +18,9 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
-      - run: python -m bot bgm-get
+      - run: python -m bot bgm-get $MODE
+        env:
+          MODE: ${{ inputs.mode }}
       - uses: actions/upload-artifact@v4
         with:
           name: bgm

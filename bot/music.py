@@ -116,3 +116,26 @@ def by_name(name):
                       f"수익화 채널에 쓸 수 없어요.")
     exact = [t for t in ok if t["name"].lower() == title.strip().lower()]
     return (exact or ok)[0], ""
+
+
+def calm_candidates(n=3):
+    """가수 없는(연주곡) 잔잔한 곡 후보: 상업적 이용 가능 + musicinfo 로 연주곡·느린 템포 확인."""
+    out = []
+    for tag in ["lofi", "chill", "ambient", "piano", "acoustic", "jazz"]:
+        try:
+            res = _query(tags=tag, limit=50, vocalinstrumental="instrumental", order="popularity_total",
+                         durationbetween="90_300", include="licenses musicinfo")
+        except Exception as e:
+            print("[music]", e)
+            continue
+        for t in res:
+            mi = t.get("musicinfo") or {}
+            if _ok(t) and mi.get("vocalinstrumental") == "instrumental" and mi.get("speed") in ("verylow", "low", "medium"):
+                out.append(t)
+                print(f"[music] 후보 {t['id']} | {t['name']} - {t['artist_name']} | {tag} | speed={mi.get('speed')} "
+                      f"| {t.get('license_ccurl')}")
+            if len([x for x in out if x in res]) >= 2:
+                break
+        if len(out) >= n * 2:
+            break
+    return out
