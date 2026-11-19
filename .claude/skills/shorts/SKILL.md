@@ -147,3 +147,15 @@ gh workflow run shorts-upload.yml --ref main -f folder=assets/samples/<slug> \
 - **더빙은 첫 문장만**: `"keep_audio": true, "intro_voice": true, "durations": [0, ...]` (0 = 첫 장면 길이를 목소리 길이에 자동 맞춤).
   사용자에게 첫 문장만 녹음받아 `voice.mp3` 로 → 1.4배속, 목소리 나올 때 현장음 자동으로 줄임. 녹음 없으면 임시 음성.
 - 마무리는 대중 입장 공감 한마디 (해요잉·질문 없음). 예시: `assets/samples/penguin/`.
+
+
+## 게임형 (스팀 공식 영상 + 평점/실사/AI)
+- 게임 영상은 **게임사가 스팀 상점에 올린 공식 트레일러·게임플레이**만 사용 (개인 유튜버 플레이 영상은 그 사람 저작물이라 불가).
+  인기 게임: `curl -s "https://store.steampowered.com/api/featuredcategories?cc=kr&l=koreana"` (top_sellers 등)
+  영상 주소: `api/appdetails?appids=<id>` → movies[].hls_h264 → `ffmpeg -i "<m3u8>" -c copy trailer.mp4`
+  장면 컷은 `-an` (트레일러 음악은 Content ID 위험 → 우리 음악·더빙 사용).
+- 카드: `overlay: "score"` (overlay_text "Metacritic|78|100;OpenCritic|80|100") / `overlay: "steam"` ("복합적|대체로 긍정적|기간 설명").
+  점수는 OpenCritic·Kotaku 등 보도로 확인, 설명란에 "점수는 보도 기준".
+- 실사: 같은 주제의 위키미디어 CC BY/CC0/PD 사진·영상 (SA 제외) — `photo-check.yml -f "query=검색어1|검색어2"` → 아티팩트 photos.
+- AI 이미지: 게임과 현실을 잇는 장면 (예: 1403년 도시 재현).
+- 길이 최대 30초 (`SHORTS_MAX_SECONDS` 기본 25 — 게임형은 대본을 짧게 유지). 예시: `assets/samples/crimson_desert/`, `assets/samples/kcd2/`.

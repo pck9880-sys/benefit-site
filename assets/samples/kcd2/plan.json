@@ -1,0 +1,121 @@
+{
+ "topic": "킹덤 컴 딜리버런스 2 쿠텐베르크 = 실제 쿠트나호라",
+ "title_top": "600년 전 도시를",
+ "title_bottom": "그대로 옮긴 게임 ㄷㄷ",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "voice": "용식",
+ "beats": [
+  {
+   "narration": "1403년 중세 도시를 통째로 재현한 게임이 있다는데",
+   "card": "1403년 중세 도시를 통째로 재현한 게임이 있다는데",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "킹덤 컴 딜리버런스 2 속 도시 쿠텐베르크인데",
+   "card": "킹덤 컴 딜리버런스 2 속 도시 쿠텐베르크인데",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "이게 지금 체코에 실제로 있는 쿠트나호라임",
+   "card": "이게 지금 체코에 실제로 있는 쿠트나호라임",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "유네스코 세계유산으로 지정된 도시라고 함",
+   "card": "유네스코 세계유산으로 지정된 도시라고 함",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "제작사가 도시 기록 보관소 자료까지 받아서 만들었대",
+   "card": "제작사가 도시 기록 보관소 자료까지 받아서 만들었대",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "메타크리틱 89점 받은 게임이라는 거",
+   "card": "메타크리틱 89점 받은 게임이라는 거",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "question": "근데 이 정도면 게임임 역사 공부임?",
+ "outro": "다들 댓글로 알려줘요잉~",
+ "yt_title": "600년 전 도시를 그대로 옮긴 게임 ㄷㄷ #shorts",
+ "description": "킹덤 컴: 딜리버런스 2의 도시 쿠텐베르크는 1403년의 체코 쿠트나호라(유네스코 세계유산)를 재현했어요.\n\n※ 게임 영상: Warhorse Studios / Deep Silver 공식 게임플레이 티저(Steam)\n※ 1403년 도시 장면은 AI로 만든 이미지예요.\n\n사진 출처\n- Photo: Perituss (CC0) https://commons.wikimedia.org/wiki/File:Saint_Barbara_Kutna_Hora_2010_3.jpg\n- Photo: Benjamín Skála (CC BY 2.5) https://commons.wikimedia.org/w/index.php?curid=1473746",
+ "tags": [
+  "킹덤컴딜리버런스2",
+  "KCD2",
+  "쿠트나호라",
+  "중세",
+  "게임",
+  "역사"
+ ],
+ "sources": [
+  "https://www.deepsilver.com/games/kingdom-come-deliverance-ii/news/kuttenberg-a-medieval-metropolis",
+  "https://www.visitczechia.com/en-us/news/2025/02/n-kingdom-come-deliverance-2",
+  "https://store.epicgames.com/news/hands-on-with-kingdom-come-deliverance-2-s-gritty-medieval-world-and-holy-roman-empire-politics"
+ ],
+ "media": [
+  {
+   "video": "clip0.mp4"
+  },
+  {
+   "video": "clip1.mp4"
+  },
+  {
+   "image": "img2.jpg"
+  },
+  {
+   "image": "img3.jpg"
+  },
+  {
+   "image": "img4.jpg"
+  },
+  {
+   "video": "clip5.mp4"
+  },
+  {
+   "video": "clip6.mp4"
+  },
+  {
+   "video": "clip6.mp4",
+   "start": 2.5
+  }
+ ]
+}
