@@ -1,0 +1,240 @@
+{
+ "topic": "딸 친구가 PC방에서 잔다길래 명절에 데려온 썰 (루리웹 유머 베스트 원글 소개)",
+ "title_top": "PC방서 자던 딸친구",
+ "title_bottom": "지금은 우리 둘째",
+ "mood": "웃긴글",
+ "kind": "",
+ "caption_style": "mix",
+ "music_concept": "신나는 코믹",
+ "question": "",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "intro_post": {
+  "emoji": "🤣",
+  "board": "유머 • 정보 게시판"
+ },
+ "beats": [
+  {
+   "narration": "추석 전날 밤, 대학생 딸이 끌고 온 캐리어 두 개",
+   "card": "캐리어가 **두 개**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "하나는 딸 거, 하나는 처음 보는 애 거였음",
+   "card": "하나는 **모르는 애** 거",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "\"엄마, 얘 수빈이. 연휴 동안 우리 집에 있을 거야\"",
+   "card": "연휴 동안 **우리 집에**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "수빈이는 신발도 못 벗고 현관에 서 있었는데",
+   "card": "신발도 **못 벗고**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "딸을 베란다로 끌고 가서 물어보니까",
+   "card": "**베란다**로 소환",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "알고 보니 수빈이는 보육원 출신",
+   "card": "**보육원** 출신",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "연휴엔 기숙사 문 닫아서 작년 설엔 PC방에서 잤다고",
+   "card": "작년 설엔 **PC방**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "comment",
+   "overlay_text": "따뜻행",
+   "overlay_source": "커뮤니티 반응"
+  },
+  {
+   "narration": "다음 날 전 부치는데 뒤집개를 쥐여 줬더니",
+   "card": "**뒤집개** 건네줌",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "\"명절에 전 부쳐 본 거 처음이에요\" 하고 울었음",
+   "card": "전 부친 게 **처음**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "그 뒤로 친척들한텐 \"우리 둘째\"라고 소개하는 중",
+   "card": "\"우리 **둘째**\"",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "근데 요즘 수빈이 동그랑땡이 딸 것보다 예쁨",
+   "card": "동그랑땡이 **더 예쁨**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "딸이 그걸 인정 안 함ㅋㅋ",
+   "card": "딸이 **인정 안 함**",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "comment",
+   "overlay_text": "딸이 그걸 인정안함ㅋㅋㅋㅋㅋㅋ",
+   "overlay_source": "커뮤니티 반응"
+  }
+ ],
+ "outro": "",
+ "media": [
+  {
+   "image": "s1.jpg"
+  },
+  {
+   "image": "s2.jpg"
+  },
+  {
+   "image": "s3.jpg"
+  },
+  {
+   "zzal": "z1.png"
+  },
+  {
+   "image": "s4.jpg"
+  },
+  {
+   "image": "img0.jpg"
+  },
+  {
+   "image": "img1.jpg"
+  },
+  {
+   "image": "img0.jpg"
+  },
+  {
+   "image": "img1.jpg"
+  },
+  {
+   "zzal": "z2.png"
+  },
+  {
+   "image": "img0.jpg"
+  },
+  {
+   "image": "img1.jpg"
+  }
+ ],
+ "gpt_images": [
+  {
+   "file": "img0.jpg",
+   "prompt": "Photorealistic vertical 9:16 photo, late night apartment entrance in Korea, a fictional Korean college girl in a puffer jacket pulling two suitcases through the front door, behind her a shy thin fictional young woman standing in the doorway with shoes still on, looking down, warm hallway light, surprised fictional middle-aged mother in pajamas seen from behind, candid everyday mood, no text, no letters, no logos, no watermark"
+  },
+  {
+   "file": "img1.jpg",
+   "prompt": "Photorealistic vertical 9:16 photo, Korean holiday kitchen, a large electric griddle with rows of golden donggeurangttaeng (Korean meat patties) frying, a fictional young woman's hands holding a spatula flipping a perfectly round patty, next to it a few lopsided ugly patties, warm cozy family atmosphere, steam, no text, no letters, no logos, no watermark"
+  },
+  {
+   "file": "thumb_src.jpg",
+   "prompt": "Square 1:1 photorealistic photo for a YouTube Shorts thumbnail. A beautiful Korean adult woman in her late 20s with a slim, well-proportioned figure, wearing a stylish form-fitting outfit (fitted V-neck knit top or slim cardigan with high-waist jeans, light natural cleavage visible) that shows her body silhouette tastefully, laughing hard with hand over mouth, eyes squinted, playful and bright energy. Reaction relates to this topic: 딸 친구가 PC방에서 잔다길래 명절에 데려온 썰 (루리웹 유머 베스트 원글 소개). Waist-up framing, face in the upper third, bright clean studio light, soft pastel background, high contrast, sharp focus, Instagram-model look. fully clothed, no lingerie, no swimwear, no nudity, no suggestive pose, not resembling any real person, no text, no logo, no watermark."
+  }
+ ],
+ "thumb_caption": "딸이 인정 안 함ㅋㅋ",
+ "end_comments": [
+  {
+   "text": "동그랑땡 못생긴건 못참지;;;",
+   "likes": 0
+  },
+  {
+   "text": "너 동그랑땡 개못하자나",
+   "likes": 0
+  },
+  {
+   "text": "딸이 그걸 인정안함ㅋㅋㅋㅋㅋㅋ",
+   "likes": 0
+  },
+  {
+   "text": "근대 친딸도 맘이 곱내",
+   "likes": 0
+  },
+  {
+   "text": "어우90년대 화장실 변기 옆에 있던 좋은생각 느낌",
+   "likes": 0
+  }
+ ],
+ "yt_title": "PC방서 자던 딸 친구의 명절 #shorts",
+ "description": "대학생 딸이 추석 전날 밤 모르는 친구를 데려옴. 기숙사 문 닫는 연휴마다 PC방에서 잤다는 수빈이. 그 뒤로 명절마다 수저 한 벌 더 놓게 됐는데… 요즘 문제는 동그랑땡임ㅋㅋ\n출처: 루리웹 유머 베스트 인기글\n\n※ 출처: 커뮤니티 인기글 (얼굴은 모자이크 처리함)",
+ "tags": [
+  "유머",
+  "썰",
+  "웃긴썰",
+  "공감",
+  "쇼츠"
+ ],
+ "sources": [
+  "https://bbs.ruliweb.com/best/board/300143/read/77451323"
+ ],
+ "pin_comment": "명절 동그랑땡 대결, 님들은 딸 편임 수빈이 편임?"
+}
