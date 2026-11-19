@@ -1,0 +1,105 @@
+{
+ "topic": "우주정거장 물방울 탁구 (스콧 켈리)",
+ "title_top": "우주에서 물로",
+ "title_bottom": "탁구 치면 생기는 일 ㄷㄷ",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "beats": [
+  {
+   "narration": "우주정거장에선 물이 안 떨어지고 공처럼 둥둥 뜬다는데",
+   "card": "물이 공처럼",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "그래서 물도 이렇게 공 모양으로 마심",
+   "card": "공 모양 물",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "근데 스콧 켈리가 이 물방울로 탁구를 쳐봤거든",
+   "card": "물방울 탁구",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "물을 튕겨내는 라켓이라 안 터지고 통통 튄다고 함",
+   "card": "통통 튀는 물",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "1년짜리 우주 임무 중에 찍은 영상이라는 거",
+   "card": "1년 우주 임무",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "question": "근데 우주에서 1년 살기 vs 1억 받기 뭐 고름?",
+ "outro": "솔직히 난 1억 받고 지구에 있을 듯",
+ "outro_free": true,
+ "voice": "용식",
+ "yt_title": "우주에서 물로 탁구 치면 생기는 일 ㄷㄷ #shorts",
+ "description": "우주정거장에서는 물이 떨어지지 않고 공처럼 떠요. NASA 우주비행사 스콧 켈리가 1년짜리 우주 임무 중 물을 튕겨내는(소수성) 라켓으로 물방울 탁구를 쳤어요.\n\n영상 출처\n- Video: NASA Johnson (Public domain) https://commons.wikimedia.org/wiki/File:SpeedyTime_5_%E2%80%93_Water_in_Space.webm\n- Video: NASA (Public domain) https://commons.wikimedia.org/wiki/File:First_8K_Video_from_Space_-_Ultra_HD_VP9.webm\n- Video: NASA Johnson (Public domain) https://commons.wikimedia.org/wiki/File:Liquid_Ping_Pong_in_Space_-_RED_4K.webm\n※ 일부 장면은 AI로 만든 이미지예요.",
+ "tags": [
+  "우주",
+  "우주정거장",
+  "NASA",
+  "스콧켈리",
+  "물방울",
+  "신기한영상"
+ ],
+ "sources": [
+  "https://commons.wikimedia.org/wiki/File:Liquid_Ping_Pong_in_Space_-_RED_4K.webm"
+ ],
+ "media": [
+  {
+   "video": "clip0.mp4"
+  },
+  {
+   "video": "clip1.mp4"
+  },
+  {
+   "video": "clip2.mp4"
+  },
+  {
+   "video": "clip3.mp4"
+  },
+  {
+   "image": "img4.jpg"
+  },
+  {
+   "video": "clip5.mp4"
+  },
+  {
+   "video": "clip5.mp4"
+  }
+ ]
+}
