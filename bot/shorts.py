@@ -466,7 +466,8 @@ def upload_youtube(video, p, credits=()):
         r = requests.post(
             "https://api.upload-post.com/api/upload",
             headers={"Authorization": f"Apikey {config.UPLOAD_POST_API_KEY}",
-                     "Idempotency-Key": "shorts-" + re.sub(r"\W", "", p.topic)[:40] + now().strftime("%Y%m%d")},
+                     "Idempotency-Key": "shorts-" + __import__("hashlib").md5(p.yt_title.encode()).hexdigest()[:16]
+                     + now().strftime("%Y%m%d")},
             data=[("user", config.UPLOAD_POST_USER), ("platform[]", "youtube"),
                   ("title", p.yt_title[:100]), ("youtube_title", p.yt_title[:100]),
                   ("youtube_description", full_description(p, credits)[:4900]),
