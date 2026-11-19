@@ -873,7 +873,8 @@ def full_description(p, credits=()):
     voice = (f"\n\nThis content was produced with Typecast, an AI virtual actor service. "
              f"Characters casted: {config.TYPECAST_VOICE_NAME} https://typecast.ai") if config.TYPECAST_CREDIT else ""
     music = f"\n\n{music_credit()}" if music_credit() else ""
-    return (f"{p.description}\n\n출처\n{src}{photo}\n\n※ 일부 장면은 AI로 만든 이미지예요.{voice}{music}\n\n{tags} #shorts")
+    ai_note = "" if "AI로 만든" in p.description else "\n\n※ 장면 일부는 AI로 만든 이미지임."  # 고지문 중복 방지, 음슴체
+    return (f"{p.description}\n\n출처\n{src}{photo}{ai_note}{voice}{music}\n\n{tags} #shorts")
 
 
 def upload_youtube(video, p, credits=()):
