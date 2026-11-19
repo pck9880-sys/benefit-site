@@ -1,0 +1,148 @@
+{
+ "topic": "감동: 꿈꾸던 어른이 되었나요",
+ "title_top": "꿈꾸던 어른이",
+ "title_bottom": "되었나요?",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "caption_style": "epic",
+ "beats": [
+  {
+   "narration": "어릴 때 꿈, 기억나요?",
+   "card": "어릴 때 꿈, 기억나요?",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "뭐든 될 수 있을 줄 알았던 **그때**",
+   "card": "뭐든 될 수 있을 줄 알았던 **그때**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "열아홉, 시험지 앞에서 처음 작아졌고",
+   "card": "열아홉, 시험지 앞에서 처음 작아졌고",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "스물다섯, 이력서 앞에서 또 작아졌죠",
+   "card": "스물다섯, 이력서 앞에서 또 작아졌죠",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "지금은 퇴근길 지하철에서 하루를 버티는 **어른**",
+   "card": "지금은 퇴근길 지하철에서 하루를 버티는 **어른**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "꿈꾸던 모습은 아니어도",
+   "card": "꿈꾸던 모습은 아니어도",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "오늘까지 버틴 당신, **충분히 잘하고 있어요**",
+   "card": "오늘까지 버틴 당신, **충분히 잘하고 있어요**",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "question": "",
+ "voice": "용식",
+ "outro": "님들은 꿈꾸던 어른이 **되었나요잉?**",
+ "outro_custom": true,
+ "outro_impact": false,
+ "keep_audio": true,
+ "durations": [
+  3.6,
+  4.0,
+  4.0,
+  4.0,
+  4.4,
+  3.6,
+  5.0,
+  4.4
+ ],
+ "bgm": {
+  "file": "song.mp3",
+  "start": 0,
+  "lufs": -15,
+  "credit": ""
+ },
+ "media": [
+  {
+   "image": "a_rooftop.jpg"
+  },
+  {
+   "image": "a_drawing.jpg"
+  },
+  {
+   "image": "a_student.jpg"
+  },
+  {
+   "image": "a_hallway.jpg"
+  },
+  {
+   "image": "a_subway.jpg"
+  },
+  {
+   "image": "a_rooftop.jpg"
+  },
+  {
+   "image": "a_sunset.jpg"
+  },
+  {
+   "image": "a_sunset.jpg"
+  }
+ ],
+ "yt_title": "꿈꾸던 어른이 되었나요? #shorts",
+ "description": "어릴 때 꿈, 기억나요? 꿈꾸던 모습은 아니어도 오늘까지 버틴 당신, 충분히 잘하고 있어요.\n\n님들은 꿈꾸던 어른이 되었나요잉?\n\n※ 장면은 AI로 만든 이미지예요.\n♪ 음악: 꿈꾸던 어른이 되었나요\n\n#감동 #위로 #어른 #꿈 #직장인",
+ "pin_comment": "어릴 때 꿈이 뭐였어요? 댓글로 남겨주세요 🚀 님들은 꿈꾸던 어른이 되었나요잉?",
+ "tags": [
+  "감동",
+  "위로",
+  "어른",
+  "꿈",
+  "직장인",
+  "공감"
+ ],
+ "sources": []
+}
