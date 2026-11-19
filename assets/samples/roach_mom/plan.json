@@ -1,0 +1,205 @@
+{
+ "topic": "엄마한테 '내가 바퀴벌레 되면?' 카톡 질문 (커뮤니티 썰 재구성)",
+ "mood": "웃긴글",
+ "kind": "썰",
+ "title_top": "엄마한테 바퀴벌레 질문했더니",
+ "title_bottom": "첫 답장이 동남아 바퀴냐고 ㅋㅋ",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "caption_style": "box",
+ "beats": [
+  {
+   "narration": "엄마한테 바퀴벌레 질문 했다가 큰일 남",
+   "card": "바퀴벌레 질문 했다가 **큰일**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "내가 바퀴벌레 되면 어떡할 거야? 보냄",
+   "card": "\"내가 **바퀴벌레** 되면?\"",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "첫 답장이 동남아 바퀴야, 한국 바퀴야?",
+   "card": "\"**동남아** 바퀴야, 한국 바퀴야?\"",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "comment",
+   "overlay_text": "동남아 바퀴벌레냐 우리나라 바퀴벌레냐가 제일 웃겨요 ㅠㅠㅠㅜㅜㅜㅠ",
+   "overlay_source": "커뮤니티 반응"
+  },
+  {
+   "narration": "아니 그게 지금 왜 중요한데",
+   "card": "그게 **왜** 중요한데",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "근데 다음 답장 보고 살짝 울컥함",
+   "card": "다음 답장에 **울컥**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "알아보고 먹이 놓고 기다리겠대",
+   "card": "**먹이** 놓고 기다리겠대",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "다른 데선 바퀴여도 엄마한텐 특별하대",
+   "card": "엄마한텐 **특별한** 바퀴",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "comment",
+   "overlay_text": "다른 곳 가면 바퀸데 엄마한테는 특별한 바퀴라는 거보고 눈물날 뻔 했는데 ㅋㅋ쿠ㅜㅜㅜ 내 감동 돌려내",
+   "overlay_source": "커뮤니티 반응"
+  },
+  {
+   "narration": "친구들 엄마는 그냥 밟는다던데",
+   "card": "친구 엄마들은 **밟는다**던데",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "근데 그날 밤 거실에 진짜 바퀴 나옴",
+   "card": "그날 밤 **진짜** 바퀴 등장",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "엄마 소리 지르면서 줄넘기하듯 뜀",
+   "card": "**줄넘기**하듯 뜀",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "comment",
+   "overlay_text": "나 농담아니고 애기처럼 펑펑 울 자신 있음",
+   "overlay_source": "커뮤니티 반응"
+  },
+  {
+   "narration": "그러고 슬리퍼로 바로 잡더라",
+   "card": "**슬리퍼**로 바로 잡음",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "나 그냥 사람으로 살기로 함",
+   "card": "그냥 **사람**으로 살기로 함",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "question": "",
+ "voice": "용식",
+ "outro": "",
+ "media": [
+  {
+   "zzal": "i_phone.png"
+  },
+  {
+   "zzal": "i_phone.png"
+  },
+  {
+   "zzal": "i_parent.png"
+  },
+  {
+   "zzal": "z_sad.png"
+  },
+  {
+   "zzal": "i_parent.png"
+  },
+  {
+   "zzal": "i_parent.png"
+  },
+  {
+   "zzal": "i_parent.png"
+  },
+  {
+   "zzal": "z_smug.png"
+  },
+  {
+   "zzal": "i_roach.png"
+  },
+  {
+   "zzal": "i_scared.png"
+  },
+  {
+   "zzal": "z_shock.png"
+  },
+  {
+   "zzal": "i_phone.png"
+  }
+ ],
+ "music_concept": "신나는 코믹",
+ "thumb_caption": "동남아 바퀴야?",
+ "yt_title": "엄마한테 '내가 바퀴벌레 되면?' 물어봤더니 ㅋㅋ #shorts",
+ "description": "요즘 유행하는 '엄마, 내가 바퀴벌레 되면 어떡할 거야?' 카톡 질문. 엄마 첫 답장은 \"동남아 바퀴야, 한국 바퀴야?\"였는데, 다음 답장엔 살짝 울컥… 그런데 그날 밤 거실에 진짜 바퀴가 나타났어요.\n\n님들은 어떻게 생각해요잉?\n\n※ 커뮤니티 실제 사연 여러 개를 재구성했어요.\n※ 일러스트: いらすとや (irasutoya.com)\n출처: 인스티즈, 브런치\n\n#바퀴벌레 #엄마카톡 #웃긴썰 #썰 #카톡",
+ "tags": [
+  "바퀴벌레",
+  "엄마카톡",
+  "내가바퀴벌레가되면",
+  "웃긴썰",
+  "썰",
+  "카톡",
+  "엄마"
+ ],
+ "sources": [
+  "https://www.instiz.net/pt/7357267",
+  "https://brunch.co.kr/@bibi0905/16",
+  "https://www.instiz.net/name/67102831"
+ ],
+ "pin_comment": "님들 엄마는 내가 바퀴벌레 되면…🅰 알아보고 먹이 놓고 기다려 줌 / 🅱 일단 슬리퍼부터 듦 — 님들은 어떻게 생각해요잉?"
+}
