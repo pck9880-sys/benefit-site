@@ -70,9 +70,11 @@ outro = re.sub(r"\*\*", "", outro or "")
 (d / "더빙용" / "대본.txt").write_text("\n".join(body + ([outro] if outro else [])) + "\n", "utf-8")
 (d / "더빙용" / "대본_본문.txt").write_text("\n".join(body) + "\n", "utf-8")
 (d / "더빙용" / "대본_마무리.txt").write_text(outro + "\n", "utf-8")
-# 목소리 2명: 본문 1명 + 마무리 1명 (자바바·제롬·구리 중, 편마다 돌아가며). 같은 편 재실행이면 그대로.
+# 목소리: 유머·핫이슈 = 본문 1명 + 마무리 다른 1명 (자바바·제롬·구리 돌아가며) / 감동 = 현준 고정. 같은 편 재실행이면 그대로.
 VOICES = ["자바바", "제롬", "구리"]
-if old.get("voices"):
+if p.get("mood") == "감동":  # 감동은 현준 고정 (본문·마무리 모두)
+    vm, vo = "현준", "현준"
+elif old.get("voices") and "현준" not in old["voices"]:
     vm, vo = old["voices"]
 else:
     vf = Path(os.path.expanduser("~/쇼츠작업/voice_rotation.txt"))
