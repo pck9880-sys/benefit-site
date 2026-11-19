@@ -1,0 +1,109 @@
+{
+ "topic": "USGS 지질학자들의 용암 샘플 채취",
+ "title_top": "1150도 용암을",
+ "title_bottom": "직접 퍼가는 직업 ㄷㄷ",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "beats": [
+  {
+   "narration": "천 도 넘는 용암을 직접 퍼가는 사람들이 있다는데",
+   "card": "1150도 용암",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "미국 지질조사국 화산 연구원들이 하는 일임",
+   "card": "USGS 화산 연구원",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "하와이 킬라우에아에서 녹은 용암을 망치로 뜨고",
+   "card": "망치로 용암 채취",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "물 양동이에 넣어서 바로 식혀버린다고 함",
+   "card": "물에 바로 식힘",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "그래야 성분이 안 변해서 분석할 수 있는 거",
+   "card": "성분 분석",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "question": "근데 연봉 1억 주면 이 일 할 거임 말 거임?",
+ "voice": "용식",
+ "outro": "다들 댓글로 알려줘요잉~",
+ "yt_title": "1150도 용암을 직접 퍼가는 직업 ㄷㄷ #shorts",
+ "description": "미국 지질조사국(USGS) 화산 연구원들은 1,150도 용암을 망치로 떠서 물 양동이에 넣어 바로 식혀요. 그래야 성분이 변하지 않아 분석할 수 있대요.\n\n영상 출처\n- Video: France Pinoy (CC BY 3.0) https://commons.wikimedia.org/wiki/File:ICELAND_CRAZY_BED_OF_VOLCANO_LAVA_Geldingadalur_Volcano_Eruption_in_Iceland_April_1,_2021.webm\n- Video: U.S. Geological Survey (USGS) (Public domain) https://commons.wikimedia.org/wiki/File:Volcano_Lava_Sample.webm\n※ 일부 장면은 AI로 만든 이미지예요.",
+ "tags": [
+  "용암",
+  "화산",
+  "킬라우에아",
+  "USGS",
+  "신기한직업",
+  "과학"
+ ],
+ "sources": [
+  "https://www.usgs.gov/media/images/geologist-collects-a-sample-lava-quenching-it-a-bucket",
+  "https://www.usgs.gov/news/volcano-watch-hvos-geological-sample-collections-are-important-resource"
+ ],
+ "media": [
+  {
+   "video": "clip0.mp4"
+  },
+  {
+   "video": "clip1.mp4"
+  },
+  {
+   "video": "clip2.mp4"
+  },
+  {
+   "image": "img3.jpg"
+  },
+  {
+   "image": "img4.jpg"
+  },
+  {
+   "video": "clip5.mp4"
+  },
+  {
+   "video": "clip5.mp4"
+  }
+ ],
+ "credits": [
+  "Video: France Pinoy (CC BY 3.0) https://commons.wikimedia.org/wiki/File:ICELAND_CRAZY_BED_OF_VOLCANO_LAVA_Geldingadalur_Volcano_Eruption_in_Iceland_April_1,_2021.webm",
+  "Video: U.S. Geological Survey (USGS) (Public domain) https://commons.wikimedia.org/wiki/File:Volcano_Lava_Sample.webm"
+ ]
+}

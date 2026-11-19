@@ -718,8 +718,13 @@ def render_sample(folder):
     import json
     from . import pipeline
     d = config.ROOT / folder if not Path(folder).is_absolute() else Path(folder)
-    p = Plan(**json.loads((d / "plan.json").read_text("utf-8")))
-    media = [("image", f) if (f := d / f"img{i}.jpg").exists() else None for i in range(len(p.beats))]
+    raw = json.loads((d / "plan.json").read_text("utf-8"))
+    p = Plan(**raw)
+    if raw.get("media"):  # 장면별 소재 지정: {"video": "clip0.mp4", "start": 0} / {"image": "img3.jpg"}
+        media = [("video", d / m["video"], float(m.get("start", 0))) if "video" in m else ("image", d / m["image"])
+                 for m in raw["media"]]
+    else:
+        media = [("image", f) if (f := d / f"img{i}.jpg").exists() else None for i in range(len(p.beats))]
     work = Path(tempfile.mkdtemp(prefix="sample-"))
     audios = None
     voice = next((d / f"voice.{ext}" for ext in ("mp3", "wav", "m4a", "mp4") if (d / f"voice.{ext}").exists()), None)

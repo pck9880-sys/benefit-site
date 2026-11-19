@@ -1,6 +1,6 @@
 ---
 name: shorts
-description: "이슈해요잉" 유튜브 숏츠 1편을 빠르게 만드는 작업 순서. 사용자가 숏츠/쇼츠 제작, 오늘 이슈 영상, 더빙 파일(mp3) 첨부, 영상 업로드를 요청할 때 사용. 주제 3개 추천 → 사실 확인 → 대본 → Figma GPT 이미지 → 타입캐스트 더빙 프롬프트 → 합성·미리보기 → 컨펌 후 업로드.
+description: "이슈해요잉" 유튜브 숏츠 1편을 빠르게 만드는 작업 순서 (뉴스 이슈형 + CC 영상 재가공형). 사용자가 숏츠/쇼츠 제작, 오늘 이슈 영상, 더빙 파일(mp3) 첨부, 영상 업로드를 요청할 때 사용. 주제 3개 추천 → 사실 확인 → 대본 → Figma GPT 이미지 → 타입캐스트 더빙 프롬프트 → 합성·미리보기 → 컨펌 후 업로드.
 ---
 
 # 숏츠 1편 제작 (반자동)
@@ -74,3 +74,42 @@ gh workflow run shorts-upload.yml --ref main -f folder=assets/samples/<slug> \
 - 코드: `bot/shorts.py`(render_sample, make_video, overlay_html, signature, split_voice), 설정 `bot/config.py`.
 - 화면: 1080×1920, 상단 2줄 제목(흰/노랑, 자동 크기 맞춤), 가운데 1080×1080 장면(천천히 줌), 하단 자막. 효과음 없음, 배경음악 -33 LUFS(더빙 9:1).
 - 매일 자동 제작은 이미지 키(OPENAI_API_KEY/HIGGSFIELD_KEY)가 없으면 쉰다 (`has_image_source`).
+
+
+---
+
+# CC 영상 재가공형 (크리에이티브 커먼즈 영상 + AI 이미지 섞기, 최대 25초)
+
+## 장르 분류 (흥미 소스) — 매번 다른 칸에서 고르기
+| 분류 | 예시 검색어(영어) | 주 출처 |
+|---|---|---|
+| 🌋 극한 자연 | volcano lava, tornado, lightning, avalanche | USGS·NOAA(퍼블릭 도메인) |
+| 🚀 우주·로켓 | rocket launch, ISS spacewalk, mars rover | NASA(퍼블릭 도메인) |
+| 🐙 신기한 동물 | octopus camouflage, mantis shrimp, deep sea creature | NOAA, 위키미디어 CC BY |
+| 🔬 실험·과학 | slow motion, liquid nitrogen, chemical reaction | 위키미디어 CC BY |
+| 🛠 신기한 직업·현장 | lava sampling, bomb disposal robot, wind turbine climber | 정부기관 퍼블릭 도메인 |
+| 🏛 역사 실제 영상 | moon landing, first flight, old city footage | 퍼블릭 도메인 아카이브 |
+| ⚽ 스포츠·이슈 | (방송 영상은 불가) → AI 이미지 + 기사 카드 | — |
+
+## 순서
+1. 분류표에서 주제 3개 추천 → 선택.
+2. 후보 영상 찾기 (서버에서 실행 — 위키미디어는 이 컨테이너에서 429 차단됨):
+   `gh workflow run cc-find.yml --ref main -f "queries=검색어1|검색어2"` → 완료 후
+   `gh run download <id> -n cc -D /tmp/claude-0/sh/cc` → `candidates.json`(제목·라이선스·길이·credit), `candN_sheet.jpg`(미리보기 6컷)
+   - 라이선스는 코드가 자동 필터: CC BY·CC0·퍼블릭 도메인·Pexels만 (NC·ND·SA·불명 제외).
+3. 미리보기를 Read 로 보고 장면 고르기: 필요하면 `ffmpeg -ss <t> -i candN.webm -frames:v 1 -vf scale=240:135,setsar=1 p_N_t.jpg` 여러 장 hstack.
+4. 사실 확인: 영상 설명(candidates.json desc) + 공식 출처(예: usgs.gov, nasa.gov) 웹 검색.
+5. 클립 자르기 (8초, 무음, 720p):
+   `ffmpeg -ss <시작> -t 8 -i candN.webm -an -vf scale=-2:720 -c:v libx264 -preset veryfast -crf 23 assets/samples/<slug>/clipK.mp4`
+6. AI 이미지 1~2장(Figma)을 중간에 섞기 — 영상에 없는 '결정적 장면'(예: 용암을 물에 식히는 순간, 실험실 분석).
+7. plan.json 에 `"media"` 로 장면별 소재 지정 (beats + question + outro 순서, 질문·마무리는 마지막 영상 재사용):
+   `[{"video":"clip0.mp4"},{"video":"clip1.mp4","start":0},{"image":"img3.jpg"}, ...]`
+   설명란에 `영상 출처` 목록(candidates.json 의 credit)을 넣기 — CC BY 필수 조건.
+8. 더빙(용식, 1.0으로 녹음 → 코드가 1.4배속, **25초 넘으면 자동으로 더 빠르게**) → 합성 → 미리보기 → 컨펌 → 업로드 (위 6·7단계와 동일).
+   예시 폴더: `assets/samples/lava_sampling/`.
+
+## 유튜브 CC 영상에 대해
+- 유튜브 'Creative Commons' 영상은 **라이선스상 재사용 가능**하지만, 유튜브 약관은 **외부 프로그램으로 내려받기를 금지**하고 서버에서는 봇 차단도 됨 → 다운로더를 만들지 않는다.
+- 대신 유튜브 CC 영상 상당수가 **위키미디어 공용에 라이선스 검수 후 옮겨져 있음**(video2commons) → cc-find 가 그걸 찾는다.
+- 유튜브에서 찾은 영상을 쓰고 싶으면: 같은 제목으로 위키미디어 검색 → 있으면 사용. 없으면 사용자가 원작자 공식 채널인지·CC BY인지 확인 후 직접 받아 첨부(사용자 판단·책임) → `assets/samples/<slug>/` 에 넣고 같은 순서.
+- 재사용 콘텐츠 정책: 자르기만 하면 수익화 거절 → 반드시 내레이션·자막·카드·질문으로 재가공.
