@@ -34,6 +34,12 @@ elif cmd == "photos":  # 사진 검색 점검: python -m bot photos "검색어"
 elif cmd == "shorts-sample":  # 저장된 대본·이미지로 숏츠 렌더링 (틀 테스트): python -m bot shorts-sample 폴더
     from . import shorts
     shorts.render_sample(sys.argv[2])
+elif cmd == "bgm-add":  # 배경음악 즐겨찾기 추가 (텔레그램 /bgmadd 와 같음): python -m bot bgm-add "곡 - 아티스트"
+    from . import config
+    st = pipeline.load_state()
+    pipeline.handle_bgm_command(st, "/bgmadd " + " ".join(sys.argv[2:]))
+    pipeline.save_json(config.STATE_FILE, st)
+    print("favs:", st.get("bgm_favs"))
 elif cmd == "shorts-due":  # 워크플로에서 숏츠를 만들 차례인지 확인 (0=만들기)
     from . import shorts
     sys.exit(0 if shorts.due(pipeline.load_state()) else 1)
