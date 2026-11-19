@@ -28,8 +28,9 @@ CAP_Y = 1330  # 자막 위치 (영상 아래쪽에 겹침)
 
 
 class Beat(BaseModel):
-    narration: str = Field(description="읽을 문장 1개. 28자 이내, 쇼츠 썰 푸는 말투 ('~라는데', '~거든요', '~했다고 함')")
+    narration: str = Field(description="읽을 문장 1개. 24자 이내, 쇼츠 썰 푸는 말투 ('~라는데', '~거든요', '~했다고 함')")
     card: str = Field(description="AI 영상이 없을 때 화면 가운데 카드에 띄울 짧은 문구 (20자 이내)")
+    twist: bool = Field(default=False, description="반전·핵심 숫자가 나오는 문장이면 true ('띵' 효과음)")
     visual: str = Field(description="'photo' (실제 사진: 실존 인물·장소·물건·사건 현장) 또는 'ai' (재연 장면·주인공 연출 컷)")
     query: str = Field(description="실제 사진 검색어 (영어 2~4단어). 실존 대상은 정확한 고유명사+종류 (예: 'Samsung Lions baseball', 'Everland amusement park'), 일반 장면은 구체적으로 (예: 'baseball stadium crowd night'). ai 장면이어도 대체용으로 반드시 작성")
     ai_prompt: str = Field(description="AI 이미지 프롬프트 (영어). 주인공이 나오면 'the protagonist' 로 지칭. 사실적인 사진 느낌, 글자·로고 없음")
@@ -43,7 +44,7 @@ class Plan(BaseModel):
                                        "실존 인물을 닮게 만들지 않음 — 실존 인물은 'photo' 장면으로만 보여줌")
     photo_fallbacks: List[str] = Field(description="사진 검색이 안 될 때 쓸 넓은 영어 검색어 2~3개 (예: 'soccer stadium', 'football fans')")
     hook_video: str = Field(description="첫 장면 AI 영상 프롬프트 (영어, 5초, 역동적인 한 장면)")
-    beats: List[Beat] = Field(description="내레이션 6~8문장 (전체 35초 이내). 첫 문장은 제목 내용을 다시 던지는 훅, 마지막은 반전·한마디 정리")
+    beats: List[Beat] = Field(description="내레이션 4~5문장 (전체 20초 이내). 첫 문장은 제목 내용을 다시 던지는 훅, 마지막은 반전·한마디 정리")
     yt_title: str = Field(description="유튜브 제목 40자 이내, 끝에 #shorts")
     description: str = Field(description="유튜브 설명 2~3줄")
     tags: List[str] = Field(description="해시태그용 키워드 5~8개 (# 없이)")
@@ -170,7 +171,7 @@ def tts(text, out, prev="", nxt=""):
         import edge_tts
 
         async def go():
-            await edge_tts.Communicate(text, config.SHORTS_VOICE, rate="+18%").save(str(out))
+            await edge_tts.Communicate(text, config.SHORTS_VOICE, rate="+25%").save(str(out))
         asyncio.run(go())
         return out if out.exists() and out.stat().st_size > 1000 else None
     except Exception as ex:
@@ -214,18 +215,25 @@ def make_video(p, media, work):
     audios = [tts(t, work / f"a{i}.mp3", n[i - 1] if i else "", n[i + 1] if i + 1 < len(n) else "")
               for i, t in enumerate(n)]
     voiced = sum(1 for a in audios if a)
+    events, t_beat = [], 0.0  # 효과음 (시각, 종류)
     with Renderer() as r:
         title = r.png(title_html(p), work / "title.png")
         for i, b in enumerate(p.beats):
             audio = audios[i]
-            dur = (duration(audio) + 0.12) if audio else max(2.2, len(b.narration) * 0.11)
+            dur = (duration(audio) + 0.05) if audio else max(2.2, len(b.narration) * 0.11)
             parts = chunks(b.narration)
             total_chars = sum(len(x) for x in parts)
             caps, t = [], 0.0
+            if i:
+                events.append((t_beat, "whoosh"))  # 장면 전환 '휙'
+            if getattr(b, "twist", False):
+                events.append((t_beat + 0.05, "ding"))  # 반전 '띵'
             for j, text in enumerate(parts):
                 d = dur * len(text) / total_chars
                 caps.append((r.png(caption_html(text), work / f"c{i}_{j}.png"), t, t + d))
+                events.append((t_beat + t, "pop"))  # 자막 뜰 때 '뽁'
                 t += d
+            t_beat += dur
             kind, src = media[i] if i < len(media) and media[i] else (None, None)
             cmd = ["-f", "lavfi", "-i", f"color=c=black:s={W}x{H}:r=30:d={dur:.3f}"]
             frames = int(dur * 30) + 1
@@ -265,12 +273,30 @@ def make_video(p, media, work):
     joined = work / "joined.mp4"
     ff("-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", joined)
     out = work / "shorts.mp4"
+    # 오디오 믹스: 음성 + 배경음악(옅게) + 효과음
+    inputs, chains, labels = ["-i", joined], [], ["[0:a]"]
     bgms = sorted((config.ROOT / "assets" / "bgm").glob("*.mp3"))
-    if bgms:  # 배경음악을 작게 깔기
-        bgm = random.choice(bgms)
-        ff("-i", joined, "-stream_loop", "-1", "-i", bgm, "-filter_complex",
-           f"[1:a]volume={config.SHORTS_BGM_VOLUME}[b];[0:a][b]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[a]",
-           "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", out)
+    k = 1
+    if bgms:
+        inputs += ["-stream_loop", "-1", "-i", random.choice(bgms)]
+        chains.append(f"[{k}:a]volume={config.SHORTS_BGM_VOLUME}[bg]")
+        labels.append("[bg]")
+        k += 1
+    sfx_dir = config.ROOT / "assets" / "sfx"
+    vol = {"pop": config.SHORTS_SFX_VOLUME, "whoosh": config.SHORTS_SFX_VOLUME * 0.8, "ding": config.SHORTS_SFX_VOLUME}
+    for j, (at, kind) in enumerate(events):
+        f = sfx_dir / f"{kind}.wav"
+        if not f.exists():
+            continue
+        inputs += ["-i", f]
+        ms = int(at * 1000)
+        chains.append(f"[{k}:a]adelay={ms}|{ms},volume={vol[kind]}[s{j}]")
+        labels.append(f"[s{j}]")
+        k += 1
+    if len(labels) > 1:
+        chains.append("".join(labels) + f"amix=inputs={len(labels)}:duration=first:dropout_transition=0:normalize=0[a]")
+        ff(*inputs, "-filter_complex", ";".join(chains), "-map", "0:v", "-map", "[a]", "-c:v", "copy",
+           "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", out)
     else:
         ff("-i", joined, "-c", "copy", "-movflags", "+faststart", out)
     return out, voiced
