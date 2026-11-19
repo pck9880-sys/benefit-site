@@ -1,5 +1,5 @@
 #!/bin/zsh
-# Mac 숏츠 자동 제작 (크론: 0~8시 2시간마다, 그 외 4시간마다) → 크롬 Claude 더빙 → 유튜브 자동 업로드 (중간 보고 없음). cron/launchd 가 이 파일을 실행.
+# Mac 숏츠 자동 제작 (크론: 하루 6편: 0·3·6시 + 12·16·20시) → 크롬 Claude 더빙 → 유튜브 자동 업로드 (중간 보고 없음). cron/launchd 가 이 파일을 실행.
 export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
 cd "$HOME/benefit-site" || exit 1
 # 이전 편이 아직 돌고 있으면 이번 회차는 건너뜀 (겹침 방지)
