@@ -43,9 +43,10 @@ python3 "$REPO/scripts/mac/drop_server.py" "$DIR" "$PORT" & SERVER=$!
 trap 'kill $SERVER 2>/dev/null' EXIT
 sleep 1
 
+PRIVACY=$([ "${SHORTS_PUBLISH:-1}" = "0" ] && echo 비공개 || echo 공개)  # SHORTS_PUBLISH=0 → 테스트(비공개)
 LAST_VOICE=$(cat "$WORK/last_voice.txt" 2>/dev/null || echo "없음")
 fill() { sed -e "s#{{DIR}}#$DIR#g" -e "s#{{PORT}}#$PORT#g" -e "s#{{MOOD}}#$(cat "$DIR/mood")#g" \
-             -e "s#{{LAST_VOICE}}#$LAST_VOICE#g" "$1"; }
+             -e "s#{{LAST_VOICE}}#$LAST_VOICE#g" -e "s#{{PRIVACY}}#$PRIVACY#g" "$1"; }
 TOOLS="Bash,Read,Write,Glob,Grep,mcp__claude-in-chrome"
 
 # 3) 타입캐스트 더빙 (이미 voice.mp3 가 있으면 건너뜀)

@@ -5,7 +5,11 @@ cd "$HOME/benefit-site" || exit 1
 export SHORTS_BGM=0  # 음악은 업로드 때 유튜브 저장됨 사운드로
 git pull -q --rebase || true
 BEFORE=$(ls assets/samples)
-caffeinate -i claude -p "$(cat .claude/prompts/shorts-hourly.md)" \
+EXTRA=""
+[ -n "${SHORTS_FORCE_MOOD:-}" ] && EXTRA="
+
+[이번 회차만] 종류는 순환 대신 '$SHORTS_FORCE_MOOD' 로 고정."
+caffeinate -i claude -p "$(cat .claude/prompts/shorts-hourly.md)$EXTRA" \
   --permission-mode acceptEdits \
   --allowedTools "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,mcp__claude_ai_Figma__generate_image,mcp__claude_ai_Figma__create_session,mcp__claude_ai_Figma__create_new_file" \
   >> "$HOME/benefit-site/shorts_hourly.log" 2>&1
