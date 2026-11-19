@@ -27,7 +27,8 @@
 2) 공통 제작
    - 자막: **caption_style "mix"** (흰+검정테두리 / 빨강+흰테두리 / 검정+흰테두리 둥근글씨 / 주황빨강+검정테두리 4종을 장면마다 섞음). 모든 종류 공통.
    - 대본 11~12문장(반말 썰 말투, 한 문장 30자 이내, 훅→상황→전개→반전→마무리). question 은 비움. 마무리는 자동('님들은 어떻게 생각해요잉?').
-   - AI 이미지: Figma MCP generate_image 4장 (fileKey XPyCf7k9rdYwZF42krwyZ4). 사람은 가상 인물만, 글자·로고 없음, 예전 이미지 재사용 금지.
+   - AI 이미지 4장: **직접 만들지 않는다 (Figma 사용 안 함).** plan.json 에 "gpt_images": [{"file": "img0.jpg", "prompt": "<영어 프롬프트>"}, ...] 로 적기만 하면
+     다음 단계 스크립트가 ChatGPT 로 생성한다. media 에는 그 파일 이름을 그대로 쓴다. 사람은 가상 인물만, 글자·로고 없음, 장면마다 구체적으로.
    - **실제 사진 섞기**: AI 이미지와 함께 실제 사진 1~3장(기사 대표 이미지 og:image, 커뮤니티 글 사진, 제품 공식 사진 등).
      `python -m bot.realimg <URL> assets/samples/<slug>/rN.jpg <모드>` → media 에 {"image": "rN.jpg"}.
      모드: 제품·음식·풍경(사람 없음) = none 그대로 / 사람 나오면 auto(얼굴·머리 모자이크) / 집회·군중 = all(전체 흐림).
@@ -35,10 +36,10 @@
      워터마크·방송 로고가 크게 박힌 사진, 커뮤니티 사진 중 개인 신상이 드러나는 것(카톡 프로필·이름표 등)은 쓰지 않는다.
      설명란에 "※ 일부 실제 사진은 모자이크 처리했어요." 한 줄.
    - **배경음악은 넣지 않는다** (업로드 때 유튜브 '저장됨' 사운드에서 고름). plan.json 에 "music_concept": "잔잔한 감동" | "신나는 코믹" | "일상 브이로그" | "긴장감 이슈".
-   - 썸네일(기본값): 웃긴글·기본이면 `python -m bot.thumb prompt assets/samples/<slug>` 문구 그대로 Figma generate_image(정사각 1024x1024)
-     → assets/samples/<slug>/thumb_src.jpg. 문구의 안전 조건(성인·옷 다 입음·노출/선정적 자세 금지)은 빼거나 바꾸지 않는다.
-     plan.json 에 "thumb_caption": 이미지 아래 자막 상자에 넣을 훅 한 마디(15자 이내). 감동이면 이미지 생략(장면 컷). 그 뒤 `python -m bot.thumb assets/samples/<slug>` → thumb.jpg.
-   - 렌더(임시 음성): `SHORTS_BGM=0 python -c "from bot import shorts; shorts.render_sample('assets/samples/<slug>')"` → shorts_sample.mp4 를 assets/samples/<slug>/preview.mp4 로 복사.
+   - 썸네일(기본값): 웃긴글·기본이면 `python -m bot.thumb prompt assets/samples/<slug>` 문구 그대로 gpt_images 에 {"file": "thumb_src.jpg", "prompt": ...} 로 추가.
+     문구의 안전 조건(성인·옷 다 입음·노출/선정적 자세 금지)은 빼거나 바꾸지 않는다.
+     plan.json 에 "thumb_caption": 이미지 아래 자막 상자에 넣을 훅 한 마디(15자 이내). 감동이면 생략(장면 컷).
+   - **렌더·썸네일 합성은 하지 않는다** (이미지 생성 뒤 다음 단계 스크립트가 함).
    - plan.json 에 yt_title(#shorts), description, tags, sources, pin_comment 포함.
 
 3) assets/samples/_queue.md 맨 아래에: 순서번호 · 만든 시각 · 종류 · slug · 제목 · 핵심 한 줄 · 녹음 대본(코드블록) · 설명 · 고정 댓글.

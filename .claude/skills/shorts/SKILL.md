@@ -12,6 +12,7 @@ description: 유튜브 숏츠 1편을 빠르게 만드는 작업 순서 (뉴스 
 - **음악**: 영상에 미리 깔지 않음(`SHORTS_BGM=0`). 업로드 때 유튜브 **'저장됨' 사운드**에서 `music_concept` 에 맞게 선택.
 - **더빙**: 타입캐스트에서 **찜한 두 캐릭터만**, 편마다 번갈아 (`~/쇼츠작업/last_voice.txt`).
 - **자막**: `caption_style: "mix"` — 4종(흰/검정테두리, 빨강/흰테두리, 검정/흰테두리 Jua, 주황빨강 그라데이션/검정테두리 도현)을 장면마다 돌아가며. 폰트는 assets/fonts(OFL).
+- **AI 이미지**: Figma 대신 **ChatGPT 웹**(크롬 Claude) — plan `gpt_images` → `scripts/mac/shorts_gpt_images.sh <slug>`. 실패 장면은 폴더의 다른 이미지로 채움.
 - **실제 사진**: `python -m bot.realimg <URL> rN.jpg auto|all|none` — 사람 얼굴·머리 자동 모자이크(macOS Vision, `scripts/mac/faces`), 군중은 전체 흐림, 제품은 그대로. AI 이미지와 섞어 씀.
 - **썸네일**: `bot/thumb.py` — 웃긴글·기본 = AI 성인 여성(핏 좋은 옷, 노출·선정 자세 금지) + 리액션 + 제목 / 감동 = 장면 컷.
 - **파일**: `~/쇼츠작업/<날짜>_<slug>/{원본,더빙용}`, `결과.txt`(업로드 링크·고른 곡). 크롬 저장·파일 창 대신 `scripts/mac/drop_server.py`.
