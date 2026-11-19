@@ -15,11 +15,8 @@ cd "$REPO" || exit 1
 [ -f "$SRC/plan.json" ] || { echo "plan.json 없음: $SRC"; exit 1; }
 mkdir -p "$DIR/원본" "$DIR/더빙용"
 
-# 1) 원본(임시 음성) 영상 + 썸네일 + 업로드 정보 + 더빙 대본
-if [ ! -f "$SRC/preview.mp4" ]; then
-  python3 -c "from bot import shorts; shorts.render_sample('assets/samples/$SLUG')" && cp shorts_sample.mp4 "$SRC/preview.mp4"
-fi
-cp "$SRC/preview.mp4" "$DIR/원본/영상.mp4"
+# 1) 썸네일 + 업로드 정보 + 더빙 대본 (임시 음성 영상은 만들지 않음: 더빙 받은 뒤 한 번만 합성)
+[ -f "$SRC/preview.mp4" ] && cp "$SRC/preview.mp4" "$DIR/원본/영상.mp4"
 python3 -m bot.thumb "assets/samples/$SLUG" && cp "$SRC/thumb.jpg" "$DIR/thumb.jpg" 2>/dev/null
 python3 - "$SRC" "$DIR" <<'EOF'
 import json, re, sys
