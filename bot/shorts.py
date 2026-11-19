@@ -156,7 +156,10 @@ BASE_CSS = FONT + ("*{margin:0;box-sizing:border-box}body{width:1080px;height:19
 
 
 def title_html(p):
-    return f"""<style>{BASE_CSS}
+    shade = (f'<div style="position:absolute;left:0;right:0;top:{MEDIA_Y + MEDIA - 420}px;height:420px;'
+             f'background:linear-gradient(to bottom,rgba(0,0,0,0),rgba(0,0,0,.55))"></div>'
+             if getattr(p, "caption_style", "box") == "epic" else "")  # 자막 뒤를 자연스럽게 어둡게
+    return shade + f"""<style>{BASE_CSS}
 .t{{position:absolute;top:110px;left:40px;right:40px;height:{MEDIA_Y - 140}px;display:flex;flex-direction:column;
  justify-content:center;align-items:center;font-weight:900;line-height:1.2;letter-spacing:-.035em}}
 .t div{{white-space:nowrap;font-size:98px}}
@@ -176,12 +179,18 @@ def caption_html(text, style="box", impact=False):
     if style == "epic":  # 영화 예고편 스타일: 박스 없이 굵은 흰 글씨 + 검은 테두리, **강조** 는 금색
         size = 100 if impact else 70
         top = MEDIA_Y + MEDIA // 2 - 80 if impact else CAP_Y
+        badge = ""
+        m = re.match(r"^\[(.+?)\]\s*", text)  # [현장 MC] 같은 말머리 → 작은 배지
+        if m:
+            badge, text = f'<div class="b">{e(m.group(1))}</div>', text[m.end():]
         body = re.sub(r"\*\*(.+?)\*\*", r'<span class="k">\1</span>', e(text))
         return f"""<style>{BASE_CSS}
 .c{{position:absolute;top:{top}px;left:40px;right:40px;text-align:center;font-size:{size}px;font-weight:900;color:#fff;
  line-height:1.25;letter-spacing:-.03em;-webkit-text-stroke:{10 if impact else 7}px #000;paint-order:stroke fill;
  text-shadow:0 8px 24px rgba(0,0,0,.6)}}
-.k{{color:#FFD54A}}</style><div class="c">{body}</div>"""
+.k{{color:#FFD54A}}
+.b{{display:inline-block;margin-bottom:14px;background:#e11d48;color:#fff;font-size:34px;font-weight:900;padding:6px 18px;
+ border-radius:8px;-webkit-text-stroke:0;text-shadow:none;letter-spacing:0}}</style><div class="c">{badge}<div>{body}</div></div>"""
     text = re.sub(r"\*\*(.+?)\*\*", r"\1", text)
     return f"""<style>{BASE_CSS}
 .c{{position:absolute;top:{CAP_Y}px;left:0;right:0;text-align:center}}
@@ -466,17 +475,23 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
                          f":y='ih/2-(ih/zoom/2)':d={frames}:s={MEDIA}x{MEDIA}:fps=30[m]")
             cmd += ["-i", title]
             for c, _, _ in caps:
-                cmd += ["-i", c]
+                cmd += (["-loop", "1", "-t", f"{dur:.3f}", "-i", c] if p.caption_style == "epic" else ["-i", c])
             cmd += (["-i", audio] if audio else ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"])
             a_idx = 3 + len(caps)
             if keep_audio and kind == "video" and has_audio(src):  # 원본 영상 소리 살리기
                 a_idx = 1
-                if b.slowmo:  # 슬로모션이면 소리도 느리고 낮게
-                    cmd += ["-filter:a", "atempo=0.625"]
+                af = ("atempo=0.625," if b.slowmo else "")  # 슬로모션이면 소리도 느리고 낮게
+                # 장면이 바뀔 때 소리가 툭 끊기지 않게 앞뒤를 짧게 페이드
+                cmd += ["-filter:a", f"{af}afade=t=in:st=0:d=0.12,afade=t=out:st={max(0, dur - 0.2):.2f}:d=0.2"]
             fc = [media_f, f"[0:v][m]overlay=0:{MEDIA_Y}:shortest=1[v0]", "[v0][2:v]overlay=0:0[v1]"]
             last = "v1"
             for j, (_, t0, t1) in enumerate(caps):
-                fc.append(f"[{last}][{3 + j}:v]overlay=0:0:enable='between(t,{t0:.2f},{t1:.2f})'[w{j}]")
+                if p.caption_style == "epic":  # 자막이 부드럽게 나타났다 사라짐
+                    fc.append(f"[{3 + j}:v]format=rgba,fade=t=in:st={t0:.2f}:d=0.18:alpha=1,"
+                              f"fade=t=out:st={max(t0, t1 - 0.12):.2f}:d=0.12:alpha=1[cf{j}]")
+                    fc.append(f"[{last}][cf{j}]overlay=0:0:shortest=1[w{j}]")
+                else:
+                    fc.append(f"[{last}][{3 + j}:v]overlay=0:0:enable='between(t,{t0:.2f},{t1:.2f})'[w{j}]")
                 last = f"w{j}"
             fc.append(f"[{last}]format=yuv420p[vout]")
             seg = work / f"seg{i}.mp4"

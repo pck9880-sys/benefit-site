@@ -127,3 +127,13 @@ gh workflow run shorts-upload.yml --ref main -f folder=assets/samples/<slug> \
 - 미 국방부·NASA 촬영본은 퍼블릭 도메인 (한국 행사여도 미군 촬영이면 가능, 예: 서울 ADEX).
 - 위키미디어 검색은 영어 단어가 엉뚱하게 매칭될 수 있음(예: drum→buk) → 결과 제목 꼭 확인.
 - 경복궁 수문장 교대식처럼 SA 라이선스만 있는 주제는 불가 → 사용자가 공공누리(kogl.or.kr) 1유형 영상을 직접 받아 첨부하면 사용.
+
+
+## 현장음·국뽕형 옵션 (plan.json)
+- `"caption_style": "epic"` — 박스 없는 굵은 흰 자막 + 검은 테두리, `**강조**` 는 금색, 부드럽게 나타남, 아래쪽 그라데이션.
+- 자막 앞에 `[현장 MC]` 처럼 쓰면 빨간 배지로 표시 (실제 발언 장면).
+- beat `"slowmo": true` 하이라이트 슬로모션 / `"outro_impact": true` 마무리 흰 플래시 + 화면 가운데 큰 자막.
+- `"bgm": {"file":"bgm.mp3","start":14,"lufs":-24,"credit":"..."}` — 옅은 음악, 현장음이 크면 자동으로 더 작아짐(덕킹). 음악은 `bgm-get.yml -f mode=tag:epic` 로 후보 받기, 마무리 쯤 커지는 구간을 start 로.
+- **현장음형은 'A vs B 뭐가 더 좋음?' 질문을 넣지 않는다** (`"question": ""`). 마무리는 강렬한 한마디(예: "이게 **대한민국 공군**이다").
+- 장면 전환 때 현장음은 자동으로 짧게 페이드(끊김 방지). 장면 첫 1초가 엉뚱하면 media 에 `"start"` 로 건너뛰기.
+- 실제 음성(인터뷰·MC) 찾기: 원본 오디오를 16kHz wav 로 뽑아 `faster-whisper`(pip, 모델 small/medium)로 받아쓰기 → 신뢰도 높은 구간만 자막과 함께 사용. 불확실하면 쓰지 않는다.
