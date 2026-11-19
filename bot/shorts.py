@@ -31,6 +31,8 @@ class Beat(BaseModel):
     narration: str = Field(description="읽을 문장 1개. 24자 이내, 반말 썰 말투 ('~라는데', '~거든', '~했다고 함', '~인 거'). '~입니다/~습니다/~해요' 금지")
     card: str = Field(description="AI 영상이 없을 때 화면 가운데 카드에 띄울 짧은 문구 (20자 이내)")
     twist: bool = Field(default=False, description="반전·핵심 숫자가 나오는 문장이면 true ('띵' 효과음)")
+    slowmo: bool = Field(default=False, description="하이라이트 장면 슬로모션")
+    impact: bool = Field(default=False, description="강렬한 장면: 흰 플래시 + 큰 자막")
     visual: str = Field(description="'photo' (실제 사진: 실존 인물·장소·물건·사건 현장) 또는 'ai' (재연 장면·주인공 연출 컷)")
     query: str = Field(description="실제 사진 검색어 (영어 2~4단어). 실존 대상은 정확한 고유명사+종류 (예: 'Samsung Lions baseball', 'Everland amusement park'), 일반 장면은 구체적으로 (예: 'baseball stadium crowd night'). ai 장면이어도 대체용으로 반드시 작성")
     ai_prompt: str = Field(description="AI 이미지 프롬프트 (영어). 주인공이 나오면 'the protagonist' 로 지칭. 사실적인 사진 느낌, 글자·로고 없음")
@@ -52,6 +54,8 @@ class Plan(BaseModel):
     beats: List[Beat] = Field(description="내레이션 4~5문장 (전체 20초 이내). 첫 문장은 제목 내용을 다시 던지는 훅, 마지막은 반전·한마디 정리")
     question: str = Field(default="", description="마무리 직전 토론 유도 질문 1문장 (예: '근데 이거 실력임, 운빨임?'). "
                                                  "의견이 둘로 갈리게, 욕설·비하·혐오·정치 편가르기·특정인 공격 금지. 20자 이내")
+    outro_impact: bool = Field(default=False, description="마무리 장면을 강렬하게 (플래시 + 큰 자막)")
+    caption_style: str = Field(default="box", description="'box'(기본 검은 박스) / 'epic'(영화 예고편 스타일)")
     outro_free: bool = Field(default=False, description="true 면 마무리를 시그니처('해요잉' 등)로 바꾸지 않고 그대로 (CC 영상형)")
     voice: str = Field(default="", description="비워두세요 (시스템이 정함)")
     outro: str = Field(default="", description="채널 시그니처 마무리 한마디. 지시된 목소리 형식('다들 ~하자!' 또는 '다들 ~해요잉~'), 주제와 연결된 친근한 당부 "
@@ -168,7 +172,17 @@ def title_html(p):
 }};</script>"""
 
 
-def caption_html(text):
+def caption_html(text, style="box", impact=False):
+    if style == "epic":  # 영화 예고편 스타일: 박스 없이 굵은 흰 글씨 + 검은 테두리, **강조** 는 금색
+        size = 100 if impact else 70
+        top = MEDIA_Y + MEDIA // 2 - 80 if impact else CAP_Y
+        body = re.sub(r"\*\*(.+?)\*\*", r'<span class="k">\1</span>', e(text))
+        return f"""<style>{BASE_CSS}
+.c{{position:absolute;top:{top}px;left:40px;right:40px;text-align:center;font-size:{size}px;font-weight:900;color:#fff;
+ line-height:1.25;letter-spacing:-.03em;-webkit-text-stroke:{10 if impact else 7}px #000;paint-order:stroke fill;
+ text-shadow:0 8px 24px rgba(0,0,0,.6)}}
+.k{{color:#FFD54A}}</style><div class="c">{body}</div>"""
+    text = re.sub(r"\*\*(.+?)\*\*", r"\1", text)
     return f"""<style>{BASE_CSS}
 .c{{position:absolute;top:{CAP_Y}px;left:0;right:0;text-align:center}}
 .c span{{display:inline-block;max-width:960px;background:rgba(0,0,0,.82);color:#fff;font-size:62px;font-weight:800;
@@ -365,7 +379,7 @@ def with_outro(p):
     p.outro = p.outro.strip() if p.outro_free else signature(p.outro, voice_of(p))
     if p.question.strip():  # 토론 유도 질문 (마지막 장면 위에)
         p.beats.append(Beat(narration=p.question.strip(), card=p.question.strip(), twist=True, visual="ai", query="", ai_prompt=""))
-    p.beats.append(Beat(narration=p.outro, card=p.outro, visual="ai", query="", ai_prompt=""))
+    p.beats.append(Beat(narration=p.outro, card=p.outro, visual="ai", query="", ai_prompt="", impact=p.outro_impact))
     return p
 
 
@@ -379,10 +393,11 @@ def voices(p, work):
         return [f.result() for f in futs]
 
 
-def make_video(p, media, work, audios=None, voice_track=None, durations=None, keep_audio=False):
+def make_video(p, media, work, audios=None, voice_track=None, durations=None, keep_audio=False, bgm_spec=None):
     """media: 문장별 ("video"|"image", 경로) 또는 None(글자 카드). 마지막에 시그니처 마무리 멘트를 붙인다.
     audios 를 미리 만들어 넘기면 그대로 쓴다 (화면 소재와 동시에 만들어 시간 절약)."""
     from concurrent.futures import ThreadPoolExecutor
+    global LAST_BGM, LAST_BGM_CREDIT
     CURRENT_VOICE["name"] = voice_of(p)
     p = with_outro(p)
     last = next((m for m in reversed(list(media)) if m), None)
@@ -398,8 +413,8 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
         for i, b in enumerate(p.beats):
             audio = audios[i]
             dur = durations[i] if durations else (duration(audio) + 0.05) if audio else max(2.2, len(b.narration) * 0.11)
-            parts = chunks(b.narration)
-            total_chars = sum(len(x) for x in parts)
+            parts = [b.narration] if p.caption_style == "epic" else chunks(b.narration)
+            total_chars = sum(len(x) for x in parts) or 1
             caps, t = [], 0.0
             if i:
                 events.append((t_beat, "whoosh"))  # 장면 전환 '휙'
@@ -407,7 +422,7 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
                 events.append((t_beat + 0.05, "ding"))  # 반전 '띵'
             for j, text in enumerate(parts):
                 d = dur * len(text) / total_chars
-                caps.append((r.png(caption_html(text), work / f"c{i}_{j}.png"), t, t + d))
+                caps.append((r.png(caption_html(text, p.caption_style, b.impact), work / f"c{i}_{j}.png"), t, t + d))
                 events.append((t_beat + t, "pop"))  # 자막 뜰 때 '뽁'
                 t += d
             t_beat += dur
@@ -431,8 +446,12 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
             frames = int(dur * 30) + 1
             if kind == "video":
                 cmd += ["-ss", f"{start:.2f}", "-stream_loop", "-1", "-i", src]
-                media_f = (f"[1:v]scale={MEDIA}:{MEDIA}:force_original_aspect_ratio=increase,"
-                           f"crop={MEDIA}:{MEDIA},setsar=1,fps=30[m]")
+                slow = "setpts=1.6*PTS," if b.slowmo else ""
+                zoom = (f"scale={int(MEDIA * 1.12)}:{int(MEDIA * 1.12)}:force_original_aspect_ratio=increase,"
+                        f"crop={MEDIA}:{MEDIA}," if b.impact else "")
+                flash = "fade=t=in:st=0:d=0.35:color=white," if b.impact else ""
+                media_f = (f"[1:v]{slow}scale={MEDIA}:{MEDIA}:force_original_aspect_ratio=increase,"
+                           f"crop={MEDIA}:{MEDIA},{zoom}{flash}setsar=1,fps=30[m]")
             elif kind in ("image", "card"):  # 사진: 정사각으로 자르고 천천히 확대/축소 (카드는 글자가 안 잘리게 살짝만)
                 cmd += ["-loop", "1", "-i", src]
                 zmax, step = (1.04, 0.0006) if kind == "card" else (1.15, 0.0015)
@@ -452,6 +471,8 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
             a_idx = 3 + len(caps)
             if keep_audio and kind == "video" and has_audio(src):  # 원본 영상 소리 살리기
                 a_idx = 1
+                if b.slowmo:  # 슬로모션이면 소리도 느리고 낮게
+                    cmd += ["-filter:a", "atempo=0.625"]
             fc = [media_f, f"[0:v][m]overlay=0:{MEDIA_Y}:shortest=1[v0]", "[v0][2:v]overlay=0:0[v1]"]
             last = "v1"
             for j, (_, t0, t1) in enumerate(caps):
@@ -474,22 +495,35 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
     out = work / "shorts.mp4"
     # 오디오 믹스: 음성 + 배경음악(옅게) + 효과음
     inputs, chains, labels = ["-i", joined], [], ["[0:a]"]
-    if keep_audio:  # 현장음 크기 맞추기 (배경음악 없음)
-        chains.append("[0:a]loudnorm=I=-14:TP=-1.5,aresample=44100[orig]")
+    if keep_audio:  # 현장음 크기 맞추기
+        chains.append("[0:a]loudnorm=I=-14:TP=-1.5,aresample=44100,asplit=2[orig][key]")
         labels = ["[orig]"]
+        if bgm_spec:  # 옅은 배경음악 + 현장음이 클 때 자동으로 더 줄이기(사이드체인 덕킹)
+            inputs += ["-ss", f"{bgm_spec.get('start', 0):.1f}", "-i", bgm_spec["file"]]
+            chains.append(f"[1:a]loudnorm=I={bgm_spec.get('lufs', -24)}:TP=-6:LRA=11,aresample=44100,"
+                          f"aformat=channel_layouts=stereo,afade=t=in:d=0.8[bgraw]")
+            chains.append("[bgraw][key]sidechaincompress=threshold=0.03:ratio=12:attack=30:release=500[bg]")
+            labels.append("[bg]")
+            LAST_BGM, LAST_BGM_CREDIT = Path(bgm_spec["file"]).name, bgm_spec.get("credit")
+        else:
+            chains[-1] = chains[-1].replace(",asplit=2[orig][key]", "[orig]")
     if voice_track:  # 장면 음성(무음) 대신 통 녹음을 목소리로
         inputs += ["-i", voice_track]
         chains.append("[1:a]loudnorm=I=-14:TP=-1.5,aresample=44100,aformat=channel_layouts=stereo[vo]")
         labels = ["[vo]"]
     from . import music
-    global LAST_BGM, LAST_BGM_CREDIT
-    bgm, LAST_BGM_CREDIT = music.pick(work) if (config.SHORTS_BGM and not keep_audio) else (None, "NONE")  # 배경음악 꺼져 있으면 없음
-    if LAST_BGM_CREDIT == "NONE":  # 즐겨찾기만 쓰기로 했는데 못 받은 경우
+    k = 2 if (voice_track or (keep_audio and bgm_spec)) else 1
+    if keep_audio:
+        bgm = None
+    else:
+        bgm, LAST_BGM_CREDIT = music.pick(work) if config.SHORTS_BGM else (None, "NONE")  # 배경음악 꺼져 있으면 없음
+    if keep_audio:
+        pass
+    elif LAST_BGM_CREDIT == "NONE":  # 즐겨찾기만 쓰기로 했는데 못 받은 경우
         LAST_BGM_CREDIT = None
     elif not bgm:
         bgms = sorted(f for ext in ("*.mp3", "*.wav", "*.m4a") for f in (config.ROOT / "assets" / "bgm").glob(ext))
         bgm = random.choice(bgms) if bgms else None
-    k = 2 if voice_track else 1
     if bgm:
         LAST_BGM = bgm.name
         bl = duration(bgm)
@@ -741,7 +775,10 @@ def render_sample(folder):
     audios = None
     voice = next((d / f"voice.{ext}" for ext in ("mp3", "wav", "m4a", "mp4") if (d / f"voice.{ext}").exists()), None)
     if raw.get("keep_audio"):  # 더빙 없이 원본 현장음 + 자막만 (장면 길이는 durations)
-        video, voiced = make_video(p, media, work, durations=raw["durations"], keep_audio=True)
+        spec = raw.get("bgm")
+        if spec:
+            spec = {**spec, "file": str(d / spec["file"])}
+        video, voiced = make_video(p, media, work, durations=raw["durations"], keep_audio=True, bgm_spec=spec)
     elif voice:  # 타입캐스트 웹에서 직접 만든 더빙 (반자동, 1.0배속으로 받아서 여기서 1.2배속)
         texts = [b.narration for b in with_outro(p).beats]
         fast = speed_up(voice, work)

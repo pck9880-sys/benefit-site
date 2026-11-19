@@ -1,14 +1,14 @@
 {
  "topic": "서울 ADEX 2023 블랙이글스 에어쇼 현장음",
- "title_top": "한국 공군 블랙이글스",
- "title_bottom": "에어쇼 현장 소리 ㄷㄷ",
+ "title_top": "이게 대한민국 공군 클래스",
+ "title_bottom": "블랙이글스 에어쇼 ㄷㄷ",
  "character": "",
  "hook_video": "",
  "photo_fallbacks": [],
  "beats": [
   {
-   "narration": "서울 ADEX 2023 현장",
-   "card": "서울 ADEX 2023 현장",
+   "narration": "서울 ADEX 2023",
+   "card": "서울 ADEX 2023",
    "twist": false,
    "visual": "ai",
    "query": "",
@@ -18,8 +18,20 @@
    "overlay_source": ""
   },
   {
-   "narration": "대한민국 공군 블랙이글스 등장",
-   "card": "대한민국 공군 블랙이글스 등장",
+   "narration": "**대한민국 공군** 블랙이글스",
+   "card": "**대한민국 공군** 블랙이글스",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "slowmo": true
+  },
+  {
+   "narration": "하늘을 **도화지**처럼",
+   "card": "하늘을 **도화지**처럼",
    "twist": false,
    "visual": "ai",
    "query": "",
@@ -29,8 +41,8 @@
    "overlay_source": ""
   },
   {
-   "narration": "하늘에 그려지는 연기 쇼",
-   "card": "하늘에 그려지는 연기 쇼",
+   "narration": "관객들 **전부 손 흔드는** 순간",
+   "card": "관객들 **전부 손 흔드는** 순간",
    "twist": false,
    "visual": "ai",
    "query": "",
@@ -40,19 +52,8 @@
    "overlay_source": ""
   },
   {
-   "narration": "관객들 다 같이 손 흔드는 중",
-   "card": "관객들 다 같이 손 흔드는 중",
-   "twist": false,
-   "visual": "ai",
-   "query": "",
-   "ai_prompt": "",
-   "overlay": "none",
-   "overlay_text": "",
-   "overlay_source": ""
-  },
-  {
-   "narration": "소리 켜고 들어보세요",
-   "card": "소리 켜고 들어보세요",
+   "narration": "소리부터 **차원이 다름**",
+   "card": "소리부터 **차원이 다름**",
    "twist": false,
    "visual": "ai",
    "query": "",
@@ -63,21 +64,21 @@
   }
  ],
  "question": "직관 vs 영상, 뭐가 더 좋음?",
- "outro": "솔직히 이건 직관해야 함",
+ "outro": "이게 **대한민국 공군**이다",
  "outro_free": true,
  "voice": "용식",
  "keep_audio": true,
  "durations": [
-  3.2,
+  3.0,
+  4.0,
   3.8,
-  3.6,
   3.4,
-  3.6,
   3.2,
-  2.6
+  3.6,
+  4.0
  ],
- "yt_title": "한국 공군 블랙이글스 에어쇼 현장 소리 ㄷㄷ #shorts",
- "description": "서울 ADEX 2023 현장, 대한민국 공군 블랙이글스 에어쇼를 현장 소리 그대로 담았어요. 소리 켜고 보세요!\n\n영상 출처 (퍼블릭 도메인, 미 국방부 촬영)\n- Video: Sgt Elijah Florence (Public domain) https://commons.wikimedia.org/wiki/File:Seoul_ADEX_23_B-roll.webm\n- Video: Senior Airman Nash Truitt (Public domain) https://commons.wikimedia.org/wiki/File:B-roll_ADEX_2023.webm",
+ "yt_title": "이게 대한민국 공군 클래스, 블랙이글스 에어쇼 ㄷㄷ #shorts",
+ "description": "서울 ADEX 2023 현장, 대한민국 공군 블랙이글스 에어쇼를 현장 소리 그대로 담았어요. 소리 켜고 보세요!\n\n영상 출처 (퍼블릭 도메인, 미 국방부 촬영)\n- Video: Sgt Elijah Florence (Public domain) https://commons.wikimedia.org/wiki/File:Seoul_ADEX_23_B-roll.webm\n- Video: Senior Airman Nash Truitt (Public domain) https://commons.wikimedia.org/wiki/File:B-roll_ADEX_2023.webm\n\nMusic: \"Our Obdurate Past\" by Christiaan Bakker (Jamendo) License: http://creativecommons.org/licenses/by/3.0/",
  "tags": [
   "블랙이글스",
   "에어쇼",
@@ -95,23 +96,32 @@
    "video": "clip0.mp4"
   },
   {
+   "video": "clip4.mp4"
+  },
+  {
    "video": "clip1.mp4"
+  },
+  {
+   "video": "clip3.mp4",
+   "start": 1.2
   },
   {
    "video": "clip2.mp4"
   },
   {
-   "video": "clip3.mp4"
-  },
-  {
-   "video": "clip4.mp4"
-  },
-  {
    "video": "clip5.mp4"
   },
   {
-   "video": "clip5.mp4",
-   "start": 3.2
+   "video": "clip4.mp4",
+   "start": 1.0
   }
- ]
+ ],
+ "caption_style": "epic",
+ "outro_impact": true,
+ "bgm": {
+  "file": "bgm.mp3",
+  "start": 14,
+  "lufs": -24,
+  "credit": "Music: \"Our Obdurate Past\" by Christiaan Bakker (Jamendo) License: http://creativecommons.org/licenses/by/3.0/"
+ }
 }
