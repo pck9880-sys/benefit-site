@@ -9,7 +9,7 @@ KST = timezone(timedelta(hours=9))
 
 HELP = (
     "🤖 자동 게시 봇\n\n"
-    "지원금 글은 1시간에 1개씩 승인 없이 자동 게시되고, 결과는 저녁 9시 KPI 리포트로 알려드려요.\n"
+    "지원금 글은 4시간마다 2개씩(글 150개 이후엔 1개씩) 자동 게시되고, 결과는 저녁 9시 KPI 리포트로 알려드려요.\n"
     f"응답이 없으면 {round(config.AUTO_APPROVE_HOURS * 60)}분 뒤 다음 확인 때 자동 게시됩니다.\n"
     "버튼은 15분 안에 반영되고, 반영되면 메시지가 「✅ 게시됨」으로 바뀝니다.\n\n"
     "명령어\n/status 현황\n/pause 일시정지\n/resume 재개\n/now 다음 실행 때 바로 글 생성\n/approveall 대기 초안 전부 승인\n"
@@ -152,7 +152,8 @@ def should_generate(st):
         return True
     t = now()
     if config.SCHEDULE == "hourly":
-        return st.get("last_generate_hour") != t.strftime("%Y-%m-%d %H")
+        every = max(1, config.GENERATE_EVERY_HOURS)
+        return t.hour % every == 0 and st.get("last_generate_hour") != t.strftime("%Y-%m-%d %H")
     return t.hour >= config.GENERATE_HOUR_KST and st["last_generate_date"] != t.strftime("%Y-%m-%d")
 
 
@@ -177,6 +178,8 @@ def generate(st):
     st["last_generate_date"] = now().strftime("%Y-%m-%d")  # 목록 조회 성공 후에만 '오늘 완료' 처리
     st["last_generate_hour"] = now().strftime("%Y-%m-%d %H")
     limit = config.POSTS_PER_HOUR if config.SCHEDULE == "hourly" else config.POSTS_PER_DAY
+    if config.SCHEDULE == "hourly" and len(list(config.POSTS_DIR.glob("*.json"))) >= config.SLOWDOWN_AFTER_POSTS:
+        limit = 1  # 글이 충분히 쌓이면 속도를 줄여 대량 생성으로 보이지 않게
 
     made = 0
     for svc in services:

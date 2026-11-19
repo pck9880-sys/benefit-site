@@ -36,7 +36,9 @@ SITE_DESCRIPTION = _env(
 CLAUDE_MODEL = _env("CLAUDE_MODEL", "claude-sonnet-5-5")
 POSTS_PER_DAY = int(_env("POSTS_PER_DAY", "5"))  # SCHEDULE=daily 일 때 하루 생성 수
 SCHEDULE = _env("SCHEDULE", "hourly")  # hourly: 매시간 POSTS_PER_HOUR 개 / daily: 하루 1번 POSTS_PER_DAY 개
-POSTS_PER_HOUR = int(_env("POSTS_PER_HOUR", "1"))
+POSTS_PER_HOUR = int(_env("POSTS_PER_HOUR", "2"))  # 한 번 생성할 때 만드는 글 수
+GENERATE_EVERY_HOURS = int(_env("GENERATE_EVERY_HOURS", "4"))  # 몇 시간마다 생성할지
+SLOWDOWN_AFTER_POSTS = int(_env("SLOWDOWN_AFTER_POSTS", "150"))  # 글이 이만큼 쌓이면 한 번에 1개로 줄임
 REQUIRE_APPROVAL = _env("REQUIRE_APPROVAL", "0") == "1"  # 0이면 승인 없이 바로 게시
 GENERATE_HOUR_KST = int(_env("GENERATE_HOUR_KST", "7"))
 AUTO_APPROVE_HOURS = float(_env("AUTO_APPROVE_HOURS", "0.0833"))  # 5분  # 0이면 승인 없이는 게시 안 함

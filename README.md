@@ -44,7 +44,9 @@
 | `SITE_URL` | 자동 (github.io 주소) | 도메인 연결 시 변경 |
 | `CLAUDE_MODEL` | claude-sonnet-5-5 | 비용을 줄이려면 `claude-haiku-5-5`, 품질을 더 올리려면 `claude-opus-5-5` |
 | `SCHEDULE` | hourly | hourly = 매시간 생성, daily = 하루 1번 |
-| `POSTS_PER_HOUR` | 1 | 매시간 생성 글 수 |
+| `GENERATE_EVERY_HOURS` | 4 | 몇 시간마다 생성할지 |
+| `POSTS_PER_HOUR` | 2 | 한 번 생성할 때 만드는 글 수 |
+| `SLOWDOWN_AFTER_POSTS` | 150 | 글이 이만큼 쌓이면 한 번에 1개로 감속 |
 | `REQUIRE_APPROVAL` | 0 | 1이면 텔레그램 승인 후 게시 |
 | `POSTS_PER_DAY` | 5 | daily 모드일 때 하루 생성 글 수 |
 | `GENERATE_HOUR_KST` | 7 | 생성 시각 (한국시간) |

@@ -2,7 +2,7 @@
 {% block title %}{{ a.title }} | {{ site_name }}{% endblock %}
 {% block desc %}{{ a.description }}{% endblock %}
 {% block ogtype %}article{% endblock %}
-{% block ogimage %}{{ site_url }}/static/img/cat/{{ thumb_key(post.source.field) }}.webp{% endblock %}
+
 {% block head %}
 <script type="application/ld+json">{{ {"@context":"https://schema.org","@type":"Article","headline":a.title,"description":a.description,"datePublished":post.published_at,"dateModified":post.published_at,"mainEntityOfPage":canonical,"publisher":{"@type":"Organization","name":site_name}} | tojson }}</script>
 {% if faq_ld %}<script type="application/ld+json">{{ faq_ld | safe }}</script>{% endif %}
