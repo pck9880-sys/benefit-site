@@ -39,4 +39,5 @@ txt = f"""[제목]
 [설정] 아동용 아님 · 'AI로 변경·합성된 콘텐츠' 예
 """
 (out / "업로드정보.txt").write_text(txt, "utf-8")
+(out / "제목.txt").write_text((info.get("title") or "").strip(), "utf-8")  # 제목만 (길게 눌러 바로 복사)
 print(f"[deliver] {out}")
