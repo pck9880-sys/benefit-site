@@ -56,7 +56,10 @@ def _meta():
 
 
 def pick(raw, main=False):
-    """bgm 설정 dict {file, start, lufs, credit} 또는 None (음원 없음)."""
+    """bgm 설정 dict {file, start, lufs, credit} 또는 None (음원 없음).
+    기본은 꺼짐 (2026-11-20: 음악은 미리 깔지 않고 유튜브 '저장됨' 사운드 사용). SHORTS_SONG_PREMIX=1 일 때만."""
+    if os.environ.get("SHORTS_SONG_PREMIX") != "1":
+        return None
     mood = mood_of(raw)
     want = raw.get("song")
     f = None
