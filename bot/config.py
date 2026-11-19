@@ -66,6 +66,7 @@ SHORTS_SFX_VOLUME = float(_env("SHORTS_SFX_VOLUME", "0.35"))  # 효과음 크기
 YOUTUBE_API_KEY = _env("YOUTUBE_API_KEY")  # 인기 쇼츠 분석용 (없으면 구글 검색어만 사용)
 OPENAI_API_KEY = _env("OPENAI_API_KEY")  # GPT 이미지 (있으면 최우선 사용)
 OPENAI_IMAGE_MODEL = _env("OPENAI_IMAGE_MODEL", "gpt-image-1.5")
+SHORTS_PHOTOS = _env("SHORTS_PHOTOS", "0") == "1"  # 무료 실사 사진 검색 (끔: 장면은 GPT 이미지만)
 OPENAI_IMAGE_QUALITY = _env("OPENAI_IMAGE_QUALITY", "medium")  # low / medium / high
 HIGGSFIELD_KEY = _env("HIGGSFIELD_KEY")  # 힉스필드 API "키ID:시크릿" (없으면 글자 카드 화면)
 HIGGSFIELD_MODEL = _env("HIGGSFIELD_MODEL", "kling-video/v3.0-turbo/text-to-video")

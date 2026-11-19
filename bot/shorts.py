@@ -73,8 +73,8 @@ WRITE = """당신은 조회수 높은 한국 유튜브 쇼츠 작가입니다. �
   '~입니다', '~습니다', '~해요' 같은 존댓말 문장 끝은 절대 쓰지 않습니다.
 - 마무리(outro)는 채널 시그니처: 항상 '다들 ~해요잉~' 형식의 친근한 한마디 (본문 beats 에는 넣지 않음).
 - 제목 2줄: 첫 줄은 상황, 둘째 줄(노란색)은 궁금증 ("~하는 이유", "~라고?", "결과는?").
-- 화면은 요즘 인기 쇼츠처럼 문장마다 컷이 바뀝니다. 기본은 문장마다 내용에 딱 맞는 AI 이미지('ai')이고,
-  실존 인물·브랜드·장소를 꼭 보여줘야 하는 문장만 실제 사진('photo')으로 합니다.
+- 화면은 요즘 인기 쇼츠처럼 문장마다 컷이 바뀝니다. 모든 문장은 내용에 딱 맞는 AI 이미지('ai')로 연출합니다
+  (뉴스 화면·실제 사진은 쓰지 않음). ai_prompt 는 그 문장 내용이 한눈에 보이도록 구체적으로 (장소·사물·행동·분위기).
   · 실존 인물·장소·제품·사건은 'photo' (실제 사진 검색). 실존 인물을 AI로 그리지 않습니다.
   · 감정·상황 재연, '만약 내가 ~라면' 같은 장면은 'ai' — 매번 같은 가상 주인공(character)이 나오게 해서 이야기처럼 이어지게.
   · AI 프롬프트는 영어, 실제 사진처럼 (photorealistic, natural light, smartphone photo). 글자·로고·저작권 캐릭터 금지.
@@ -398,7 +398,7 @@ def gather_media(p, work):
     from . import gpt_image, higgsfield, photos
     media, credits, used, cost = [None] * len(p.beats), [], set(), 0.0
     if gpt_image.enabled():  # 1순위: GPT 이미지
-        ai_idx = [i for i, b in enumerate(p.beats) if b.visual == "ai"]
+        ai_idx = list(range(len(p.beats)))  # 뉴스·실사 사진 없이 모든 장면을 GPT 이미지로
         prompts = [f"{p.beats[i].ai_prompt}. The protagonist: {p.character}. Photorealistic candid photo, natural light, "
                    f"shallow depth of field, Korean context if relevant. No readable text, no logos, no watermark"
                    for i in ai_idx]
@@ -424,8 +424,19 @@ def gather_media(p, work):
             if clips and clips[0]:
                 media[0] = ("video", clips[0])
         print(f"[shorts] 힉스필드: 이미지 {sum(1 for f in files if f)}/{len(files)}, 예상 ${cost:.2f}")
+    if gpt_image.enabled():  # 실패한 장면은 한 번 더 시도 → 그래도 없으면 옆 장면 이미지 재사용
+        miss = [i for i in range(len(p.beats)) if not media[i]]
+        if miss:
+            files, c = gpt_image.make_images([f"{p.beats[i].ai_prompt}. Photorealistic candid photo, no text" for i in miss], work)
+            cost += c
+            for i, f in zip(miss, files):
+                if f:
+                    media[i] = ("image", f)
+        for i in range(len(p.beats)):
+            if not media[i]:
+                media[i] = next((media[j] for j in (i - 1, i + 1, 0) if 0 <= j < len(media) and media[j]), None)
     for i, b in enumerate(p.beats):
-        if media[i]:
+        if media[i] or not config.SHORTS_PHOTOS:
             continue
         f, credit = photos.find(b.query, used, work / f"p{i}.jpg", fallbacks=p.photo_fallbacks)
         if f:
