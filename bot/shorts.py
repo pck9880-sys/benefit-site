@@ -327,7 +327,9 @@ def make_video(p, media, work):
     from . import music
     global LAST_BGM, LAST_BGM_CREDIT
     bgm, LAST_BGM_CREDIT = music.pick(work)  # Jamendo (키 있을 때) → 없으면 저장된 곡
-    if not bgm:
+    if LAST_BGM_CREDIT == "NONE":  # 즐겨찾기만 쓰기로 했는데 못 받은 경우
+        LAST_BGM_CREDIT = None
+    elif not bgm:
         bgms = sorted(f for ext in ("*.mp3", "*.wav", "*.m4a") for f in (config.ROOT / "assets" / "bgm").glob(ext))
         bgm = random.choice(bgms) if bgms else None
     k = 1
@@ -336,7 +338,8 @@ def make_video(p, media, work):
         bl = duration(bgm)
         off = random.uniform(bl * 0.15, bl * 0.45) if bl > 60 else 0  # 긴 곡은 인트로를 건너뛰고 신나는 부분부터
         inputs += ["-stream_loop", "-1", "-ss", f"{off:.1f}", "-i", bgm]
-        chains.append(f"[{k}:a]volume={config.SHORTS_BGM_VOLUME},afade=t=in:d=0.3[bg]")
+        # 곡마다 음량이 달라서 먼저 일정한 크기(-30 LUFS)로 맞춘 뒤 목소리 아래로 옅게 깐다
+        chains.append(f"[{k}:a]loudnorm=I={config.SHORTS_BGM_LUFS}:TP=-6:LRA=11,aresample=44100,afade=t=in:d=0.3[bg]")
         labels.append("[bg]")
         k += 1
     sfx_dir = config.ROOT / "assets" / "sfx"

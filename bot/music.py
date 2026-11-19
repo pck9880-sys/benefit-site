@@ -87,6 +87,9 @@ def pick(out_dir, tags=None):
                     return f, credit
         except Exception as e:
             print("[music] 즐겨찾기 곡 실패:", e)
+    if favs:  # 즐겨찾기가 있으면 그 곡만 쓴다 (다른 곡으로 대체하지 않음)
+        print("[music] 즐겨찾기 곡을 받지 못함 → 배경음악 없이 진행")
+        return None, "NONE"
     for t in search(tags, n=3):
         try:
             f, credit = download(t, out_dir)
