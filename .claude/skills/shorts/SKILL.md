@@ -202,3 +202,4 @@ gh workflow run shorts-upload.yml --ref main -f folder=assets/samples/<slug> \
 - **고정 댓글** 문구를 매번 같이 준다: 영상 질문 + A/B 선택지 (예: "🅰 찬성 / 🅱 반대 — 님들은 어떻게 생각해요잉?").
 - 사용자에게 줄 것: 최종 mp4 + 제목 + 설명 + 고정 댓글 (사용자가 직접 업로드).
 - 채널 배너: `kmong/channel/banner_G_30s.png` ("30초 만에 정리해요잉~").
+- 자막(box): **한 문장 = 한 자막**, 중간에 끊지 않음 (단어 단위 줄바꿈, 최대 2줄 균형). 문장은 30자 이내로 쓴다.

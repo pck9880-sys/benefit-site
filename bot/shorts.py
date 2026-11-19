@@ -246,12 +246,15 @@ def caption_html(text, style="box", impact=False, idx=0, sticker=""):
 .k{{color:#FFD54A}}
 .b{{display:inline-block;margin-bottom:14px;background:#e11d48;color:#fff;font-size:34px;font-weight:900;padding:6px 18px;
  border-radius:8px;-webkit-text-stroke:0;text-shadow:none;letter-spacing:0}}</style><div class="c">{badge}<div>{body}</div></div>"""
-    text = re.sub(r"\*\*(.+?)\*\*", r"\1", text)
+    body = re.sub(r"\*\*(.+?)\*\*", r'<b class="k">\1</b>', e(text))  # 문장 통째로, 단어 단위 줄바꿈 + **강조** 노란색
+    size = 60 if len(text) <= 22 else 54
     return f"""<style>{BASE_CSS}
-.c{{position:absolute;top:{CAP_Y}px;left:0;right:0;text-align:center}}
-.c span{{display:inline-block;max-width:960px;background:rgba(0,0,0,.82);color:#fff;font-size:62px;font-weight:800;
- line-height:1.3;padding:14px 30px;border-radius:14px;letter-spacing:-.02em}}</style>
-<div class="c"><span>{e(text)}</span></div>"""
+.c{{position:absolute;top:{CAP_Y}px;left:40px;right:40px;text-align:center}}
+.c span{{display:inline-block;max-width:980px;background:rgba(0,0,0,.84);color:#fff;font-size:{size}px;font-weight:800;
+ line-height:1.32;padding:16px 34px;border-radius:16px;letter-spacing:-.02em;word-break:keep-all;overflow-wrap:break-word;
+ text-wrap:balance}}
+.c .k{{color:#FFD54A;font-weight:900}}</style>
+<div class="c"><span>{body}</span></div>"""
 
 
 def card_html(text):
@@ -479,7 +482,8 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
         for i, b in enumerate(p.beats):
             audio = audios[i]
             dur = durations[i] if durations else (duration(audio) + 0.05) if audio else max(2.2, len(b.narration) * 0.11)
-            parts = [b.narration] if p.caption_style in ("epic", "variety", "meme") else chunks(b.narration)
+            parts = [b.card if (p.caption_style == "box" and getattr(b, "card", "") and
+                                re.sub(r"\*\*", "", b.card) == re.sub(r"\*\*", "", b.narration)) else b.narration]  # 한 문장 = 한 자막 (끊지 않음)
             total_chars = sum(len(x) for x in parts) or 1
             caps, t = [], 0.0
             twist = getattr(b, "twist", False)
