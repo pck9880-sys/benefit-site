@@ -126,7 +126,8 @@ if [ ! -f "$SRC/voice.mp3" ]; then
   if [ -s "$DIR/더빙용/voice_main.mp3" ] && [ -s "$DIR/더빙용/voice_outro.mp3" ]; then
     ffmpeg -y -loglevel error -i "$DIR/더빙용/voice_main.mp3" -f lavfi -t 0.4 -i anullsrc=r=44100:cl=stereo -i "$DIR/더빙용/voice_outro.mp3" \
       -filter_complex "[0:a]aresample=44100,aformat=channel_layouts=stereo[a];[2:a]aresample=44100,aformat=channel_layouts=stereo[c];[a][1:a][c]concat=n=3:v=0:a=1" \
-      -b:a 256k "$DIR/더빙용/voice.mp3" && cp "$DIR/더빙용/voice.mp3" "$SRC/voice.mp3"
+      -b:a 256k "$DIR/더빙용/voice.mp3" && cp "$DIR/더빙용/voice.mp3" "$SRC/voice.mp3" \
+      && cp "$DIR/더빙용/voice_main.mp3" "$DIR/더빙용/voice_outro.mp3" "$SRC/"  # 합성 때 본문·마무리 따로 맞춤
   elif [ -s "$DIR/더빙용/voice.mp3" ]; then
     cp "$DIR/더빙용/voice.mp3" "$SRC/voice.mp3"
   fi

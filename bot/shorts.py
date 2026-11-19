@@ -1087,7 +1087,7 @@ def render_sample(folder):
                 n_beats = len(p.beats)
                 media = list(media) + [None] * max(0, n_beats - len(media))
                 media = media[:n_beats] + [("image", cc)]
-                END_PAD = 2.5
+                END_PAD = 1.0  # 댓글은 구리가 읽으므로 여유는 짧게
         except Exception as ex:
             print("[comments] 카드 실패:", ex)
     global SONG_SPEC
@@ -1120,12 +1120,32 @@ def render_sample(folder):
         texts = [b.narration for b in with_outro(p).beats]
         if raw.get("outro_spoken"):  # 마무리에서 댓글 반응까지 읽으면 실제로 말한 글로 경계 계산
             texts[-1] = raw["outro_spoken"]
-        fast = speed_up(voice, work)
+        vm, vo = d / "voice_main.mp3", d / "voice_outro.mp3"
+        if vm.exists() and vo.exists():
+            fm = speed_up(vm, work)
+            (work / "voice_fast.mp3").rename(work / "main_fast.mp3")
+            fm = work / "main_fast.mp3"
+            mdurs = split_voice(fm, len(texts) - 1, work, texts[:-1])
+            fo = speed_up(vo, work)
+            joined_v = work / "voice_joined.wav"
+            ff("-i", fm, "-f", "lavfi", "-t", "0.4", "-i", "anullsrc=r=44100:cl=stereo", "-i", fo, "-filter_complex",
+               "[0:a]aresample=44100,aformat=channel_layouts=stereo[a];[2:a]aresample=44100,aformat=channel_layouts=stereo[c];"
+               "[a][1:a][c]concat=n=3:v=0:a=1", joined_v)
+            fast = joined_v
+            PRESPLIT = mdurs[:-1] + [mdurs[-1] + 0.4, duration(fo)]
+        else:
+            fast = speed_up(voice, work)
+            PRESPLIT = None
         if END_PAD:  # 댓글 캡처를 읽을 시간: 끝에 무음 추가 → 마지막 장면이 길어짐
             padded = work / "voice_pad.wav"
             ff("-i", fast, "-af", f"apad=pad_dur={END_PAD}", padded)
             fast = padded
-        durs = split_voice(fast, len(texts), work, texts)
+        if PRESPLIT:
+            durs = PRESPLIT
+            durs[-1] = round(duration(fast) - sum(durs[:-1]), 3)  # 끝 여유(END_PAD) 포함
+            print(f"[voice] 본문 {len(durs) - 1}문장 + 마무리(다른 목소리) {durs[-1]:.1f}초")
+        else:
+            durs = split_voice(fast, len(texts), work, texts)
         gap = float(os.environ.get("SHORTS_SENTENCE_GAP", "0.35"))  # 문장 사이 숨 쉬는 틈 (2026-11-20 사용자 요청)
         if gap > 0 and len(durs) > 1:
             fast, durs = add_gaps(fast, durs, gap, work)
@@ -1210,7 +1230,7 @@ def speed_up(voice, work, tempo=None):
 def split_voice(voice, n, work, texts=None):
     """타입캐스트 웹에서 받은 통 녹음을 문장 사이 쉼(무음) 기준으로 n 조각으로 자른다.
     문장 안에도 짧은 쉼이 있으므로, 글자 수 비율로 예상한 경계 위치에 가장 가까운(그리고 긴) 쉼을 고른다."""
-    r = subprocess.run(["ffmpeg", "-i", str(voice), "-af", "silencedetect=noise=-38dB:d=0.15", "-f", "null", "-"],
+    r = subprocess.run(["ffmpeg", "-i", str(voice), "-af", "silencedetect=noise=-40dB:d=0.06", "-f", "null", "-"],
                        capture_output=True, text=True)
     starts = [float(v) for v in re.findall(r"silence_start: ([\d.]+)", r.stderr)]
     ends = [float(v) for v in re.findall(r"silence_end: ([\d.]+)", r.stderr)]
