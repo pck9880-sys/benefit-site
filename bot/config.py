@@ -82,7 +82,7 @@ SHORTS_VOICE_CHAR = _env("SHORTS_VOICE_CHAR", "용식")  # 숏츠 기본 목소�
 TYPECAST_ONLY = _env("TYPECAST_ONLY", "1") == "1"  # 1이면 항상 타입캐스트(박창수)만 — 실패하면 무료 음성으로 바꾸지 않고 중단
 TYPECAST_CREDIT = _env("TYPECAST_CREDIT", "0") == "1"  # 무료 플랜일 때만 출처 표기 필요 (베이직 유료라 끔)
 SHORTS_MAX_SECONDS = float(_env("SHORTS_MAX_SECONDS", "30"))  # 숏츠 최대 길이
-VOICE_FILE_TEMPO = float(_env("VOICE_FILE_TEMPO", "1.4"))  # 직접 만든 음성 파일(1.0배속)을 이 배속으로
+VOICE_FILE_TEMPO = float(_env("VOICE_FILE_TEMPO", "1.2"))  # 2026-11-20 사용자: 1.2배 고정  # 직접 만든 음성 파일(1.0배속)을 이 배속으로
 TTS_WORKERS = int(_env("TTS_WORKERS", "2"))  # 음성 동시 생성 수 (타입캐스트 무료 플랜 최대 2)
 TYPECAST_TEMPO = float(_env("TYPECAST_TEMPO", "1.0"))  # 목소리 배속 (1.0 = 원래 속도)
 HIGGSFIELD_SECONDS = int(_env("HIGGSFIELD_SECONDS", "5"))

@@ -6,7 +6,8 @@ cd "$HOME/benefit-site" || exit 1
 LOCK=/tmp/shorts_hourly.lock
 if ! mkdir "$LOCK" 2>/dev/null; then echo "$(date) 이전 실행 중 → 건너뜀" >> shorts_hourly.log; exit 0; fi
 trap 'rmdir "$LOCK"' EXIT
-export SHORTS_BGM=0  # 음악은 업로드 때 유튜브 저장됨 사운드로
+export SHORTS_BGM=0  # 음악은 업로드 때 스튜디오 오디오 보관함에서
+export VOICE_FILE_TEMPO=1.2 SHORTS_MAX_SECONDS=60  # 더빙 1.2배 고정
 git pull -q --rebase || true
 BEFORE=$(ls assets/samples)
 # 종류 순서: 유머 2 → 감동 1 → 핫이슈 2 → 반복 (~/쇼츠작업/rotation.txt 에 다음 순번)

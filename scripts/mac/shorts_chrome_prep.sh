@@ -5,6 +5,7 @@
 # 결과: ~/쇼츠작업/<날짜>_<slug>/{원본,더빙용}/영상.mp4, thumb.jpg, 업로드정보.json, 결과.txt
 set -u
 export SHORTS_BGM=0  # 배경음악 미리 깔지 않음
+export VOICE_FILE_TEMPO=1.2 SHORTS_MAX_SECONDS=60  # 더빙 1.2배 고정 (길어도 더 빠르게 하지 않음)
 SLUG="$1"
 REPO="$HOME/benefit-site"
 SRC="$REPO/assets/samples/$SLUG"
@@ -26,6 +27,7 @@ p = json.loads((src / "plan.json").read_text("utf-8"))
 from bot import config, shorts
 info = {"title": p.get("yt_title"), "description": shorts.full_description(shorts.Plan(**p)),
         "tags": p.get("tags"), "pin_comment": p.get("pin_comment"), "thumb": "thumb.jpg",
+        "music": "영상에 포함" if p.get("song_premixed") else "보관함에서 추가",
         "music_concept": p.get("music_concept") or {"감동": "잔잔한 감동", "웃긴글": "신나는 코믹"}.get(p.get("mood"), "일상 브이로그")}
 (d / "업로드정보.json").write_text(json.dumps(info, ensure_ascii=False, indent=1), "utf-8")
 outro = p.get("outro") if p.get("outro_custom") else config.SHORTS_OUTRO
@@ -62,8 +64,9 @@ sleep 1
 
 PRIVACY=$([ "${SHORTS_PUBLISH:-1}" = "0" ] && echo 비공개 || echo 공개)  # SHORTS_PUBLISH=0 → 테스트(비공개)
 LAST_VOICE=$(cat "$WORK/last_voice.txt" 2>/dev/null || echo "없음")
+ACCOUNT=$(cat "$WORK/upload_account.txt" 2>/dev/null)  # 업로드할 구글 계정 (저장소에 안 올림)
 fill() { sed -e "s#{{DIR}}#$DIR#g" -e "s#{{PORT}}#$PORT#g" -e "s#{{MOOD}}#$(cat "$DIR/mood")#g" \
-             -e "s#{{LAST_VOICE}}#$LAST_VOICE#g" -e "s#{{PRIVACY}}#$PRIVACY#g" "$1"; }
+             -e "s#{{LAST_VOICE}}#$LAST_VOICE#g" -e "s#{{PRIVACY}}#$PRIVACY#g" -e "s#{{ACCOUNT}}#$ACCOUNT#g" "$1"; }
 TOOLS="Bash,Read,Write,Glob,Grep,mcp__claude-in-chrome"
 
 # 3) 타입캐스트 더빙 (이미 voice.mp3 가 있으면 건너뜀)

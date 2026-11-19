@@ -222,14 +222,14 @@ def font_css(family, file):
 # 섞어 쓰는 자막 4종 (사용자 참고 이미지 2026-11-20): 장면마다 돌아가며
 MIX_STYLES = [
     # 흰 글씨 + 검은 테두리 (기본 설명 문장)
-    dict(font=("Pretendard", None), fill="#fff", stroke="#111", sw=20, shadow="0 8px 18px rgba(0,0,0,.55)", weight=900),
+    dict(font=("Pretendard", None), fill="#fff", stroke="#111", sw=16, shadow="0 8px 18px rgba(0,0,0,.55)", weight=900),
     # 빨간 글씨 + 흰 테두리 + 어두운 그림자 (강조·반발)
-    dict(font=("BHS", "BlackHanSans-Regular.ttf"), fill="#e8121c", stroke="#fff", sw=22,
-         shadow="6px 8px 0 rgba(40,0,0,.85)", weight=400),
+    dict(font=("BHS", "BlackHanSans-Regular.ttf"), fill="#e8121c", stroke="#fff", sw=17,
+         shadow="5px 7px 0 rgba(40,0,0,.85)", weight=400),
     # 검은 글씨 + 흰 테두리, 둥근 글씨 (말투·인용)
-    dict(font=("Jua", "Jua-Regular.ttf"), fill="#111", stroke="#fff", sw=22, shadow="0 6px 14px rgba(0,0,0,.45)", weight=400),
+    dict(font=("Jua", "Jua-Regular.ttf"), fill="#111", stroke="#fff", sw=17, shadow="0 6px 14px rgba(0,0,0,.45)", weight=400),
     # 주황·빨강 그라데이션 + 검은 테두리 + 붉은 번짐 (전환·반전)
-    dict(font=("DoHyeon", "DoHyeon-Regular.ttf"), fill="linear-gradient(#ff7a1a,#d0141c)", stroke="#1a0000", sw=24,
+    dict(font=("DoHyeon", "DoHyeon-Regular.ttf"), fill="linear-gradient(#ff7a1a,#d0141c)", stroke="#1a0000", sw=18,
          shadow="0 0 22px rgba(255,60,0,.55)", weight=400),
 ]
 
@@ -241,9 +241,9 @@ def mix_caption_html(text, idx=0, impact=False):
     body = re.sub(r"\*\*(.+?)\*\*", r"\1", e(text))
     grad = st["fill"].startswith("linear")
     fill = (f"background:{st['fill']};-webkit-background-clip:text;color:transparent;" if grad else f"color:{st['fill']};")
-    size = 140 if impact else 128
+    size = 110 if impact else 96
     return f"""<style>{css_font}{BASE_CSS}
-.c{{position:absolute;top:{MEDIA_Y + MEDIA - 330}px;left:16px;right:16px;height:300px;display:flex;align-items:flex-end;
+.c{{position:absolute;top:{MEDIA_Y + MEDIA - 270}px;left:30px;right:30px;height:240px;display:flex;align-items:flex-end;
  justify-content:center;text-align:center}}
 .w{{position:relative;display:inline-block;font-family:'{fam}',Pretendard,sans-serif;font-weight:{st['weight']};
  font-size:{size}px;line-height:1.12;letter-spacing:-.02em;word-break:keep-all}}
@@ -251,8 +251,8 @@ def mix_caption_html(text, idx=0, impact=False):
 .w .f{{position:relative;{fill}}}</style>
 <div class="c"><div class="w"><div class="o">{body}</div><div class="f">{body}</div></div></div>
 <script>window.fit=function(){{const c=document.querySelector('.c'),w=document.querySelector('.w');let s={size};
- while((w.scrollWidth>c.clientWidth||w.scrollHeight>c.clientHeight)&&s>56){{s-=3;w.style.fontSize=s+'px';
-  w.querySelectorAll('.o').forEach(o=>o.style.webkitTextStroke=Math.round(s*0.16)+'px {st["stroke"]}');}}}};</script>"""
+ while((w.scrollWidth>c.clientWidth||w.scrollHeight>c.clientHeight)&&s>48){{s-=3;w.style.fontSize=s+'px';
+  w.querySelectorAll('.o').forEach(o=>o.style.webkitTextStroke=Math.round(s*0.17)+'px {st["stroke"]}');}}}};</script>"""
 
 
 def caption_html(text, style="box", impact=False, idx=0, sticker=""):
@@ -755,6 +755,39 @@ body{{width:1080px;height:1080px;background:#fff}}
     return Path(out)
 
 
+def comments_card(raw, out):
+    """마지막 장면: 커뮤니티 댓글창 캡처처럼 (실제 댓글만). plan "end_comments": [{"text": "...", "likes": 123}, ...]
+    없으면 beats 의 comment 카드 문구를 모아 씀. 닉네임·프로필은 회색 처리(개인정보)."""
+    items = raw.get("end_comments") or [{"text": b.get("overlay_text", "")} for b in raw.get("beats", [])
+                                        if b.get("overlay") == "comment" and b.get("overlay_text")]
+    items = [x if isinstance(x, dict) else {"text": str(x)} for x in items][:5]
+    if not items:
+        return None
+    rows = "".join(
+        f'<div class="r"><div class="av"></div><div class="bd"><div class="nm"></div>'
+        f'<div class="tx">{e(re.sub(r"[*][*]", "", it["text"]))}</div>'
+        f'<div class="mt">{"👍 " + str(it["likes"]) if it.get("likes") else "👍"}&nbsp;&nbsp;·&nbsp;&nbsp;답글</div></div>'
+        + (f'<div class="best">BEST</div>' if i < 2 else "") + "</div>" for i, it in enumerate(items))
+    html = f"""<style>{BASE_CSS}
+body{{width:1080px;height:1080px;background:#f2f3f5}}
+.w{{position:absolute;left:40px;right:40px;top:30px;bottom:290px;background:#fff;border-radius:28px;padding:30px 40px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.08)}}
+.h{{font-size:40px;font-weight:800;color:#111;margin-bottom:20px}}.h span{{color:#2e8b57}}
+.r{{position:relative;display:flex;gap:22px;padding:22px 0;border-top:1px solid #eee}}
+.av{{flex:none;width:64px;height:64px;border-radius:50%;background:#d9dce1}}
+.bd{{flex:1;min-width:0}}.nm{{width:170px;height:24px;border-radius:12px;background:#e3e5e8;margin:6px 0 14px;filter:blur(1px)}}
+.tx{{font-size:40px;line-height:1.38;color:#222;font-weight:500;word-break:keep-all;letter-spacing:-.02em}}
+.mt{{margin-top:10px;font-size:28px;color:#9ca3af}}
+.best{{position:absolute;right:0;top:24px;background:#ff4d4f;color:#fff;font-size:24px;font-weight:800;padding:4px 12px;border-radius:8px}}</style>
+<div class="w"><div class="h">댓글 반응 <span>{len(items)}</span></div>{rows}</div>
+<script>window.fit=function(){{const w=document.querySelector('.w');let s=40;
+ while(w.scrollHeight>w.clientHeight&&s>26){{s-=2;document.querySelectorAll('.tx').forEach(t=>t.style.fontSize=s+'px');}}}};</script>"""
+    png = Path(out).with_suffix(".png")
+    with Renderer() as r:
+        r.png(html, png, 1080, 1080, transparent=False)
+    ff("-i", png, "-q:v", "2", out)
+    return Path(out)
+
+
 # ---------- 화면 소재 모으기 ----------
 def gather_media(p, work):
     """문장별 화면: 첫 문장은 AI 영상(가능하면), 'ai' 는 AI 이미지, 'photo' 는 무료 실사 사진. 없으면 대체.
@@ -1025,6 +1058,17 @@ def render_sample(folder):
             media[0] = ("image", intro_card(raw, work / "intro.jpg"))
         except Exception as ex:
             print("[intro] 카드 실패:", ex)
+    END_PAD = 0.0
+    if raw.get("end_comments", True) is not False and media:  # 마무리 장면 = 댓글·반응 캡처 (조금 길게)
+        try:
+            cc = comments_card(raw, work / "comments.jpg")
+            if cc:
+                n_beats = len(p.beats)
+                media = list(media) + [None] * max(0, n_beats - len(media))
+                media = media[:n_beats] + [("image", cc)]
+                END_PAD = 2.5
+        except Exception as ex:
+            print("[comments] 카드 실패:", ex)
     global SONG_SPEC
     SONG_SPEC = None
     if raw.get("song") is not False and not raw.get("bgm"):  # "song": false 면 인기곡 안 씀
@@ -1054,6 +1098,10 @@ def render_sample(folder):
     elif voice:  # 타입캐스트 웹에서 직접 만든 더빙 (반자동, 1.0배속으로 받아서 여기서 1.2배속)
         texts = [b.narration for b in with_outro(p).beats]
         fast = speed_up(voice, work)
+        if END_PAD:  # 댓글 캡처를 읽을 시간: 끝에 무음 추가 → 마지막 장면이 길어짐
+            padded = work / "voice_pad.wav"
+            ff("-i", fast, "-af", f"apad=pad_dur={END_PAD}", padded)
+            fast = padded
         durs = split_voice(fast, len(texts), work, texts)
         video, voiced = make_video(p, media, work, voice_track=fast, durations=durs)
     elif True:
