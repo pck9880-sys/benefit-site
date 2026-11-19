@@ -175,3 +175,10 @@ gh workflow run shorts-upload.yml --ref main -f folder=assets/samples/<slug> \
 - 대사 찾기: 트레일러 오디오를 faster-whisper 로 받아쓰기 → 또렷한 문장 구간 사용.
 - 사용자에게는 **더빙 문장만**(대사 장면 제외) 녹음 요청 → 1.4배속, 대사 사이 빈 구간에 자동 배치.
 - 시네마 레터박스는 `ffmpeg cropdetect` 로 확인 후 클립 자를 때 crop.
+
+
+## 스팀에 없는 게임 (예: GTA6) — 공식 미디어 자료
+- 게임사 공식 사이트의 미디어/프레스 페이지에서 직접 받기. 록스타: `https://www.rockstargames.com/VI/media` → HTML 안의 `media-rockstargames-com.akamaized.net/.../downloads/videos/<이름>/<이름>.mp4` 와 `downloads/screenshots/*.zip`.
+- **용량 먼저 확인** (`curl -sI` 로 content-length): 'An Extended Look' 같은 긴 영상은 14GB → 받지 말 것. 런치 트레일러(약 750MB)·스크린샷 zip(약 110MB)이면 충분.
+- 트레일러 소리는 빼고(-an) 더빙 + 배경음악. 설명란에 "게임사 공식 미디어 자료" 표기. 록스타는 수익 영상은 정책 범위 밖 → 사용자에게 신고 위험 안내.
+- 예시: `assets/samples/gta6_launch/`.
