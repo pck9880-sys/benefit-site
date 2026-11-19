@@ -1,0 +1,204 @@
+{
+ "topic": "이강인 AFC 올해의 국제선수상 2년 연속 수상 (2026-11-19 방콕)",
+ "title_top": "이강인, 아시아 최초 기록",
+ "title_bottom": "손흥민도 못 한 2연속 ㄷㄷ",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "caption_style": "box",
+ "beats": [
+  {
+   "narration": "이강인이 아시아에서 아무도 못 한 기록 세움",
+   "card": "아시아 **최초** 기록",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "AFC 올해의 국제선수상 2년 연속 수상함",
+   "card": "AFC 국제선수상 **2년 연속**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "headline",
+   "overlay_text": "이강인, 황인범 제치고 AFC 올해의 국제선수상...최초 2회 연속 수상",
+   "overlay_source": "뉴스핌"
+  },
+  {
+   "narration": "19일 태국 방콕 시상식에서 발표됐는데",
+   "card": "19일 **방콕** 시상식",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "아시아 밖 리그에서 뛰는 선수한테 주는 상이거든",
+   "card": "아시아 **밖**에서 뛰는 선수 상",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "황인범, 일본 우에다까지 제쳤다고 함",
+   "card": "황인범·**우에다** 제침",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "2012년 상 생긴 뒤 2년 연속은 처음이래",
+   "card": "2012년 이후 **처음**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "4번 받은 손흥민도 연속 수상은 못 했음",
+   "card": "손흥민도 **연속**은 못 함",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "PSG에서 트로피만 12개 들었다고 함",
+   "card": "PSG 트로피 **12개**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "지금은 AT 마드리드서 12경기 2골 1도움",
+   "card": "AT 마드리드 **2골 1도움**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "headline",
+   "overlay_text": "이강인, 2026 AFC 올해의 남자 국제선수상 수상…아시아 최고 해외파 우뚝",
+   "overlay_source": "스포츠한국"
+  },
+  {
+   "narration": "근데 월드컵에선 한국 조별리그 탈락이었잖아",
+   "card": "근데 월드컵은 **조별 탈락**",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "그래도 이강인은 3경기 다 뛰었거든",
+   "card": "이강인은 **3경기** 다 뜀",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "이제 대표팀에서도 진짜 에이스 될 수 있을까?",
+   "card": "대표팀 **에이스** 될까?",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "question": "",
+ "voice": "용식",
+ "outro": "",
+ "media": [
+  {
+   "image": "a_trophy.jpg"
+  },
+  {
+   "zzal": "z_award.png"
+  },
+  {
+   "image": "a_trophy.jpg"
+  },
+  {
+   "image": "a_rain.jpg"
+  },
+  {
+   "zzal": "z_shield.png"
+  },
+  {
+   "image": "a_trophy.jpg"
+  },
+  {
+   "zzal": "z_tv.png"
+  },
+  {
+   "image": "a_rain.jpg"
+  },
+  {
+   "image": "a_rain.jpg"
+  },
+  {
+   "image": "a_empty.jpg"
+  },
+  {
+   "image": "a_empty.jpg"
+  },
+  {
+   "image": "a_rain.jpg"
+  },
+  {
+   "image": "a_trophy.jpg"
+  }
+ ],
+ "yt_title": "[오늘의 이슈] 이강인, 손흥민도 못 한 AFC 2년 연속 수상 ㄷㄷ #shorts",
+ "description": "이강인이 19일 태국 방콕에서 열린 'AFC 어워즈 2026'에서 올해의 남자 국제선수상을 받았어요. 황인범, 일본의 우에다 아야세를 제쳤고, 2012년 상이 생긴 뒤 2년 연속 수상은 처음이래요. 역대 최다 4회 수상자 손흥민도 연속 수상은 없었어요. 지금은 AT 마드리드에서 라리가 12경기 2골 1도움이에요. 다만 2026 월드컵에서 한국은 조별리그에서 탈락했어요.\n\n님들은 어떻게 생각해요잉?\n\n※ 일부 장면은 AI로 만든 이미지예요.\n※ 일러스트: いらすとや (irasutoya.com)\n출처: 뉴스핌, 스포츠한국(한국아이닷컴) 보도\n\n#이강인 #AFC #축구 #국가대표 #AT마드리드",
+ "pin_comment": "AFC 2년 연속 수상한 이강인…🅰 이제 대표팀 원톱 에이스 / 🅱 아직 대표팀에선 더 보여줘야 — 님들은 어떻게 생각해요잉?",
+ "tags": [
+  "이강인",
+  "AFC",
+  "AFC어워즈",
+  "축구",
+  "국가대표",
+  "AT마드리드",
+  "오늘의이슈"
+ ],
+ "sources": [
+  "https://www.newspim.com/news/view/20261120000008",
+  "https://www.hankooki.com/news/articleView.html?idxno=348945",
+  "https://m.news.nate.com/view/20261120n00466"
+ ]
+}
