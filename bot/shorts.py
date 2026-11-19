@@ -1117,6 +1117,8 @@ def render_sample(folder):
         video, voiced = make_video(p, media, work, durations=durs, keep_audio=True, bgm_spec=spec, intro_voice=intro)
     elif voice:  # 타입캐스트 웹에서 직접 만든 더빙 (반자동, 1.0배속으로 받아서 여기서 1.2배속)
         texts = [b.narration for b in with_outro(p).beats]
+        if raw.get("outro_spoken"):  # 마무리에서 댓글 반응까지 읽으면 실제로 말한 글로 경계 계산
+            texts[-1] = raw["outro_spoken"]
         fast = speed_up(voice, work)
         if END_PAD:  # 댓글 캡처를 읽을 시간: 끝에 무음 추가 → 마지막 장면이 길어짐
             padded = work / "voice_pad.wav"

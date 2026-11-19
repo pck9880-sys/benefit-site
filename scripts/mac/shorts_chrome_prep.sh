@@ -67,20 +67,20 @@ info_f.write_text(json.dumps(info, ensure_ascii=False, indent=1), "utf-8")
 outro = p.get("outro") if p.get("outro_custom") else config.SHORTS_OUTRO
 body = [re.sub(r"\*\*", "", b["narration"]) for b in p["beats"] if not b.get("orig_audio")]
 outro = re.sub(r"\*\*", "", outro or "")
-(d / "더빙용" / "대본.txt").write_text("\n".join(body + ([outro] if outro else [])) + "\n", "utf-8")
+# 마무리 = 댓글 반응 읽기(구리) + 마무리 멘트. 웃음·울음 기호는 읽으면 어색해서 뺌.
+def _clean(c):
+    c = re.sub(r"[ㅋㅎㅠㅜ]{2,}|[ㅋㅎㅠㅜ]+$|[~;]+|\^+", " ", c)
+    return re.sub(r"\s+", " ", c).strip(" .")
+cm = [_clean(c.get("text", "") if isinstance(c, dict) else str(c)) for c in (p.get("end_comments") or [])]
+cm = [c for c in cm if 2 <= len(c) <= 40][:3]
+outro_lines = (["댓글 반응."] + [c + "." for c in cm] if cm else []) + ([outro] if outro else [])
+(d / "더빙용" / "대본.txt").write_text("\n".join(body + outro_lines) + "\n", "utf-8")
 (d / "더빙용" / "대본_본문.txt").write_text("\n".join(body) + "\n", "utf-8")
-(d / "더빙용" / "대본_마무리.txt").write_text(outro + "\n", "utf-8")
-# 목소리: 유머·핫이슈 = 본문 1명 + 마무리 다른 1명 (자바바·제롬·구리 돌아가며) / 감동 = 현준 고정. 같은 편 재실행이면 그대로.
-VOICES = ["자바바", "제롬", "구리"]
-if p.get("mood") == "감동":  # 감동은 현준 고정 (본문·마무리 모두)
-    vm, vo = "현준", "현준"
-elif old.get("voices") and "현준" not in old["voices"]:
-    vm, vo = old["voices"]
-else:
-    vf = Path(os.path.expanduser("~/쇼츠작업/voice_rotation.txt"))
-    k = int(vf.read_text()) if vf.exists() else 0
-    vf.write_text(str(k + 1))
-    vm, vo = VOICES[k % 3], VOICES[(k + 1) % 3]
+(d / "더빙용" / "대본_마무리.txt").write_text("\n".join(outro_lines) + "\n", "utf-8")
+p["outro_spoken"] = " ".join(outro_lines)  # 합성 때 문장 경계 계산용 (자막은 마무리 멘트만)
+(src / "plan.json").write_text(json.dumps(p, ensure_ascii=False, indent=1), "utf-8")
+# 목소리 고정 (2026-11-20): 본문 = 제롬(모든 종류), 마무리 댓글 반응 읽기 = 구리
+vm, vo = "제롬", "구리"
 info["voices"] = [vm, vo]
 info_f.write_text(json.dumps(info, ensure_ascii=False, indent=1), "utf-8")
 (d / "voices").write_text(f"{vm} {vo}", "utf-8")
