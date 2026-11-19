@@ -344,7 +344,7 @@ def make_video(p, media, work):
         k += 1
     sfx_dir = config.ROOT / "assets" / "sfx"
     vol = {"pop": config.SHORTS_SFX_VOLUME, "whoosh": config.SHORTS_SFX_VOLUME * 0.8, "ding": config.SHORTS_SFX_VOLUME}
-    for j, (at, kind) in enumerate(events):
+    for j, (at, kind) in enumerate(events if config.SHORTS_SFX else []):
         f = sfx_dir / f"{kind}.wav"
         if not f.exists():
             continue
