@@ -136,7 +136,7 @@ def handle_updates(st):
             st["contest_off"] = False
             notify(st, "🏆 공모전 알림을 켰습니다.")
         elif text == "/shorts":
-            st["shorts_request"] = True
+            st["shorts_request"] = now().isoformat(timespec="seconds")
             notify(st, "🎬 숏츠를 만들기 시작할게요 (영상 완성까지 약 5~10분)")
         elif text == "/kpi":
             from . import kpi

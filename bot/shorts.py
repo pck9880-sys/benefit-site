@@ -364,15 +364,34 @@ def send_telegram(st, video, p, uploaded, credits):
 
 
 # ---------- 실행 ----------
+STATE = config.DATA_DIR / "shorts_state.json"  # 숏츠 기록은 따로 저장 (메인 작업과 파일 충돌 방지)
+
+
+def load_ss():
+    import json
+    return json.loads(STATE.read_text("utf-8")) if STATE.exists() else {}
+
+
+def requested(st, ss):
+    req = st.get("shorts_request")
+    if not req:
+        return False
+    done = ss.get("request_done", "")
+    if req is True:  # 예전 형식
+        return not done
+    return str(req) > done
+
+
 def due(st):
+    ss = load_ss()
     if st.get("paused") or config.SHORTS_PER_DAY <= 0:
         return False
-    tried = st.get("shorts_tried")
+    tried = ss.get("shorts_tried")
     if tried and now() - datetime.fromisoformat(tried) < timedelta(minutes=50):
         return False  # 방금 시도함 (실패해도 15분마다 반복하지 않게)
-    if st.get("shorts_request"):
+    if requested(st, ss):
         return True
-    done = st.get("kpi", {}).get("shorts_made", {}).get(now().strftime("%Y-%m-%d"), 0)
+    done = ss.get("kpi", {}).get("shorts_made", {}).get(now().strftime("%Y-%m-%d"), 0)
     return now().hour >= config.SHORTS_HOUR_KST and done < config.SHORTS_PER_DAY
 
 
@@ -382,18 +401,20 @@ def run(force=False):
     if not force and not due(st):
         print("[shorts] 오늘 할 일 없음")
         return
+    ss = load_ss()
     month = now().strftime("%Y-%m")
-    if st.get("cost", {}).get(month, 0) >= config.MAX_MONTHLY_USD:
+    if st.get("cost", {}).get(month, 0) + ss.get("cost", {}).get(month, 0) >= config.MAX_MONTHLY_USD:
         print("[shorts] 월 비용 상한 도달")
         return
     work = Path(tempfile.mkdtemp(prefix="shorts-"))
-    st["shorts_tried"] = now().isoformat(timespec="minutes")
+    ss["shorts_tried"] = now().isoformat(timespec="minutes")
+    was_requested = requested(st, ss)
     try:
-        p, cost = plan_short(st)
+        p, cost = plan_short(ss)
         print(f"[shorts] 주제: {p.topic} / 문장 {len(p.beats)} / AI컷 {sum(b.visual == 'ai' for b in p.beats)}")
         media, credits, cost2 = gather_media(p, work)
         cost += cost2
-        st.setdefault("cost", {})[month] = round(st.get("cost", {}).get(month, 0) + cost, 4)
+        ss.setdefault("cost", {})[month] = round(ss.get("cost", {}).get(month, 0) + cost, 4)
         video, voiced = make_video(p, media, work)
         print(f"[shorts] 완성 {duration(video):.1f}초, 음성 {voiced}/{len(p.beats)}")
         uploaded = None
@@ -404,12 +425,13 @@ def run(force=False):
         send_telegram(st, video, p, uploaded, credits)
         if config.SHORTS_KEEP:
             shutil.copy(video, config.ROOT / "shorts_preview.mp4")
-        st["shorts_topics"] = (st.get("shorts_topics", []) + [p.topic])[-60:]
-        kpi.bump(st, "shorts_made")
-        st.pop("shorts_request", None)
+        ss["shorts_topics"] = (ss.get("shorts_topics", []) + [p.topic])[-60:]
+        kpi.bump(ss, "shorts_made")
+        if was_requested:
+            ss["request_done"] = now().isoformat(timespec="seconds")
     except Exception as ex:
         pipeline.notify(st, f"⚠️ 숏츠 제작 실패: {type(ex).__name__}: {str(ex)[:300]}")
         raise
     finally:
         shutil.rmtree(work, ignore_errors=True)
-        pipeline.save_json(config.STATE_FILE, st)
+        pipeline.save_json(STATE, ss)

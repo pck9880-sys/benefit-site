@@ -28,6 +28,9 @@ def _sum(st, key, days):
 
 
 def report(st):
+    from . import shorts
+    ss = shorts.load_ss()  # 숏츠 기록은 따로 저장됨
+    st = {**st, "kpi": {**st.get("kpi", {}), **ss.get("kpi", {})}}
     posts = [json.loads(p.read_text("utf-8")) for p in config.POSTS_DIR.glob("*.json")]
     today = now().strftime("%Y-%m-%d")
     week_ago = (now() - timedelta(days=6)).strftime("%Y-%m-%d")
@@ -37,7 +40,7 @@ def report(st):
     blog_week = sum(1 for p in posts if (p.get("blog_sent") or "") >= week_ago)
     drafts = len(list(config.DRAFTS_DIR.glob("*.json")))
     month = now().strftime("%Y-%m")
-    cost = st.get("cost", {}).get(month, 0)
+    cost = st.get("cost", {}).get(month, 0) + ss.get("cost", {}).get(month, 0)
     fields = {}
     for p in posts:
         f = p.get("source", {}).get("field") or "기타"
