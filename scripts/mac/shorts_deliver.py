@@ -40,4 +40,12 @@ txt = f"""[제목]
 """
 (out / "업로드정보.txt").write_text(txt, "utf-8")
 (out / "제목.txt").write_text((info.get("title") or "").strip(), "utf-8")  # 제목만 (길게 눌러 바로 복사)
+# 사진 앱에도 넣기 → iCloud 사진으로 아이폰 갤러리에 바로 보임 (2026-11-20 권한 허용됨). 끝나면 사진 앱 닫기.
+import subprocess
+try:
+    subprocess.run(["osascript", "-e", f'tell application "Photos" to import {{POSIX file "{out / "영상.mp4"}"}} skip check duplicates true',
+                    "-e", 'tell application "Photos" to quit'], timeout=180, capture_output=True)
+    print("[deliver] 사진 앱(갤러리)에 넣음")
+except Exception as ex:
+    print("[deliver] 사진 앱 넣기 실패:", ex)
 print(f"[deliver] {out}")
