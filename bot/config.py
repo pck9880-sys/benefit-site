@@ -52,11 +52,18 @@ CONTESTS_PER_DAY = int(_env("CONTESTS_PER_DAY", "3"))  # 하루에 출품안 만
 CONTEST_HOUR_KST = int(_env("CONTEST_HOUR_KST", "8"))
 SHORTS_PER_DAY = int(_env("SHORTS_PER_DAY", "1"))  # 하루 숏츠 수 (0이면 끔)
 SHORTS_HOUR_KST = int(_env("SHORTS_HOUR_KST", "12"))  # 이 시각 이후 첫 실행 때 제작
-SHORTS_VOICE = _env("SHORTS_VOICE", "ko-KR-SunHiNeural")  # 무료 음성 (남성: ko-KR-InJoonNeural)
+SHORTS_VOICE = _env("SHORTS_VOICE", "ko-KR-InJoonNeural")  # 무료 음성 (여성: ko-KR-SunHiNeural)
 SHORTS_PRIVACY = _env("SHORTS_PRIVACY", "public")  # public / unlisted / private
 SHORTS_KEEP = _env("SHORTS_KEEP") == "1"  # 테스트용: 영상 파일을 남김
 UPLOAD_POST_API_KEY = _env("UPLOAD_POST_API_KEY")  # Upload-Post (유튜브 자동 업로드, 무료 월 10개)
 UPLOAD_POST_USER = _env("UPLOAD_POST_USER")  # Upload-Post 프로필 이름
+SHORTS_CHANNEL = _env("SHORTS_CHANNEL", "")  # 영상 맨 위에 작게 표시할 채널 이름 (예: @내채널)
+SHORTS_BGM_VOLUME = float(_env("SHORTS_BGM_VOLUME", "0.10"))  # 배경음악 크기 (static/bgm/*.mp3)
+YOUTUBE_API_KEY = _env("YOUTUBE_API_KEY")  # 인기 쇼츠 분석용 (없으면 구글 검색어만 사용)
+HIGGSFIELD_KEY = _env("HIGGSFIELD_KEY")  # 힉스필드 API "키ID:시크릿" (없으면 글자 카드 화면)
+HIGGSFIELD_MODEL = _env("HIGGSFIELD_MODEL", "kling-video/v3.0-turbo/text-to-video")
+HIGGSFIELD_CLIPS = int(_env("HIGGSFIELD_CLIPS", "3"))  # 숏츠 1개당 AI 영상 장면 수
+HIGGSFIELD_SECONDS = int(_env("HIGGSFIELD_SECONDS", "5"))
 MOCK = _env("MOCK") == "1"  # 테스트용: 외부 API 호출 없이 동작
 
 # 모델별 단가 (USD / 1M 토큰) - 비용 추적용

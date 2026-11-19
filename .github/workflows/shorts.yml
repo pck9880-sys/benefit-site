@@ -27,6 +27,11 @@ jobs:
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       UPLOAD_POST_API_KEY: ${{ secrets.UPLOAD_POST_API_KEY }}
       UPLOAD_POST_USER: ${{ vars.UPLOAD_POST_USER }}
+      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+      HIGGSFIELD_KEY: ${{ secrets.HIGGSFIELD_KEY }}
+      HIGGSFIELD_MODEL: ${{ vars.HIGGSFIELD_MODEL }}
+      HIGGSFIELD_CLIPS: ${{ vars.HIGGSFIELD_CLIPS }}
+      SHORTS_CHANNEL: ${{ vars.SHORTS_CHANNEL }}
       SITE_URL: ${{ vars.SITE_URL }}
       CF_PAGES_PROJECT: ${{ vars.CF_PAGES_PROJECT || 'jiwon-hyetaek' }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
