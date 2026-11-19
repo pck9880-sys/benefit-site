@@ -31,7 +31,7 @@ class Beat(BaseModel):
     narration: str = Field(description="읽을 문장 1개. 28자 이내, 쇼츠 썰 푸는 말투 ('~라는데', '~거든요', '~했다고 함')")
     card: str = Field(description="AI 영상이 없을 때 화면 가운데 카드에 띄울 짧은 문구 (20자 이내)")
     visual: str = Field(description="'photo' (실제 사진: 실존 인물·장소·물건·사건 현장) 또는 'ai' (재연 장면·주인공 연출 컷)")
-    query: str = Field(description="실제 사진 검색어 (영어 2~4단어, 예: 'baseball pitcher stadium'). ai 장면이어도 대체용으로 반드시 작성")
+    query: str = Field(description="실제 사진 검색어 (영어 2~4단어). 실존 대상은 정확한 고유명사+종류 (예: 'Samsung Lions baseball', 'Everland amusement park'), 일반 장면은 구체적으로 (예: 'baseball stadium crowd night'). ai 장면이어도 대체용으로 반드시 작성")
     ai_prompt: str = Field(description="AI 이미지 프롬프트 (영어). 주인공이 나오면 'the protagonist' 로 지칭. 사실적인 사진 느낌, 글자·로고 없음")
 
 

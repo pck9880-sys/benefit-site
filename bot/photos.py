@@ -70,7 +70,7 @@ def openverse(query, n=10):
 def find(query, used, out_path, fallbacks=()):
     """query 로 사진 1장을 받아 out_path 에 저장. 안 되면 더 짧은 검색어로 재시도. (경로, 출처) 또는 (None, None)."""
     words = query.split()
-    tries = [query] + ([" ".join(words[:2])] if len(words) > 2 else []) + list(fallbacks)
+    tries = [query] + ([" ".join(words[:-1])] if len(words) > 2 else []) + list(fallbacks)
     for q in dict.fromkeys(t for t in tries if t):
         f, credit = _find_one(q, used, out_path)
         if f:
