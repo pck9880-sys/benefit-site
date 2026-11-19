@@ -65,8 +65,23 @@ info = {"title": p.get("yt_title"), "description": shorts.full_description(short
         "music_concept": p.get("music_concept", "")}
 info_f.write_text(json.dumps(info, ensure_ascii=False, indent=1), "utf-8")
 outro = p.get("outro") if p.get("outro_custom") else config.SHORTS_OUTRO
-lines = [b["narration"] for b in p["beats"] if not b.get("orig_audio")] + ([outro] if outro else [])
-(d / "더빙용" / "대본.txt").write_text("\n".join(re.sub(r"\*\*", "", x) for x in lines) + "\n", "utf-8")
+body = [re.sub(r"\*\*", "", b["narration"]) for b in p["beats"] if not b.get("orig_audio")]
+outro = re.sub(r"\*\*", "", outro or "")
+(d / "더빙용" / "대본.txt").write_text("\n".join(body + ([outro] if outro else [])) + "\n", "utf-8")
+(d / "더빙용" / "대본_본문.txt").write_text("\n".join(body) + "\n", "utf-8")
+(d / "더빙용" / "대본_마무리.txt").write_text(outro + "\n", "utf-8")
+# 목소리 2명: 본문 1명 + 마무리 1명 (자바바·제롬·구리 중, 편마다 돌아가며). 같은 편 재실행이면 그대로.
+VOICES = ["자바바", "제롬", "구리"]
+if old.get("voices"):
+    vm, vo = old["voices"]
+else:
+    vf = Path(os.path.expanduser("~/쇼츠작업/voice_rotation.txt"))
+    k = int(vf.read_text()) if vf.exists() else 0
+    vf.write_text(str(k + 1))
+    vm, vo = VOICES[k % 3], VOICES[(k + 1) % 3]
+info["voices"] = [vm, vo]
+info_f.write_text(json.dumps(info, ensure_ascii=False, indent=1), "utf-8")
+(d / "voices").write_text(f"{vm} {vo}", "utf-8")
 (d / "mood").write_text(p.get("mood") or "기본", "utf-8")
 (d / "song_file").write_text(song_file, "utf-8")
 EOF
@@ -97,16 +112,22 @@ sleep 1
 
 SONG_FILE=$(cat "$DIR/song_file")
 if [ "${SHORTS_PUBLISH:-1}" = "0" ] || [ -z "$SONG_FILE" ]; then PRIVACY=비공개; else PRIVACY=공개; fi
-LAST_VOICE=$(cat "$WORK/last_voice.txt" 2>/dev/null || echo "없음")
+read MAIN_VOICE OUTRO_VOICE < "$DIR/voices"
 ACCOUNT=$(cat "$WORK/upload_account.txt" 2>/dev/null)  # 업로드할 구글 계정 (저장소에 안 올림)
 fill() { sed -e "s#{{DIR}}#$DIR#g" -e "s#{{PORT}}#$PORT#g" -e "s#{{MOOD}}#$(cat "$DIR/mood")#g" \
-             -e "s#{{LAST_VOICE}}#$LAST_VOICE#g" -e "s#{{PRIVACY}}#$PRIVACY#g" -e "s#{{ACCOUNT}}#$ACCOUNT#g" "$1"; }
+             -e "s#{{MAIN_VOICE}}#$MAIN_VOICE#g" -e "s#{{OUTRO_VOICE}}#$OUTRO_VOICE#g" -e "s#{{PRIVACY}}#$PRIVACY#g" -e "s#{{ACCOUNT}}#$ACCOUNT#g" "$1"; }
 
 # 3) 타입캐스트 더빙 (이미 voice.mp3 가 있으면 건너뜀)
 if [ ! -f "$SRC/voice.mp3" ]; then
   run_claude 더빙 .claude/prompts/shorts-chrome-dub.md
-  [ -s "$DIR/더빙용/voice.mp3" ] && cp "$DIR/더빙용/voice.mp3" "$SRC/voice.mp3"
-  [ -s "$DIR/voice_used.txt" ] && cp "$DIR/voice_used.txt" "$WORK/last_voice.txt"
+  # 본문 + (0.4초) + 마무리 → voice.mp3 (마무리만 다른 목소리)
+  if [ -s "$DIR/더빙용/voice_main.mp3" ] && [ -s "$DIR/더빙용/voice_outro.mp3" ]; then
+    ffmpeg -y -loglevel error -i "$DIR/더빙용/voice_main.mp3" -f lavfi -t 0.4 -i anullsrc=r=44100:cl=stereo -i "$DIR/더빙용/voice_outro.mp3" \
+      -filter_complex "[0:a]aresample=44100,aformat=channel_layouts=stereo[a];[2:a]aresample=44100,aformat=channel_layouts=stereo[c];[a][1:a][c]concat=n=3:v=0:a=1" \
+      -b:a 256k "$DIR/더빙용/voice.mp3" && cp "$DIR/더빙용/voice.mp3" "$SRC/voice.mp3"
+  elif [ -s "$DIR/더빙용/voice.mp3" ]; then
+    cp "$DIR/더빙용/voice.mp3" "$SRC/voice.mp3"
+  fi
 else
   cp "$SRC/voice.mp3" "$DIR/더빙용/voice.mp3"
 fi
