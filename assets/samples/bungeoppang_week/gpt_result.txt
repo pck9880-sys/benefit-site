@@ -1,0 +1,2 @@
+성공: img0.jpg, img1.jpg, img2.jpg, img3.jpg, thumb_src.jpg
+참고: chatgpt.com 페이지에서 127.0.0.1 로 직접 PUT 은 차단됨(Failed to fetch) → 로컬 수신 페이지(_recv.html) 팝업 + postMessage 로 우회 저장, PNG→JPEG(0.92) 변환
