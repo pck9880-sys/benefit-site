@@ -1,0 +1,243 @@
+{
+ "topic": "오배송 택배 강아지 옷 입힌 할아버지와 택배기사·업체의 따뜻한 결말 (2026-11 실제 사연)",
+ "title_top": "잘못 배달된",
+ "title_bottom": "강아지 옷 한 벌",
+ "mood": "감동",
+ "kind": "",
+ "caption_style": "mix",
+ "music_concept": "잔잔한 감동",
+ "question": "",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "intro_post": {
+  "emoji": "🥹",
+  "board": "감동 • 사연 게시판"
+ },
+ "beats": [
+  {
+   "narration": "택배기사가 강아지 옷 택배를 옆집에 잘못 둠",
+   "card": "강아지 옷 택배 **오배송**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "오후에 찾으러 갔더니 상자가 이미 뜯겨 있었음",
+   "card": "상자가 **이미 뜯겨** 있음",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "옆집 할아버지 강아지가 그 옷을 입고 있었음",
+   "card": "강아지가 **입고 있음**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "받는 사람 이름이 할아버지 이름이랑 같았다고 함",
+   "card": "받는 사람 이름이 **같았음**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "누가 보낸 선물인 줄 알았다는 거임",
+   "card": "**선물**인 줄 알았음",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "남의 택배 뜯으면 안 되는 거 아닌가 싶었음",
+   "card": "뜯으면 **안 되는데**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "근데 옷 입은 강아지 보니 말이 안 나왔음",
+   "card": "차마 **벗겨 달란 말**을 못 함",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "결국 옷값은 기사님이 내기로 함",
+   "card": "옷값은 **기사님이** 냄",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "주문한 고객에겐 양해 구하고 다시 보내 달라 함",
+   "card": "주문 고객에겐 **재배송** 부탁",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "그런데 며칠 뒤 업체에서 연락이 옴",
+   "card": "업체에서 **연락**이 옴",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "기사님 마음에 감동했다며 옷은 선물한다고 함",
+   "card": "옷은 할아버지께 **선물**",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "그렇게 강아지는 올겨울 따뜻하게 보내게 됐음",
+   "card": "올겨울은 **따뜻하게**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "comment",
+   "overlay_text": "덕분에 강아지가 올겨울 따뜻하게 보낼 듯",
+   "overlay_source": "커뮤니티 반응"
+  }
+ ],
+ "outro": "",
+ "media": [
+  {
+   "image": "img0.jpg"
+  },
+  {
+   "image": "img1.jpg"
+  },
+  {
+   "image": "img2.jpg"
+  },
+  {
+   "image": "img3.jpg"
+  },
+  {
+   "image": "img4.jpg"
+  },
+  {
+   "image": "img0.jpg"
+  },
+  {
+   "image": "img1.jpg"
+  },
+  {
+   "image": "img2.jpg"
+  },
+  {
+   "image": "img3.jpg"
+  },
+  {
+   "image": "img4.jpg"
+  },
+  {
+   "image": "img0.jpg"
+  },
+  {
+   "image": "img1.jpg"
+  }
+ ],
+ "gpt_images": [
+  {
+   "file": "img0.jpg",
+   "prompt": "A Korean delivery driver in a work uniform placing a small cardboard parcel in front of the wrong apartment door in an old Korean villa hallway, late autumn morning light, slightly hurried mood. Warm, gentle Korean everyday scene, cozy soft lighting, fictional people. Cinematic warm photo, soft golden hour light, gentle emotional mood, shallow depth of field, fictional people only (back view or side view preferred), no text, no letters, no logos, no watermark"
+  },
+  {
+   "file": "img1.jpg",
+   "prompt": "An elderly Korean grandfather in a cardigan kneeling on the floor of his modest living room, smiling while dressing his small white mixed-breed dog in a new knitted red winter sweater, an opened cardboard box beside them. Warm, gentle Korean everyday scene, cozy soft lighting, fictional people. Cinematic warm photo, soft golden hour light, gentle emotional mood, shallow depth of field, fictional people only (back view or side view preferred), no text, no letters, no logos, no watermark"
+  },
+  {
+   "file": "img2.jpg",
+   "prompt": "A Korean delivery driver standing at an open apartment door, hesitating with a soft conflicted smile, looking down at a small dog happily wearing a red knitted sweater next to an elderly man, warm afternoon light. Warm, gentle Korean everyday scene, cozy soft lighting, fictional people. Cinematic warm photo, soft golden hour light, gentle emotional mood, shallow depth of field, fictional people only (back view or side view preferred), no text, no letters, no logos, no watermark"
+  },
+  {
+   "file": "img3.jpg",
+   "prompt": "Close-up of a Korean delivery driver sitting in his delivery truck reading a kind text message on his smartphone, moved and smiling, parcels stacked in the back, golden evening light. Warm, gentle Korean everyday scene, cozy soft lighting, fictional people. Cinematic warm photo, soft golden hour light, gentle emotional mood, shallow depth of field, fictional people only (back view or side view preferred), no text, no letters, no logos, no watermark"
+  },
+  {
+   "file": "img4.jpg",
+   "prompt": "A small white dog in a red knitted sweater walking happily beside an elderly Korean grandfather on a quiet neighborhood street with fallen ginkgo leaves, early winter, breath visible in the cold air, heartwarming. Warm, gentle Korean everyday scene, cozy soft lighting, fictional people. Cinematic warm photo, soft golden hour light, gentle emotional mood, shallow depth of field, fictional people only (back view or side view preferred), no text, no letters, no logos, no watermark"
+  }
+ ],
+ "thumb_caption": "차마 벗겨 달라고 못 함",
+ "end_comments": [
+  {
+   "text": "택배기사님도 업체도 멋지다"
+  },
+  {
+   "text": "덕분에 강아지가 올겨울 따뜻하게 보낼 듯"
+  },
+  {
+   "text": "마음이 따뜻해지는 이야기"
+  },
+  {
+   "text": "오배송된 옷인데 어쩜 강아지 몸에 딱 맞는지"
+  }
+ ],
+ "yt_title": "잘못 배달된 강아지 옷의 결말 #shorts",
+ "description": "택배기사가 강아지 옷 택배를 옆집에 잘못 배달했음. 찾으러 갔더니 할아버지네 강아지가 이미 그 옷을 입고 있었음. 차마 벗겨 달라고 못 한 기사님은 옷값을 직접 내기로 했는데… 업체가 보내온 답장이 따뜻했음.\n\n님들 생각은 어떰?\n\n※ SNS(스레드)에 올라온 실제 사연을 재구성함. 이미지는 AI로 만든 가상 장면임.\n출처: 머니투데이 / 서플 오따뉴\n\n#택배 #강아지 #감동 #훈훈 #사연\n\n※ 실제 사연을 바탕으로 재구성함.",
+ "tags": [
+  "감동",
+  "택배",
+  "강아지",
+  "훈훈",
+  "사연",
+  "쇼츠",
+  "위로",
+  "공감"
+ ],
+ "sources": [
+  "https://supple.kr/news/cmwdff3yc03f7al9p6ox2u2tq"
+ ],
+ "pin_comment": "잘못 온 택배를 강아지가 이미 입고 있다면…🅰 그냥 선물로 드림 / 🅱 그래도 돌려받음 — 님들 생각은 어떰?"
+}
