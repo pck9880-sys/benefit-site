@@ -1087,7 +1087,7 @@ def render_sample(folder):
                 n_beats = len(p.beats)
                 media = list(media) + [None] * max(0, n_beats - len(media))
                 media = media[:n_beats] + [("image", cc)]
-                END_PAD = 1.0  # 댓글은 구리가 읽으므로 여유는 짧게
+                END_PAD = 0.5  # 댓글은 구리가 읽으므로 여유는 짧게
         except Exception as ex:
             print("[comments] 카드 실패:", ex)
     global SONG_SPEC
@@ -1146,9 +1146,16 @@ def render_sample(folder):
             print(f"[voice] 본문 {len(durs) - 1}문장 + 마무리(다른 목소리) {durs[-1]:.1f}초")
         else:
             durs = split_voice(fast, len(texts), work, texts)
-        gap = float(os.environ.get("SHORTS_SENTENCE_GAP", "0.35"))  # 문장 사이 숨 쉬는 틈 (2026-11-20 사용자 요청)
+        gap = float(os.environ.get("SHORTS_SENTENCE_GAP", "0.25"))  # 문장 사이 숨 쉬는 틈 (2026-11-20 사용자 요청)
         if gap > 0 and len(durs) > 1:
             fast, durs = add_gaps(fast, durs, gap, work)
+        cap = float(os.environ.get("SHORTS_HARD_MAX", "27.5"))  # 28초 미만 보장: 넘으면 전체를 살짝 더 빠르게
+        if sum(durs) > cap:
+            k = round(sum(durs) / cap, 3)
+            faster = work / "voice_cap.wav"
+            ff("-i", fast, "-af", f"atempo={k}", "-ar", "44100", "-ac", "2", faster)
+            fast, durs = faster, [round(x / k, 3) for x in durs]
+            print(f"[voice] {cap}초 넘음 → 전체 {k}배 더 빠르게 → {sum(durs):.1f}초")
         video, voiced = make_video(p, media, work, voice_track=fast, durations=durs)
     elif True:
         video, voiced = make_video(p, media, work, audios)

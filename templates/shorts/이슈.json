@@ -15,8 +15,8 @@
   "board": "이슈 • 뉴스 게시판"
  },
  "beats": [
-  11,
-  12
+  8,
+  10
  ],
  "ai_images": 4,
  "thumb_ai": true,
@@ -51,7 +51,7 @@
  ],
  "ira": {
   "min": 3,
-  "max": 6
+  "max": 5
  },
  "intro_card": false,
  "text_cards": false

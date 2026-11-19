@@ -140,12 +140,12 @@ def check(slug):
             errs.append(f"{k} '{s}' 너무 김 (공백 빼고 9자 이내)")
     beats = [b for b in p.get("beats", []) if b.get("narration", "").strip()]
     p["beats"] = beats
-    lo, hi = t["beats"]
+    lo, hi = 8, 10  # 28초 미만: 문장 8~10개
     if not lo <= len(beats) <= hi:
         errs.append(f"문장 {len(beats)}개 (필요 {lo}~{hi})")
     total = sum(len(re.sub(r"\*\*|\s", "", b["narration"])) for b in beats)
-    if total > 190:  # 1.2배속 기준 약 35초 (유머 테스트: 260자 → 55초로 너무 김)
-        errs.append(f"대본 전체 {total}자 (공백 빼고 190자 이내, 35초 안팎) → 문장을 짧게")
+    if total > 130:  # 28초 미만 (2026-11-20): 1.2배속 본문 약 19초 + 댓글 반응 약 6초
+        errs.append(f"대본 전체 {total}자 (공백 빼고 130자 이내 — 영상 28초 미만) → 문장 수·길이 줄이기")
     for i, b in enumerate(beats):
         s = re.sub(r"\*\*", "", b["narration"]).strip()
         if len(s) > 30:

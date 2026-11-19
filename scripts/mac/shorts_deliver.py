@@ -48,4 +48,17 @@ try:
     print("[deliver] 사진 앱(갤러리)에 넣음")
 except Exception as ex:
     print("[deliver] 사진 앱 넣기 실패:", ex)
+# 깃허브(imac-outputs, outputs/날짜/)에도 올려 휴대폰에서 받기 (View raw → 공유 → 비디오 저장)
+try:
+    gh = Path.home() / "쇼츠작업" / "github"
+    gh.mkdir(parents=True, exist_ok=True)
+    gf = gh / f"{datetime.now():%m%d_%H%M}_{slug}.mp4"
+    shutil.copy(out / "영상.mp4", gf)
+    r = subprocess.run(["/Users/imac/github/imac-outputs/bin/publish-output.sh", str(gf), f"숏츠 {title}"],
+                       capture_output=True, text=True, timeout=300)
+    link = next((l.split("=", 1)[1] for l in r.stdout.splitlines() if l.startswith("GITHUB=")), "")
+    (out / "깃허브링크.txt").write_text(link, "utf-8")
+    print("[deliver] 깃허브:", link)
+except Exception as ex:
+    print("[deliver] 깃허브 올리기 실패:", ex)
 print(f"[deliver] {out}")
