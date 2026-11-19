@@ -280,21 +280,23 @@ def voices(p, work):
         return [f.result() for f in futs]
 
 
-def make_video(p, media, work, audios=None):
+def make_video(p, media, work, audios=None, voice_track=None, durations=None):
     """media: 문장별 ("video"|"image", 경로) 또는 None(글자 카드). 마지막에 시그니처 마무리 멘트를 붙인다.
     audios 를 미리 만들어 넘기면 그대로 쓴다 (화면 소재와 동시에 만들어 시간 절약)."""
     from concurrent.futures import ThreadPoolExecutor
     p = with_outro(p)
     media = list(media) + [next((m for m in reversed(list(media)) if m), None)]  # 마무리는 마지막 장면 그대로
     segs, jobs = [], []
+    if voice_track:  # 통 녹음 하나를 그대로 깔고, 장면은 durations 길이로 전환
+        audios = [None] * len(p.beats)
     audios = audios or voices(p, work)
-    voiced = sum(1 for a in audios if a)
+    voiced = len(p.beats) if voice_track else sum(1 for a in audios if a)
     events, t_beat = [], 0.0  # 효과음 (시각, 종류)
     with Renderer() as r:
         title = r.png(title_html(p), work / "title.png")
         for i, b in enumerate(p.beats):
             audio = audios[i]
-            dur = (duration(audio) + 0.05) if audio else max(2.2, len(b.narration) * 0.11)
+            dur = durations[i] if durations else (duration(audio) + 0.05) if audio else max(2.2, len(b.narration) * 0.11)
             parts = chunks(b.narration)
             total_chars = sum(len(x) for x in parts)
             caps, t = [], 0.0
@@ -353,6 +355,10 @@ def make_video(p, media, work, audios=None):
     out = work / "shorts.mp4"
     # 오디오 믹스: 음성 + 배경음악(옅게) + 효과음
     inputs, chains, labels = ["-i", joined], [], ["[0:a]"]
+    if voice_track:  # 장면 음성(무음) 대신 통 녹음을 목소리로
+        inputs += ["-i", voice_track]
+        chains.append("[1:a]loudnorm=I=-14:TP=-1.5,aresample=44100,aformat=channel_layouts=stereo[vo]")
+        labels = ["[vo]"]
     from . import music
     global LAST_BGM, LAST_BGM_CREDIT
     bgm, LAST_BGM_CREDIT = music.pick(work) if config.SHORTS_BGM else (None, "NONE")  # 배경음악 꺼져 있으면 없음
@@ -361,7 +367,7 @@ def make_video(p, media, work, audios=None):
     elif not bgm:
         bgms = sorted(f for ext in ("*.mp3", "*.wav", "*.m4a") for f in (config.ROOT / "assets" / "bgm").glob(ext))
         bgm = random.choice(bgms) if bgms else None
-    k = 1
+    k = 2 if voice_track else 1
     if bgm:
         LAST_BGM = bgm.name
         bl = duration(bgm)
@@ -382,8 +388,9 @@ def make_video(p, media, work, audios=None):
         chains.append(f"[{k}:a]adelay={ms}|{ms},volume={vol[kind]}[s{j}]")
         labels.append(f"[s{j}]")
         k += 1
-    if len(labels) > 1:
-        chains.append("".join(labels) + f"amix=inputs={len(labels)}:duration=first:dropout_transition=0:normalize=0[a]")
+    if len(labels) > 1 or voice_track:
+        chains.append("".join(labels) + f"amix=inputs={len(labels)}:duration=first:dropout_transition=0:normalize=0[a]"
+                      if len(labels) > 1 else f"{labels[0]}anull[a]")
         ff(*inputs, "-filter_complex", ";".join(chains), "-map", "0:v", "-map", "[a]", "-c:v", "copy",
            "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", out)
     else:
@@ -605,8 +612,11 @@ def render_sample(folder):
     voice = next((d / f"voice.{ext}" for ext in ("mp3", "wav", "m4a", "mp4") if (d / f"voice.{ext}").exists()), None)
     if voice:  # 타입캐스트 웹에서 직접 만든 더빙 (반자동, 1.0배속으로 받아서 여기서 1.2배속)
         texts = [b.narration for b in p.beats] + [signature(p.outro)]
-        audios = split_voice(speed_up(voice, work), len(p.beats) + 1, work, texts)
-    video, voiced = make_video(p, media, work, audios)
+        fast = speed_up(voice, work)
+        durs = split_voice(fast, len(p.beats) + 1, work, texts)
+        video, voiced = make_video(p, media, work, voice_track=fast, durations=durs)
+    else:
+        video, voiced = make_video(p, media, work, audios)
     out = config.ROOT / "shorts_sample.mp4"
     shutil.copy(video, out)
     from . import typecast
@@ -683,12 +693,6 @@ def split_voice(voice, n, work, texts=None):
     if len(cuts) < n - 1:
         raise RuntimeError(f"문장 경계를 {len(cuts) + 1}개만 찾았어요 (필요 {n}개). 대본을 한 줄에 한 문장으로 넣어주세요.")
     bounds = [0.0] + cuts + [total]
-    out = []
-    for i in range(n):
-        f = work / f"v{i}.mp3"
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(voice), "-ss", f"{bounds[i]:.3f}",
-                        "-to", f"{bounds[i + 1]:.3f}", "-af", "silenceremove=start_periods=1:start_threshold=-45dB,"
-                        "areverse,silenceremove=start_periods=1:start_threshold=-45dB,areverse", str(f)], check=True)
-        out.append(f)
-    print(f"[voice] 통 녹음 {total:.1f}초 → {n}문장으로 분할")
-    return out
+    durs = [bounds[i + 1] - bounds[i] for i in range(n)]
+    print(f"[voice] 통 녹음 {total:.1f}초 → 문장 {n}개 경계: {[round(c, 2) for c in cuts]}")
+    return durs  # 녹음은 자르지 않음 (자르면 말끝이 끊김) — 화면·자막 전환 타이밍으로만 사용
