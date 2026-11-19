@@ -105,7 +105,8 @@ gh workflow run shorts-upload.yml --ref main -f folder=assets/samples/<slug> \
 7. plan.json 에 `"media"` 로 장면별 소재 지정 (beats + question + outro 순서, 질문·마무리는 마지막 영상 재사용):
    `[{"video":"clip0.mp4"},{"video":"clip1.mp4","start":0},{"image":"img3.jpg"}, ...]`
    설명란에 `영상 출처` 목록(candidates.json 의 credit)을 넣기 — CC BY 필수 조건.
-8. 더빙(용식, 1.0으로 녹음 → 코드가 1.4배속, **25초 넘으면 자동으로 더 빠르게**) → 합성 → 미리보기 → 컨펌 → 업로드 (위 6·7단계와 동일).
+8. 마무리: CC 영상형은 '해요잉' 시그니처를 쓰지 않는다 → `"outro_free": true` + 시청자(대중) 입장 한마디 (예: '솔직히 난 열 배 줘도 못 함'). 질문은 그대로 둔다.
+9. 더빙(용식, 1.0으로 녹음 → 코드가 1.4배속, **25초 넘으면 자동으로 더 빠르게**) → 합성 → 미리보기 → 컨펌 → 업로드 (위 6·7단계와 동일).
    예시 폴더: `assets/samples/lava_sampling/`.
 
 ## 유튜브 CC 영상에 대해

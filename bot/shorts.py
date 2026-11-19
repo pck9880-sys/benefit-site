@@ -52,6 +52,7 @@ class Plan(BaseModel):
     beats: List[Beat] = Field(description="내레이션 4~5문장 (전체 20초 이내). 첫 문장은 제목 내용을 다시 던지는 훅, 마지막은 반전·한마디 정리")
     question: str = Field(default="", description="마무리 직전 토론 유도 질문 1문장 (예: '근데 이거 실력임, 운빨임?'). "
                                                  "의견이 둘로 갈리게, 욕설·비하·혐오·정치 편가르기·특정인 공격 금지. 20자 이내")
+    outro_free: bool = Field(default=False, description="true 면 마무리를 시그니처('해요잉' 등)로 바꾸지 않고 그대로 (CC 영상형)")
     voice: str = Field(default="", description="비워두세요 (시스템이 정함)")
     outro: str = Field(default="", description="채널 시그니처 마무리 한마디. 지시된 목소리 형식('다들 ~하자!' 또는 '다들 ~해요잉~'), 주제와 연결된 친근한 당부 "
                                      "(예: '다들 손흥민 응원하자!' / '다들 손흥민 응원해요잉~'). 20자 이내")
@@ -355,7 +356,7 @@ def signature(text, voice=None):
 def with_outro(p):
     """대본 끝에 시그니처 마무리 멘트('다들 ~해요잉~')를 붙인 복사본."""
     p = p.model_copy(deep=True)
-    p.outro = signature(p.outro, voice_of(p))
+    p.outro = p.outro.strip() if p.outro_free else signature(p.outro, voice_of(p))
     if p.question.strip():  # 토론 유도 질문 (마지막 장면 위에)
         p.beats.append(Beat(narration=p.question.strip(), card=p.question.strip(), twist=True, visual="ai", query="", ai_prompt=""))
     p.beats.append(Beat(narration=p.outro, card=p.outro, visual="ai", query="", ai_prompt=""))
