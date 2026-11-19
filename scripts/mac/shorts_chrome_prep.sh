@@ -1,5 +1,5 @@
 #!/bin/zsh
-# 숏츠 1편: 로컬 작업 폴더 정리 → 크롬 Claude 로 타입캐스트 더빙(찜한 두 캐릭터) → 더빙 렌더 → 유튜브 업로드.
+# 숏츠 1편: 로컬 작업 폴더 정리 → 크롬 Claude 로 타입캐스트 더빙 → 더빙 렌더 → iCloud Drive/쇼츠업로드 에 전달(사용자가 앱으로 업로드).
 # 사용: scripts/mac/shorts_chrome_prep.sh <slug>
 #   SHORTS_DUB_ONLY=1  더빙만 하고 끝 (이미지 생성과 동시에 돌릴 때)
 #   SHORTS_PUBLISH=0   테스트(비공개)
@@ -143,10 +143,11 @@ if [ -f "$SRC/voice.mp3" ] && SHORTS_SONG_PREMIX=$PREMIX SHORTS_SONG_FILE="$SONG
      python3 -c "from bot import shorts; shorts.render_sample('assets/samples/$SLUG')" \
    && cp shorts_sample.mp4 "$DIR/더빙용/영상.mp4" && cp shorts_sample.mp4 "$SRC/final.mp4"; then
   print -r -- '{"total_cost_usd":0,"num_turns":0}' | python3 scripts/mac/usage_log.py "$SLUG" 합성 "$(( $(date +%s) - t0 ))" >/dev/null
-  # 5) 업로드
-  run_claude 업로드 .claude/prompts/shorts-chrome-upload.md
-  if [ -z "$SONG_FILE" ]; then
-    echo "음악: 지정 곡은 PC 스튜디오에서 못 넣음 → 비공개. 앱에서 사운드 추가 후 공개하거나, 곡 파일을 ~/쇼츠작업/음원/ 에 넣으면 다음부터 자동 공개" >> "$DIR/결과.txt"
+  # 5) 전달: 사용자가 휴대폰 유튜브 앱으로 올림 (사운드 추가 → 저장됨). SHORTS_UPLOAD=1 이면 예전처럼 크롬 자동 업로드.
+  if [ "${SHORTS_UPLOAD:-0}" = "1" ]; then
+    run_claude 업로드 .claude/prompts/shorts-chrome-upload.md
+  else
+    python3 "$REPO/scripts/mac/shorts_deliver.py" "$DIR" "$SLUG" >> "$DIR/결과.txt" 2>&1
   fi
 else
   echo "실패: 더빙 없음 → 업로드 안 함" >> "$DIR/결과.txt"
