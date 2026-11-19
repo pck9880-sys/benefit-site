@@ -149,6 +149,12 @@ if [ -f "$SRC/voice.mp3" ] && SHORTS_SONG_PREMIX=$PREMIX SHORTS_SONG_FILE="$SONG
     run_claude 업로드 .claude/prompts/shorts-chrome-upload.md
   else
     python3 "$REPO/scripts/mac/shorts_deliver.py" "$DIR" "$SLUG" >> "$DIR/결과.txt" 2>&1
+    # 웍스 '나와의 대화'로 영상 + 제목·곡 보내기 (SHORTS_WORKS=0 이면 끔)
+    if [ "${SHORTS_WORKS:-1}" = "1" ]; then
+      PKG=$(ls -dt "$HOME/Library/Mobile Documents/com~apple~CloudDocs/쇼츠업로드/"*/ 2>/dev/null | head -1)
+      [ -n "$PKG" ] && "$REPO/scripts/mac/shorts_send_works.sh" "${PKG}영상.mp4" \
+        "$(cat "${PKG}제목.txt") / 곡: $(python3 -c "import json;print(json.load(open('$DIR/업로드정보.json'))['song'])")" >> "$DIR/결과.txt" 2>&1
+    fi
   fi
 else
   echo "실패: 더빙 없음 → 업로드 안 함" >> "$DIR/결과.txt"
