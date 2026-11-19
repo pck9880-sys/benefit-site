@@ -17,6 +17,10 @@
    - gpt_images[].prompt: 장면별 영어 프롬프트 (구체적으로, 사람은 가상 인물). 스타일 꼬리·썸네일 문구는 도구가 자동으로 붙인다.
    - thumb_caption (15자 이내 훅, 감동은 비워도 됨), end_comments: 원글 **실제 댓글** 3~5개 [{"text","likes"}] (닉네임 제외, 지어내기 금지).
    - yt_title(20자 안팎, #shorts 자동), description(음슴체, 고지문은 도구가 자동), pin_comment(음슴체 질문), sources(출처 URL).
+   - **문장에 맞는 '과장된 실사'**: 실사로 보여줄 문장에는 beat 에 "real_query": "<영어 검색어>" 를 적는다 → 도구가 그 문장 장면에 실사를 자동으로 넣음.
+     검색어는 대본·자막 내용을 **과장해서** 웃기게: 예) "김장봉투 두 개 들고 옴" → "huge pile of kimchi bags",
+     "냉장고 문이 안 닫힘" → "overflowing refrigerator", "엄마한테 혼남" → "angry mother pointing finger" (사람은 자동 모자이크).
+     문장 4~6개에 real_query. 사람 얼굴 크게 나오는 사진은 "real_mode": "all"(전체 흐림) 도 가능.
    - **실사 사진 우선 (AI 범벅 금지)**: 이야기 속 실제 물건·장소·상황은 실사 사진으로. 예) "김장봉투 두 개" → 실제 김장봉투 사진.
      `python -m bot.photos get "<영어 검색어>" assets/samples/<slug>/rN.jpg auto` (무료 사진, 사람 나오면 자동 모자이크, 출처 자동 기록).
      안 나오면 검색어를 바꿔 다시. 기사 대표 사진은 `python -m bot.realimg <URL> rN.jpg auto|all`.

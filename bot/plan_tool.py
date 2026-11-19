@@ -200,6 +200,19 @@ def check(slug):
     if not ok:
         p["media"] = _layout(p, d, t)
         notes.append("장면 배치를 템플릿 순서로 채움")
+    # 문장에 딱 맞는 '과장된 실사' — beat 에 real_query 가 있으면 그 문장 장면에 실사를 자동으로 받아 넣음
+    from . import photos
+    for i, b in enumerate(beats):
+        q = (b.get("real_query") or "").strip()
+        if not q:
+            continue
+        f = d / f"r{100 + i}.jpg"
+        if not f.exists():
+            photos.get(q, f, b.get("real_mode", "auto"))
+        if f.exists() and i < len(p["media"]):
+            p["media"][i] = {"image": f.name}
+        elif not f.exists():
+            errs.append(f"문장{i + 1} 실사 '{q}' 못 찾음 → real_query 를 다른 영어 검색어로")
     ai_names = {g["file"] for g in gi if not g["file"].startswith("thumb")}
     n_ai = sum(1 for m in p["media"] if m.get("image") in ai_names)
     n_real = sum(1 for m in p["media"] if re.match(r"^[rs]\d+\.jpg$", m.get("image", "")))
