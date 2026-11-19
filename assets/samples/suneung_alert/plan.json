@@ -20,7 +20,10 @@
    "twist": false,
    "visual": "ai",
    "query": "",
-   "ai_prompt": ""
+   "ai_prompt": "",
+   "overlay": "headline",
+   "overlay_text": "[2027 수능] 하루종일 세번 울린 '위급재난문자'…시민들 \"수능 하루쯤은 감수\"",
+   "overlay_source": "경향신문"
   },
   {
    "narration": "신발 깔창에 숨긴 휴대폰이 걸렸고",
@@ -28,7 +31,10 @@
    "twist": true,
    "visual": "ai",
    "query": "",
-   "ai_prompt": ""
+   "ai_prompt": "",
+   "overlay": "headline",
+   "overlay_text": "재난문자 세번 울린 초유의 수능…**수험생 깔창에선 폰** 나왔다",
+   "overlay_source": "중앙일보"
   },
   {
    "narration": "안경은 AI 안경인지 하나하나 다 검사했는데",
@@ -44,7 +50,10 @@
    "twist": true,
    "visual": "ai",
    "query": "",
-   "ai_prompt": ""
+   "ai_prompt": "",
+   "overlay": "comment",
+   "overlay_text": "안 하는 것보단 낫다… **이번 한 번뿐이어야 한다**",
+   "overlay_source": "온라인 반응"
   }
  ],
  "outro": "다들 수험생들 고생했다고 응원하자!",
