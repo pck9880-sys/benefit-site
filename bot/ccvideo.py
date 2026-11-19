@@ -17,7 +17,9 @@ UA = {"User-Agent": "jiwon-shorts-bot/1.0 (https://github.com/pck9880-sys/benefi
 
 def license_ok(lic):
     l = (lic or "").lower()
-    if not l or any(x in l for x in ("nc", "nd", "sa", "fair use", "non-free")):
+    if re.search(r"kogl[ -]?type[ -]?1\b|공공누리\s*제?1\s*유형", l):  # 공공누리 1유형: 출처표시만 하면 상업·변경 가능
+        return True
+    if not l or "kogl" in l or any(x in l for x in ("nc", "nd", "sa", "fair use", "non-free")):
         return False
     return bool(re.search(r"cc[ -]?by|cc0|public domain|pd", l))
 
