@@ -11,7 +11,7 @@ HELP = (
     "🤖 자동 게시 봇\n\n"
     "매일 새 글 초안이 오면 ✅ 승인 / ❌ 거절 버튼만 눌러주세요.\n"
     f"응답이 없으면 {config.AUTO_APPROVE_HOURS:g}시간 후 자동 게시됩니다 (0이면 자동 게시 안 함).\n"
-    "버튼은 최대 1시간 이내에 반영됩니다.\n\n"
+    "버튼은 15분 안에 반영되고, 반영되면 메시지가 "✅ 게시됨"으로 바뀝니다.\n\n"
     "명령어\n/status 현황\n/pause 일시정지\n/resume 재개\n/now 다음 실행 때 바로 글 생성\n/approveall 대기 초안 전부 승인\n"
     "/contest 다음 실행 때 공모전 출품안 받기\n/contestoff 공모전 알림 끄기 · /conteston 켜기"
 )
@@ -109,7 +109,7 @@ def handle_updates(st):
             notify(st, "▶️ 재개했습니다.")
         elif text == "/now":
             st["force_generate"] = True
-            notify(st, "다음 실행(1시간 이내) 때 새 글을 생성합니다.")
+            notify(st, "다음 실행(15분 이내) 때 새 글을 생성합니다.")
         elif text == "/approveall":
             n = len(drafts())
             for p in drafts():
@@ -117,7 +117,7 @@ def handle_updates(st):
             notify(st, f"✅ {n}개 승인했습니다.")
         elif text == "/contest":
             st["contest_force"] = True
-            notify(st, "🏆 다음 실행(1시간 이내) 때 공모전 출품안을 보내드릴게요.")
+            notify(st, "🏆 다음 실행(15분 이내) 때 공모전 출품안을 보내드릴게요.")
         elif text == "/contestoff":
             st["contest_off"] = True
             notify(st, "🏆 공모전 알림을 껐습니다. /conteston 으로 다시 켜기")
