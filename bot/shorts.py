@@ -602,8 +602,9 @@ def render_sample(folder):
     media = [("image", f) if (f := d / f"img{i}.jpg").exists() else None for i in range(len(p.beats))]
     work = Path(tempfile.mkdtemp(prefix="sample-"))
     audios = None
-    if (d / "voice.mp3").exists():  # 타입캐스트 웹에서 직접 만든 더빙 (반자동)
-        audios = split_voice(d / "voice.mp3", len(p.beats) + 1, work)
+    voice = next((d / f"voice.{ext}" for ext in ("mp3", "wav", "m4a", "mp4") if (d / f"voice.{ext}").exists()), None)
+    if voice:  # 타입캐스트 웹에서 직접 만든 더빙 (반자동, 1.0배속으로 받아서 여기서 1.2배속)
+        audios = split_voice(speed_up(voice, work), len(p.beats) + 1, work)
     video, voiced = make_video(p, media, work, audios)
     out = config.ROOT / "shorts_sample.mp4"
     shutil.copy(video, out)
@@ -644,6 +645,16 @@ def upload_file(video, plan_json, music_credit_text=""):
     st = pipeline.load_state()
     pipeline.notify(st, f"🎬 유튜브 업로드: {p.yt_title}\n{url or '처리 중 (유튜브 스튜디오에서 확인)'}")
     print("[upload] URL:", url)
+
+
+def speed_up(voice, work, tempo=None):
+    """목소리 높낮이는 그대로, 속도만 올림 (기본 1.2배)."""
+    tempo = tempo or config.VOICE_FILE_TEMPO
+    out = work / "voice_fast.mp3"
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(voice), "-vn", "-af", f"atempo={tempo}",
+                    "-ar", "44100", "-ac", "2", str(out)], check=True)
+    print(f"[voice] {tempo}배속: {duration(voice):.1f}초 → {duration(out):.1f}초")
+    return out
 
 
 def split_voice(voice, n, work):
