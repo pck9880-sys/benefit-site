@@ -67,8 +67,9 @@ jobs:
         if: steps.due.outputs.go == '1'
         run: |
           pip install edge-tts playwright
-          python -m playwright install --with-deps chromium
-          sudo apt-get install -y ffmpeg fonts-noto-cjk >/dev/null
+          # 러너에 이미 있는 크롬을 사용 (playwright 브라우저·시스템 패키지 설치는 15분 이상 걸려서 생략)
+          echo "CHROMIUM_PATH=$(command -v google-chrome || command -v chromium || command -v chromium-browser)" >> "$GITHUB_ENV"
+          command -v ffmpeg || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
 
       - name: 타입캐스트 목소리 확인
         if: steps.due.outputs.go == '1'

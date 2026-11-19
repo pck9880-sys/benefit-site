@@ -55,7 +55,9 @@ def download(t, out_dir):
     for url in (t.get("audiodownload"), t.get("audio")):
         if not url:
             continue
-        a = requests.get(url, timeout=60)
+        a = requests.get(url, timeout=60, headers={"User-Agent": "Mozilla/5.0 (shorts-bot)"})
+        print(f"[music] 받기 {t['name']}: HTTP {a.status_code}, {len(a.content) // 1024}KB, "
+              f"{a.headers.get('content-type')}")
         if a.status_code == 200 and len(a.content) > 200_000:
             f = out_dir / f"bgm_{t['id']}.mp3"
             f.write_bytes(a.content)
@@ -78,6 +80,7 @@ def pick(out_dir, tags=None):
     for fav in favs[:3]:
         try:
             res = _query(id=fav["id"])
+            print(f"[music] 즐겨찾기 '{fav['name']}' 조회: {len(res)}건")
             if res:
                 f, credit = download(res[0], out_dir)
                 if f:
