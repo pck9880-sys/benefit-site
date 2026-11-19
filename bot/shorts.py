@@ -601,7 +601,10 @@ def render_sample(folder):
     p = Plan(**json.loads((d / "plan.json").read_text("utf-8")))
     media = [("image", f) if (f := d / f"img{i}.jpg").exists() else None for i in range(len(p.beats))]
     work = Path(tempfile.mkdtemp(prefix="sample-"))
-    video, voiced = make_video(p, media, work)
+    audios = None
+    if (d / "voice.mp3").exists():  # 타입캐스트 웹에서 직접 만든 더빙 (반자동)
+        audios = split_voice(d / "voice.mp3", len(p.beats) + 1, work)
+    video, voiced = make_video(p, media, work, audios)
     out = config.ROOT / "shorts_sample.mp4"
     shutil.copy(video, out)
     from . import typecast
@@ -641,3 +644,26 @@ def upload_file(video, plan_json, music_credit_text=""):
     st = pipeline.load_state()
     pipeline.notify(st, f"🎬 유튜브 업로드: {p.yt_title}\n{url or '처리 중 (유튜브 스튜디오에서 확인)'}")
     print("[upload] URL:", url)
+
+
+def split_voice(voice, n, work):
+    """타입캐스트 웹에서 받은 통 mp3 를 문장 사이 쉼(무음) 기준으로 n 조각으로 자른다."""
+    r = subprocess.run(["ffmpeg", "-i", str(voice), "-af", "silencedetect=noise=-38dB:d=0.18", "-f", "null", "-"],
+                       capture_output=True, text=True)
+    starts = [float(v) for v in re.findall(r"silence_start: ([\d.]+)", r.stderr)]
+    ends = [float(v) for v in re.findall(r"silence_end: ([\d.]+)", r.stderr)]
+    total = duration(voice)
+    gaps = [(e - s_, (s_ + e) / 2) for s_, e in zip(starts, ends) if 0.3 < (s_ + e) / 2 < total - 0.3]
+    cuts = sorted(m for _, m in sorted(gaps, reverse=True)[:n - 1])  # 가장 긴 쉼 n-1 개 = 문장 경계
+    if len(cuts) < n - 1:
+        raise RuntimeError(f"문장 경계를 {len(cuts) + 1}개만 찾았어요 (필요 {n}개). 대본을 한 줄에 한 문장으로 넣어주세요.")
+    bounds = [0.0] + cuts + [total]
+    out = []
+    for i in range(n):
+        f = work / f"v{i}.mp3"
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(voice), "-ss", f"{bounds[i]:.3f}",
+                        "-to", f"{bounds[i + 1]:.3f}", "-af", "silenceremove=start_periods=1:start_threshold=-45dB,"
+                        "areverse,silenceremove=start_periods=1:start_threshold=-45dB,areverse", str(f)], check=True)
+        out.append(f)
+    print(f"[voice] 통 녹음 {total:.1f}초 → {n}문장으로 분할")
+    return out
