@@ -1,0 +1,26 @@
+name: fetch-files
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: "공백으로 구분한 이미지 URL (위키미디어 등 자유 라이선스 사진 받기용)"
+        required: true
+permissions:
+  contents: read
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          URLS: ${{ inputs.urls }}
+        run: |
+          mkdir out; i=0
+          for u in $URLS; do
+            curl -sfL -A "jiwon-shorts-bot/1.0 (https://github.com/pck9880-sys/benefit-site; automated video tool)" -o "out/f$i.jpg" "$u" && echo "ok $i" || echo "fail $i"
+            i=$((i+1)); sleep 2
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: files
+          path: out/
+          retention-days: 1
