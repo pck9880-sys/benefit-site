@@ -58,6 +58,9 @@ elif cmd == "bgm-get":  # 즐겨찾기 배경음악 받기 / calm: 잔잔한 연
     if len(sys.argv) > 2 and sys.argv[2] == "calm":
         for t in music.calm_candidates()[:3]:
             print(music.download(t, Path(".")))
+    elif len(sys.argv) > 2 and sys.argv[2].startswith("tag:"):  # 예: tag:epic → 해당 장르 연주곡 후보 3개
+        for t in music.search(sys.argv[2][4:], n=3):
+            print(music.download(t, Path(".")))
     else:
         f, credit = music.pick(Path("."))
         print(f, credit)
