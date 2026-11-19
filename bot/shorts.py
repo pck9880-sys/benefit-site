@@ -454,7 +454,7 @@ def full_description(p, credits=()):
     src = "\n".join(f"- {u}" for u in p.sources[:3])
     photo = ("\n\n사진 출처\n" + "\n".join(f"- {c}" for c in dict.fromkeys(credits))) if credits else ""
     voice = (f"\n\nThis content was produced with Typecast, an AI virtual actor service. "
-             f"Characters casted: {config.TYPECAST_VOICE_NAME} https://typecast.ai") if typecast.enabled() else ""
+             f"Characters casted: {config.TYPECAST_VOICE_NAME} https://typecast.ai") if config.TYPECAST_CREDIT else ""
     music = f"\n\n{music_credit()}" if music_credit() else ""
     return (f"{p.description}\n\n출처\n{src}{photo}\n\n※ 일부 장면은 AI로 만든 이미지예요.{voice}{music}\n\n{tags} #shorts")
 
@@ -604,7 +604,8 @@ def render_sample(folder):
     audios = None
     voice = next((d / f"voice.{ext}" for ext in ("mp3", "wav", "m4a", "mp4") if (d / f"voice.{ext}").exists()), None)
     if voice:  # 타입캐스트 웹에서 직접 만든 더빙 (반자동, 1.0배속으로 받아서 여기서 1.2배속)
-        audios = split_voice(speed_up(voice, work), len(p.beats) + 1, work)
+        texts = [b.narration for b in p.beats] + [signature(p.outro)]
+        audios = split_voice(speed_up(voice, work), len(p.beats) + 1, work, texts)
     video, voiced = make_video(p, media, work, audios)
     out = config.ROOT / "shorts_sample.mp4"
     shutil.copy(video, out)
@@ -657,15 +658,28 @@ def speed_up(voice, work, tempo=None):
     return out
 
 
-def split_voice(voice, n, work):
-    """타입캐스트 웹에서 받은 통 mp3 를 문장 사이 쉼(무음) 기준으로 n 조각으로 자른다."""
-    r = subprocess.run(["ffmpeg", "-i", str(voice), "-af", "silencedetect=noise=-38dB:d=0.18", "-f", "null", "-"],
+def split_voice(voice, n, work, texts=None):
+    """타입캐스트 웹에서 받은 통 녹음을 문장 사이 쉼(무음) 기준으로 n 조각으로 자른다.
+    문장 안에도 짧은 쉼이 있으므로, 글자 수 비율로 예상한 경계 위치에 가장 가까운(그리고 긴) 쉼을 고른다."""
+    r = subprocess.run(["ffmpeg", "-i", str(voice), "-af", "silencedetect=noise=-38dB:d=0.15", "-f", "null", "-"],
                        capture_output=True, text=True)
     starts = [float(v) for v in re.findall(r"silence_start: ([\d.]+)", r.stderr)]
     ends = [float(v) for v in re.findall(r"silence_end: ([\d.]+)", r.stderr)]
     total = duration(voice)
-    gaps = [(e - s_, (s_ + e) / 2) for s_, e in zip(starts, ends) if 0.3 < (s_ + e) / 2 < total - 0.3]
-    cuts = sorted(m for _, m in sorted(gaps, reverse=True)[:n - 1])  # 가장 긴 쉼 n-1 개 = 문장 경계
+    gaps = [((s_ + e) / 2, e - s_) for s_, e in zip(starts, ends) if 0.3 < (s_ + e) / 2 < total - 0.3]
+    lens = [len(re.sub(r"\s", "", t)) for t in texts] if texts and len(texts) == n else [1] * n
+    head = ends[0] if starts and starts[0] < 0.05 else 0.0
+    tail = starts[-1] if ends and ends[-1] > total - 0.05 else total
+    speech = tail - head
+    cuts, prev = [], 0.0
+    for k in range(1, n):
+        expect = head + speech * sum(lens[:k]) / sum(lens)
+        cand = [(abs(m - expect) - 0.8 * g, m) for m, g in gaps if m > prev + 0.4]
+        if not cand:
+            break
+        _, best = min(cand)
+        cuts.append(best)
+        prev = best
     if len(cuts) < n - 1:
         raise RuntimeError(f"문장 경계를 {len(cuts) + 1}개만 찾았어요 (필요 {n}개). 대본을 한 줄에 한 문장으로 넣어주세요.")
     bounds = [0.0] + cuts + [total]

@@ -78,6 +78,7 @@ TYPECAST_API_KEY = _env("TYPECAST_API_KEY")  # 타입캐스트 음성 (없으면
 TYPECAST_VOICE_ID = _env("TYPECAST_VOICE_ID")  # 타입캐스트 voice_id (비우면 이름으로 검색)
 TYPECAST_VOICE_NAME = _env("TYPECAST_VOICE_NAME", "용식")
 TYPECAST_ONLY = _env("TYPECAST_ONLY", "1") == "1"  # 1이면 항상 타입캐스트(박창수)만 — 실패하면 무료 음성으로 바꾸지 않고 중단
+TYPECAST_CREDIT = _env("TYPECAST_CREDIT", "0") == "1"  # 무료 플랜일 때만 출처 표기 필요 (베이직 유료라 끔)
 VOICE_FILE_TEMPO = float(_env("VOICE_FILE_TEMPO", "1.2"))  # 직접 만든 음성 파일(1.0배속)을 이 배속으로
 TTS_WORKERS = int(_env("TTS_WORKERS", "2"))  # 음성 동시 생성 수 (타입캐스트 무료 플랜 최대 2)
 TYPECAST_TEMPO = float(_env("TYPECAST_TEMPO", "1.2"))  # 목소리 1.2배속
