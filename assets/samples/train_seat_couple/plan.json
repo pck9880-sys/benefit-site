@@ -1,0 +1,209 @@
+{
+ "topic": "설 귀경길 입석 열차, 아기 안고 서 있던 엄마에게 예매한 자리를 내준 노부부 (2026-02 블라인드 사연, 서울신문 보도)",
+ "title_top": "열차에서",
+ "title_bottom": "울 뻔한 이유",
+ "mood": "감동",
+ "kind": "",
+ "caption_style": "mix",
+ "music_concept": "잔잔한 감동",
+ "question": "",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "intro_post": false,
+ "beats": [
+  {
+   "narration": "설 귀경길, 입석 표뿐인 아기 엄마",
+   "card": "입석 표**뿐**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "우는 아기 안고 서서 가는데",
+   "card": "아기 안고 **서서**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "한 아저씨가 빈자리 있다고 부름",
+   "card": "빈자리 **있어요**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "가 보니 아주머니 한 분이 계셨는데",
+   "card": "아주머니가 **앉아** 계심",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "부부가 한 자리를 내준 거였음",
+   "card": "부부 자리를 **내줌**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "두 분은 한 자리에 꼭 붙어 앉고",
+   "card": "한 자리에 **꼭 붙어**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "창가 자리는 엄마랑 아기한테 줌",
+   "card": "**창가 자리**는 아기에게",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "\"이런 기회에 더 가까이 앉는 거죠\"",
+   "card": "더 **가까이** 앉는 거죠",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "연락처 물으니 아기 잘 키우라고만",
+   "card": "아기 **잘 키우라고**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "남은 건 뒷모습 사진 한 장.",
+   "card": "**뒷모습** 사진 한 장",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "outro": "",
+ "media": [
+  {
+   "image": "img0.jpg"
+  },
+  {
+   "zzal": "i1.png"
+  },
+  {
+   "zzal": "i2.png"
+  },
+  {
+   "zzal": "z1.png"
+  },
+  {
+   "image": "img1.jpg"
+  },
+  {
+   "zzal": "i3.png"
+  },
+  {
+   "image": "img2.jpg"
+  },
+  {
+   "zzal": "i4.png"
+  },
+  {
+   "zzal": "i5.png"
+  },
+  {
+   "zzal": "z2.png"
+  }
+ ],
+ "gpt_images": [
+  {
+   "file": "img0.jpg",
+   "prompt": "Smartphone photo inside a packed Korean intercity train standing area during the Lunar New Year holiday rush: a tired young Korean mother standing in the crowded aisle holding a crying baby in a baby carrier on her chest, people with luggage and gift boxes squeezed all around, warm afternoon light through windows, emotional and exhausting atmosphere. Hyper-realistic photo that clearly looks like a real smartphone snapshot (real skin, real textures, natural light, slight motion blur), warm emotional everyday moment, fictional people only, no text, no letters, no logos, no watermark"
+  },
+  {
+   "file": "img1.jpg",
+   "prompt": "Smartphone photo on a Korean train: a kind gray-haired Korean man in his 60s in a neat winter jacket gently leaning toward a young mother holding a baby in the crowded aisle, gesturing toward the seats, warm caring smile, other passengers blurred, soft natural window light. Hyper-realistic photo that clearly looks like a real smartphone snapshot (real skin, real textures, natural light, slight motion blur), warm emotional everyday moment, fictional people only, no text, no letters, no logos, no watermark"
+  },
+  {
+   "file": "img2.jpg",
+   "prompt": "Smartphone photo on a Korean train: an older Korean couple in their 60s squeezed together sharing one seat, smiling warmly, while a young mother and her sleeping baby sit comfortably in the window seat next to them, golden late-afternoon sunlight through the train window, heartwarming moment. Hyper-realistic photo that clearly looks like a real smartphone snapshot (real skin, real textures, natural light, slight motion blur), warm emotional everyday moment, fictional people only, no text, no letters, no logos, no watermark"
+  },
+  {
+   "file": "img3.jpg",
+   "prompt": "Smartphone photo taken from behind on a Korean train station platform at dusk: an older Korean couple walking away holding hands, carrying a small bag, train beside them, soft warm platform lights, quiet touching moment, faces not visible. Hyper-realistic photo that clearly looks like a real smartphone snapshot (real skin, real textures, natural light, slight motion blur), warm emotional everyday moment, fictional people only, no text, no letters, no logos, no watermark"
+  }
+ ],
+ "thumb_caption": "모르는 부부가 내준 자리",
+ "end_comments": [
+  {
+   "text": "손잡고 다니시는 모습에서 다정함과 선함이 느껴진다",
+   "likes": 0
+  },
+  {
+   "text": "부부는 서로 닮는다더니 멋지게 나이 잘 드신 부부다",
+   "likes": 0
+  },
+  {
+   "text": "마음의 여유만큼 품위가 가득한 부부이신 것 같다",
+   "likes": 0
+  },
+  {
+   "text": "인류애 충전된다. 따뜻하다",
+   "likes": 0
+  }
+ ],
+ "yt_title": "입석 열차 아기 엄마에게 생긴 일 #shorts",
+ "description": "설 귀경길 영주→청량리 열차, 입석 표뿐이라 우는 아기를 안고 서 있던 엄마. 처음 보는 부부가 예매한 두 자리 중 하나를 내주고 둘이 한 자리에 붙어 앉음. 연락처를 물었더니 \"아기 잘 키우라\"는 말만 남기고 떠났다고 함.\n출처: 블라인드 사연(서울신문 2026.2.19 보도)\n\n※ 실제 사연을 바탕으로 재구성함.\n\n※ 장면 일부는 AI로 만든 이미지임.",
+ "tags": [
+  "감동",
+  "위로",
+  "사연",
+  "공감",
+  "쇼츠"
+ ],
+ "sources": [
+  "https://m.seoul.co.kr/news/2026/02/19/20260219500033"
+ ],
+ "pin_comment": "님들은 모르는 사람한테 받은 친절 중에 아직도 기억나는 거 있음?"
+}
