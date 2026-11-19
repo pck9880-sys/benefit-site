@@ -326,7 +326,7 @@ def make_video(p, media, work):
     inputs, chains, labels = ["-i", joined], [], ["[0:a]"]
     from . import music
     global LAST_BGM, LAST_BGM_CREDIT
-    bgm, LAST_BGM_CREDIT = music.pick(work)  # Jamendo (키 있을 때) → 없으면 저장된 곡
+    bgm, LAST_BGM_CREDIT = music.pick(work) if config.SHORTS_BGM else (None, "NONE")  # 배경음악 꺼져 있으면 없음
     if LAST_BGM_CREDIT == "NONE":  # 즐겨찾기만 쓰기로 했는데 못 받은 경우
         LAST_BGM_CREDIT = None
     elif not bgm:
@@ -540,6 +540,4 @@ def render_sample(folder):
     voice = (f"타입캐스트 {config.TYPECAST_VOICE_NAME} {n_tc}/{len(p.beats) + 1}문장" if n_tc else "무료 음성") + \
         ("" if typecast.enabled() else " (타입캐스트 키 없음)")
     print(f"[sample] {duration(out):.1f}초, 음성 {voiced}/{len(p.beats) + 1} ({voice})")
-    st = pipeline.load_state()
-    send_telegram(st, out, p, uploaded=None, credits=())
-    pipeline.notify(st, f"🧪 틀 테스트 영상: {duration(out):.1f}초 · 목소리 {voice}")
+    # 테스트 영상은 텔레그램으로 보내지 않음 (작업 채팅에서 먼저 확인)

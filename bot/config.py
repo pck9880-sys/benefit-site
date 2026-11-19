@@ -59,6 +59,7 @@ UPLOAD_POST_API_KEY = _env("UPLOAD_POST_API_KEY")  # Upload-Post (유튜브 자�
 UPLOAD_POST_USER = _env("UPLOAD_POST_USER")  # Upload-Post 프로필 이름
 SHORTS_CHANNEL = _env("SHORTS_CHANNEL", "")  # 영상 맨 위에 작게 표시할 채널 이름 (예: @내채널)
 SHORTS_BGM_VOLUME = float(_env("SHORTS_BGM_VOLUME", "0.12"))  # (예전 설정, 미사용)
+SHORTS_BGM = _env("SHORTS_BGM", "0") == "1"  # 배경음악 사용 여부 (현재 끔)
 SHORTS_BGM_LUFS = float(_env("SHORTS_BGM_LUFS", "-32"))  # 배경음악 크기 (목소리 -14 기준, 낮을수록 작게)
 SHORTS_SFX_VOLUME = float(_env("SHORTS_SFX_VOLUME", "0.35"))  # 효과음 크기 (assets/sfx)
 YOUTUBE_API_KEY = _env("YOUTUBE_API_KEY")  # 인기 쇼츠 분석용 (없으면 구글 검색어만 사용)
