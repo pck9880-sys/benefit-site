@@ -34,6 +34,11 @@ class Beat(BaseModel):
     visual: str = Field(description="'photo' (실제 사진: 실존 인물·장소·물건·사건 현장) 또는 'ai' (재연 장면·주인공 연출 컷)")
     query: str = Field(description="실제 사진 검색어 (영어 2~4단어). 실존 대상은 정확한 고유명사+종류 (예: 'Samsung Lions baseball', 'Everland amusement park'), 일반 장면은 구체적으로 (예: 'baseball stadium crowd night'). ai 장면이어도 대체용으로 반드시 작성")
     ai_prompt: str = Field(description="AI 이미지 프롬프트 (영어). 주인공이 나오면 'the protagonist' 로 지칭. 사실적인 사진 느낌, 글자·로고 없음")
+    overlay: str = Field(default="none", description="이미지 위에 올릴 카드: 'none' / 'headline'(실제 기사 제목) / 'comment'(실제 여론·댓글) "
+                                                    "/ 'quote'(당사자·기관의 실제 발언)")
+    overlay_text: str = Field(default="", description="카드 문구. headline 은 기사 제목 그대로, comment·quote 는 조사 자료에 실제로 "
+                                                      "나온 반응·발언만 (지어내기·욕설·특정인 비방 금지). 강조할 부분은 **굵게**")
+    overlay_source: str = Field(default="", description="headline 은 언론사명, comment 는 '온라인 커뮤니티' 같은 출처, quote 는 말한 사람·기관")
 
 
 class Plan(BaseModel):
@@ -66,12 +71,16 @@ PICK = """당신은 한국 유튜브 쇼츠 채널의 기획자입니다. 아래
    좋은 주제: 신기한 사실, 해외 화제, 신기술·신제품, 게임·놀이기구·자동차처럼 장면으로 재연하기 좋은 것, 생활 속 의외의 이유.
    피할 주제: 정치·선거, 사망·사고·재난·범죄 피해, 연예인 사생활·루머, 특정인 비방, 건강·투자 조언, 미성년자.
 2) 웹 검색으로 그 주제의 사실관계를 확인하세요. 검색으로 확인되지 않은 내용은 쓰지 않습니다.
-3) 정리: 주제, 왜 뜨는지, 확인된 사실 5~8개(숫자·이름은 정확히), 출처 URL, 시청자가 '오?' 할 반전 포인트."""
+3) 정리: 주제, 왜 뜨는지, 확인된 사실 5~8개(숫자·이름은 정확히), 출처 URL, 시청자가 '오?' 할 반전 포인트,
+   실제 기사 제목 2~3개(언론사명 포함, 원문 그대로), 기사·커뮤니티에 인용된 실제 여론·반응 2~3개(원문 그대로, 욕설 제외)."""
 
 WRITE = """당신은 조회수 높은 한국 유튜브 쇼츠 작가입니다. 아래 조사 내용으로 30~40초 쇼츠를 만드세요.
 - 조사 내용에 있는 사실만 씁니다. 과장·낚시·지어낸 숫자 금지. 남의 쇼츠 대사를 베끼지 않습니다.
 - 말투: 친구에게 썰 푸는 반말 쇼츠 내레이션 ("~라는데", "근데 여기서 반전", "~했다고 함", "~인 거"). 문장은 짧게.
   '~입니다', '~습니다', '~해요' 같은 존댓말 문장 끝은 절대 쓰지 않습니다.
+- 요즘 이슈 쇼츠처럼 사이사이에 카드(overlay)를 넣습니다: 기사 제목 카드 1개(headline, 조사 자료의 실제 제목 그대로),
+  실제 여론 카드 1~2개(comment, 조사 자료에 인용된 네티즌·시민 반응만 — 없으면 넣지 않음), 필요하면 실제 발언 카드(quote).
+  카드 문구는 절대 지어내지 않습니다. 욕설·비방·사망/피해자 관련 조롱은 넣지 않습니다.
 - 마무리(outro)는 채널 시그니처 (본문 beats 에는 넣지 않음): {outro_rule}
 - 제목 2줄: 첫 줄은 상황, 둘째 줄(노란색)은 궁금증 ("~하는 이유", "~라고?", "결과는?").
 - 화면은 요즘 인기 쇼츠처럼 문장마다 컷이 바뀝니다. 모든 문장은 내용에 딱 맞는 AI 이미지('ai')로 연출합니다
@@ -168,6 +177,42 @@ def card_html(text):
 body{{width:{MEDIA}px;height:{MEDIA}px;background:#fff;display:flex;align-items:center;justify-content:center;
  font-family:Pretendard,sans-serif;word-break:keep-all}}
 p{{font-size:84px;font-weight:600;color:#222;text-align:center;line-height:1.35;padding:0 90px;letter-spacing:-.03em}}</style><p>{e(text)}</p>"""
+
+
+def _rich(text):
+    """**굵게** → 빨간 밑줄 강조"""
+    return re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", e(text))
+
+
+def overlay_html(kind, text, source, bg_uri):
+    """기사 제목·댓글·발언 카드 (실제 화면 캡처 대신 직접 그림 — 닉네임·얼굴은 흐리게 처리)."""
+    bg = (f'<img src="{bg_uri}" style="position:absolute;inset:-40px;width:1160px;height:1160px;object-fit:cover;'
+          f'filter:blur(16px) brightness(.6)">') if bg_uri else ""
+    common = (f"<style>{FONT}*{{margin:0;box-sizing:border-box}}body{{width:{MEDIA}px;height:{MEDIA}px;background:#111;"
+              f"font-family:Pretendard,sans-serif;word-break:keep-all;overflow:hidden;position:relative}}"
+              f".wrap{{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:70px}}"
+              f"b{{text-decoration:underline;text-decoration-color:#ff3b30;text-decoration-thickness:6px;text-underline-offset:10px}}</style>")
+    if kind == "headline":
+        tag = ""
+        m = re.match(r"^\s*\[(.+?)\]\s*", text)
+        if m:
+            tag, text = f'<span style="color:#e11d48">[{e(m.group(1))}]</span> ', text[m.end():]
+        card = (f'<div style="background:#fff;border-radius:22px;padding:46px 50px;box-shadow:0 30px 80px rgba(0,0,0,.5);width:100%">'
+                f'<div style="font-size:60px;font-weight:800;line-height:1.38;color:#111;letter-spacing:-.03em">{tag}{_rich(text)}</div>'
+                f'<div style="margin-top:26px;font-size:32px;color:#6b7280;font-weight:600">{e(source)}</div></div>')
+    elif kind == "comment":
+        card = (f'<div style="background:#1f1f22;border-radius:26px;padding:40px 44px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.5)">'
+                f'<div style="display:flex;align-items:center;gap:18px;margin-bottom:24px">'
+                f'<span style="background:#2563eb;color:#fff;font-size:28px;font-weight:900;padding:6px 16px;border-radius:8px">BEST</span>'
+                f'<span style="width:56px;height:56px;border-radius:50%;background:#f59e0b;filter:blur(7px)"></span>'
+                f'<span style="font-size:32px;color:#d4d4d8;filter:blur(9px)">익명사용자1234</span>'
+                f'<span style="font-size:28px;color:#71717a;margin-left:auto">{e(source)}</span></div>'
+                f'<div style="font-size:54px;font-weight:700;color:#fff;line-height:1.42;letter-spacing:-.02em">{_rich(text)}</div></div>')
+    else:  # quote
+        card = (f'<div style="background:#fff;border-radius:26px;padding:50px 54px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.5)">'
+                f'<div style="font-size:54px;font-weight:600;color:#111;line-height:1.5;letter-spacing:-.02em">{_rich(text)}</div>'
+                f'<div style="margin-top:26px;font-size:32px;color:#6b7280;font-weight:600">— {e(source)}</div></div>')
+    return common + bg + f'<div class="wrap">{card}</div>'
 
 
 class Renderer:
@@ -353,15 +398,29 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None):
                 t += d
             t_beat += dur
             kind, src = media[i] if i < len(media) and media[i] else (None, None)
+            ov = getattr(b, "overlay", "none")
+            if ov in ("headline", "comment", "quote") and b.overlay_text:  # 기사 제목·여론·발언 카드
+                bg_src = src if kind == "image" else next((m[1] for m in media if m and m[0] == "image"), None)
+                bg_uri = ""
+                if bg_src:  # 브라우저가 로컬 파일을 못 읽으므로 작게 줄여 data URI 로
+                    small = work / f"ovbg{i}.jpg"
+                    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(bg_src), "-vf", "scale=540:-2",
+                                    "-q:v", "5", str(small)], check=True)
+                    import base64
+                    bg_uri = "data:image/jpeg;base64," + base64.b64encode(small.read_bytes()).decode()
+                card = r.png(overlay_html(ov, b.overlay_text, b.overlay_source, bg_uri),
+                             work / f"ov{i}.png", MEDIA, MEDIA, transparent=False)
+                kind, src = "card", card
             cmd = ["-f", "lavfi", "-i", f"color=c=black:s={W}x{H}:r=30:d={dur:.3f}"]
             frames = int(dur * 30) + 1
             if kind == "video":
                 cmd += ["-stream_loop", "-1", "-i", src]
                 media_f = (f"[1:v]scale={MEDIA}:{MEDIA}:force_original_aspect_ratio=increase,"
                            f"crop={MEDIA}:{MEDIA},setsar=1,fps=30[m]")
-            elif kind == "image":  # 사진: 정사각으로 자르고 천천히 확대/축소 (번갈아)
+            elif kind in ("image", "card"):  # 사진: 정사각으로 자르고 천천히 확대/축소 (카드는 글자가 안 잘리게 살짝만)
                 cmd += ["-loop", "1", "-i", src]
-                z = "min(1.0+on*0.0015,1.15)" if i % 2 == 0 else "max(1.15-on*0.0015,1.0)"
+                zmax, step = (1.04, 0.0006) if kind == "card" else (1.15, 0.0015)
+                z = f"min(1.0+on*{step},{zmax})" if i % 2 == 0 else f"max({zmax}-on*{step},1.0)"
                 media_f = (f"[1:v]scale={MEDIA * 2}:{MEDIA * 2}:force_original_aspect_ratio=increase,"
                            f"crop={MEDIA * 2}:{MEDIA * 2},setsar=1,zoompan=z='{z}':x='iw/2-(iw/zoom/2)'"
                            f":y='ih/2-(ih/zoom/2)':d={frames}:s={MEDIA}x{MEDIA}:fps=30[m]")
