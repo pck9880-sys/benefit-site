@@ -34,6 +34,7 @@ class Beat(BaseModel):
     slowmo: bool = Field(default=False, description="하이라이트 장면 슬로모션")
     impact: bool = Field(default=False, description="강렬한 장면: 흰 플래시 + 큰 자막")
     sticker: str = Field(default="", description="예능 리액션 스티커 (예: 'ㅋㅋㅋ', '?!', '귀여움 주의')")
+    orig_audio: bool = Field(default=False, description="이 장면은 더빙 없이 원본 영상 소리(게임 대사 등)를 쓰고 자막만")
     visual: str = Field(description="'photo' (실제 사진: 실존 인물·장소·물건·사건 현장) 또는 'ai' (재연 장면·주인공 연출 컷)")
     query: str = Field(description="실제 사진 검색어 (영어 2~4단어). 실존 대상은 정확한 고유명사+종류 (예: 'Samsung Lions baseball', 'Everland amusement park'), 일반 장면은 구체적으로 (예: 'baseball stadium crowd night'). ai 장면이어도 대체용으로 반드시 작성")
     ai_prompt: str = Field(description="AI 이미지 프롬프트 (영어). 주인공이 나오면 'the protagonist' 로 지칭. 사실적인 사진 느낌, 글자·로고 없음")
@@ -157,6 +158,14 @@ BASE_CSS = FONT + ("*{margin:0;box-sizing:border-box}body{width:1080px;height:19
 
 
 def title_html(p):
+    if getattr(p, "caption_style", "") == "meme":  # 밈형 제목: 두 줄 모두 흰색, 아주 굵은 글씨
+        return f"""<style>{meme_font_css()}{BASE_CSS}
+.t{{position:absolute;top:90px;left:30px;right:30px;height:{MEDIA_Y - 110}px;display:flex;flex-direction:column;justify-content:center;
+ align-items:center;font-family:BHS,Pretendard,sans-serif;line-height:1.12;color:#fff}}
+.t div{{white-space:nowrap;font-size:150px;letter-spacing:-.02em}}</style>
+<div class="t"><div>{e(p.title_top)}</div><div>{e(p.title_bottom)}</div></div>
+<script>window.fit=function(){{const box=document.querySelector('.t');
+ for(const d of box.children){{let s=150;while(d.scrollWidth>box.clientWidth&&s>50){{s-=2;d.style.fontSize=s+'px';}}}}}};</script>"""
     shade = (f'<div style="position:absolute;left:0;right:0;top:{MEDIA_Y + MEDIA - 420}px;height:420px;'
              f'background:linear-gradient(to bottom,rgba(0,0,0,0),rgba(0,0,0,.55))"></div>'
              if getattr(p, "caption_style", "box") == "epic" else "")  # 자막 뒤를 자연스럽게 어둡게
@@ -176,10 +185,34 @@ def title_html(p):
 }};</script>"""
 
 
+_MEME_FONT = None
+
+
+def meme_font_css():
+    """Black Han Sans (OFL) 를 data URI 로 (브라우저가 로컬 파일을 못 읽어서)."""
+    global _MEME_FONT
+    if _MEME_FONT is None:
+        import base64
+        f = config.ROOT / "assets" / "fonts" / "BlackHanSans-Regular.ttf"
+        _MEME_FONT = ("@font-face{font-family:'BHS';src:url(data:font/ttf;base64,"
+                      + base64.b64encode(f.read_bytes()).decode() + ") format('truetype')}") if f.exists() else ""
+    return _MEME_FONT
+
+
+MEME_COLORS = ["#ffffff", "#ff3ef5", "#ffe600", "#3ef0ff"]
 VARIETY = [("#FFE600", "#111"), ("#FF4D8D", "#fff"), ("#38D9FF", "#111"), ("#8CFF5A", "#111"), ("#FF9A2E", "#111")]
 
 
 def caption_html(text, style="box", impact=False, idx=0, sticker=""):
+    if style == "meme":  # 밈 자막: 영상 가운데, 굵은 기울임 글씨 + 두꺼운 검은 테두리, 줄마다 색이 다름
+        col = MEME_COLORS[idx % len(MEME_COLORS)]
+        hi = "#ffe600" if col == "#ffffff" else "#ffffff"
+        body = re.sub(r"\*\*(.+?)\*\*", rf'<span style="color:{hi}">\1</span>', e(text))
+        size = 104 if impact else 88
+        return f"""<style>{meme_font_css()}{BASE_CSS}
+.c{{position:absolute;top:{MEDIA_Y + int(MEDIA * 0.52)}px;left:30px;right:30px;text-align:center;font-family:BHS,Pretendard,sans-serif;
+ font-size:{size}px;line-height:1.15;color:{col};-webkit-text-stroke:16px #000;paint-order:stroke fill;transform:skewX(-9deg);
+ letter-spacing:-.01em;text-shadow:0 10px 18px rgba(0,0,0,.45)}}</style><div class="c">{body}</div>"""
     if style == "variety":  # 예능 자막: 색 박스 + 굵은 테두리 + 살짝 기울기, 리액션 스티커
         bg, fg = VARIETY[idx % len(VARIETY)]
         rot = (-2.5, 2, -1.5, 2.5, -2)[idx % 5]
@@ -470,7 +503,7 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
         for i, b in enumerate(p.beats):
             audio = audios[i]
             dur = durations[i] if durations else (duration(audio) + 0.05) if audio else max(2.2, len(b.narration) * 0.11)
-            parts = [b.narration] if p.caption_style in ("epic", "variety") else chunks(b.narration)
+            parts = [b.narration] if p.caption_style in ("epic", "variety", "meme") else chunks(b.narration)
             total_chars = sum(len(x) for x in parts) or 1
             caps, t = [], 0.0
             if i:
@@ -529,10 +562,10 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
                          f":y='ih/2-(ih/zoom/2)':d={frames}:s={MEDIA}x{MEDIA}:fps=30[m]")
             cmd += ["-i", title]
             for c, _, _ in caps:
-                cmd += (["-loop", "1", "-t", f"{dur:.3f}", "-i", c] if p.caption_style in ("epic", "variety") else ["-i", c])
+                cmd += (["-loop", "1", "-t", f"{dur:.3f}", "-i", c] if p.caption_style in ("epic", "variety", "meme") else ["-i", c])
             cmd += (["-i", audio] if audio else ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"])
             a_idx = 3 + len(caps)
-            if keep_audio and kind == "video" and has_audio(src):  # 원본 영상 소리 살리기
+            if keep_audio and kind == "video" and has_audio(src) and (keep_audio != "mixed" or b.orig_audio):  # 원본 소리
                 a_idx = 1
                 af = ("atempo=0.625," if b.slowmo else "")  # 슬로모션이면 소리도 느리고 낮게
                 # 장면이 바뀔 때 소리가 툭 끊기지 않게 앞뒤를 짧게 페이드
@@ -540,7 +573,7 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
             fc = [media_f, f"[0:v][m]overlay=0:{MEDIA_Y}:shortest=1[v0]", "[v0][2:v]overlay=0:0[v1]"]
             last = "v1"
             for j, (_, t0, t1) in enumerate(caps):
-                if p.caption_style in ("epic", "variety"):  # 자막이 부드럽게 나타났다 사라짐
+                if p.caption_style in ("epic", "variety", "meme"):  # 자막이 부드럽게 나타났다 사라짐
                     fc.append(f"[{3 + j}:v]format=rgba,fade=t=in:st={t0:.2f}:d=0.18:alpha=1,"
                               f"fade=t=out:st={max(t0, t1 - 0.12):.2f}:d=0.12:alpha=1[cf{j}]")
                     fc.append(f"[{last}][cf{j}]overlay=0:0:shortest=1[w{j}]")
@@ -564,7 +597,24 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
     out = work / "shorts.mp4"
     # 오디오 믹스: 음성 + 배경음악(옅게) + 효과음
     inputs, chains, labels = ["-i", joined], [], ["[0:a]"]
-    if keep_audio:  # 현장음 크기 맞추기
+    if keep_audio == "mixed" and voice_track:  # 게임 대사(원본) + 더빙(빈 구간) — 둘은 겹치지 않음
+        inputs += ["-i", voice_track]
+        chains.append("[0:a]loudnorm=I=-14:TP=-1.5,aresample=44100[orig]")
+        chains.append("[1:a]loudnorm=I=-14:TP=-1.5,aresample=44100,aformat=channel_layouts=stereo[vo]")
+        labels = ["[orig]", "[vo]"]
+        voice_track = None
+        keep_audio = True
+        if bgm_spec:
+            inputs += ["-stream_loop", "-1", "-ss", f"{bgm_spec.get('start', 0):.1f}", "-i", bgm_spec["file"]]
+            chains.append(f"[2:a]loudnorm=I={bgm_spec.get('lufs', -30)}:TP=-6:LRA=11,aresample=44100,"
+                          f"aformat=channel_layouts=stereo,afade=t=in:d=0.8[bg]")
+            labels.append("[bg]")
+            LAST_BGM, LAST_BGM_CREDIT = Path(bgm_spec["file"]).name, bgm_spec.get("credit")
+            bgm_spec = None
+        mixed_done = True
+    else:
+        mixed_done = False
+    if keep_audio and not mixed_done:  # 현장음 크기 맞추기
         chains.append("[0:a]loudnorm=I=-14:TP=-1.5,aresample=44100,asplit=2[orig][key]")
         labels = ["[orig]"]
         if bgm_spec:  # 옅은 배경음악 + 현장음이 클 때 자동으로 더 줄이기(사이드체인 덕킹)
@@ -582,7 +632,7 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
             chains.append(f"[{vi}:a]loudnorm=I=-14:TP=-1.5,aresample=44100,aformat=channel_layouts=stereo,asplit=2[vo][vkey]")
             chains.append("[orig][vkey]sidechaincompress=threshold=0.02:ratio=10:attack=10:release=300[origd]")
             labels = ["[origd]", "[vo]"] + labels[1:]
-    if voice_track:  # 장면 음성(무음) 대신 통 녹음을 목소리로
+    if voice_track and not mixed_done:  # 장면 음성(무음) 대신 통 녹음을 목소리로
         inputs += ["-i", voice_track]
         chains.append("[1:a]loudnorm=I=-14:TP=-1.5,aresample=44100,aformat=channel_layouts=stereo[vo]")
         labels = ["[vo]"]
@@ -834,6 +884,51 @@ def run(force=False):
         pipeline.save_json(STATE, ss)
 
 
+def render_mixed(p, raw, d, media, work, voice):
+    """원본 대사 장면 + 더빙 장면을 섞는다. 더빙은 원본 대사가 없는 장면에만 들어간다."""
+    beats = with_outro(p).beats
+    voiced_idx = [i for i, b in enumerate(beats) if not b.orig_audio]
+    texts = [beats[i].narration for i in voiced_idx]
+    if voice:  # 사용자가 녹음한 더빙 (더빙 문장만, 1.0배속) → 1.4배속
+        fast = speed_up(voice, work)
+    else:  # 임시 음성: 문장마다 만들어 0.35초 간격으로 이어붙임
+        parts = [tts(t, work / f"mx{i}.mp3") for i, t in enumerate(texts)]
+        lst = work / "mx.txt"
+        gap = work / "gap.wav"
+        ff("-f", "lavfi", "-i", "anullsrc=r=44100:cl=mono", "-t", "0.35", gap)
+        lst.write_text("".join(f"file '{f}'\nfile '{gap}'\n" for f in parts if f))
+        raw_all = work / "mx_all.wav"
+        ff("-f", "concat", "-safe", "0", "-i", lst, "-ar", "44100", "-ac", "1", raw_all)
+        fast = speed_up(raw_all, work)  # 실제 녹음과 같은 배속으로 맞춰 길이를 미리 확인
+    vd = split_voice(fast, len(texts), work, texts)
+    bounds = [0.0]
+    for x_ in vd:
+        bounds.append(bounds[-1] + x_)
+    plan_d = list(raw.get("durations") or [0] * len(beats))
+    durs, pieces, k = [], [], 0
+    for i, b in enumerate(beats):
+        if b.orig_audio:
+            dur = float(plan_d[i])
+            f = work / f"sil{i}.wav"
+            ff("-f", "lavfi", "-i", "anullsrc=r=44100:cl=mono", "-t", f"{dur:.3f}", f)
+        else:
+            dur = vd[k]
+            f = work / f"vp{i}.wav"
+            ff("-i", fast, "-ss", f"{bounds[k]:.3f}", "-to", f"{bounds[k + 1]:.3f}", "-ar", "44100", "-ac", "1", f)
+            k += 1
+        durs.append(round(dur, 3))
+        pieces.append(f)
+    lst = work / "vtrack.txt"
+    lst.write_text("".join(f"file '{f}'\n" for f in pieces))
+    track = work / "vtrack.wav"
+    ff("-f", "concat", "-safe", "0", "-i", lst, "-ar", "44100", "-ac", "1", track)
+    spec = raw.get("bgm")
+    if spec:
+        spec = {**spec, "file": str(d / spec["file"])}
+    print(f"[mixed] 장면 길이 {durs} (합계 {sum(durs):.1f}초)")
+    return make_video(p, media, work, durations=durs, keep_audio="mixed", voice_track=track, bgm_spec=spec)
+
+
 def render_sample(folder):
     """assets/samples/<이름>/plan.json + img0.jpg… 로 영상만 만들어 텔레그램으로 보냄 (업로드 안 함)."""
     import json
@@ -849,7 +944,9 @@ def render_sample(folder):
     work = Path(tempfile.mkdtemp(prefix="sample-"))
     audios = None
     voice = next((d / f"voice.{ext}" for ext in ("mp3", "wav", "m4a", "mp4") if (d / f"voice.{ext}").exists()), None)
-    if raw.get("keep_audio"):  # 더빙 없이 원본 현장음 + 자막만 (장면 길이는 durations)
+    if raw.get("mixed_audio"):  # 게임 대사 장면(orig_audio)은 원본 소리, 나머지는 더빙
+        video, voiced = render_mixed(p, raw, d, media, work, voice)
+    elif raw.get("keep_audio"):  # 더빙 없이 원본 현장음 + 자막만 (장면 길이는 durations)
         spec = raw.get("bgm")
         if spec:
             spec = {**spec, "file": str(d / spec["file"])}
