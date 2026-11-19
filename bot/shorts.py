@@ -173,6 +173,15 @@ class Renderer:
 
 # ---------- 음성 ----------
 ENGINES = []  # 문장별로 실제 쓴 음성 엔진 기록
+LAST_BGM = None  # 이번 영상에 쓴 배경음악 파일 이름 (설명란 출처 표기용)
+
+
+def music_credit():
+    import json
+    f = config.ROOT / "assets" / "bgm" / "credits.json"
+    if not LAST_BGM or not f.exists():
+        return ""
+    return json.loads(f.read_text("utf-8")).get(LAST_BGM, "")
 
 
 def tts(text, out, prev="", nxt=""):
@@ -316,6 +325,8 @@ def make_video(p, media, work):
     k = 1
     if bgms:
         bgm = random.choice(bgms)
+        global LAST_BGM
+        LAST_BGM = bgm.name
         bl = duration(bgm)
         off = random.uniform(bl * 0.15, bl * 0.45) if bl > 60 else 0  # 긴 곡은 인트로를 건너뛰고 신나는 부분부터
         inputs += ["-stream_loop", "-1", "-ss", f"{off:.1f}", "-i", bgm]
@@ -384,7 +395,8 @@ def full_description(p, credits=()):
     photo = ("\n\n사진 출처\n" + "\n".join(f"- {c}" for c in dict.fromkeys(credits))) if credits else ""
     voice = (f"\n\nThis content was produced with Typecast, an AI virtual actor service. "
              f"Characters casted: {config.TYPECAST_VOICE_NAME} https://typecast.ai") if typecast.enabled() else ""
-    return (f"{p.description}\n\n출처\n{src}{photo}\n\n※ 일부 장면은 AI로 만든 이미지예요.{voice}\n\n{tags} #shorts")
+    music = f"\n\n{music_credit()}" if music_credit() else ""
+    return (f"{p.description}\n\n출처\n{src}{photo}\n\n※ 일부 장면은 AI로 만든 이미지예요.{voice}{music}\n\n{tags} #shorts")
 
 
 def upload_youtube(video, p, credits=()):
