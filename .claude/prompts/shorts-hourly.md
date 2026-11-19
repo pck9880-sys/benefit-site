@@ -28,9 +28,9 @@
    - 대본 11~12문장(반말 썰 말투, 한 문장 30자 이내, 훅→상황→전개→반전→마무리). question 은 비움. 마무리는 자동('님들은 어떻게 생각해요잉?').
    - AI 이미지: Figma MCP generate_image 4장 (fileKey XPyCf7k9rdYwZF42krwyZ4). 사람은 가상 인물만, 글자·로고 없음, 예전 이미지 재사용 금지.
    - **배경음악은 넣지 않는다** (업로드 때 유튜브 '저장됨' 사운드에서 고름). plan.json 에 "music_concept": "잔잔한 감동" | "신나는 코믹" | "일상 브이로그" | "긴장감 이슈".
-   - 썸네일(기본값): 웃긴글·기본이면 `python -m bot.thumb prompt assets/samples/<slug>` 문구 그대로 Figma generate_image(세로)
+   - 썸네일(기본값): 웃긴글·기본이면 `python -m bot.thumb prompt assets/samples/<slug>` 문구 그대로 Figma generate_image(정사각 1024x1024)
      → assets/samples/<slug>/thumb_src.jpg. 문구의 안전 조건(성인·옷 다 입음·노출/선정적 자세 금지)은 빼거나 바꾸지 않는다.
-     감동이면 생략. 그 뒤 `python -m bot.thumb assets/samples/<slug>` → thumb.jpg.
+     plan.json 에 "thumb_caption": 이미지 아래 자막 상자에 넣을 훅 한 마디(15자 이내). 감동이면 이미지 생략(장면 컷). 그 뒤 `python -m bot.thumb assets/samples/<slug>` → thumb.jpg.
    - 렌더(임시 음성): `SHORTS_BGM=0 python -c "from bot import shorts; shorts.render_sample('assets/samples/<slug>')"` → shorts_sample.mp4 를 assets/samples/<slug>/preview.mp4 로 복사.
    - plan.json 에 yt_title(#shorts), description, tags, sources, pin_comment 포함.
 

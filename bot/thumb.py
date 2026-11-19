@@ -5,7 +5,7 @@
   넘지 않는 선(코드로 고정): 25세 이상 성인, 옷 다 갖춰 입음, 속옷·수영복·노출·가슴/엉덩이 클로즈업·선정적 자세 금지,
   실존 인물 닮은꼴 금지, 영상 내용과 연결된 리액션(낚시성 무관 썸네일 금지).
 - 사용법:
-  1) prompt(raw) 문구로 Figma generate_image (세로 1024x1536) → assets/samples/<slug>/thumb_src.jpg
+  1) prompt(raw) 문구로 Figma generate_image (정사각 1024x1024) → assets/samples/<slug>/thumb_src.jpg
   2) python -m bot.thumb assets/samples/<slug>  → thumb.jpg (1080x1920, 제목 합성)
   plan.json "thumb": false 면 만들지 않음.
 """
@@ -30,16 +30,16 @@ def prompt(raw):
     if mood == "감동":
         return None  # 감동은 영상 장면 컷 사용
     topic = raw.get("topic", "")
-    return ("Vertical 2:3 photorealistic portrait for a YouTube Shorts thumbnail. A beautiful Korean "
+    return ("Square 1:1 photorealistic photo for a YouTube Shorts thumbnail. A beautiful Korean "
             f"{SAFE.split(',')[0]} with a slim, well-proportioned figure, wearing a stylish form-fitting outfit "
-            "(fitted knit mini dress or crop cardigan with high-waist jeans) that shows her body silhouette tastefully, "
-            f"{REACTION[mood]}. Reaction relates to this topic: {topic}. Waist-up to knee-up framing, "
+            "(fitted knit top or slim cardigan with high-waist jeans) that shows her body silhouette tastefully, "
+            f"{REACTION[mood]}. Reaction relates to this topic: {topic}. Waist-up framing, face in the upper third, "
             "bright clean studio light, soft pastel background, high contrast, sharp focus, Instagram-model look. "
             + ", ".join(SAFE.split(", ")[1:]) + ".")
 
 
 def compose(folder):
-    from .shorts import Renderer, BASE_CSS
+    from .shorts import Renderer, BASE_CSS, MEDIA_Y, MEDIA
     d = Path(folder) if Path(folder).is_absolute() else config.ROOT / folder
     raw = json.loads((d / "plan.json").read_text("utf-8"))
     if raw.get("thumb") is False:
@@ -55,16 +55,26 @@ def compose(folder):
         return None
     import base64
     uri = "data:image/jpeg;base64," + base64.b64encode(src.read_bytes()).decode()
+    # 채널 기존 썸네일 느낌: 검은 바탕 + 위 흰/노랑 두 줄 제목 + 가운데 정사각 장면 + 아래쪽 어두운 자막 상자
+    import re
+    cap = raw.get("thumb_caption") or next((b.get("narration", "") for b in raw.get("beats", [])), "")
+    cap = re.sub(r"\*\*", "", cap)
+    if len(cap) > 16:  # 어절 단위로 자르기 (단어 중간 끊김 금지)
+        cut = cap[:16].rsplit(" ", 1)[0]
+        cap = (cut if len(cut) >= 6 else cap[:15]).rstrip(" ,") + "…"
     html = f"""<style>{BASE_CSS}
-.bg{{position:absolute;inset:0;background:url({uri}) center/cover}}
-.sh{{position:absolute;left:0;right:0;top:0;height:760px;background:linear-gradient(rgba(0,0,0,.75),rgba(0,0,0,0))}}
-.t{{position:absolute;top:120px;left:40px;right:40px;text-align:center;font-weight:900;line-height:1.15;
- letter-spacing:-.035em;word-break:keep-all;-webkit-text-stroke:6px #000;paint-order:stroke fill}}
-.t div{{white-space:nowrap;font-size:130px}}.a{{color:#fff}}.b{{color:#FFE400}}</style>
-<div class="bg"></div><div class="sh"></div>
+body{{background:#000}}
+.t{{position:absolute;top:110px;left:40px;right:40px;height:{MEDIA_Y - 140}px;display:flex;flex-direction:column;
+ justify-content:center;align-items:center;font-weight:900;line-height:1.2;letter-spacing:-.035em}}
+.t div{{white-space:nowrap;font-size:98px}}.a{{color:#fff}}.b{{color:#FFE400}}
+.m{{position:absolute;left:0;top:{MEDIA_Y}px;width:1080px;height:{MEDIA}px;background:url({uri}) center 30%/cover}}
+.c{{position:absolute;left:0;right:0;top:{MEDIA_Y + MEDIA - 190}px;text-align:center}}
+.c span{{display:inline-block;background:rgba(20,20,20,.82);color:#fff;font-size:62px;font-weight:800;
+ padding:14px 34px 18px;border-radius:18px;letter-spacing:-.03em;white-space:nowrap}}</style>
 <div class="t"><div class="a">{e(raw.get('title_top', ''))}</div><div class="b">{e(raw.get('title_bottom', ''))}</div></div>
+<div class="m"></div>{f'<div class="c"><span>{e(cap)}</span></div>' if cap else ''}
 <script>window.fit=function(){{const box=document.querySelector('.t');
- for(const x of box.children){{let s=130;while(x.scrollWidth>box.clientWidth&&s>50){{s-=2;x.style.fontSize=s+'px';}}}}}};</script>"""
+ for(const x of box.children){{let s=98;while(x.scrollWidth>box.clientWidth&&s>40){{s-=2;x.style.fontSize=s+'px';}}}}}};</script>"""
     out = d / "thumb.jpg"
     png = d / "_thumb.png"
     with Renderer() as r:
