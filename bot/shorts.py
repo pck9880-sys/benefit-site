@@ -196,6 +196,9 @@ def tts(text, out, prev="", nxt=""):
             ENGINES.append("typecast")
             return f
         except Exception as ex:
+            if config.TYPECAST_ONLY:
+                raise RuntimeError(f"타입캐스트({config.TYPECAST_VOICE_NAME}) 음성 실패 — 무료 음성으로 바꾸지 않고 중단: "
+                                   f"{str(ex)[:200]}")
             print(f"[shorts] 타입캐스트 실패 → 무료 음성: {str(ex)[:150]}")
     try:
         import edge_tts

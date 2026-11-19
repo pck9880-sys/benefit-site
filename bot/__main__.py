@@ -40,6 +40,15 @@ elif cmd == "bgm-add":  # 배경음악 즐겨찾기 추가 (텔레그램 /bgmadd
     pipeline.handle_bgm_command(st, "/bgmadd " + " ".join(sys.argv[2:]))
     pipeline.save_json(config.STATE_FILE, st)
     print("favs:", st.get("bgm_favs"))
+elif cmd == "typecast-test":  # 타입캐스트 음성 1문장만 실제로 만들어 보기 (차단 여부 확인)
+    import tempfile
+    from pathlib import Path
+    from . import typecast
+    try:
+        f = typecast.tts("테스트 한 문장이야", Path(tempfile.mkdtemp()) / "t.mp3")
+        print(f"✅ 타입캐스트 음성 정상 ({f.stat().st_size // 1024}KB)")
+    except Exception as e:
+        print("❌", str(e)[:600])
 elif cmd == "shorts-due":  # 워크플로에서 숏츠를 만들 차례인지 확인 (0=만들기)
     from . import shorts
     sys.exit(0 if shorts.due(pipeline.load_state()) else 1)

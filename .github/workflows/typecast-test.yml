@@ -1,0 +1,19 @@
+name: typecast-test
+on:
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      TYPECAST_API_KEY: ${{ secrets.TYPECAST_API_KEY }}
+      TYPECAST_VOICE_ID: ${{ vars.TYPECAST_VOICE_ID }}
+      TYPECAST_VOICE_NAME: ${{ vars.TYPECAST_VOICE_NAME }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: python -m bot typecast-test
