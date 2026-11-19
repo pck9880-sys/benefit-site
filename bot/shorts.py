@@ -28,7 +28,7 @@ CAP_Y = 1330  # 자막 위치 (영상 아래쪽에 겹침)
 
 
 class Beat(BaseModel):
-    narration: str = Field(description="읽을 문장 1개. 24자 이내, 쇼츠 썰 푸는 말투 ('~라는데', '~거든요', '~했다고 함')")
+    narration: str = Field(description="읽을 문장 1개. 24자 이내, 반말 썰 말투 ('~라는데', '~거든', '~했다고 함', '~인 거'). '~입니다/~습니다/~해요' 금지")
     card: str = Field(description="AI 영상이 없을 때 화면 가운데 카드에 띄울 짧은 문구 (20자 이내)")
     twist: bool = Field(default=False, description="반전·핵심 숫자가 나오는 문장이면 true ('띵' 효과음)")
     visual: str = Field(description="'photo' (실제 사진: 실존 인물·장소·물건·사건 현장) 또는 'ai' (재연 장면·주인공 연출 컷)")
@@ -65,7 +65,8 @@ PICK = """당신은 한국 유튜브 쇼츠 채널의 기획자입니다. 아래
 
 WRITE = """당신은 조회수 높은 한국 유튜브 쇼츠 작가입니다. 아래 조사 내용으로 30~40초 쇼츠를 만드세요.
 - 조사 내용에 있는 사실만 씁니다. 과장·낚시·지어낸 숫자 금지. 남의 쇼츠 대사를 베끼지 않습니다.
-- 말투: 친구에게 썰 푸는 쇼츠 내레이션 ("~라는데", "근데 여기서 반전", "~했다고 함"). 문장은 짧게.
+- 말투: 친구에게 썰 푸는 반말 쇼츠 내레이션 ("~라는데", "근데 여기서 반전", "~했다고 함", "~인 거"). 문장은 짧게.
+  '~입니다', '~습니다', '~해요' 같은 존댓말 문장 끝은 절대 쓰지 않습니다.
 - 제목 2줄: 첫 줄은 상황, 둘째 줄(노란색)은 궁금증 ("~하는 이유", "~라고?", "결과는?").
 - 화면은 요즘 인기 쇼츠처럼 문장마다 컷이 바뀝니다. 문장마다 실제 사진('photo')과 AI 연출 컷('ai')을 섞으세요 (대략 반반).
   · 실존 인물·장소·제품·사건은 'photo' (실제 사진 검색). 실존 인물을 AI로 그리지 않습니다.
@@ -114,11 +115,19 @@ BASE_CSS = FONT + ("*{margin:0;box-sizing:border-box}body{width:1080px;height:19
 
 def title_html(p):
     return f"""<style>{BASE_CSS}
-.t{{position:absolute;top:150px;left:30px;right:30px;text-align:center;font-weight:900;font-size:98px;line-height:1.22;letter-spacing:-.035em}}
+.t{{position:absolute;top:110px;left:40px;right:40px;height:{MEDIA_Y - 140}px;display:flex;flex-direction:column;
+ justify-content:center;align-items:center;font-weight:900;line-height:1.2;letter-spacing:-.035em}}
+.t div{{white-space:nowrap;font-size:98px}}
 .a{{color:#fff}}.b{{color:#FFE400}}
 .ch{{position:absolute;top:70px;left:0;right:0;text-align:center;font-size:30px;font-weight:700;color:#9ca3af}}</style>
 <div class="ch">{e(config.SHORTS_CHANNEL)}</div>
-<div class="t"><div class="a">{e(p.title_top)}</div><div class="b">{e(p.title_bottom)}</div></div>"""
+<div class="t"><div class="a">{e(p.title_top)}</div><div class="b">{e(p.title_bottom)}</div></div>
+<script>window.fit=function(){{  // 제목이 검은 띠(레터박스) 밖으로 넘치지 않게 글자 크기를 줄임
+ const box=document.querySelector('.t');
+ for(const d of box.children){{let s=98;while(d.scrollWidth>box.clientWidth&&s>40){{s-=2;d.style.fontSize=s+'px';}}}}
+ let s2=parseInt(getComputedStyle(box.children[0]).fontSize);
+ while(box.scrollHeight>box.clientHeight&&s2>40){{s2-=2;for(const d of box.children)d.style.fontSize=Math.min(s2,parseInt(d.style.fontSize||98))+'px';}}
+}};</script>"""
 
 
 def caption_html(text):
@@ -148,6 +157,7 @@ class Renderer:
         page = self._b.new_page(viewport={"width": w, "height": h})
         page.set_content("<!doctype html><html><head><meta charset='utf-8'></head><body>" + html + "</body></html>")
         page.evaluate("document.fonts.ready")
+        page.evaluate("window.fit && window.fit()")
         page.wait_for_timeout(150)
         page.screenshot(path=str(out), omit_background=transparent)
         page.close()
@@ -159,12 +169,17 @@ class Renderer:
 
 
 # ---------- 음성 ----------
+ENGINES = []  # 문장별로 실제 쓴 음성 엔진 기록
+
+
 def tts(text, out, prev="", nxt=""):
     """타입캐스트(키 있을 때) → 실패하면 무료 음성."""
     from . import typecast
     if typecast.enabled():
         try:
-            return typecast.tts(text, out, prev, nxt)
+            f = typecast.tts(text, out, prev, nxt)
+            ENGINES.append("typecast")
+            return f
         except Exception as ex:
             print(f"[shorts] 타입캐스트 실패 → 무료 음성: {str(ex)[:150]}")
     try:
@@ -173,6 +188,7 @@ def tts(text, out, prev="", nxt=""):
         async def go():
             await edge_tts.Communicate(text, config.SHORTS_VOICE, rate="+25%").save(str(out))
         asyncio.run(go())
+        ENGINES.append("edge")
         return out if out.exists() and out.stat().st_size > 1000 else None
     except Exception as ex:
         print(f"[shorts] 음성 실패: {type(ex).__name__}")
@@ -461,3 +477,24 @@ def run(force=False):
     finally:
         shutil.rmtree(work, ignore_errors=True)
         pipeline.save_json(STATE, ss)
+
+
+def render_sample(folder):
+    """assets/samples/<이름>/plan.json + img0.jpg… 로 영상만 만들어 텔레그램으로 보냄 (업로드 안 함)."""
+    import json
+    from . import pipeline
+    d = config.ROOT / folder if not Path(folder).is_absolute() else Path(folder)
+    p = Plan(**json.loads((d / "plan.json").read_text("utf-8")))
+    media = [("image", f) if (f := d / f"img{i}.jpg").exists() else None for i in range(len(p.beats))]
+    work = Path(tempfile.mkdtemp(prefix="sample-"))
+    video, voiced = make_video(p, media, work)
+    out = config.ROOT / "shorts_sample.mp4"
+    shutil.copy(video, out)
+    from . import typecast
+    n_tc = ENGINES.count("typecast")
+    voice = (f"타입캐스트 {config.TYPECAST_VOICE_NAME} {n_tc}/{len(p.beats)}문장" if n_tc else "무료 음성") + \
+        ("" if typecast.enabled() else " (타입캐스트 키 없음)")
+    print(f"[sample] {duration(out):.1f}초, 음성 {voiced}/{len(p.beats)} ({voice})")
+    st = pipeline.load_state()
+    send_telegram(st, out, p, uploaded=None, credits=())
+    pipeline.notify(st, f"🧪 틀 테스트 영상: {duration(out):.1f}초 · 목소리 {voice}")

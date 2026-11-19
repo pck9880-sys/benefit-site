@@ -1,0 +1,62 @@
+{
+ "topic": "수능 AI 커닝 감독",
+ "title_top": "오늘 수능장에 처음 생긴",
+ "title_bottom": "'AI 전담 감독관'",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "beats": [
+  {
+   "narration": "오늘 수능장엔 특별한 감독관이 있었다는데",
+   "card": "AI 전담 감독관",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": ""
+  },
+  {
+   "narration": "세무사 시험 수석이 AI로 커닝했다고 자백했거든",
+   "card": "세무사 수석 AI 커닝 자백",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": ""
+  },
+  {
+   "narration": "AI 안경 끼고 수학 30문제를 18분 만에 푼 사람도 있음",
+   "card": "30문제 18분",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": ""
+  },
+  {
+   "narration": "그래서 시험장 1,312곳마다 전담 요원을 붙인 거",
+   "card": "시험장 1,312곳",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": ""
+  },
+  {
+   "narration": "걸리면 최대 징역 5년이라고 함",
+   "card": "최대 징역 5년",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": ""
+  }
+ ],
+ "yt_title": "오늘 수능장에 처음 생긴 'AI 전담 감독관' #shorts",
+ "description": "수능 AI 부정행위 막으려고 시험장마다 전담 요원이 배치됐어요.",
+ "tags": [
+  "수능",
+  "AI",
+  "AI안경",
+  "부정행위"
+ ],
+ "sources": [
+  "https://supple.kr/news/cmwhhiw61ei8tal9pdycwzjag",
+  "https://www.koreancenter.or.kr/news/articleView.html?idxno=1440151"
+ ]
+}

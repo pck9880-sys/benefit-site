@@ -7,6 +7,10 @@ on:
         description: "시간과 상관없이 지금 1개 만들기"
         type: boolean
         default: false
+      sample:
+        description: "틀 테스트: 저장된 대본·이미지 폴더 (예: assets/samples/ai_suneung)"
+        type: string
+        default: ""
   schedule:
     - cron: "40 3 * * *"   # 낮 12:40 KST (메인 워크플로가 못 불렀을 때 대비)
 
@@ -56,7 +60,7 @@ jobs:
       - name: 만들 차례인지 확인
         id: due
         run: |
-          if [ "${{ inputs.force }}" = "true" ] || python -m bot shorts-due; then echo "go=1" >> "$GITHUB_OUTPUT"; fi
+          if [ -n "${{ inputs.sample }}" ] || [ "${{ inputs.force }}" = "true" ] || python -m bot shorts-due; then echo "go=1" >> "$GITHUB_OUTPUT"; fi
 
       - name: 영상 도구 설치
         if: steps.due.outputs.go == '1'
@@ -69,12 +73,25 @@ jobs:
         if: steps.due.outputs.go == '1'
         run: python -m bot typecast-check || true
 
+      - name: 틀 테스트 영상
+        if: inputs.sample != ''
+        env:
+          SAMPLE: ${{ inputs.sample }}
+        run: python -m bot shorts-sample "$SAMPLE"
+
+      - uses: actions/upload-artifact@v4
+        if: inputs.sample != ''
+        with:
+          name: shorts-sample
+          path: shorts_sample.mp4
+          retention-days: 3
+
       - name: 숏츠 제작 + 업로드
-        if: steps.due.outputs.go == '1'
+        if: steps.due.outputs.go == '1' && inputs.sample == ''
         run: python -m bot shorts ${{ inputs.force == true && '--force' || '' }}
 
       - name: 변경사항 저장
-        if: always() && steps.due.outputs.go == '1'
+        if: always() && steps.due.outputs.go == '1' && inputs.sample == ''
         run: |
           git config user.name "auto-bot"
           git config user.email "auto-bot@users.noreply.github.com"

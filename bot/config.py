@@ -69,7 +69,7 @@ PEXELS_API_KEY = _env("PEXELS_API_KEY")  # 무료 실사 사진 (없으면 Openv
 TYPECAST_API_KEY = _env("TYPECAST_API_KEY")  # 타입캐스트 음성 (없으면 무료 음성)
 TYPECAST_VOICE_ID = _env("TYPECAST_VOICE_ID")  # 타입캐스트 voice_id (비우면 이름으로 검색)
 TYPECAST_VOICE_NAME = _env("TYPECAST_VOICE_NAME", "용식")
-TYPECAST_TEMPO = float(_env("TYPECAST_TEMPO", "1.15"))
+TYPECAST_TEMPO = float(_env("TYPECAST_TEMPO", "1.2"))  # 목소리 1.2배속
 HIGGSFIELD_SECONDS = int(_env("HIGGSFIELD_SECONDS", "5"))
 MOCK = _env("MOCK") == "1"  # 테스트용: 외부 API 호출 없이 동작
 
