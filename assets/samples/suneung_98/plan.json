@@ -1,0 +1,26 @@
+{
+ "topic": "2027 수능 부정행위 98명 (재난문자로 49명 적발)",
+ "title_top": "수능날 재난문자 3번",
+ "title_bottom": "진짜 효과 있었을까?",
+ "character": "", "hook_video": "", "photo_fallbacks": [],
+ "caption_style": "box",
+ "beats": [
+  {"narration": "수능날 재난문자 세 번, 진짜 효과 있었을까?", "card": "재난문자 **세 번**, 효과 있었을까?", "twist": false, "visual": "ai", "query": "", "ai_prompt": "", "overlay": "none", "overlay_text": "", "overlay_source": ""},
+  {"narration": "재난문자 울려서 걸린 사람만 49명이래", "card": "재난문자로 걸린 사람 **49명**", "twist": false, "visual": "ai", "query": "", "ai_prompt": "", "overlay": "none", "overlay_text": "", "overlay_source": ""},
+  {"narration": "전자기기까지 합치면 부정행위가 98명", "card": "부정행위 총 **98명**", "twist": false, "visual": "ai", "query": "", "ai_prompt": "",
+   "overlay": "headline", "overlay_text": "수능서 전자기기 관련 부정행위 98명 적발…스마트폰으로 문제지 촬영도", "overlay_source": "경향신문"},
+  {"narration": "근데 시험 중에 실제로 쓴 건 5건", "card": "실제로 쓴 건 **5건**", "twist": true, "visual": "ai", "query": "", "ai_prompt": "", "overlay": "none", "overlay_text": "", "overlay_source": ""},
+  {"narration": "스마트안경, 소형카메라, 화장실 폰까지 나옴", "card": "스마트안경·소형카메라·**화장실 폰**", "twist": false, "visual": "ai", "query": "", "ai_prompt": "", "overlay": "none", "overlay_text": "", "overlay_source": ""},
+  {"narration": "시민들은 수능 하루쯤은 감수한다는 분위기", "card": "시민들 \"하루쯤은 **감수**\"", "twist": false, "visual": "ai", "query": "", "ai_prompt": "", 
+   "overlay": "comment", "overlay_text": "수능 하루쯤은 감수", "overlay_source": "시민 반응 (경향신문 보도)"},
+  {"narration": "근데 매년 이렇게 울려야 하나 싶긴 함", "card": "근데 **매년** 울려야 하나?", "twist": false, "visual": "ai", "query": "", "ai_prompt": "", "overlay": "none", "overlay_text": "", "overlay_source": ""}
+ ],
+ "question": "",
+ "voice": "용식",
+ "outro": "",
+ "media": [{"image": "img0.jpg"}, {"image": "img1.jpg"}, {"image": "img2.jpg"}, {"zzal": "z3.png"}, {"image": "img4.jpg"}, {"image": "img5.jpg"}, {"zzal": "z6.png"}, {"image": "img0.jpg"}],
+ "yt_title": "수능날 재난문자 3번, 진짜 효과 있었을까? #shorts",
+ "description": "2027 수능 부정행위 98명 적발. 위급재난문자로 49명(1차 31·2차 11·3차 7명)이 걸렸고, 시험 중 스마트기기를 실제로 쓴 사례는 5건(스마트안경·소형카메라·문제지 촬영·화장실 폰)이었대요.\n\n※ 일부 장면은 AI로 만든 이미지예요.\n※ 일러스트: いらすとや (irasutoya.com)\n\n출처: 교육부 발표(한국일보·경향신문 보도)",
+ "tags": ["수능", "2027수능", "재난문자", "부정행위", "AI안경", "교육부"],
+ "sources": ["https://www.hankookilbo.com/news/article/A2026111919020002319", "https://www.khan.co.kr/article/202611191932001/", "https://weekly.khan.co.kr/article/202611171802001"]
+}
