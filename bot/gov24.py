@@ -68,3 +68,11 @@ def list_services_by_id(service_id):
         return []
     res = _get("serviceList", {"cond[서비스ID::EQ]": service_id})
     return res.get("data") or []
+
+
+def search(keyword):
+    """서비스명에 키워드가 들어간 공공서비스 목록."""
+    if config.MOCK:
+        return [s for s in list_services() if keyword in (s.get("서비스명") or "")]
+    res = _get("serviceList", {"page": 1, "perPage": 100, "cond[서비스명::LIKE]": keyword})
+    return res.get("data") or []

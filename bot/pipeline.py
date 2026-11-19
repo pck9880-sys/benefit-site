@@ -13,7 +13,7 @@ HELP = (
     f"응답이 없으면 {round(config.AUTO_APPROVE_HOURS * 60)}분 뒤 다음 확인 때 자동 게시됩니다.\n"
     "버튼은 15분 안에 반영되고, 반영되면 메시지가 「✅ 게시됨」으로 바뀝니다.\n\n"
     "명령어\n/status 현황\n/pause 일시정지\n/resume 재개\n/now 다음 실행 때 바로 글 생성\n/approveall 대기 초안 전부 승인\n"
-    "/kpi 성과 리포트 보기 (매일 저녁 9시 자동 전송)\n/contest 다음 실행 때 공모전 출품안 받기\n/contestoff 공모전 알림 끄기 · /conteston 켜기"
+    "/post 지금 글 1개 올리기 · /post 3 (3개) · /post 청년 월세 (주제 지정)\n/kpi 성과 리포트 보기 (매일 저녁 9시 자동 전송)\n/contest 다음 실행 때 공모전 출품안 받기\n/contestoff 공모전 알림 끄기 · /conteston 켜기"
 )
 
 
@@ -107,6 +107,17 @@ def handle_updates(st):
         elif text == "/resume":
             st["paused"] = False
             notify(st, "▶️ 재개했습니다.")
+        elif text.startswith("/post") or text.startswith("/글"):
+            arg = text.split(maxsplit=1)[1].strip() if " " in text else ""
+            if not arg:
+                req = {"count": 1}
+            elif arg.isdigit():
+                req = {"count": max(1, min(int(arg), 10))}
+            else:
+                req = {"keyword": arg[:30], "count": 1}
+            st.setdefault("post_requests", []).append(req)
+            what = f"'{req['keyword']}' 관련 글 1개" if req.get("keyword") else f"글 {req['count']}개"
+            notify(st, f"📝 요청 받았어요. {what}를 지금 만들고 있어요 (1~3분 뒤 링크를 보내드려요)")
         elif text == "/now":
             st["force_generate"] = True
             notify(st, "다음 실행(15분 이내) 때 새 글을 생성합니다.")
@@ -157,9 +168,11 @@ def should_generate(st):
     return t.hour >= config.GENERATE_HOUR_KST and st["last_generate_date"] != t.strftime("%Y-%m-%d")
 
 
-def generate(st):
+def generate(st, picks=None, want=None, announce=False):
+    """picks/want 를 주면 요청받은 글만 바로 만든다 (텔레그램 /post 명령)."""
     month = now().strftime("%Y-%m")
-    st["force_generate"] = False
+    if picks is None:
+        st["force_generate"] = False
     if st["cost"].get(month, 0) >= config.MAX_MONTHLY_USD:
         st["last_generate_date"] = now().strftime("%Y-%m-%d")
         notify(st, f"⚠️ 이번 달 비용 상한(${config.MAX_MONTHLY_USD:g})에 도달해 생성을 건너뜁니다.")
@@ -167,7 +180,7 @@ def generate(st):
 
     used = set(st["used_ids"])
     queue = [q for q in st.get("queue", []) if q.get("서비스ID") not in used]
-    if len(queue) < 5:  # 대기열이 비면 정부24 목록을 다시 받아 많이 찾는 순으로 채움
+    if picks is None and len(queue) < 5:  # 대기열이 비면 정부24 목록을 다시 받아 많이 찾는 순으로 채움
         gov24_all = gov24.list_services()
         services = [s for s in gov24_all if s.get("서비스ID") and s["서비스ID"] not in used
                     and s.get("지원내용") and s.get("지원대상")]
@@ -190,14 +203,17 @@ def generate(st):
             mixed += national[:2] + local[:1]
             national, local = national[2:], local[1:]
         queue = [{k: s.get(k) for k in keep if s.get(k)} for s in mixed[:60]]
-    services = queue
-    st["last_generate_date"] = now().strftime("%Y-%m-%d")  # 목록 조회 성공 후에만 '오늘 완료' 처리
-    st["last_generate_hour"] = now().strftime("%Y-%m-%d %H")
-    limit = config.POSTS_PER_HOUR if config.SCHEDULE == "hourly" else config.POSTS_PER_DAY
-    if config.SCHEDULE == "hourly" and len(list(config.POSTS_DIR.glob("*.json"))) >= config.SLOWDOWN_AFTER_POSTS:
-        limit = 1  # 글이 충분히 쌓이면 속도를 줄여 대량 생성으로 보이지 않게
-
-    refresh_one(st, month)
+    if picks is not None:  # 요청 글: 대기열·정기 일정은 건드리지 않음
+        services, limit = [x for x in picks if x.get("서비스ID") not in used], want
+    else:
+        services = queue
+        st["last_generate_date"] = now().strftime("%Y-%m-%d")  # 목록 조회 성공 후에만 '오늘 완료' 처리
+        st["last_generate_hour"] = now().strftime("%Y-%m-%d %H")
+        limit = config.POSTS_PER_HOUR if config.SCHEDULE == "hourly" else config.POSTS_PER_DAY
+        if config.SCHEDULE == "hourly" and len(list(config.POSTS_DIR.glob("*.json"))) >= config.SLOWDOWN_AFTER_POSTS:
+            limit = 1  # 글이 충분히 쌓이면 속도를 줄여 대량 생성으로 보이지 않게
+        refresh_one(st, month)
+    published = []
     made = 0
     for svc in services:
         if made >= limit:
@@ -236,8 +252,9 @@ def generate(st):
         path = config.DRAFTS_DIR / f"{sid}.json"
         save_json(path, d)
         made += 1
-        if not config.REQUIRE_APPROVAL:
-            publish(st, path, "자동")  # 승인 없이 바로 게시 (텔레그램 알림은 저녁 KPI 리포트로 대신)
+        if not config.REQUIRE_APPROVAL or announce:
+            publish(st, path, "요청" if announce else "자동")  # 승인 없이 바로 게시
+            published.append(d)
             continue
         if telegram.enabled() and st.get("owner_chat_id"):
             a = d["article"]
@@ -252,6 +269,42 @@ def generate(st):
     done = set(st["used_ids"])
     st["queue"] = [q for q in queue if q.get("서비스ID") not in done]
     print(f"generated {made} posts")
+    if announce:
+        if published:
+            notify(st, "✅ 요청하신 글을 올렸어요 (사이트 반영까지 약 2분)\n\n" + "\n\n".join(
+                f"• {x['article']['title']}\n{config.SITE_URL}/posts/{x['id']}" for x in published))
+        else:
+            notify(st, "⚠️ 요청하신 글을 만들지 못했어요. 이미 올린 주제이거나 정부 데이터에서 찾지 못했어요.")
+
+
+def handle_requests(st):
+    """텔레그램으로 받은 글 요청 처리: {'count': n} 또는 {'keyword': '...'}"""
+    reqs = st.pop("post_requests", [])
+    for r in reqs:
+        used = set(st["used_ids"])
+        if r.get("keyword"):
+            try:
+                kw = r["keyword"]
+                found = gov24.search(kw)
+                if not found and " " in kw:  # "청년 월세" → "청년"으로 찾고 모든 단어가 들어간 것만
+                    words = kw.split()
+                    found = [x for x in gov24.search(words[0])
+                             if all(w in (x.get("서비스명") or "").replace(" ", "") for w in words)]
+            except Exception as e:
+                notify(st, f"⚠️ 검색 실패: {e}")
+                continue
+            found = [x for x in found if x.get("서비스ID") not in used and x.get("지원내용")]
+            found.sort(key=lambda x: int(x.get("조회수") or 0), reverse=True)
+            if not found:
+                notify(st, f"🔎 '{r['keyword']}' 관련 지원제도 중 아직 안 올린 것을 찾지 못했어요.")
+                continue
+            generate(st, picks=found, want=r.get("count", 1), announce=True)
+        else:
+            queue = [q for q in st.get("queue", []) if q.get("서비스ID") not in used]
+            if len(queue) < r["count"]:
+                generate(st, picks=None)  # 대기열 채우기 겸 정기 생성
+                queue = [q for q in st.get("queue", []) if q.get("서비스ID") not in set(st["used_ids"])]
+            generate(st, picks=queue, want=r["count"], announce=True)
 
 
 # ---------- 자동 승인 ----------
@@ -324,6 +377,8 @@ def tick():
     try:
         handle_updates(st)  # 텔레그램 주인 등록·명령어는 항상 처리
         if benefit_ready():
+            if st.get("post_requests"):
+                handle_requests(st)
             if should_generate(st):
                 generate(st)
             auto_approve(st)
