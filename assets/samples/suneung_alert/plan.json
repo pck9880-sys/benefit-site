@@ -47,7 +47,7 @@
    "ai_prompt": ""
   }
  ],
- "outro": "다들 수험생들 고생했다고 응원해요잉~",
+ "outro": "다들 수험생들 고생했다고 응원하자!",
  "yt_title": "수능장에 재난문자 울리자 줄줄이 걸린 것들 #shorts",
  "description": "2027 수능, 수신 거부가 안 되는 위급재난문자로 숨긴 휴대폰을 찾고 AI 안경까지 전수검사했어요. 용인에선 초소형 카메라도 나왔다고 해요.",
  "tags": [
@@ -61,5 +61,6 @@
  "sources": [
   "https://www.wikitree.co.kr/articles/1175361",
   "https://weekly.khan.co.kr/article/202611171802001"
- ]
+ ],
+ "voice": "태우"
 }

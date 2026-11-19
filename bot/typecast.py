@@ -4,7 +4,7 @@ import requests
 from . import config
 
 BASE = "https://api.typecast.ai"
-_voice = None
+_voice = {}
 
 
 def enabled():
@@ -22,25 +22,26 @@ def find_voices(name):
             or name.lower() in ((v.get("voice_name") or {}).get("eng") or "").lower()]
 
 
-def voice():
-    """(voice_id, 모델) — 설정값이 없으면 이름으로 검색."""
-    global _voice
-    if _voice:
-        return _voice
-    vid, model = config.TYPECAST_VOICE_ID, "ssfm-v31"
-    found = find_voices(config.TYPECAST_VOICE_NAME) if not vid else []
+def voice(name=None):
+    """(voice_id, 모델) — 캐릭터 이름으로 검색 (기본 설정값)."""
+    name = name or config.TYPECAST_VOICE_NAME
+    if name in _voice:
+        return _voice[name]
+    vid = config.TYPECAST_VOICE_ID if name == config.TYPECAST_VOICE_NAME else ""
+    model = "ssfm-v31"
+    found = find_voices(name) if not vid else []
     if not vid:
         if not found:
-            raise RuntimeError(f"타입캐스트에서 '{config.TYPECAST_VOICE_NAME}' 목소리를 찾지 못함")
+            raise RuntimeError(f"타입캐스트에서 '{name}' 목소리를 찾지 못함")
         vid = found[0]["voice_id"]
         versions = [m["version"] for m in found[0].get("models", [])]
         model = next((v for v in ("ssfm-v31", "ssfm-v30", "ssfm-v21") if v in versions), versions[0] if versions else model)
-    _voice = (vid, model)
-    return _voice
+    _voice[name] = (vid, model)
+    return _voice[name]
 
 
-def tts(text, out, prev="", nxt=""):
-    vid, model = voice()
+def tts(text, out, prev="", nxt="", name=None):
+    vid, model = voice(name)
     prompt = {"emotion_type": "smart", "previous_text": prev, "next_text": nxt} if model != "ssfm-v21" \
         else {"emotion_type": "preset", "emotion_preset": "normal"}
     r = requests.post(f"{BASE}/v1/text-to-speech", headers=_h(), timeout=60, json={

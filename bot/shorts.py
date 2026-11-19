@@ -45,8 +45,9 @@ class Plan(BaseModel):
     photo_fallbacks: List[str] = Field(description="사진 검색이 안 될 때 쓸 넓은 영어 검색어 2~3개 (예: 'soccer stadium', 'football fans')")
     hook_video: str = Field(description="첫 장면 AI 영상 프롬프트 (영어, 5초, 역동적인 한 장면)")
     beats: List[Beat] = Field(description="내레이션 4~5문장 (전체 20초 이내). 첫 문장은 제목 내용을 다시 던지는 훅, 마지막은 반전·한마디 정리")
-    outro: str = Field(default="다들 오늘도 행복해요잉~", description="채널 시그니처 마무리 한마디. 반드시 '다들 ~해요잉~' 형식, 주제와 연결된 친근한 당부 "
-                                     "(예: '다들 시험은 정직하게 해요잉~', '다들 손흥민 응원해요잉~'). 20자 이내")
+    voice: str = Field(default="", description="비워두세요 (시스템이 정함)")
+    outro: str = Field(default="", description="채널 시그니처 마무리 한마디. 지시된 목소리 형식('다들 ~하자!' 또는 '다들 ~해요잉~'), 주제와 연결된 친근한 당부 "
+                                     "(예: '다들 손흥민 응원하자!' / '다들 손흥민 응원해요잉~'). 20자 이내")
     yt_title: str = Field(description="유튜브 제목 40자 이내, 끝에 #shorts")
     description: str = Field(description="유튜브 설명 2~3줄")
     tags: List[str] = Field(description="해시태그용 키워드 5~8개 (# 없이)")
@@ -71,7 +72,7 @@ WRITE = """당신은 조회수 높은 한국 유튜브 쇼츠 작가입니다. �
 - 조사 내용에 있는 사실만 씁니다. 과장·낚시·지어낸 숫자 금지. 남의 쇼츠 대사를 베끼지 않습니다.
 - 말투: 친구에게 썰 푸는 반말 쇼츠 내레이션 ("~라는데", "근데 여기서 반전", "~했다고 함", "~인 거"). 문장은 짧게.
   '~입니다', '~습니다', '~해요' 같은 존댓말 문장 끝은 절대 쓰지 않습니다.
-- 마무리(outro)는 채널 시그니처: 항상 '다들 ~해요잉~' 형식의 친근한 한마디 (본문 beats 에는 넣지 않음).
+- 마무리(outro)는 채널 시그니처 (본문 beats 에는 넣지 않음): {outro_rule}
 - 제목 2줄: 첫 줄은 상황, 둘째 줄(노란색)은 궁금증 ("~하는 이유", "~라고?", "결과는?").
 - 화면은 요즘 인기 쇼츠처럼 문장마다 컷이 바뀝니다. 모든 문장은 내용에 딱 맞는 AI 이미지('ai')로 연출합니다
   (뉴스 화면·실제 사진은 쓰지 않음). ai_prompt 는 그 문장 내용이 한눈에 보이도록 구체적으로 (장소·사물·행동·분위기).
@@ -90,7 +91,21 @@ def now():
     return datetime.now(KST)
 
 
-def plan_short(st):
+def pick_voice(st, ss):
+    """기본은 태우. 텔레그램 '/shorts 창수' 로 요청하면 그 회차만 박창수."""
+    req = st.get("shorts_voice_req")
+    if req and req.get("at", "") > ss.get("voice_req_done", ""):
+        ss["voice_req_done"] = req["at"]
+        return req["voice"]
+    return config.SHORTS_VOICE_CHAR
+
+
+def outro_rule(voice):
+    v = VOICES.get(voice) or VOICES[config.SHORTS_VOICE_CHAR]
+    return f"반드시 '{'다들 ~하자!' if v['style'] == '하자' else '다들 ~해요잉~'}' 형식 (예: {v['example']})"
+
+
+def plan_short(st, voice=None):
     """(Plan, 비용)"""
     if config.MOCK or not config.ANTHROPIC_API_KEY:
         return Plan(topic="테스트 주제", title_top="미국 놀이공원에서", title_bottom="난리 난 기구의 정체",
@@ -109,7 +124,7 @@ def plan_short(st):
     PICKED["line"] = next((ln for ln in notes.splitlines() if "후보" in ln and "선택" in ln), "")
     res = contest._client().messages.parse(
         model=config.CLAUDE_MODEL, max_tokens=6000, output_config={"effort": "medium"}, output_format=Plan,
-        messages=[{"role": "user", "content": WRITE.format(notes=notes)}])
+        messages=[{"role": "user", "content": WRITE.format(notes=notes, outro_rule=outro_rule(voice))}])
     cost += contest._cost(res.usage)
     if res.stop_reason == "refusal" or res.parsed_output is None:
         raise RuntimeError(f"숏츠 대본 생성 실패 (stop_reason={res.stop_reason})")
@@ -180,6 +195,7 @@ class Renderer:
 
 # ---------- 음성 ----------
 ENGINES = []  # 문장별로 실제 쓴 음성 엔진 기록
+CURRENT_VOICE = {}  # 이번 영상 목소리 (타입캐스트 캐릭터 이름)
 LAST_BGM = None  # 이번 영상에 쓴 배경음악 파일 이름 (설명란 출처 표기용)
 LAST_BGM_CREDIT = None  # Jamendo 곡이면 출처 문구
 
@@ -199,7 +215,7 @@ def tts(text, out, prev="", nxt=""):
     from . import typecast
     if typecast.enabled():
         try:
-            f = typecast.tts(text, out, prev, nxt)
+            f = typecast.tts(text, out, prev, nxt, name=CURRENT_VOICE.get("name"))
             ENGINES.append("typecast")
             return f
         except Exception as ex:
@@ -248,9 +264,34 @@ def ff(*args):
 
 
 # ---------- 합성 ----------
-def signature(text):
-    """마무리 멘트를 '다들 ~해요잉~' 시그니처 형태로 맞춤."""
-    t = re.sub(r"[.!~?\s]+$", "", (text or "").strip()) or "다들 오늘도 행복해요잉"
+VOICES = {  # 목소리별 마무리 시그니처
+    "태우": {"style": "하자", "example": "다들 수험생들 응원하자!"},
+    "박창수": {"style": "해요잉", "example": "다들 수험생들 응원해요잉~"},
+}
+
+
+def voice_of(p):
+    return p.voice if p.voice in VOICES else config.SHORTS_VOICE_CHAR
+
+
+def signature(text, voice=None):
+    """마무리 멘트를 목소리별 시그니처로 맞춤: 태우 '다들 ~하자!' / 박창수 '다들 ~해요잉~'."""
+    voice = voice if voice in VOICES else config.SHORTS_VOICE_CHAR
+    t = re.sub(r"[.!~?\s]+$", "", (text or "").strip())
+    if VOICES[voice]["style"] == "하자":
+        if not t:
+            return "다들 오늘도 힘내자!"
+        t = re.sub(r"요잉$", "", t)
+        t = re.sub(r"(해요|해|하세요|합시다)$", "하", t)
+        t = re.sub(r"봐요$", "보", t)
+        if not t.endswith("자"):
+            t = t + "자" if t.endswith("하") or t.endswith("보") else t + " 하자"
+        if not t.startswith("다들"):
+            t = "다들 " + t
+        return t + "!"
+    t = t or "다들 오늘도 행복해요잉"
+    t = re.sub(r"하자$", "해요", t)
+    t = re.sub(r"보자$", "봐요", t)
     if t.endswith("요"):
         t += "잉"  # 봐요 → 봐요잉, 응원해요 → 응원해요잉
     elif t.endswith("해"):
@@ -265,7 +306,7 @@ def signature(text):
 def with_outro(p):
     """대본 끝에 시그니처 마무리 멘트('다들 ~해요잉~')를 붙인 복사본."""
     p = p.model_copy(deep=True)
-    p.outro = signature(p.outro)
+    p.outro = signature(p.outro, voice_of(p))
     p.beats.append(Beat(narration=p.outro, card=p.outro, visual="ai", query="", ai_prompt=""))
     return p
 
@@ -284,6 +325,7 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None):
     """media: 문장별 ("video"|"image", 경로) 또는 None(글자 카드). 마지막에 시그니처 마무리 멘트를 붙인다.
     audios 를 미리 만들어 넘기면 그대로 쓴다 (화면 소재와 동시에 만들어 시간 절약)."""
     from concurrent.futures import ThreadPoolExecutor
+    CURRENT_VOICE["name"] = voice_of(p)
     p = with_outro(p)
     media = list(media) + [next((m for m in reversed(list(media)) if m), None)]  # 마무리는 마지막 장면 그대로
     segs, jobs = [], []
@@ -564,7 +606,9 @@ def run(force=False):
     ss["shorts_tried"] = now().isoformat(timespec="minutes")
     was_requested = requested(st, ss)
     try:
-        p, cost = plan_short(ss)
+        voice = pick_voice(st, ss)
+        p, cost = plan_short(ss, voice)
+        p.voice = voice
         print(f"[shorts] 주제: {p.topic} / 문장 {len(p.beats)} / AI컷 {sum(b.visual == 'ai' for b in p.beats)}")
         if PICKED.get("line"):
             pipeline.notify(st, "🎬 오늘의 숏츠 주제\n" + PICKED["line"][:600])
@@ -611,7 +655,7 @@ def render_sample(folder):
     audios = None
     voice = next((d / f"voice.{ext}" for ext in ("mp3", "wav", "m4a", "mp4") if (d / f"voice.{ext}").exists()), None)
     if voice:  # 타입캐스트 웹에서 직접 만든 더빙 (반자동, 1.0배속으로 받아서 여기서 1.2배속)
-        texts = [b.narration for b in p.beats] + [signature(p.outro)]
+        texts = [b.narration for b in p.beats] + [signature(p.outro, voice_of(p))]
         fast = speed_up(voice, work)
         durs = split_voice(fast, len(p.beats) + 1, work, texts)
         video, voiced = make_video(p, media, work, voice_track=fast, durations=durs)
