@@ -17,13 +17,22 @@ def enabled():
 
 
 def pick(out_dir, tags=None):
-    """(파일 경로, 출처 문구) 또는 (None, None)."""
+    """(파일 경로, 출처 문구) 또는 (None, None). 상업적 이용 가능한 곡이 나올 때까지 장르·페이지를 바꿔 검색."""
     if not enabled():
         return None, None
-    tag = tags or random.choice(MOODS)
+    tries = [tags] if tags else random.sample(MOODS, len(MOODS))
+    for tag in tries:
+        for offset in (0, 50, 100):
+            f, credit = _pick(out_dir, tag, offset)
+            if f:
+                return f, credit
+    return None, None
+
+
+def _pick(out_dir, tag, offset):
     try:
         r = requests.get(API, timeout=20, params={
-            "client_id": config.JAMENDO_CLIENT_ID, "format": "json", "limit": 30, "tags": tag,
+            "client_id": config.JAMENDO_CLIENT_ID, "format": "json", "limit": 50, "offset": offset, "tags": tag,
             "vocalinstrumental": "instrumental", "order": "popularity_month", "audiodlformat": "mp32",
             "include": "licenses", "durationbetween": "60_300"})
         res = r.json()
@@ -44,7 +53,7 @@ def pick(out_dir, tags=None):
                           f"License: {t.get('license_ccurl', '')}")
                 print(f"[music] {t['name']} - {t['artist_name']} ({tag})")
                 return f, credit
-        print(f"[music] '{tag}' 상업적 이용 가능한 곡 없음 ({len(res.get('results', []))}곡 중)")
+        print(f"[music] '{tag}'+{offset}: 상업적 이용 가능 {len(ok)}곡 / {len(res.get('results', []))}곡")
     except Exception as e:
         print("[music] jamendo 실패:", type(e).__name__)
     return None, None
