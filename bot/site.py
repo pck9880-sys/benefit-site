@@ -111,6 +111,10 @@ def build():
         pub = config.ADSENSE_CLIENT.replace("ca-", "")
         write("ads.txt", f"google.com, {pub}, DIRECT, f08c47fec0942fa0\n")
     (out / ".nojekyll").write_text("")
+    key_file = config.ROOT / "static" / "indexnow-key.txt"
+    if key_file.exists():  # IndexNow 키는 사이트 최상위에 있어야 전체 주소에 적용됨
+        key = key_file.read_text().strip()
+        (out / f"{key}.txt").write_text(key)
     print(f"built {len(posts)} posts → {out}")
 
 
