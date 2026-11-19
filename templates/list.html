@@ -15,6 +15,10 @@
   <a class="cat" href="{{ base }}/c/{{ slug }}/">{{ thumb(name, "cat-img") }}<span>{{ name }}</span><small>{{ n }}건</small></a>
   {% endfor %}
 </section>
+<a class="check-cta" href="{{ base }}/check/"><span><strong>나도 받을 수 있을까?</strong><small>나이·지역·상황을 고르면 해당될 수 있는 지원금을 찾아드려요</small></span><b>자격 진단 →</b></a>
+{% if targets %}<section class="hubs"><h3>대상별로 찾기</h3><div class="hub-chips">{% for s, n, c in targets %}<a href="{{ base }}/target/{{ s }}/">{{ n }} <em>{{ c }}</em></a>{% endfor %}</div></section>{% endif %}
+{% set local_regions = regions | rejectattr(0, "equalto", "national") | list %}
+{% if local_regions %}<section class="hubs"><h3>지역별로 찾기</h3><div class="hub-chips">{% for s, n, c in local_regions %}<a href="{{ base }}/region/{{ s }}/">{{ n }} <em>{{ c }}</em></a>{% endfor %}</div></section>{% endif %}
 {{ ad("wide", 0) }}
 {% endif %}
 <div class="layout">

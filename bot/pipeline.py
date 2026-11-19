@@ -168,12 +168,28 @@ def generate(st):
     used = set(st["used_ids"])
     queue = [q for q in st.get("queue", []) if q.get("서비스ID") not in used]
     if len(queue) < 5:  # 대기열이 비면 정부24 목록을 다시 받아 많이 찾는 순으로 채움
-        services = [s for s in gov24.list_services() if s.get("서비스ID") and s["서비스ID"] not in used
+        gov24_all = gov24.list_services()
+        services = [s for s in gov24_all if s.get("서비스ID") and s["서비스ID"] not in used
                     and s.get("지원내용") and s.get("지원대상")]
         services.sort(key=lambda s: int(s.get("조회수") or 0), reverse=True)
         keep = ["서비스ID", "서비스명", "서비스분야", "소관기관명", "조회수", "지원대상", "지원내용", "신청방법",
                 "신청기한", "상세조회URL", "사용자구분", "전화문의", "수정일시", "선정기준", "서비스목적요약", "지원유형"]
-        queue = [{k: s.get(k) for k in keep if s.get(k)} for s in services[:60]]
+        # 이미 게시한 글 중 정부 데이터가 수정된 것은 다시 쓰기 대기열에 넣음
+        latest = {x["서비스ID"]: x for x in gov24_all if x.get("서비스ID")}
+        for p in config.POSTS_DIR.glob("*.json"):
+            d0 = load_json(p, {})
+            new = latest.get(d0.get("id"))
+            if new and new.get("수정일시") and new.get("수정일시") != d0.get("source", {}).get("updated") \
+                    and d0.get("id") not in st.setdefault("refresh", []):
+                st["refresh"].append(d0["id"])
+        from . import taxonomy
+        local = [x for x in services if taxonomy.region_of(x.get("소관기관명")) != "national"]
+        national = [x for x in services if taxonomy.region_of(x.get("소관기관명")) == "national"]
+        mixed = []  # 전국 2개 : 지역 1개 비율로 섞어 지역별 모음 페이지도 채움
+        while (national or local) and len(mixed) < 60:
+            mixed += national[:2] + local[:1]
+            national, local = national[2:], local[1:]
+        queue = [{k: s.get(k) for k in keep if s.get(k)} for s in mixed[:60]]
     services = queue
     st["last_generate_date"] = now().strftime("%Y-%m-%d")  # 목록 조회 성공 후에만 '오늘 완료' 처리
     st["last_generate_hour"] = now().strftime("%Y-%m-%d %H")
@@ -181,6 +197,7 @@ def generate(st):
     if config.SCHEDULE == "hourly" and len(list(config.POSTS_DIR.glob("*.json"))) >= config.SLOWDOWN_AFTER_POSTS:
         limit = 1  # 글이 충분히 쌓이면 속도를 줄여 대량 생성으로 보이지 않게
 
+    refresh_one(st, month)
     made = 0
     for svc in services:
         if made >= limit:
@@ -189,6 +206,10 @@ def generate(st):
         st["used_ids"].append(sid)
         try:
             detail = gov24.service_detail(sid)
+            try:
+                cond = gov24.support_conditions(sid)
+            except Exception:
+                cond = None
             article, cost = writer.write_article(svc, detail)
         except Exception as e:  # 한 건 실패해도 계속
             print(f"[skip] {sid}: {e}")
@@ -207,6 +228,7 @@ def generate(st):
                 "apply_url": detail.get("온라인신청사이트URL"),
                 "contact": detail.get("문의처") or svc.get("전화문의"),
                 "updated": svc.get("수정일시"),
+                "cond": cond,
             },
             "article": article.model_dump(),
             "cost_usd": round(cost, 5),
@@ -247,6 +269,51 @@ def benefit_ready():
     return config.MOCK or bool(config.DATA_GO_KR_KEY and config.ANTHROPIC_API_KEY)
 
 
+def refresh_one(st, month):
+    """정부 데이터가 바뀐 기존 글 1개를 최신 내용으로 다시 쓴다 (주소·게시일은 유지)."""
+    queue = st.get("refresh") or []
+    while queue:
+        sid = queue.pop(0)
+        path = config.POSTS_DIR / f"{sid}.json"
+        if not path.exists():
+            continue
+        d = load_json(path, {})
+        try:
+            items = [x for x in gov24.list_services_by_id(sid)] if hasattr(gov24, "list_services_by_id") else []
+            svc = items[0] if items else {"서비스ID": sid, "서비스명": d["source"].get("name")}
+            detail = gov24.service_detail(sid)
+            svc = {**svc, **{k: v for k, v in detail.items() if v}}
+            article, cost = writer.write_article(svc, detail)
+        except Exception as e:
+            print(f"[refresh] {sid} 실패: {e}")
+            return
+        st["cost"][month] = round(st["cost"].get(month, 0) + cost, 5)
+        d["article"] = article.model_dump()
+        d["source"]["updated"] = svc.get("수정일시") or d["source"].get("updated")
+        d["updated_at"] = now().isoformat()
+        save_json(path, d)
+        print(f"[refresh] {sid} 최신 내용으로 갱신")
+        return
+
+
+def backfill_conditions(limit=15):
+    """자격 조건이 없는 기존 글에 정부 데이터의 자격 조건을 채운다 (실행당 최대 limit 개)."""
+    n = 0
+    for p in config.POSTS_DIR.glob("*.json"):
+        if n >= limit:
+            break
+        d = load_json(p, {})
+        if d.get("source", {}).get("cond") is not None:
+            continue
+        try:
+            d["source"]["cond"] = gov24.support_conditions(d["id"])
+        except Exception as e:
+            print(f"[cond] {d['id']} 실패: {e}")
+            d["source"]["cond"] = {"codes": [], "age_min": None, "age_max": None}
+        save_json(p, d)
+        n += 1
+
+
 def tick():
     from . import contest
     st = load_state()
@@ -260,6 +327,7 @@ def tick():
             if should_generate(st):
                 generate(st)
             auto_approve(st)
+            backfill_conditions()
             from . import blog
             blog.run(st, notify)
         else:

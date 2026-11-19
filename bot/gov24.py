@@ -45,3 +45,26 @@ def service_detail(service_id):
     res = _get("serviceDetail", {"cond[서비스ID::EQ]": service_id})
     data = res.get("data") or []
     return data[0] if data else {}
+
+
+def support_conditions(service_id):
+    """서비스별 자격 조건 코드 (JA0101 남성, JA0110 나이 시작 ...). {'codes': [...Y인 코드], 'age_min', 'age_max'}"""
+    if config.MOCK:
+        return {"codes": ["JA0412", "JA0204"], "age_min": 19, "age_max": 39}
+    res = _get("supportConditions", {"cond[서비스ID::EQ]": service_id})
+    data = (res.get("data") or [{}])[0]
+    codes = sorted(k for k, v in data.items() if k.startswith("JA") and str(v).upper() == "Y")
+    def num(k):
+        try:
+            return int(data.get(k)) if data.get(k) not in (None, "", 0, "0") else None
+        except (TypeError, ValueError):
+            return None
+    return {"codes": codes, "age_min": num("JA0110"), "age_max": num("JA0111")}
+
+
+def list_services_by_id(service_id):
+    """서비스 1건의 목록 정보 (수정일시 등)."""
+    if config.MOCK:
+        return []
+    res = _get("serviceList", {"cond[서비스ID::EQ]": service_id})
+    return res.get("data") or []

@@ -74,4 +74,55 @@ def write_article(svc, detail):
 
     pin, pout = config.PRICES.get(config.CLAUDE_MODEL, (4.0, 20.0))
     cost = (res.usage.input_tokens * pin + res.usage.output_tokens * pout) / 1_000_000
-    return res.parsed_output, cost
+    article = res.parsed_output
+    try:
+        article, c2, n = fact_check(client, article, data_text)
+        cost += c2
+        print(f"[fact-check] 수정 {n}건")
+    except Exception as e:  # 검수가 실패해도 원래 글은 그대로 사용
+        print(f"[fact-check] 건너뜀: {type(e).__name__}")
+    return article, cost
+
+
+class Fix(BaseModel):
+    wrong: str = Field(description="글에 있는 틀린 표현 (글에 있는 그대로 정확히 복사)")
+    right: str = Field(description="공식 데이터에 맞게 고친 표현")
+    reason: str = Field(description="왜 틀렸는지 한 줄")
+
+
+class Review(BaseModel):
+    fixes: List[Fix] = Field(description="데이터와 다른 금액·날짜·기간·자격요건·기관명·연락처. 틀린 게 없으면 빈 목록")
+
+
+REVIEW_SYSTEM = """당신은 정부 지원제도 안내글의 사실 검수자입니다. 안내글을 공식 데이터와 한 줄씩 대조합니다.
+- 금액, 날짜, 기간, 나이, 소득 기준, 자격요건, 기관명, 전화번호, 신청 방법이 데이터와 다르면 고칩니다.
+- 데이터에 없는 구체적 수치나 조건을 지어낸 문장은 '공식 안내에서 확인 필요'로 바꿉니다.
+- 문체나 표현 취향은 고치지 않습니다. 사실 오류만 찾습니다."""
+
+
+def fact_check(client, article, data_text):
+    """공식 데이터와 대조해 사실 오류를 찾아 고친다. (고친 글, 비용, 수정 건수)"""
+    body = "\n".join([article.title, article.description, *article.summary_points, article.body_markdown,
+                      *[f"Q. {f.q} A. {f.a}" for f in article.faq]])
+    res = client.messages.parse(
+        model=config.CLAUDE_MODEL, max_tokens=4000, system=REVIEW_SYSTEM,
+        output_config={"effort": "low"}, output_format=Review,
+        messages=[{"role": "user", "content": f"[공식 데이터]\n{data_text}\n\n[안내글]\n{body}"}],
+    )
+    pin, pout = config.PRICES.get(config.CLAUDE_MODEL, (4.0, 20.0))
+    cost = (res.usage.input_tokens * pin + res.usage.output_tokens * pout) / 1_000_000
+    review = res.parsed_output
+    if not review or not review.fixes:
+        return article, cost, 0
+    a = article.model_dump()
+    n = 0
+    for fx in review.fixes:
+        if not fx.wrong or fx.wrong == fx.right:
+            continue
+        for k in ("title", "description", "body_markdown"):
+            if fx.wrong in a[k]:
+                a[k] = a[k].replace(fx.wrong, fx.right)
+                n += 1
+        a["summary_points"] = [p.replace(fx.wrong, fx.right) for p in a["summary_points"]]
+        a["faq"] = [{"q": f["q"], "a": f["a"].replace(fx.wrong, fx.right)} for f in a["faq"]]
+    return Article(**a), cost, n

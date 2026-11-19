@@ -17,6 +17,7 @@
     <span>소관 {{ post.source.org }}</span><span>게시 {{ post.date }}</span><span>읽는 데 약 {{ read_min }}분</span>
     {% if post.source.deadline %}<span class="dl">신청기한 {{ post.source.deadline[:40] }}</span>{% endif %}
   </div>
+  {% if post.audiences or post.region != "national" %}<div class="aud">{% if post.region != "national" %}<a href="{{ base }}/region/{{ post.region }}/">{{ region_names[post.region] }}</a>{% endif %}{% for a_ in post.audiences %}<a href="{{ base }}/target/{{ a_ }}/">{{ aud_names[a_] }}</a>{% endfor %}</div>{% endif %}
   <div class="summary">
     <h2 class="sum-h">핵심 요약</h2>
     <ul>{% for p in a.summary_points %}<li>{{ p }}</li>{% endfor %}</ul>

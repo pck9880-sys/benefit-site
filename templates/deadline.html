@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}신청 마감 임박 지원금 · 신청 기간 캘린더 | {{ site_name }}{% endblock %}
+{% block desc %}신청 마감이 가까운 정부·지자체 지원제도를 마감일 순으로 정리했습니다. 상시 신청 가능한 지원금도 함께 확인하세요.{% endblock %}
+{% block main %}
+<div class="layout">
+<section class="content">
+  <div class="sec-h"><h2>신청 마감 임박 지원제도</h2><span>{{ today }} 기준</span></div>
+  {% if upcoming %}
+  <ul class="dl-list">
+  {% for p in upcoming %}
+    <li><a href="{{ base }}/{{ p.url }}">
+      <span class="dday {% if p.d_day <= 7 %}hot{% endif %}">{% if p.d_day == 0 %}오늘 마감{% else %}D-{{ p.d_day }}{% endif %}</span>
+      <span class="dl-b"><strong>{{ p.article.title }}</strong><small>{{ p.source.org }} · 마감 {{ p.dl_date }}</small></span>
+    </a></li>
+  {% endfor %}
+  </ul>
+  {% else %}<p class="empty">현재 마감일이 정해진 지원제도가 없습니다.</p>{% endif %}
+  {{ ad("inline", 1) }}
+  <div class="sec-h" style="margin-top:28px"><h2>언제든 신청 가능 (상시 신청)</h2><span>{{ always|length }}건</span></div>
+  <ul class="mini-list">{% for p in always %}<li><a href="{{ base }}/{{ p.url }}">{{ p.article.title }}</a><small>{{ p.source.org }}</small></li>{% endfor %}</ul>
+  {% if others %}
+  <div class="sec-h" style="margin-top:28px"><h2>신청 기간 확인 필요</h2><span>{{ others|length }}건</span></div>
+  <p class="disc">매년 정해진 기간에 신청하거나 기관별로 기간이 다른 제도입니다. 글에서 신청 기간을 확인하세요.</p>
+  <ul class="mini-list">{% for p in others %}<li><a href="{{ base }}/{{ p.url }}">{{ p.article.title }}</a><small>{{ p.source.deadline[:40] }}</small></li>{% endfor %}</ul>
+  {% endif %}
+</section>
+{% include "sidebar.html" %}
+</div>
+{% endblock %}

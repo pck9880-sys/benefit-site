@@ -9,7 +9,7 @@ from urllib.parse import urlparse
 import markdown
 from jinja2 import Environment, FileSystemLoader
 
-from . import config
+from . import config, taxonomy
 
 PER_PAGE = 30
 
@@ -25,6 +25,9 @@ def load_posts():
         d["url"] = f"posts/{d['id']}"  # 확장자 없는 깔끔한 주소 (파일은 .html 로 저장)
         d["field_slug"] = slugify(d["source"].get("field") or "기타")
         d["date"] = d["published_at"][:10]
+        d["region"] = taxonomy.region_of(d["source"].get("org"))
+        d["audiences"] = taxonomy.audiences_of(d)
+        d["dl_state"], d["dl_date"] = taxonomy.deadline_info(d["source"].get("deadline"))
         posts.append(d)
     posts.sort(key=lambda d: d["published_at"], reverse=True)
     return posts
@@ -53,6 +56,20 @@ def build():
     cats = sorted(fields.items(), key=lambda kv: -len(kv[1]["posts"]))
     env.globals["categories"] = [(k, v["name"], len(v["posts"])) for k, v in cats]
     env.globals["recent"] = posts[:6]
+    # 대상별·지역별·마감 분류 (모든 페이지 사이드바에서 쓰므로 먼저 계산)
+    from datetime import date
+    today = date.today()
+    target_items = {slug: [d for d in posts if slug in d["audiences"]] for slug, _, _, _ in taxonomy.AUDIENCES}
+    region_items = {slug: [d for d in posts if d["region"] == slug] for slug in taxonomy.REGION_NAMES}
+    targets = [(slug, name, len(target_items[slug])) for slug, name, _, _ in taxonomy.AUDIENCES if target_items[slug]]
+    regions = [(slug, name, len(region_items[slug])) for slug, name in taxonomy.REGION_NAMES.items() if region_items[slug]]
+    upcoming = sorted([d for d in posts if d["dl_state"] == "upcoming"], key=lambda d: d["dl_date"])
+    for d in upcoming:
+        d["d_day"] = (d["dl_date"] - today).days
+    always = [d for d in posts if d["dl_state"] == "always"]
+    others = [d for d in posts if d["dl_state"] == "unknown"]
+    env.globals.update(targets=targets, regions=regions, soon=[d for d in upcoming if d["d_day"] <= 30][:5],
+                       aud_names=taxonomy.AUDIENCE_NAMES, region_names=taxonomy.REGION_NAMES)
 
     def write(rel, html):
         (out / rel).parent.mkdir(parents=True, exist_ok=True)
@@ -92,6 +109,23 @@ def build():
     paginate(posts, "", None)
     for slug, v in cats:
         paginate(v["posts"], f"c/{slug}/", v["name"])
+    for slug, name, _ in targets:
+        paginate(target_items[slug], f"target/{slug}/", name)
+    for slug, name, _ in regions:
+        paginate(region_items[slug], f"region/{slug}/", name)
+
+    write("deadline/index.html", env.get_template("deadline.html").render(
+        upcoming=upcoming, always=always, others=others, today=today.isoformat(),
+        canonical=f"{config.SITE_URL}/deadline/"))
+
+    # 자격 진단
+    write("check/index.html", env.get_template("check.html").render(canonical=f"{config.SITE_URL}/check/",
+          audience_list=[(s_, n_) for s_, n_, _, _ in taxonomy.AUDIENCES], region_list=list(taxonomy.REGION_NAMES.items())))
+    write("check.json", json.dumps([{
+        "t": d["article"]["title"], "u": d["url"], "f": d["source"].get("field"), "o": d["source"].get("org"),
+        "r": d["region"], "a": d["audiences"],
+        "amin": (d["source"].get("cond") or {}).get("age_min"), "amax": (d["source"].get("cond") or {}).get("age_max"),
+        "d": d["article"]["description"]} for d in posts], ensure_ascii=False))
 
     for name in ("about", "privacy", "contact"):
         write(f"{name}.html", env.get_template(f"{name}.html").render(canonical=f"{config.SITE_URL}/{name}"))
@@ -103,7 +137,9 @@ def build():
         ensure_ascii=False))
 
     # SEO 파일
-    urls = [f"{config.SITE_URL}/"] + [f"{config.SITE_URL}/c/{s}/" for s, _ in cats]
+    urls = [f"{config.SITE_URL}/", f"{config.SITE_URL}/check/", f"{config.SITE_URL}/deadline/"]
+    urls += [f"{config.SITE_URL}/c/{s}/" for s, _ in cats]
+    urls += [f"{config.SITE_URL}/target/{s}/" for s, _, _ in targets] + [f"{config.SITE_URL}/region/{s}/" for s, _, _ in regions]
     urls += [f"{config.SITE_URL}/{d['url']}" for d in posts]
     write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
           + "\n".join(f"<url><loc>{escape(u)}</loc></url>" for u in urls) + "\n</urlset>\n")
