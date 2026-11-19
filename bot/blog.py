@@ -71,7 +71,7 @@ def _chunks(text, size=3500):
 
 def messages(post, bp):
     src = post["source"]
-    link = f"{config.SITE_URL}/posts/{post['id']}.html"
+    link = f"{config.SITE_URL}/posts/{post['id']}"
     parts = _chunks(bp.body)
     head = ["📝 <b>네이버 블로그용 글</b> (회색 글자를 탭하면 복사돼요)", "",
             "① 제목", f"<code>{e(bp.title)}</code>", "",

@@ -22,7 +22,7 @@ def load_posts():
     posts = []
     for p in config.POSTS_DIR.glob("*.json"):
         d = json.loads(p.read_text("utf-8"))
-        d["url"] = f"posts/{d['id']}.html"
+        d["url"] = f"posts/{d['id']}"  # 확장자 없는 깔끔한 주소 (파일은 .html 로 저장)
         d["field_slug"] = slugify(d["source"].get("field") or "기타")
         d["date"] = d["published_at"][:10]
         posts.append(d)
@@ -64,7 +64,7 @@ def build():
             {"@type": "Question", "name": f["q"], "acceptedAnswer": {"@type": "Answer", "text": f["a"]}}
             for f in d["article"]["faq"]]}, ensure_ascii=False).replace("</", "<\\/") if d["article"]["faq"] else ""
         related = [x for x in fields[d["field_slug"]]["posts"] if x["id"] != d["id"]][:5]
-        write(d["url"], env.get_template("post.html").render(post=d, a=d["article"], body=body_html,
+        write(d["url"] + ".html", env.get_template("post.html").render(post=d, a=d["article"], body=body_html,
                                                              related=related, faq_ld=faq_ld, canonical=f"{config.SITE_URL}/{d['url']}"))
 
     # 목록 페이지 (페이지네이션)

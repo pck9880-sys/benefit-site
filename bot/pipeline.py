@@ -62,7 +62,7 @@ def publish(st, path, how):
     path.unlink()
     if d.get("message_id") and st.get("owner_chat_id"):
         telegram.edit(st["owner_chat_id"], d["message_id"],
-                      f"✅ 게시됨 ({how})\n{d['article']['title']}\n{config.SITE_URL}/posts/{d['id']}.html")
+                      f"✅ 게시됨 ({how})\n{d['article']['title']}\n{config.SITE_URL}/posts/{d['id']}")
 
 
 def reject(st, path):
