@@ -174,10 +174,13 @@ class Renderer:
 # ---------- 음성 ----------
 ENGINES = []  # 문장별로 실제 쓴 음성 엔진 기록
 LAST_BGM = None  # 이번 영상에 쓴 배경음악 파일 이름 (설명란 출처 표기용)
+LAST_BGM_CREDIT = None  # Jamendo 곡이면 출처 문구
 
 
 def music_credit():
     import json
+    if LAST_BGM_CREDIT:
+        return LAST_BGM_CREDIT
     f = config.ROOT / "assets" / "bgm" / "credits.json"
     if not LAST_BGM or not f.exists():
         return ""
@@ -321,11 +324,14 @@ def make_video(p, media, work):
     out = work / "shorts.mp4"
     # 오디오 믹스: 음성 + 배경음악(옅게) + 효과음
     inputs, chains, labels = ["-i", joined], [], ["[0:a]"]
-    bgms = sorted(f for ext in ("*.mp3", "*.wav", "*.m4a") for f in (config.ROOT / "assets" / "bgm").glob(ext))
+    from . import music
+    global LAST_BGM, LAST_BGM_CREDIT
+    bgm, LAST_BGM_CREDIT = music.pick(work)  # Jamendo (키 있을 때) → 없으면 저장된 곡
+    if not bgm:
+        bgms = sorted(f for ext in ("*.mp3", "*.wav", "*.m4a") for f in (config.ROOT / "assets" / "bgm").glob(ext))
+        bgm = random.choice(bgms) if bgms else None
     k = 1
-    if bgms:
-        bgm = random.choice(bgms)
-        global LAST_BGM
+    if bgm:
         LAST_BGM = bgm.name
         bl = duration(bgm)
         off = random.uniform(bl * 0.15, bl * 0.45) if bl > 60 else 0  # 긴 곡은 인트로를 건너뛰고 신나는 부분부터

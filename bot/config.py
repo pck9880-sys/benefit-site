@@ -65,6 +65,7 @@ HIGGSFIELD_KEY = _env("HIGGSFIELD_KEY")  # 힉스필드 API "키ID:시크릿" (�
 HIGGSFIELD_MODEL = _env("HIGGSFIELD_MODEL", "kling-video/v3.0-turbo/text-to-video")
 HIGGSFIELD_CLIPS = int(_env("HIGGSFIELD_CLIPS", "1"))  # 숏츠 1개당 AI 영상 수 (첫 장면에만 사용, 0이면 사진만)
 HIGGSFIELD_IMAGE_MODEL = _env("HIGGSFIELD_IMAGE_MODEL", "higgsfield-ai/soul/standard")
+JAMENDO_CLIENT_ID = _env("JAMENDO_CLIENT_ID")  # 무료 배경음악 API (없으면 assets/bgm)
 PEXELS_API_KEY = _env("PEXELS_API_KEY")  # 무료 실사 사진 (없으면 Openverse CC 사진)
 TYPECAST_API_KEY = _env("TYPECAST_API_KEY")  # 타입캐스트 음성 (없으면 무료 음성)
 TYPECAST_VOICE_ID = _env("TYPECAST_VOICE_ID")  # 타입캐스트 voice_id (비우면 이름으로 검색)
