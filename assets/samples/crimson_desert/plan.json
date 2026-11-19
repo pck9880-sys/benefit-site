@@ -1,0 +1,106 @@
+{
+ "topic": "붉은사막 스팀 평가 역전",
+ "title_top": "첫날 혹평받던 한국 게임",
+ "title_bottom": "지금 반전 상황 ㄷㄷ",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "voice": "용식",
+ "beats": [
+  {
+   "narration": "출시 12시간 만에 부정 리뷰 5천 개 받은 한국 게임",
+   "card": "출시 12시간 만에 부정 리뷰 5천 개 받은 한국 게임",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "펄어비스의 오픈월드 대작 붉은사막인데",
+   "card": "펄어비스의 오픈월드 대작 붉은사막인데",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "해외 평론가 점수는 메타크리틱 78점이고",
+   "card": "해외 평론가 점수는 메타크리틱 78점이고",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "score",
+   "overlay_text": "Metacritic|78|100;OpenCritic|80|100",
+   "overlay_source": "해외 평론가 평균"
+  },
+  {
+   "narration": "IGN 8.5점, 게임스팟 7점으로 갈렸다고 함",
+   "card": "IGN 8.5점, 게임스팟 7점으로 갈렸다고 함",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "score",
+   "overlay_text": "IGN|8.5|10;GameSpot|7|10",
+   "overlay_source": "해외 매체 리뷰"
+  },
+  {
+   "narration": "근데 스팀 평가가 복합적에서 대체로 긍정적으로 역전",
+   "card": "근데 스팀 평가가 복합적에서 대체로 긍정적으로 역전",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "steam",
+   "overlay_text": "복합적|대체로 긍정적|출시 첫날 → 이후",
+   "overlay_source": "Steam 사용자 평가"
+  }
+ ],
+ "question": "근데 지금 사도 됨 vs 좀 더 기다림?",
+ "outro": "다들 댓글로 알려줘요잉~",
+ "yt_title": "첫날 혹평받던 한국 게임 붉은사막, 지금 반전 상황 #shorts",
+ "description": "펄어비스 붉은사막, 출시 직후 스팀 '복합적'에서 '대체로 긍정적'으로 반등. 해외 평론가 메타크리틱 78점, 오픈크리틱 80점대.\n\n※ 게임 영상: Pearl Abyss 공식 트레일러(Steam), 점수는 보도 기준",
+ "tags": [
+  "붉은사막",
+  "CrimsonDesert",
+  "펄어비스",
+  "스팀",
+  "게임리뷰",
+  "게임뉴스"
+ ],
+ "sources": [
+  "https://opencritic.com/news/28370/crimson-desert-launches-to-a-mixed-rating-on-steam-receiving-almost-5-000-negative-reviews-in-under-12-hours",
+  "https://opencritic.com/news/28549/crimson-desert-now-has-mostly-positive-reviews-on-steam",
+  "https://kotaku.com/crimson-desert-metacritic-scores-review-roundup-2000680110"
+ ],
+ "media": [
+  {
+   "video": "clip0.mp4"
+  },
+  {
+   "video": "clip1.mp4"
+  },
+  {
+   "video": "clip2.mp4"
+  },
+  {
+   "video": "clip3.mp4"
+  },
+  {
+   "video": "clip4.mp4"
+  },
+  {
+   "video": "clip5.mp4"
+  },
+  {
+   "video": "clip3.mp4"
+  }
+ ]
+}

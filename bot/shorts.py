@@ -254,6 +254,34 @@ def overlay_html(kind, text, source, bg_uri):
                 f'<span style="font-size:32px;color:#d4d4d8;filter:blur(9px)">익명사용자1234</span>'
                 f'<span style="font-size:28px;color:#71717a;margin-left:auto">{e(source)}</span></div>'
                 f'<div style="font-size:54px;font-weight:700;color:#fff;line-height:1.42;letter-spacing:-.02em">{_rich(text)}</div></div>')
+    elif kind == "score":  # 해외 평점 카드: "매체|점수|만점" 여러 개를 ; 로 (예: "Metacritic|78|100;IGN|8.5|10")
+        rows = []
+        for it in text.split(";"):
+            name, sc, mx = (it.split("|") + ["", "", ""])[:3]
+            try:
+                ratio = float(sc) / float(mx)
+            except ValueError:
+                ratio = 0.7
+            col = "#22c55e" if ratio >= .8 else "#eab308" if ratio >= .65 else "#ef4444"
+            rows.append(f'<div style="display:flex;align-items:center;gap:26px;margin:16px 0">'
+                        f'<div style="width:150px;height:150px;border-radius:24px;background:{col};color:#111;display:flex;'
+                        f'align-items:center;justify-content:center;font-size:{68 if len(sc) < 4 else 56}px;font-weight:900">{e(sc)}</div>'
+                        f'<div><div style="font-size:52px;font-weight:900;color:#fff">{e(name)}</div>'
+                        f'<div style="font-size:30px;color:#a1a1aa">/ {e(mx)}점</div></div></div>')
+        card = (f'<div style="background:rgba(17,17,20,.92);border-radius:30px;padding:40px 50px;width:100%;'
+                f'box-shadow:0 30px 80px rgba(0,0,0,.6)"><div style="font-size:36px;color:#a1a1aa;font-weight:800;margin-bottom:10px">'
+                f'{e(source or "해외 평점")}</div>{"".join(rows)}</div>')
+    elif kind == "steam":  # 스팀 사용자 평가 카드: "이전평가|현재평가|리뷰 수"
+        before, now_, cnt = (text.split("|") + ["", "", ""])[:3]
+        def tag(t, c):
+            return f'<span style="color:{c};font-weight:900">{e(t)}</span>'
+        card = (f'<div style="background:linear-gradient(160deg,#1b2838,#2a475e);border-radius:28px;padding:44px 50px;width:100%;'
+                f'box-shadow:0 30px 80px rgba(0,0,0,.6);color:#c7d5e0">'
+                f'<div style="font-size:34px;font-weight:800;letter-spacing:.05em;color:#66c0f4">사용자 평가</div>'
+                f'<div style="font-size:50px;margin-top:22px">{tag(before, "#b9a074")} '
+                f'<span style="color:#fff;font-weight:900"> → </span> {tag(now_, "#66c0f4")}</div>'
+                f'<div style="font-size:34px;margin-top:20px;color:#8f98a0">{e(cnt)}</div>'
+                f'<div style="font-size:26px;margin-top:16px;color:#6b7a88">{e(source)}</div></div>')
     else:  # quote
         card = (f'<div style="background:#fff;border-radius:26px;padding:50px 54px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.5)">'
                 f'<div style="font-size:54px;font-weight:600;color:#111;line-height:1.5;letter-spacing:-.02em">{_rich(text)}</div>'
@@ -460,8 +488,13 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
             kind, src = mi[0], mi[1]
             start = mi[2] if len(mi) > 2 else 0.0  # CC 영상은 구간 시작점
             ov = getattr(b, "overlay", "none")
-            if ov in ("headline", "comment", "quote") and b.overlay_text:  # 기사 제목·여론·발언 카드
+            if ov in ("headline", "comment", "quote", "score", "steam") and b.overlay_text:  # 기사 제목·여론·발언 카드
                 bg_src = src if kind == "image" else next((m[1] for m in media if m and m[0] == "image"), None)
+                if kind == "video":  # 영상 장면이면 그 장면의 한 프레임을 흐린 배경으로
+                    fr = work / f"ovfr{i}.jpg"
+                    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{start + 1:.2f}", "-i", str(src),
+                                    "-frames:v", "1", str(fr)])
+                    bg_src = fr if fr.exists() else bg_src
                 bg_uri = ""
                 if bg_src:  # 브라우저가 로컬 파일을 못 읽으므로 작게 줄여 data URI 로
                     small = work / f"ovbg{i}.jpg"
