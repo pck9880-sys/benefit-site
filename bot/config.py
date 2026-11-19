@@ -58,7 +58,7 @@ SHORTS_KEEP = _env("SHORTS_KEEP") == "1"  # 테스트용: 영상 파일을 남�
 UPLOAD_POST_API_KEY = _env("UPLOAD_POST_API_KEY")  # Upload-Post (유튜브 자동 업로드, 무료 월 10개)
 UPLOAD_POST_USER = _env("UPLOAD_POST_USER")  # Upload-Post 프로필 이름
 SHORTS_CHANNEL = _env("SHORTS_CHANNEL", "")  # 영상 맨 위에 작게 표시할 채널 이름 (예: @내채널)
-SHORTS_BGM_VOLUME = float(_env("SHORTS_BGM_VOLUME", "0.10"))  # 배경음악 크기 (static/bgm/*.mp3)
+SHORTS_BGM_VOLUME = float(_env("SHORTS_BGM_VOLUME", "0.18"))  # 배경음악 크기 (assets/bgm/*.mp3)
 YOUTUBE_API_KEY = _env("YOUTUBE_API_KEY")  # 인기 쇼츠 분석용 (없으면 구글 검색어만 사용)
 HIGGSFIELD_KEY = _env("HIGGSFIELD_KEY")  # 힉스필드 API "키ID:시크릿" (없으면 글자 카드 화면)
 HIGGSFIELD_MODEL = _env("HIGGSFIELD_MODEL", "kling-video/v3.0-turbo/text-to-video")

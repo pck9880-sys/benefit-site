@@ -246,7 +246,7 @@ def make_video(p, clips, work):
     joined = work / "joined.mp4"
     ff("-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", joined)
     out = work / "shorts.mp4"
-    bgms = sorted((config.ROOT / "static" / "bgm").glob("*.mp3"))
+    bgms = sorted((config.ROOT / "assets" / "bgm").glob("*.mp3"))
     if bgms:  # 배경음악을 작게 깔기
         bgm = random.choice(bgms)
         ff("-i", joined, "-stream_loop", "-1", "-i", bgm, "-filter_complex",
