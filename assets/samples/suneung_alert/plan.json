@@ -1,0 +1,65 @@
+{
+ "topic": "수능날 위급재난문자로 숨긴 휴대폰 적발",
+ "title_top": "수능장에 재난문자 울리자",
+ "title_bottom": "줄줄이 걸린 것들 ㄷㄷ",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "beats": [
+  {
+   "narration": "오늘 수능장에 재난문자가 세 번이나 울렸다는데",
+   "card": "재난문자 세 번",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": ""
+  },
+  {
+   "narration": "위급재난문자는 수신 거부가 안 되거든",
+   "card": "수신 거부 불가",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": ""
+  },
+  {
+   "narration": "신발 깔창에 숨긴 휴대폰이 걸렸고",
+   "card": "깔창 속 휴대폰",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": ""
+  },
+  {
+   "narration": "안경은 AI 안경인지 하나하나 다 검사했는데",
+   "card": "AI 안경 전수검사",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": ""
+  },
+  {
+   "narration": "용인에선 초소형 카메라까지 나왔다고 함",
+   "card": "초소형 카메라 적발",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": ""
+  }
+ ],
+ "outro": "다들 수험생들 고생했다고 응원해요잉~",
+ "yt_title": "수능장에 재난문자 울리자 줄줄이 걸린 것들 #shorts",
+ "description": "2027 수능, 수신 거부가 안 되는 위급재난문자로 숨긴 휴대폰을 찾고 AI 안경까지 전수검사했어요. 용인에선 초소형 카메라도 나왔다고 해요.",
+ "tags": [
+  "수능",
+  "재난문자",
+  "AI안경",
+  "초소형카메라",
+  "수능부정행위",
+  "2027수능"
+ ],
+ "sources": [
+  "https://www.wikitree.co.kr/articles/1175361",
+  "https://weekly.khan.co.kr/article/202611171802001"
+ ]
+}
