@@ -1,0 +1,200 @@
+{
+ "topic": "제63회 세무사 시험 수석 AI 부정행위 + 국가시험 응시제한 10년",
+ "title_top": "세무사 시험 수석이",
+ "title_bottom": "알고 보니 AI 컨닝 ㄷㄷ",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "caption_style": "box",
+ "beats": [
+  {
+   "narration": "세무사 시험 수석 합격자가 알고 보니 AI 컨닝이었대",
+   "card": "세무사 **수석**이 AI 컨닝?",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "심지어 본인이 직접 경찰에 자수했음",
+   "card": "본인이 직접 **자수**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "근데 수법이 거의 영화급인데",
+   "card": "수법이 **영화급**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "수정테이프에 초소형 카메라를 붙여서 문제를 찍고",
+   "card": "수정테이프에 **초소형 카메라**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "AI가 푼 답을 카톡으로 받아서",
+   "card": "AI 답을 **카톡**으로",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "옷 속에 숨긴 초소형 모니터로 봤다고 함",
+   "card": "옷 속 **초소형 모니터**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "headline",
+   "overlay_text": "[단독]세무사 수석, AI 답 ‘카톡’으로 받아 옷 속 모니터로 봤다",
+   "overlay_source": "동아일보"
+  },
+  {
+   "narration": "감독관 코앞에서 그대로 뚫린 거",
+   "card": "감독관 **코앞에서** 뚫림",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "경찰은 13시간 조사에 압수수색까지 했고",
+   "card": "13시간 조사 + **압수수색**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "headline",
+   "overlay_text": "'AI 부정행위' 세무사 수석, 13시간 경찰 조사받고 귀가",
+   "overlay_source": "연합뉴스TV"
+  },
+  {
+   "narration": "공단 상대로 집단소송까지 추진 중이래",
+   "card": "공단 상대 **집단소송**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "headline",
+   "overlay_text": "AI로 세무사시험 부정행위…법무법인 YK, 공단 상대 집단소송 추진",
+   "overlay_source": "문화일보"
+  },
+  {
+   "narration": "결국 정부가 칼을 빼들었는데",
+   "card": "정부가 **칼을 빼듦**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "국가자격시험 컨닝 걸리면 이제 10년 동안 못 봄",
+   "card": "컨닝 걸리면 **10년** 응시 금지",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "headline",
+   "overlay_text": "국가자격시험 관리감독 강화…부정행위 응시제한 10년으로 확대",
+   "overlay_source": "대한민국 정책브리핑"
+  },
+  {
+   "narration": "근데 AI 기기는 점점 작아지는데 이걸로 막힐까?",
+   "card": "근데 이걸로 **막힐까?**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "question": "",
+ "voice": "용식",
+ "outro": "",
+ "media": [
+  {
+   "image": "a_trophy.jpg"
+  },
+  {
+   "zzal": "z1.png"
+  },
+  {
+   "zzal": "z3.png"
+  },
+  {
+   "image": "a_detector.jpg"
+  },
+  {
+   "image": "a_helper.jpg"
+  },
+  {
+   "image": "a_monitor.jpg"
+  },
+  {
+   "image": "a_detector.jpg"
+  },
+  {
+   "image": "a_detector.jpg"
+  },
+  {
+   "image": "a_helper.jpg"
+  },
+  {
+   "image": "a_lock.jpg"
+  },
+  {
+   "image": "a_lock.jpg"
+  },
+  {
+   "zzal": "z11.png"
+  },
+  {
+   "zzal": "z12.png"
+  }
+ ],
+ "yt_title": "세무사 시험 수석이 알고 보니 AI 컨닝 ㄷㄷ #shorts",
+ "description": "제63회 세무사 시험 수석 합격자가 AI 부정행위를 시인하고 경찰에 자수했어요. 보도에 따르면 초소형 카메라로 문제를 찍고, AI가 푼 답을 카톡으로 받아 옷 속 초소형 모니터로 확인했다고 해요. 정부는 국가자격시험 부정행위 응시제한을 10년으로 늘리기로 했어요.\n\n님들은 어떻게 생각해요잉?\n\n※ 일부 장면은 AI로 만든 이미지예요.\n※ 일러스트: いらすとや (irasutoya.com)\n출처: 동아일보·연합뉴스TV·문화일보·대한민국 정책브리핑 보도\n\n#세무사 #AI부정행위 #컨닝 #국가자격시험 #세무사시험",
+ "tags": [
+  "세무사",
+  "AI부정행위",
+  "컨닝",
+  "국가자격시험",
+  "세무사시험",
+  "이슈"
+ ],
+ "sources": [
+  "https://news.google.com/rss/search?q=%EC%84%B8%EB%AC%B4%EC%82%AC+AI+%EB%B6%80%EC%A0%95%ED%96%89%EC%9C%84&hl=ko&gl=KR&ceid=KR:ko"
+ ]
+}
