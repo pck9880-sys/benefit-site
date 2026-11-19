@@ -104,6 +104,18 @@ def _layout(p, d, t):
                 break
         else:
             media.append({"image": pools["ai"][i % len(pools["ai"])]} if pools["ai"] else media[-1])
+    # 규칙(2026-11-20): AI 이미지 2장마다 실사(실제 사진·원글 이미지) 1장 — AI 가 3장 연속이면 남은 실사로 바꿈
+    ai_set = set(pools["ai"])
+    real_left = [x for x in pools["real"] + pools["post"] if not any(x in m.values() for m in media)]
+    streak = 0
+    for i, m in enumerate(media):
+        if m.get("image") in ai_set:
+            streak += 1
+            if streak > 2 and real_left:
+                media[i] = {"image": real_left.pop(0)}
+                streak = 0
+        else:
+            streak = 0
     return media
 
 
@@ -188,6 +200,13 @@ def check(slug):
     if not ok:
         p["media"] = _layout(p, d, t)
         notes.append("장면 배치를 템플릿 순서로 채움")
+    ai_names = {g["file"] for g in gi if not g["file"].startswith("thumb")}
+    n_ai = sum(1 for m in p["media"] if m.get("image") in ai_names)
+    n_real = sum(1 for m in p["media"] if re.match(r"^[rs]\d+\.jpg$", m.get("image", "")))
+    need = (n_ai + 1) // 2
+    if n_real < need:
+        errs.append(f"AI 장면 {n_ai}개에 실사 {n_real}개 → AI 2장당 실사 1장 필수: 실사 {need - n_real}장 더 "
+                    f"(python -m bot.photos get \"<영어 검색어>\" assets/samples/<slug>/rN.jpg auto)")
     if kind == "감동" and any("zzal" in m for m in p["media"]):
         p["media"] = [m for m in p["media"] if "zzal" not in m] or p["media"]
         p["media"] = _layout(p, d, t)
