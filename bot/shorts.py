@@ -223,36 +223,55 @@ def font_css(family, file):
 # 섞어 쓰는 자막 4종 (사용자 참고 이미지 2026-11-20): 장면마다 돌아가며
 MIX_STYLES = [
     # 흰 글씨 + 검은 테두리 (기본 설명 문장)
-    dict(font=("Pretendard", None), fill="#fff", stroke="#111", sw=16, shadow="0 8px 18px rgba(0,0,0,.55)", weight=900),
+    dict(font=("Pretendard", None), fill="#fff", stroke="#111", sw=11, shadow="0 8px 18px rgba(0,0,0,.55)", weight=900),
     # 빨간 글씨 + 흰 테두리 + 어두운 그림자 (강조·반발)
-    dict(font=("BHS", "BlackHanSans-Regular.ttf"), fill="#e8121c", stroke="#fff", sw=17,
-         shadow="5px 7px 0 rgba(40,0,0,.85)", weight=400),
+    dict(font=("BHS", "BlackHanSans-Regular.ttf"), fill="#e8121c", stroke="#fff", sw=12,
+         shadow="4px 5px 0 rgba(40,0,0,.85)", weight=400),
     # 검은 글씨 + 흰 테두리, 둥근 글씨 (말투·인용)
-    dict(font=("Jua", "Jua-Regular.ttf"), fill="#111", stroke="#fff", sw=17, shadow="0 6px 14px rgba(0,0,0,.45)", weight=400),
+    dict(font=("Jua", "Jua-Regular.ttf"), fill="#111", stroke="#fff", sw=12, shadow="0 6px 14px rgba(0,0,0,.45)", weight=400),
     # 주황·빨강 그라데이션 + 검은 테두리 + 붉은 번짐 (전환·반전)
-    dict(font=("DoHyeon", "DoHyeon-Regular.ttf"), fill="linear-gradient(#ff7a1a,#d0141c)", stroke="#1a0000", sw=18,
+    dict(font=("DoHyeon", "DoHyeon-Regular.ttf"), fill="linear-gradient(#ff7a1a,#d0141c)", stroke="#1a0000", sw=13,
          shadow="0 0 22px rgba(255,60,0,.55)", weight=400),
 ]
+
+
+def balance_lines(text, max_one=13):
+    """자막 줄바꿈: 짧으면 한 줄, 길면 가운데에 가장 가까운 띄어쓰기에서만 나눔 (단어 중간 끊김 없음, 한 줄에 한두 글자만 남지 않게)."""
+    if "\n" in text or len(text) <= max_one or " " not in text:
+        return text
+    mid = len(text) / 2
+    sp = [i for i, ch in enumerate(text) if ch == " "]
+    n = len(text)
+    def cost(i):  # 가운데에 가깝게, 한 글자 단어(두·한·안·못·더 등) 앞뒤에서는 끊지 않기 ("두 / 포기", "/ 두 개" 방지)
+        prev, nxt = text[:i].split(" ")[-1], text[i + 1:].split(" ")[0]
+        return abs(i - mid) + (8 if len(prev) <= 1 else 0) + (8 if len(nxt) <= 1 else 0)
+    ok = [i for i in sp if min(i, n - i - 1) >= n * 0.3  # 양쪽 다 전체의 30% 이상 (꼬리 한두 글자 방지)
+          and len(text[:i].split(" ")[-1]) > 1 and len(text[i + 1:].split(" ")[0]) > 1]  # 한 글자 단어 앞뒤 금지
+    if not ok:
+        return text  # 한 줄로 두고 글자 크기를 줄여 맞춤
+    best = min(ok, key=cost)
+    return text[:best].strip() + "\n" + text[best + 1:].strip()
 
 
 def mix_caption_html(text, idx=0, impact=False):
     st = MIX_STYLES[idx % len(MIX_STYLES)]
     fam, file = st["font"]
     css_font = font_css(fam, file) if file else ""
-    body = re.sub(r"\*\*(.+?)\*\*", r"\1", e(text))
+    plain = re.sub(r"\*\*(.+?)\*\*", r"\1", text).strip()
+    body = e(balance_lines(plain, 11))
     grad = st["fill"].startswith("linear")
     fill = (f"background:{st['fill']};-webkit-background-clip:text;color:transparent;" if grad else f"color:{st['fill']};")
-    size = 110 if impact else 96
+    size = 78 if impact else 67  # 2026-11-20: 96px 의 70%
     return f"""<style>{css_font}{BASE_CSS}
-.c{{position:absolute;top:{MEDIA_Y + MEDIA - 270}px;left:30px;right:30px;height:240px;display:flex;align-items:flex-end;
+.c{{position:absolute;top:{MEDIA_Y + MEDIA - 220}px;left:60px;right:60px;height:190px;display:flex;align-items:flex-end;
  justify-content:center;text-align:center}}
 .w{{position:relative;display:inline-block;font-family:'{fam}',Pretendard,sans-serif;font-weight:{st['weight']};
- font-size:{size}px;line-height:1.12;letter-spacing:-.02em;word-break:keep-all}}
+ font-size:{size}px;line-height:1.18;letter-spacing:-.02em;word-break:keep-all;white-space:pre}}
 .w .o{{position:absolute;inset:0;color:{st['stroke']};-webkit-text-stroke:{st['sw']}px {st['stroke']};text-shadow:{st['shadow']}}}
 .w .f{{position:relative;{fill}}}</style>
 <div class="c"><div class="w"><div class="o">{body}</div><div class="f">{body}</div></div></div>
 <script>window.fit=function(){{const c=document.querySelector('.c'),w=document.querySelector('.w');let s={size};
- while((w.scrollWidth>c.clientWidth||w.scrollHeight>c.clientHeight)&&s>48){{s-=3;w.style.fontSize=s+'px';
+ while((w.scrollWidth>c.clientWidth||w.scrollHeight>c.clientHeight)&&s>40){{s-=2;w.style.fontSize=s+'px';
   w.querySelectorAll('.o').forEach(o=>o.style.webkitTextStroke=Math.round(s*0.17)+'px {st["stroke"]}');}}}};</script>"""
 
 

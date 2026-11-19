@@ -1,14 +1,58 @@
 {
  "label": "핫이슈",
- "plan": {"mood": "기본", "kind": "이슈", "caption_style": "mix", "music_concept": "긴장감 이슈", "question": "",
-          "character": "", "hook_video": "", "photo_fallbacks": []},
- "intro": {"emoji": "🔥", "board": "이슈 • 뉴스 게시판"},
- "beats": [11, 12],
- "ai_images": 4, "thumb_ai": true,
- "zzal": {"min": 0, "max": 1, "source": "irasutoya"},
- "real_photos": {"min": 1, "max": 3},
- "media_pattern": ["ai", "real", "ai", "real", "ai", "zzal", "ai", "real", "ai", "ai", "real", "ai"],
+ "plan": {
+  "mood": "기본",
+  "kind": "이슈",
+  "caption_style": "mix",
+  "music_concept": "긴장감 이슈",
+  "question": "",
+  "character": "",
+  "hook_video": "",
+  "photo_fallbacks": []
+ },
+ "intro": {
+  "emoji": "🔥",
+  "board": "이슈 • 뉴스 게시판"
+ },
+ "beats": [
+  11,
+  12
+ ],
+ "ai_images": 4,
+ "thumb_ai": true,
+ "zzal": {
+  "min": 0,
+  "max": 1,
+  "source": "irasutoya"
+ },
+ "real_photos": {
+  "min": 2,
+  "max": 5
+ },
+ "media_pattern": [
+  "real",
+  "ai",
+  "real",
+  "real",
+  "ai",
+  "zzal",
+  "real",
+  "real",
+  "ai",
+  "real",
+  "real",
+  "ai"
+ ],
  "image_style": "Photorealistic dramatic news-style photo, cinematic lighting, tense atmosphere, no real identifiable people, no text, no letters, no logos, no watermark",
- "disclaimers": ["※ 일부 실제 사진은 모자이크 처리함.", "※ 장면 일부는 AI로 만든 이미지임."],
- "tags": ["이슈", "뉴스", "핫이슈", "요즘", "쇼츠"]
+ "disclaimers": [
+  "※ 일부 실제 사진은 모자이크 처리함.",
+  "※ 장면 일부는 AI로 만든 이미지임."
+ ],
+ "tags": [
+  "이슈",
+  "뉴스",
+  "핫이슈",
+  "요즘",
+  "쇼츠"
+ ]
 }

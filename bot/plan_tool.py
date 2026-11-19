@@ -136,6 +136,19 @@ def check(slug):
         if BAD_END.search(s):
             errs.append(f"문장{i + 1} 존댓말/해요체 끝: {s} → 음슴체(~함/~했음/~임)로")
         b.setdefault("card", s)
+    ends = [re.sub(r"[^가-힣]", "", re.sub(r"\*\*", "", b["narration"]))[-2:] for b in beats]
+    for i in range(2, len(ends)):
+        if ends[i] and ends[i] == ends[i - 1] == ends[i - 2]:
+            errs.append(f"문장{i - 1}~{i + 1} 끝맺음 '{ends[i]}' 3번 연속 → 이어 주는 말(~했는데/~하더니/~해서)·명사 끝 등으로 섞기")
+            break
+    import unicodedata
+    def _jong_m(ch):  # 받침이 ㅁ 인 글자(했음·함·임·됨·옴…) = 음슴체 명사형 끝
+        if not ("가" <= ch <= "힣"):
+            return False
+        return (ord(ch) - 0xAC00) % 28 == 16
+    eum = sum(1 for e in ends if e and _jong_m(e[-1]))
+    if beats and eum > len(beats) * 0.55:
+        errs.append(f"'~음/~함' 끝이 {eum}/{len(beats)}문장 → 절반 이하로. '~했는데/~하더니/~해서/~니까', 명사 끝, 'ㅋㅋ' 로 이어 쓰기")
     for k in ("yt_title", "pin_comment", "description"):
         if "해요잉" in p.get(k, ""):
             errs.append(f"{k} 에 '해요잉' 금지")
@@ -193,6 +206,11 @@ def check(slug):
             continue
         if line not in desc:
             desc = desc.rstrip() + "\n\n" + line
+    cf = d / "credits.json"
+    if cf.exists():
+        for c in json.loads(cf.read_text("utf-8")).values():
+            if c and c not in desc:
+                desc = desc.rstrip() + "\n" + c
     pj = d / "post.json"
     if pj.exists():
         site = json.loads(pj.read_text("utf-8")).get("site", "")

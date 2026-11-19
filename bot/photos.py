@@ -100,3 +100,47 @@ def _find_one(query, used, out_path):
             continue
     print(f"[photos] '{query}': 후보 {len(cands)}개, 실패 {fails[:6]}")
     return None, None
+
+
+def get(query, out, mode="auto"):
+    """실사 사진 1장 받기: Pexels(키) → Openverse(CC, 재시도) → 위키미디어. 사람 있으면 모자이크(bot.realimg).
+    출처는 같은 폴더 credits.json 에 모아 설명란에 붙인다. 성공하면 출처 문구, 실패하면 None."""
+    import json
+    import time
+    from pathlib import Path
+    from . import realimg
+    out = Path(out)
+    cands = pexels(query)
+    for _ in range(3):
+        if cands:
+            break
+        cands = openverse(query)
+        if not cands:
+            time.sleep(2)
+    cands = cands or wikimedia(query)
+    cands = [c for c in cands if "SA" not in c.get("credit", "")]  # 동일조건변경허락(SA)은 영상에 못 씀
+    for c in cands[:5]:
+        try:
+            r = requests.get(c["url"], timeout=30, headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                             "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"})
+            r.raise_for_status()
+            tmp = out.with_suffix(".src")
+            tmp.write_bytes(r.content)
+            realimg.process(tmp, out, mode)
+            tmp.unlink(missing_ok=True)
+            cf = out.parent / "credits.json"
+            cr = json.loads(cf.read_text("utf-8")) if cf.exists() else {}
+            cr[out.name] = c.get("credit", "")
+            cf.write_text(json.dumps(cr, ensure_ascii=False, indent=1), "utf-8")
+            print(f"[photos] {out.name} ← '{query}' {c.get('credit', '')[:80]}")
+            return c.get("credit")
+        except Exception as e:
+            print("[photos] 받기 실패:", type(e).__name__)
+    print(f"[photos] '{query}' 실사 사진 없음 → 다른 검색어로 다시 하거나 AI 이미지")
+    return None
+
+
+if __name__ == "__main__":
+    import sys
+    if sys.argv[1] == "get":
+        get(sys.argv[2], sys.argv[3], sys.argv[4] if len(sys.argv) > 4 else "auto")
