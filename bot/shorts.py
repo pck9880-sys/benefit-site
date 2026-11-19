@@ -356,6 +356,7 @@ ENGINES = []  # 문장별로 실제 쓴 음성 엔진 기록
 CURRENT_VOICE = {}  # 이번 영상 목소리 (타입캐스트 캐릭터 이름)
 LAST_BGM = None  # 이번 영상에 쓴 배경음악 파일 이름 (설명란 출처 표기용)
 LAST_BGM_CREDIT = None  # Jamendo 곡이면 출처 문구
+SONG_SPEC = None  # 분위기별 인기곡 (render_sample 이 bot.songs.pick 결과로 채움)
 
 
 def music_credit():
@@ -628,6 +629,8 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
     k = 2 if (voice_track or (keep_audio and bgm_spec)) else 1
     if keep_audio:
         bgm = None
+    elif SONG_SPEC:  # 분위기별 인기곡 (bot.songs, Mac 로컬 음원 폴더)
+        bgm, LAST_BGM_CREDIT = Path(SONG_SPEC["file"]), SONG_SPEC.get("credit")
     else:
         bgm, LAST_BGM_CREDIT = music.pick(work) if config.SHORTS_BGM else (None, "NONE")  # 배경음악 꺼져 있으면 없음
     if keep_audio:
@@ -641,9 +644,12 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
         LAST_BGM = bgm.name
         bl = duration(bgm)
         off = random.uniform(bl * 0.15, bl * 0.45) if bl > 60 else 0  # 긴 곡은 인트로를 건너뛰고 신나는 부분부터
+        if SONG_SPEC:
+            off = SONG_SPEC.get("start", off)
         inputs += ["-stream_loop", "-1", "-ss", f"{off:.1f}", "-i", bgm]
         # 곡마다 음량이 달라서 먼저 일정한 크기(-30 LUFS)로 맞춘 뒤 목소리 아래로 옅게 깐다
-        chains.append(f"[{k}:a]loudnorm=I={config.SHORTS_BGM_LUFS}:TP=-6:LRA=11,aresample=44100,afade=t=in:d=0.3[bg]")
+        lufs = SONG_SPEC.get("lufs", config.SHORTS_BGM_LUFS) if SONG_SPEC else config.SHORTS_BGM_LUFS
+        chains.append(f"[{k}:a]loudnorm=I={lufs}:TP=-6:LRA=11,aresample=44100,afade=t=in:d=0.3[bg]")
         labels.append("[bg]")
         k += 1
     sfx_dir = config.ROOT / "assets" / "sfx"
@@ -932,6 +938,16 @@ def render_sample(folder):
                  else None for i in range(len(p.beats))]
     work = Path(tempfile.mkdtemp(prefix="sample-"))
     audios = None
+    global SONG_SPEC
+    SONG_SPEC = None
+    if raw.get("song") is not False and not raw.get("bgm"):  # "song": false 면 인기곡 안 씀
+        from . import songs
+        main = bool(raw.get("keep_audio")) and not raw.get("intro_voice") and not raw.get("mixed_audio")
+        spec = songs.pick(raw, main=main)
+        if spec and (raw.get("keep_audio") or raw.get("mixed_audio")):
+            raw["bgm"] = spec  # 현장음·혼합형은 bgm_spec 경로 (절대 경로라 폴더 기준 결합에도 그대로)
+        else:
+            SONG_SPEC = spec
     voice = next((d / f"voice.{ext}" for ext in ("mp3", "wav", "m4a", "mp4") if (d / f"voice.{ext}").exists()), None)
     if raw.get("mixed_audio"):  # 게임 대사 장면(orig_audio)은 원본 소리, 나머지는 더빙
         video, voiced = render_mixed(p, raw, d, media, work, voice)
