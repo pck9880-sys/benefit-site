@@ -36,3 +36,16 @@
 {% endif %}
 </svg>
 {%- endmacro %}
+
+{# 분야별 3D 썸네일 파일 이름 #}
+{% macro thumb_key(name) -%}
+{%- set n = name or "" -%}
+{%- if "주거" in n -%}housing{%- elif "고용" in n or "창업" in n or "일자리" in n -%}work
+{%- elif "임신" in n or "출산" in n -%}birth{%- elif "보육" in n or "교육" in n -%}edu
+{%- elif "보건" in n or "의료" in n or "건강" in n -%}health{%- elif "보호" in n or "돌봄" in n -%}care
+{%- elif "생활" in n or "안정" in n or "금융" in n -%}living{%- elif "문화" in n or "환경" in n -%}culture
+{%- elif "농" in n or "어업" in n -%}farm{%- else -%}etc{%- endif -%}
+{%- endmacro %}
+{% macro thumb(name, cls="thumb") -%}
+<img class="{{ cls }}" src="{{ base }}/static/img/cat/{{ thumb_key(name) }}.webp" alt="" width="240" height="240" loading="lazy" decoding="async">
+{%- endmacro %}

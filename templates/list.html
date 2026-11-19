@@ -4,15 +4,15 @@
 {% if not title and page == 1 %}
 <section class="hero" id="hero">
   <div class="slides">
-    <div class="slide on s1"><div class="slide-in"><span class="kick">이번 달 업데이트</span><h1>받을 수 있는 지원금,<br>놓치지 말고 확인하세요</h1><p>정부·지자체 지원제도의 대상, 금액, 신청 방법을 한 페이지로 정리했습니다.</p><a class="btn" href="#latest">최신 안내 보기</a></div><div class="art art1"></div></div>
-    <div class="slide s2"><div class="slide-in"><span class="kick">주거 · 자립</span><h1>월세·전세·내 집 마련<br>지원 제도 모아보기</h1><p>청년 월세, 전세보증금 반환보증, 디딤돌 대출까지 조건을 비교해 보세요.</p><a class="btn" href="#cats">분야별 보기</a></div><div class="art art2"></div></div>
-    <div class="slide s3"><div class="slide-in"><span class="kick">일자리 · 교육</span><h1>취업 준비와 직업훈련,<br>국가 지원으로 시작하기</h1><p>국민취업지원제도, 국민내일배움카드 등 신청 절차를 쉽게 안내합니다.</p><a class="btn" href="#latest">안내 읽기</a></div><div class="art art3"></div></div>
+    <div class="slide on s1" style="background-image:url({{ base }}/static/img/banner/b1.webp)"><div class="slide-in"><span class="kick">이번 달 업데이트</span><h1>받을 수 있는 지원금,<br>놓치지 말고 확인하세요</h1><p>정부·지자체 지원제도의 대상, 금액, 신청 방법을 한 페이지로 정리했습니다.</p><a class="btn" href="#latest">최신 안내 보기</a></div></div>
+    <div class="slide s2" style="background-image:url({{ base }}/static/img/banner/b2.webp)"><div class="slide-in"><span class="kick">주거 · 자립</span><h1>월세·전세·내 집 마련<br>지원 제도 모아보기</h1><p>청년 월세, 전세보증금 반환보증, 디딤돌 대출까지 조건을 비교해 보세요.</p><a class="btn" href="#cats">분야별 보기</a></div></div>
+    <div class="slide s3" style="background-image:url({{ base }}/static/img/banner/b3.webp)"><div class="slide-in"><span class="kick">일자리 · 교육</span><h1>취업 준비와 직업훈련,<br>국가 지원으로 시작하기</h1><p>국민취업지원제도, 국민내일배움카드 등 신청 절차를 쉽게 안내합니다.</p><a class="btn" href="#latest">안내 읽기</a></div></div>
   </div>
   <div class="dots"><button class="on" aria-label="1"></button><button aria-label="2"></button><button aria-label="3"></button></div>
 </section>
 <section class="catgrid" id="cats">
   {% for slug, name, n in categories %}
-  <a class="cat" href="{{ base }}/c/{{ slug }}/">{{ icon(name) }}<span>{{ name }}</span><small>{{ n }}건</small></a>
+  <a class="cat" href="{{ base }}/c/{{ slug }}/">{{ thumb(name, "cat-img") }}<span>{{ name }}</span><small>{{ n }}건</small></a>
   {% endfor %}
 </section>
 {{ ad("wide", 0) }}
@@ -23,7 +23,7 @@
     <ul class="cards">
     {% for p in posts %}
       <li><a href="{{ base }}/{{ p.url }}">
-        <span class="card-ico">{{ icon(p.source.field) }}</span>
+        <span class="card-ico">{{ thumb(p.source.field) }}</span>
         <span class="card-b">
           <span class="tag">{{ p.source.field }}</span>
           <strong>{{ p.article.title }}</strong>

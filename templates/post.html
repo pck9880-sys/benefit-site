@@ -2,6 +2,7 @@
 {% block title %}{{ a.title }} | {{ site_name }}{% endblock %}
 {% block desc %}{{ a.description }}{% endblock %}
 {% block ogtype %}article{% endblock %}
+{% block ogimage %}{{ site_url }}/static/img/cat/{{ thumb_key(post.source.field) }}.webp{% endblock %}
 {% block head %}
 <script type="application/ld+json">{{ {"@context":"https://schema.org","@type":"Article","headline":a.title,"description":a.description,"datePublished":post.published_at,"dateModified":post.published_at,"mainEntityOfPage":canonical,"publisher":{"@type":"Organization","name":site_name}} | tojson }}</script>
 {% if faq_ld %}<script type="application/ld+json">{{ faq_ld | safe }}</script>{% endif %}
@@ -10,8 +11,8 @@
 <div class="layout">
 <article class="post content">
   <nav class="crumb"><a href="{{ base }}/">홈</a><span>›</span><a href="{{ base }}/c/{{ post.field_slug }}/">{{ post.source.field }}</a></nav>
-  <span class="tag">{{ post.source.field }}</span>
-  <h1>{{ a.title }}</h1>
+  <div class="post-head"><div><span class="tag">{{ post.source.field }}</span>
+  <h1>{{ a.title }}</h1></div>{{ thumb(post.source.field, "post-thumb") }}</div>
   <div class="meta">
     <span>소관 {{ post.source.org }}</span><span>게시 {{ post.date }}</span><span>읽는 데 약 {{ read_min }}분</span>
     {% if post.source.deadline %}<span class="dl">신청기한 {{ post.source.deadline[:40] }}</span>{% endif %}
@@ -37,7 +38,7 @@
   </div>
   <div class="share"><button class="btn ghost" id="copyLink">링크 복사</button><span class="tags">{% for t in a.tags %}<span>#{{ t }}</span>{% endfor %}</span></div>
   {{ ad("wide", 2) }}
-  {% if related %}<section class="related"><h2>함께 보면 좋은 지원제도</h2><ul class="mini-cards">{% for r in related %}<li><a href="{{ base }}/{{ r.url }}"><span class="tag">{{ r.source.field }}</span><strong>{{ r.article.title }}</strong></a></li>{% endfor %}</ul></section>{% endif %}
+  {% if related %}<section class="related"><h2>함께 보면 좋은 지원제도</h2><ul class="mini-cards">{% for r in related %}<li><a href="{{ base }}/{{ r.url }}">{{ thumb(r.source.field, "mini-thumb") }}<span class="tag">{{ r.source.field }}</span><strong>{{ r.article.title }}</strong></a></li>{% endfor %}</ul></section>{% endif %}
 </article>
 {% include "sidebar.html" %}
 </div>
