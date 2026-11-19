@@ -13,7 +13,7 @@ HELP = (
     f"응답이 없으면 {round(config.AUTO_APPROVE_HOURS * 60)}분 뒤 다음 확인 때 자동 게시됩니다.\n"
     "버튼은 15분 안에 반영되고, 반영되면 메시지가 「✅ 게시됨」으로 바뀝니다.\n\n"
     "명령어\n/status 현황\n/pause 일시정지\n/resume 재개\n/now 다음 실행 때 바로 글 생성\n/approveall 대기 초안 전부 승인\n"
-    "/post 지금 글 1개 올리기 · /post 3 (3개) · /post 청년 월세 (주제 지정)\n/kpi 성과 리포트 보기 (매일 저녁 9시 자동 전송)\n/contest 다음 실행 때 공모전 출품안 받기\n/contestoff 공모전 알림 끄기 · /conteston 켜기\n/shorts 지금 이슈 숏츠 1개 만들기 (매일 낮 12시 자동)"
+    "/post 지금 글 1개 올리기 · /post 3 (3개) · /post 청년 월세 (주제 지정)\n/kpi 성과 리포트 보기 (매일 저녁 9시 자동 전송)\n/contest 다음 실행 때 공모전 출품안 받기\n/contestoff 공모전 알림 끄기 · /conteston 켜기\n/shorts 지금 이슈 숏츠 1개 만들기 (매일 낮 12시 자동)\n/bgm 배경음악 후보 듣고 고르기 (/bgm funk 처럼 장르 지정 · /bgmadd 곡이름 으로 직접 추가 · /bgmlist 목록 · /bgmclear 자동 선택)"
 )
 
 
@@ -94,6 +94,9 @@ def handle_updates(st):
 
         if cb:
             action, _, sid = (cb.get("data") or "").partition(":")
+            if action in ("bgm", "bgmdel"):
+                handle_bgm_button(st, cb, action, sid)
+                continue
             path = config.DRAFTS_DIR / f"{sid}.json"
             telegram.answer_callback(cb["id"], "처리했습니다")
             if path.exists():
@@ -138,6 +141,8 @@ def handle_updates(st):
         elif text == "/shorts":
             st["shorts_request"] = now().isoformat(timespec="seconds")
             notify(st, "🎬 숏츠를 만들기 시작할게요 (영상 완성까지 약 5~10분)")
+        elif text.startswith("/bgm"):
+            handle_bgm_command(st, text)
         elif text == "/kpi":
             from . import kpi
             notify(st, kpi.report(st))
@@ -145,6 +150,73 @@ def handle_updates(st):
             notify(st, status_text(st))
         else:
             notify(st, HELP)
+
+
+def handle_bgm_command(st, text):
+    """/bgm [장르] 후보 3곡 미리듣기 · /bgmlist 즐겨찾기 · /bgmclear 즐겨찾기 비우기(자동 선택)"""
+    from . import music
+    if not music.enabled():
+        notify(st, "🎵 Jamendo 키(JAMENDO_CLIENT_ID)가 없어서 곡을 고를 수 없어요.")
+        return
+    favs = st.setdefault("bgm_favs", [])
+    if text.startswith("/bgmclear"):
+        st["bgm_favs"] = []
+        notify(st, "🎵 즐겨찾기를 비웠어요. 이제 인기곡 중에서 자동으로 골라요.")
+        return
+    if text.startswith("/bgmadd"):
+        name = text.split(maxsplit=1)[1].strip() if " " in text else ""
+        if not name:
+            notify(st, "🎵 곡 이름을 같이 보내주세요. 예: /bgmadd Soul Fashion Lounge  (아티스트까지: /bgmadd 곡 - 아티스트)")
+            return
+        try:
+            t, why = music.by_name(name)
+        except Exception as e:
+            t, why = None, f"검색 실패: {e}"
+        if not t:
+            notify(st, "🎵 " + why)
+            return
+        info = {"id": str(t["id"]), "name": t["name"], "artist": t["artist_name"]}
+        if all(f["id"] != info["id"] for f in favs):
+            favs.append(info)
+            st["bgm_favs"] = favs[-20:]
+        telegram.send_audio(st.get("owner_chat_id") or config.TELEGRAM_CHAT_ID, t.get("audio") or t.get("audiodownload"),
+                            t["name"], t["artist_name"])
+        notify(st, f"⭐ '{t['name']} - {t['artist_name']}' 즐겨찾기에 추가했어요. (즐겨찾기 {len(st['bgm_favs'])}곡)")
+        return
+    if text.startswith("/bgmlist"):
+        if not favs:
+            notify(st, "🎵 즐겨찾기 곡이 없어요. /bgm 으로 후보를 들어보고 ⭐ 를 눌러주세요.")
+            return
+        notify(st, "🎵 숏츠에 쓰는 즐겨찾기 곡 (누르면 삭제)",
+               buttons=[[{"text": f"🗑 {f['name']} - {f['artist']}"[:60], "callback_data": f"bgmdel:{f['id']}"}] for f in favs])
+        return
+    tag = text.split(maxsplit=1)[1].strip().lower() if " " in text else None
+    tracks = music.search(tag, n=3)
+    if not tracks:
+        notify(st, f"🎵 '{tag}' 장르에서 상업적으로 쓸 수 있는 곡을 못 찾았어요. 예: /bgm funk, /bgm hiphop, /bgm lofi")
+        return
+    notify(st, f"🎵 후보 {len(tracks)}곡이에요{f' ({tag})' if tag else ''}. 들어보고 마음에 들면 ⭐ 를 눌러주세요.\n"
+               "다른 후보: /bgm 다시 · 장르 지정: /bgm funk · 목록: /bgmlist")
+    chat = st.get("owner_chat_id") or config.TELEGRAM_CHAT_ID
+    for t in tracks:
+        telegram.send_audio(chat, t.get("audio") or t.get("audiodownload"), t["name"], t["artist_name"],
+                            buttons=[[{"text": "⭐ 이 곡 쓰기", "callback_data": f"bgm:{t['id']}"}]])
+    st["bgm_last"] = {str(t["id"]): {"id": str(t["id"]), "name": t["name"], "artist": t["artist_name"]} for t in tracks}
+
+
+def handle_bgm_button(st, cb, action, tid):
+    favs = st.setdefault("bgm_favs", [])
+    if action == "bgm":
+        info = (st.get("bgm_last") or {}).get(tid, {"id": tid, "name": f"곡 {tid}", "artist": ""})
+        if all(f["id"] != tid for f in favs):
+            favs.append(info)
+            st["bgm_favs"] = favs[-20:]
+        telegram.answer_callback(cb["id"], "⭐ 즐겨찾기에 추가했어요")
+        notify(st, f"⭐ '{info['name']}' 추가! 이제 숏츠는 즐겨찾기 {len(st['bgm_favs'])}곡 중에서 골라요. (/bgmlist)")
+    else:
+        st["bgm_favs"] = [f for f in favs if f["id"] != tid]
+        telegram.answer_callback(cb["id"], "삭제했어요")
+        notify(st, f"🗑 삭제했어요. 남은 즐겨찾기 {len(st['bgm_favs'])}곡")
 
 
 def status_text(st):

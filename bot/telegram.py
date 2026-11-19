@@ -51,3 +51,11 @@ def get_updates(offset):
 
 def answer_callback(cb_id, text):
     _call("answerCallbackQuery", callback_query_id=cb_id, text=text)
+
+
+def send_audio(chat_id, url, title, performer, buttons=None):
+    """URL 의 음악을 텔레그램 미리듣기로 보냄 (텔레그램이 직접 받아감)."""
+    payload = {"chat_id": chat_id, "audio": url, "title": title[:60], "performer": performer[:60]}
+    if buttons:
+        payload["reply_markup"] = {"inline_keyboard": buttons}
+    return _call("sendAudio", **payload)
