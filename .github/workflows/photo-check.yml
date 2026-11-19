@@ -1,0 +1,25 @@
+name: photo-check
+on:
+  workflow_dispatch:
+    inputs:
+      query:
+        description: "사진 검색어 (영어)"
+        default: "baseball stadium"
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+      QUERY: ${{ inputs.query }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: |
+          python -m bot photos "$QUERY"
+          python -m bot photos "Samsung Lions"
+          python -m bot photos "championship ring"

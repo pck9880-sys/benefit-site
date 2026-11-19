@@ -6,7 +6,7 @@ import requests
 
 from . import config
 
-UA = {"User-Agent": "shorts-bot/1.0 (automated content tool)"}
+UA = {"User-Agent": "jiwon-shorts-bot/1.0 (https://github.com/pck9880-sys/benefit-site; automated video tool) python-requests"}
 
 
 def pexels(query, n=8):
@@ -20,6 +20,31 @@ def pexels(query, n=8):
                 for p in r.json().get("photos", [])]
     except Exception as e:
         print("[photos] pexels 실패:", type(e).__name__)
+        return []
+
+
+def wikimedia(query, n=8):
+    """위키미디어 공용 (실존 인물·장소에 강함, 자유 라이선스)."""
+    import re
+    try:
+        r = requests.get("https://commons.wikimedia.org/w/api.php", headers=UA, timeout=20, params={
+            "action": "query", "format": "json", "generator": "search", "gsrnamespace": 6,
+            "gsrsearch": f"{query} filetype:bitmap", "gsrlimit": n, "prop": "imageinfo",
+            "iiprop": "url|extmetadata|size", "iiurlwidth": 1200})
+        r.raise_for_status()
+        out = []
+        for pg in sorted((r.json().get("query") or {}).get("pages", {}).values(), key=lambda x: x.get("index", 0)):
+            ii = (pg.get("imageinfo") or [{}])[0]
+            m = ii.get("extmetadata") or {}
+            lic = (m.get("LicenseShortName") or {}).get("value", "")
+            if (ii.get("width") or 0) < 640 or not re.search(r"CC|Public domain|PD", lic, re.I) or "NC" in lic:
+                continue
+            artist = re.sub(r"<[^>]+>", "", (m.get("Artist") or {}).get("value", "unknown"))[:60]
+            out.append({"url": ii.get("thumburl") or ii["url"], "id": f"wm{pg['pageid']}",
+                        "credit": f"Photo: {artist} ({lic}) {ii.get('descriptionurl', '')}"})
+        return out
+    except Exception as e:
+        print("[photos] wikimedia 실패:", type(e).__name__)
         return []
 
 
@@ -55,7 +80,7 @@ def find(query, used, out_path, fallbacks=()):
 
 def _find_one(query, used, out_path):
     fails = []
-    cands = pexels(query) + openverse(query)
+    cands = pexels(query) + wikimedia(query) + openverse(query)
     for cand in cands:
         if cand["id"] in used:
             continue

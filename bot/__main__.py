@@ -25,6 +25,12 @@ elif cmd == "typecast-check":  # 타입캐스트 키·목소리 확인 → 텔�
         pipeline.notify(st, "🎙 " + msg)
         st["typecast_reported"] = msg
         pipeline.save_json(config.STATE_FILE, st)
+elif cmd == "photos":  # 사진 검색 점검: python -m bot photos "검색어"
+    import tempfile
+    from pathlib import Path
+    from . import photos
+    q = sys.argv[2] if len(sys.argv) > 2 else "baseball stadium"
+    print(photos.find(q, set(), Path(tempfile.mkdtemp()) / "t.jpg"))
 elif cmd == "shorts-due":  # 워크플로에서 숏츠를 만들 차례인지 확인 (0=만들기)
     from . import shorts
     sys.exit(0 if shorts.due(pipeline.load_state()) else 1)
