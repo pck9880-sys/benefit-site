@@ -50,6 +50,8 @@ class Plan(BaseModel):
     photo_fallbacks: List[str] = Field(description="사진 검색이 안 될 때 쓸 넓은 영어 검색어 2~3개 (예: 'soccer stadium', 'football fans')")
     hook_video: str = Field(description="첫 장면 AI 영상 프롬프트 (영어, 5초, 역동적인 한 장면)")
     beats: List[Beat] = Field(description="내레이션 4~5문장 (전체 20초 이내). 첫 문장은 제목 내용을 다시 던지는 훅, 마지막은 반전·한마디 정리")
+    question: str = Field(default="", description="마무리 직전 토론 유도 질문 1문장 (예: '근데 이거 실력임, 운빨임?'). "
+                                                 "의견이 둘로 갈리게, 욕설·비하·혐오·정치 편가르기·특정인 공격 금지. 20자 이내")
     voice: str = Field(default="", description="비워두세요 (시스템이 정함)")
     outro: str = Field(default="", description="채널 시그니처 마무리 한마디. 지시된 목소리 형식('다들 ~하자!' 또는 '다들 ~해요잉~'), 주제와 연결된 친근한 당부 "
                                      "(예: '다들 손흥민 응원하자!' / '다들 손흥민 응원해요잉~'). 20자 이내")
@@ -81,6 +83,7 @@ WRITE = """당신은 조회수 높은 한국 유튜브 쇼츠 작가입니다. �
 - 요즘 이슈 쇼츠처럼 사이사이에 카드(overlay)를 넣습니다: 기사 제목 카드 1개(headline, 조사 자료의 실제 제목 그대로),
   실제 여론 카드 1~2개(comment, 조사 자료에 인용된 네티즌·시민 반응만 — 없으면 넣지 않음), 필요하면 실제 발언 카드(quote).
   카드 문구는 절대 지어내지 않습니다. 욕설·비방·사망/피해자 관련 조롱은 넣지 않습니다.
+- 마무리 직전 question: 댓글 토론이 붙도록 의견이 갈리는 질문 1개 (A냐 B냐 형식). 자극적이어도 욕설·비하·혐오·정치 편가르기는 금지.
 - 마무리(outro)는 채널 시그니처 (본문 beats 에는 넣지 않음): {outro_rule}
 - 제목 2줄: 첫 줄은 상황, 둘째 줄(노란색)은 궁금증 ("~하는 이유", "~라고?", "결과는?").
 - 화면은 요즘 인기 쇼츠처럼 문장마다 컷이 바뀝니다. 모든 문장은 내용에 딱 맞는 AI 이미지('ai')로 연출합니다
@@ -353,6 +356,8 @@ def with_outro(p):
     """대본 끝에 시그니처 마무리 멘트('다들 ~해요잉~')를 붙인 복사본."""
     p = p.model_copy(deep=True)
     p.outro = signature(p.outro, voice_of(p))
+    if p.question.strip():  # 토론 유도 질문 (마지막 장면 위에)
+        p.beats.append(Beat(narration=p.question.strip(), card=p.question.strip(), twist=True, visual="ai", query="", ai_prompt=""))
     p.beats.append(Beat(narration=p.outro, card=p.outro, visual="ai", query="", ai_prompt=""))
     return p
 
@@ -373,7 +378,8 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None):
     from concurrent.futures import ThreadPoolExecutor
     CURRENT_VOICE["name"] = voice_of(p)
     p = with_outro(p)
-    media = list(media) + [next((m for m in reversed(list(media)) if m), None)]  # 마무리는 마지막 장면 그대로
+    last = next((m for m in reversed(list(media)) if m), None)
+    media = list(media) + [last] * max(0, len(p.beats) - len(media))  # 질문·마무리는 마지막 장면 그대로
     segs, jobs = [], []
     if voice_track:  # 통 녹음 하나를 그대로 깔고, 장면은 durations 길이로 전환
         audios = [None] * len(p.beats)
@@ -583,7 +589,8 @@ def upload_youtube(video, p, credits=()):
                   *[("tags[]", t) for t in p.tags[:8]],
                   ("privacyStatus", config.SHORTS_PRIVACY), ("selfDeclaredMadeForKids", "false"),
                   ("containsSyntheticMedia", "true"), ("defaultLanguage", "ko"), ("defaultAudioLanguage", "ko"),
-                  ("categoryId", "24"), ("async_upload", "true")],
+                  ("categoryId", "24"), ("async_upload", "true"),
+                  *([("first_comment", f"{p.question.strip()} 👇 댓글로 의견 남겨줘요!")] if p.question.strip() else [])],
             files={"video": ("shorts.mp4", f, "video/mp4")}, timeout=300)
     if r.status_code >= 300:
         raise RuntimeError(f"유튜브 업로드 실패 HTTP {r.status_code}: {r.text[:300]}")
@@ -715,9 +722,9 @@ def render_sample(folder):
     audios = None
     voice = next((d / f"voice.{ext}" for ext in ("mp3", "wav", "m4a", "mp4") if (d / f"voice.{ext}").exists()), None)
     if voice:  # 타입캐스트 웹에서 직접 만든 더빙 (반자동, 1.0배속으로 받아서 여기서 1.2배속)
-        texts = [b.narration for b in p.beats] + [signature(p.outro, voice_of(p))]
+        texts = [b.narration for b in with_outro(p).beats]
         fast = speed_up(voice, work)
-        durs = split_voice(fast, len(p.beats) + 1, work, texts)
+        durs = split_voice(fast, len(texts), work, texts)
         video, voiced = make_video(p, media, work, voice_track=fast, durations=durs)
     else:
         video, voiced = make_video(p, media, work, audios)
