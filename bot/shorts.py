@@ -41,6 +41,7 @@ class Plan(BaseModel):
     title_bottom: str = Field(description="상단 제목 둘째 줄 (노란색, 궁금증 포인트), 13자 이내")
     character: str = Field(description="AI 장면에 계속 나올 주인공(가상 인물)의 생김새 영어 묘사 (나이·성별·옷·분위기). "
                                        "실존 인물을 닮게 만들지 않음 — 실존 인물은 'photo' 장면으로만 보여줌")
+    photo_fallbacks: List[str] = Field(description="사진 검색이 안 될 때 쓸 넓은 영어 검색어 2~3개 (예: 'soccer stadium', 'football fans')")
     hook_video: str = Field(description="첫 장면 AI 영상 프롬프트 (영어, 5초, 역동적인 한 장면)")
     beats: List[Beat] = Field(description="내레이션 6~8문장 (전체 35초 이내). 첫 문장은 제목 내용을 다시 던지는 훅, 마지막은 반전·한마디 정리")
     yt_title: str = Field(description="유튜브 제목 40자 이내, 끝에 #shorts")
@@ -82,7 +83,7 @@ def plan_short(st):
     """(Plan, 비용)"""
     if config.MOCK or not config.ANTHROPIC_API_KEY:
         return Plan(topic="테스트 주제", title_top="미국 놀이공원에서", title_bottom="난리 난 기구의 정체",
-                    character="a Korean man in his 20s wearing a hoodie", hook_video="a roller coaster drops at sunset",
+                    character="a Korean man in his 20s wearing a hoodie", photo_fallbacks=["amusement park"], hook_video="a roller coaster drops at sunset",
                     beats=[Beat(narration="미국 놀이공원에 새로 생긴 기구가 난리라는데", card="미국 놀이공원 신상 기구",
                                 visual="photo", query="roller coaster", ai_prompt=""),
                            Beat(narration="높이가 무려 백 미터가 넘는다고 함", card="높이 100m 이상",
@@ -300,7 +301,7 @@ def gather_media(p, work):
     for i, b in enumerate(p.beats):
         if media[i]:
             continue
-        f, credit = photos.find(b.query, used, work / f"p{i}.jpg")
+        f, credit = photos.find(b.query, used, work / f"p{i}.jpg", fallbacks=p.photo_fallbacks)
         if f:
             media[i] = ("image", f)
             credits.append(credit)

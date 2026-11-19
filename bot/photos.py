@@ -42,18 +42,33 @@ def openverse(query, n=10):
         return []
 
 
-def find(query, used, out_path):
-    """query 로 사진 1장을 받아 out_path 에 저장. (경로, 출처 문구) 또는 (None, None)."""
-    for cand in pexels(query) + openverse(query):
+def find(query, used, out_path, fallbacks=()):
+    """query 로 사진 1장을 받아 out_path 에 저장. 안 되면 더 짧은 검색어로 재시도. (경로, 출처) 또는 (None, None)."""
+    words = query.split()
+    tries = [query] + ([" ".join(words[:2])] if len(words) > 2 else []) + list(fallbacks)
+    for q in dict.fromkeys(t for t in tries if t):
+        f, credit = _find_one(q, used, out_path)
+        if f:
+            return f, credit
+    return None, None
+
+
+def _find_one(query, used, out_path):
+    fails = []
+    cands = pexels(query) + openverse(query)
+    for cand in cands:
         if cand["id"] in used:
             continue
         try:
             r = requests.get(cand["url"], headers=UA, timeout=30)
             if r.status_code != 200 or len(r.content) < 20_000 or not r.headers.get("content-type", "").startswith("image"):
+                fails.append(str(r.status_code))
                 continue
             out_path.write_bytes(r.content)
             used.add(cand["id"])
             return out_path, cand["credit"]
-        except requests.RequestException:
+        except requests.RequestException as e:
+            fails.append(type(e).__name__)
             continue
+    print(f"[photos] '{query}': 후보 {len(cands)}개, 실패 {fails[:6]}")
     return None, None
