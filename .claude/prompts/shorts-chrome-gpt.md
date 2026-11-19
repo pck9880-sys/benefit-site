@@ -13,7 +13,7 @@
         `const b = await (await fetch(SRC)).blob(); w.postMessage({file:'<file>', blob:b}, '*')` → ack status 201 이면 성공.
      팝업은 계속 재사용하고 끝나면 닫는다. 원본이 PNG 여도 그대로 보내면 스크립트가 JPG 로 바꾼다. Bash 로 `ls -l {{DIR}}/<file>` 확인(30KB 이상).
    - 생성을 거절하거나 실패하면 문구를 안전하게 바꿔 1번만 다시. 그래도 안 되면 건너뛰고 gpt_result.txt 에 '<file>: 실패 이유'.
-   - 썸네일(thumb_src.jpg) 문구의 안전 조건(성인·옷 다 입음·노출/선정적 자세 금지)은 빼거나 바꾸지 않는다.
+   - 썸네일(thumb_src.jpg) 문구의 조건(성인·옷 다 입음·V넥 가슴골 살짝 허용·속옷/수영복/노출/선정적 자세 금지)은 빼거나 바꾸지 않는다.
    - 실존 인물 얼굴, 글자·로고가 들어간 이미지는 요청하지 않는다.
 3) 한도 초과·업그레이드 안내가 나오면 멈추고 gpt_result.txt 에 '실패: 한도'.
 4) 확인창(confirm/alert) 띄우는 동작 금지. 끝나면 연 탭을 닫는다. gpt_result.txt 에 성공한 파일 목록.

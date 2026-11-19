@@ -39,7 +39,7 @@
      설명란에 "※ 일부 실제 사진은 모자이크 처리했어요." 한 줄.
    - **배경음악은 넣지 않는다** (업로드 때 유튜브 '저장됨' 사운드에서 고름). plan.json 에 "music_concept": "잔잔한 감동" | "신나는 코믹" | "일상 브이로그" | "긴장감 이슈".
    - 썸네일(기본값): 웃긴글·기본이면 `python -m bot.thumb prompt assets/samples/<slug>` 문구 그대로 gpt_images 에 {"file": "thumb_src.jpg", "prompt": ...} 로 추가.
-     문구의 안전 조건(성인·옷 다 입음·노출/선정적 자세 금지)은 빼거나 바꾸지 않는다.
+     문구의 조건(성인·옷 다 입음·V넥 가슴골 살짝 허용·속옷/수영복/노출/선정적 자세 금지)은 빼거나 바꾸지 않는다.
      plan.json 에 "thumb_caption": 이미지 아래 자막 상자에 넣을 훅 한 마디(15자 이내). 감동이면 생략(장면 컷).
    - **렌더·썸네일 합성은 하지 않는다** (이미지 생성 뒤 다음 단계 스크립트가 함).
    - plan.json 에 yt_title(#shorts), description, tags, sources, pin_comment 포함.

@@ -2,7 +2,7 @@
 
 - 감동: 영상 장면 중 가장 강한 컷 + 제목 2줄.
 - 웃긴글·기본: AI 성인 여성 이미지(예쁘고 핏 좋은 옷으로 몸매 라인이 드러나는 정도) + 주제에 맞는 표정·리액션 + 제목 2줄.
-  넘지 않는 선(코드로 고정): 25세 이상 성인, 옷 다 갖춰 입음, 속옷·수영복·노출·가슴/엉덩이 클로즈업·선정적 자세 금지,
+  넘지 않는 선(코드로 고정): 25세 이상 성인, 옷 다 갖춰 입음(V넥 가슴골 살짝은 허용, 2026-11-20 사용자 지정), 속옷·수영복·노출·가슴/엉덩이 클로즈업·선정적 자세 금지,
   실존 인물 닮은꼴 금지, 영상 내용과 연결된 리액션(낚시성 무관 썸네일 금지).
 - 사용법:
   1) prompt(raw) 문구로 Figma generate_image (정사각 1024x1024) → assets/samples/<slug>/thumb_src.jpg
@@ -16,7 +16,7 @@ from pathlib import Path
 
 from . import config, songs
 
-SAFE = ("adult woman in her late 20s, fully clothed, high neckline, no cleavage, no lingerie, no swimwear, "
+SAFE = ("adult woman in her late 20s, fully clothed, no lingerie, no swimwear, no nudity, "
         "no suggestive pose, not resembling any real person, no text, no logo, no watermark")
 
 REACTION = {
@@ -32,7 +32,7 @@ def prompt(raw):
     topic = raw.get("topic", "")
     return ("Square 1:1 photorealistic photo for a YouTube Shorts thumbnail. A beautiful Korean "
             f"{SAFE.split(',')[0]} with a slim, well-proportioned figure, wearing a stylish form-fitting outfit "
-            "(fitted crew-neck knit top with high neckline, or slim cardigan buttoned up, with high-waist jeans) that shows her body silhouette tastefully, "
+            "(fitted V-neck knit top or slim cardigan with high-waist jeans, light natural cleavage visible) that shows her body silhouette tastefully, "
             f"{REACTION[mood]}. Reaction relates to this topic: {topic}. Waist-up framing, face in the upper third, "
             "bright clean studio light, soft pastel background, high contrast, sharp focus, Instagram-model look. "
             + ", ".join(SAFE.split(", ")[1:]) + ".")
