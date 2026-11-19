@@ -1,6 +1,7 @@
 """텔레그램 /post 요청 테스트. 실행: MOCK=1 python -m tests.test_request"""
 import shutil
 
+from tests import _sandbox  # noqa: F401  (실제 data/ 보호)
 from bot import config, pipeline, telegram
 
 sent, queue = [], []

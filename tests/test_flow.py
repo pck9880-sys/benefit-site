@@ -2,6 +2,7 @@
 import shutil
 from datetime import timedelta
 
+from tests import _sandbox  # noqa: F401  (실제 data/ 보호)
 from bot import config, pipeline, telegram
 
 sent, edits, queue = [], [], []
