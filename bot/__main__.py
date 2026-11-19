@@ -37,7 +37,10 @@ elif cmd == "shorts-sample":  # 저장된 대본·이미지로 숏츠 렌더링 
 elif cmd == "bgm-add":  # 배경음악 즐겨찾기 추가 (텔레그램 /bgmadd 와 같음): python -m bot bgm-add "곡 - 아티스트"
     from . import config
     st = pipeline.load_state()
-    pipeline.handle_bgm_command(st, "/bgmadd " + " ".join(sys.argv[2:]))
+    args = [a for a in sys.argv[2:] if a != "--replace"]
+    if "--replace" in sys.argv:
+        st["bgm_favs"] = []  # 이 곡만 쓰기
+    pipeline.handle_bgm_command(st, "/bgmadd " + " ".join(args))
     pipeline.save_json(config.STATE_FILE, st)
     print("favs:", st.get("bgm_favs"))
 elif cmd == "typecast-test":  # 타입캐스트 음성 1문장만 실제로 만들어 보기 (차단 여부 확인)

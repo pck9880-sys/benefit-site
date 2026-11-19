@@ -5,6 +5,10 @@ on:
       name:
         description: "곡 이름 (예: Learn From Me - Jonathan Dimmel)"
         required: true
+      replace:
+        description: "기존 즐겨찾기를 지우고 이 곡만"
+        type: boolean
+        default: false
 permissions:
   contents: write
 concurrency:
@@ -24,7 +28,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
-      - run: python -m bot bgm-add "$NAME"
+      - run: python -m bot bgm-add "$NAME" ${{ inputs.replace && '--replace' || '' }}
       - run: |
           git config user.name "auto-bot"
           git config user.email "auto-bot@users.noreply.github.com"
