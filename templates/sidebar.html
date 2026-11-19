@@ -1,0 +1,15 @@
+<aside class="side">
+  <div class="box">
+    <h3>분야별 안내</h3>
+    <ul class="side-cats">{% for slug, name, n in categories %}<li><a href="{{ base }}/c/{{ slug }}/">{{ icon(name) }}<span>{{ name }}</span><em>{{ n }}</em></a></li>{% endfor %}</ul>
+  </div>
+  {{ ad("side", 2) }}
+  <div class="box">
+    <h3>최근 업데이트</h3>
+    <ol class="side-list">{% for r in recent %}<li><a href="{{ base }}/{{ r.url }}">{{ r.article.title }}</a></li>{% endfor %}</ol>
+  </div>
+  <div class="box note">
+    <h3>이용 안내</h3>
+    <p>이 사이트의 정보는 공공데이터를 바탕으로 정리한 참고 자료입니다. 실제 지원 여부와 금액은 담당 기관 심사에 따라 달라질 수 있습니다.</p>
+  </div>
+</aside>

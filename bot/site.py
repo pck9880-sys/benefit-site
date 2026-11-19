@@ -51,20 +51,31 @@ def build():
         fields.setdefault(d["field_slug"], {"name": d["source"].get("field") or "기타", "posts": []})["posts"].append(d)
     cats = sorted(fields.items(), key=lambda kv: -len(kv[1]["posts"]))
     env.globals["categories"] = [(k, v["name"], len(v["posts"])) for k, v in cats]
+    env.globals["recent"] = posts[:6]
 
     def write(rel, html):
         (out / rel).parent.mkdir(parents=True, exist_ok=True)
         (out / rel).write_text(html, "utf-8")
 
-    md = markdown.Markdown(extensions=["tables", "sane_lists"])
+    from markdown.extensions.toc import TocExtension
+    md = markdown.Markdown(extensions=["tables", "sane_lists",
+                                       TocExtension(slugify=lambda v, sep: "s-" + re.sub(r"\s+", "-", v.strip()))])
     for d in posts:
         md.reset()
         body_html = md.convert(d["article"]["body_markdown"].replace("<", "&lt;"))  # 원시 HTML 차단
+        toc = [{"id": t["id"], "name": t["name"]} for t in md.toc_tokens]
+        # 본문 중간 광고를 넣기 위해 가운데 소제목 앞에서 둘로 나눔
+        cuts = [m.start() for m in re.finditer(r"<h2", body_html)]
+        mid = cuts[len(cuts) // 2] if len(cuts) >= 3 else len(body_html)
+        body_top, body_bottom = body_html[:mid], body_html[mid:]
+        read_min = max(1, round(len(re.sub(r"<[^>]+>", "", body_html)) / 500))
         faq_ld = json.dumps({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
             {"@type": "Question", "name": f["q"], "acceptedAnswer": {"@type": "Answer", "text": f["a"]}}
             for f in d["article"]["faq"]]}, ensure_ascii=False).replace("</", "<\\/") if d["article"]["faq"] else ""
-        related = [x for x in fields[d["field_slug"]]["posts"] if x["id"] != d["id"]][:5]
-        write(d["url"] + ".html", env.get_template("post.html").render(post=d, a=d["article"], body=body_html,
+        related = [x for x in fields[d["field_slug"]]["posts"] if x["id"] != d["id"]][:4]
+        if len(related) < 4:
+            related += [x for x in posts if x["id"] != d["id"] and x not in related][:4 - len(related)]
+        write(d["url"] + ".html", env.get_template("post.html").render(post=d, a=d["article"], body_top=body_top, body_bottom=body_bottom, toc=toc, read_min=read_min,
                                                              related=related, faq_ld=faq_ld, canonical=f"{config.SITE_URL}/{d['url']}"))
 
     # 목록 페이지 (페이지네이션)
@@ -72,16 +83,17 @@ def build():
         pages = max(1, -(-len(items) // PER_PAGE))
         for i in range(pages):
             rel = f"{prefix}index.html" if i == 0 else f"{prefix}page/{i + 1}.html"
+            url = f"{config.SITE_URL}/{prefix}" + ("" if i == 0 else f"page/{i + 1}")
             write(rel, env.get_template(tmpl_name).render(
-                posts=items[i * PER_PAGE:(i + 1) * PER_PAGE], title=title, page=i + 1, pages=pages,
-                prefix=prefix, canonical=f"{config.SITE_URL}/{rel}".replace("index.html", "")))
+                posts=items[i * PER_PAGE:(i + 1) * PER_PAGE], title=title, page=i + 1, pages=pages, total=len(items),
+                prefix=prefix, canonical=url))
 
     paginate(posts, "", None)
     for slug, v in cats:
         paginate(v["posts"], f"c/{slug}/", v["name"])
 
     for name in ("about", "privacy"):
-        write(f"{name}.html", env.get_template(f"{name}.html").render(canonical=f"{config.SITE_URL}/{name}.html"))
+        write(f"{name}.html", env.get_template(f"{name}.html").render(canonical=f"{config.SITE_URL}/{name}"))
     write("404.html", env.get_template("404.html").render(canonical=config.SITE_URL))
 
     # 검색용 인덱스
