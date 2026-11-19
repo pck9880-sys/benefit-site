@@ -38,6 +38,7 @@ def wikimedia(query, n=12):
         m = ii.get("extmetadata") or {}
         lic = (m.get("LicenseShortName") or {}).get("value", "")
         if not license_ok(lic):
+            print(f"[ccvideo] 제외(라이선스 {lic or '없음'}): {pg['title'][:60]}")
             continue
         dur = float(vi.get("duration") or ii.get("duration") or 0)
         if dur and dur < 4:
