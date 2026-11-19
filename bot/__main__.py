@@ -61,6 +61,9 @@ elif cmd == "bgm-get":  # 즐겨찾기 배경음악 받기 / calm: 잔잔한 연
     else:
         f, credit = music.pick(Path("."))
         print(f, credit)
+elif cmd == "shorts-upload":  # 완성 영상 올리기: python -m bot shorts-upload 영상.mp4 plan.json "음악 출처"
+    from . import shorts
+    shorts.upload_file(sys.argv[2], sys.argv[3], sys.argv[4] if len(sys.argv) > 4 else "")
 elif cmd == "shorts-due":  # 워크플로에서 숏츠를 만들 차례인지 확인 (0=만들기)
     from . import shorts
     sys.exit(0 if shorts.due(pipeline.load_state()) else 1)

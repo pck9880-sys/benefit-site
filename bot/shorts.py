@@ -520,9 +520,17 @@ def requested(st, ss):
     return str(req) > done
 
 
+def has_image_source():
+    from . import gpt_image, higgsfield
+    return gpt_image.enabled() or higgsfield.enabled() or config.SHORTS_PHOTOS
+
+
 def due(st):
     ss = load_ss()
     if st.get("paused") or config.SHORTS_PER_DAY <= 0:
+        return False
+    if not has_image_source():  # 이미지 만들 수단이 없으면 글자 카드 영상이 올라가므로 자동 제작 안 함
+        print("[shorts] 이미지 생성 키(OPENAI_API_KEY/HIGGSFIELD_KEY)가 없어 자동 제작을 쉽니다")
         return False
     tried = ss.get("shorts_tried")
     if tried and now() - datetime.fromisoformat(tried) < timedelta(minutes=50):
@@ -601,3 +609,34 @@ def render_sample(folder):
         ("" if typecast.enabled() else " (타입캐스트 키 없음)")
     print(f"[sample] {duration(out):.1f}초, 음성 {voiced}/{len(p.beats) + 1} ({voice})")
     # 테스트 영상은 텔레그램으로 보내지 않음 (작업 채팅에서 먼저 확인)
+
+
+def upload_file(video, plan_json, music_credit_text=""):
+    """완성된 영상 파일을 그대로 유튜브에 올림 (Upload-Post). 업로드 결과 URL 을 기다렸다가 출력·알림."""
+    import json
+    import time
+    from . import pipeline
+    global LAST_BGM_CREDIT
+    p = Plan(**json.loads(Path(plan_json).read_text("utf-8")))
+    LAST_BGM_CREDIT = music_credit_text or None
+    print(full_description(p))
+    res = upload_youtube(Path(video), p)
+    if res is None:
+        raise RuntimeError("Upload-Post 키(UPLOAD_POST_API_KEY/UPLOAD_POST_USER)가 없어요")
+    print("[upload] 응답:", json.dumps(res, ensure_ascii=False)[:500])
+    url, rid = None, res.get("request_id")
+    for _ in range(36):  # 최대 6분 기다림
+        if not rid:
+            break
+        time.sleep(10)
+        s = requests.get("https://api.upload-post.com/api/uploadposts/status", params={"request_id": rid},
+                         headers={"Authorization": f"Apikey {config.UPLOAD_POST_API_KEY}"}, timeout=30).json()
+        print("[upload] 상태:", s.get("status"))
+        for r in s.get("results") or []:
+            url = url or r.get("url") or r.get("post_url")
+        if s.get("status") in ("completed", "failed"):
+            print("[upload] 결과:", json.dumps(s, ensure_ascii=False)[:800])
+            break
+    st = pipeline.load_state()
+    pipeline.notify(st, f"🎬 유튜브 업로드: {p.yt_title}\n{url or '처리 중 (유튜브 스튜디오에서 확인)'}")
+    print("[upload] URL:", url)

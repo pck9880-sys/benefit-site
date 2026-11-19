@@ -1,0 +1,32 @@
+name: shorts-upload
+on:
+  workflow_dispatch:
+    inputs:
+      folder:
+        description: "완성 영상 폴더 (final.mp4 + plan.json)"
+        default: "assets/samples/ai_suneung"
+      music:
+        description: "음악 출처 문구"
+        default: ""
+permissions:
+  contents: read
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    env:
+      UPLOAD_POST_API_KEY: ${{ secrets.UPLOAD_POST_API_KEY }}
+      UPLOAD_POST_USER: ${{ vars.UPLOAD_POST_USER }}
+      TYPECAST_API_KEY: ${{ secrets.TYPECAST_API_KEY }}
+      TYPECAST_VOICE_NAME: ${{ vars.TYPECAST_VOICE_NAME }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      SHORTS_PRIVACY: ${{ vars.SHORTS_PRIVACY }}
+      FOLDER: ${{ inputs.folder }}
+      MUSIC: ${{ inputs.music }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: python -m bot shorts-upload "$FOLDER/final.mp4" "$FOLDER/plan.json" "$MUSIC"
