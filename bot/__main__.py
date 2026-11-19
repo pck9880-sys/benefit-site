@@ -30,7 +30,8 @@ elif cmd == "photos":  # 사진 검색 점검: python -m bot photos "검색어"
     from pathlib import Path
     from . import photos
     q = sys.argv[2] if len(sys.argv) > 2 else "baseball stadium"
-    print(photos.find(q, set(), Path(tempfile.mkdtemp()) / "t.jpg"))
+    out = Path(sys.argv[3]) if len(sys.argv) > 3 else Path(tempfile.mkdtemp()) / "t.jpg"
+    print(q, "|", photos.find(q, set(), out))
 elif cmd == "shorts-sample":  # 저장된 대본·이미지로 숏츠 렌더링 (틀 테스트): python -m bot shorts-sample 폴더
     from . import shorts
     shorts.render_sample(sys.argv[2])

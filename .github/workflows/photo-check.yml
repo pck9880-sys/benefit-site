@@ -20,6 +20,12 @@ jobs:
           python-version: "3.12"
       - run: pip install -r requirements.txt
       - run: |
-          python -m bot photos "$QUERY"
-          python -m bot photos "Samsung Lions"
-          python -m bot photos "championship ring"
+          mkdir -p photos_out
+          IFS='|' read -ra Q <<< "$QUERY"
+          i=0
+          for q in "${Q[@]}"; do python -m bot photos "$q" "photos_out/p$i.jpg" | tee -a photos_out/credits.txt; i=$((i+1)); done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: photos
+          path: photos_out/
+          retention-days: 1
