@@ -61,7 +61,7 @@ SHORTS_CHANNEL = _env("SHORTS_CHANNEL", "")  # 영상 맨 위에 작게 표시�
 SHORTS_BGM_VOLUME = float(_env("SHORTS_BGM_VOLUME", "0.12"))  # (예전 설정, 미사용)
 SHORTS_BGM = _env("SHORTS_BGM", "1") == "1"  # 배경음악 사용 (즐겨찾기 곡만: Born Free - Pokki DJ, 연주곡)
 SHORTS_BGM_LUFS = float(_env("SHORTS_BGM_LUFS", "-33"))  # 배경음악 크기 (목소리 -14 기준, 낮을수록 작게)
-SHORTS_OUTRO = _env("SHORTS_OUTRO", "님들은 어떻게 생각해요잉?")  # 기본 마무리 (plan 의 outro_custom=true 면 outro 그대로)
+SHORTS_OUTRO = _env("SHORTS_OUTRO", "님들 생각은 어떰?")  # 2026-11-20: 해요잉 금지, 음슴체  # 기본 마무리 (plan 의 outro_custom=true 면 outro 그대로)
 SHORTS_SFX = _env("SHORTS_SFX", "0") == "1"  # 효과음 사용 안 함
 SHORTS_SFX_VOLUME = float(_env("SHORTS_SFX_VOLUME", "0.35"))  # 효과음 크기 (assets/sfx)
 YOUTUBE_API_KEY = _env("YOUTUBE_API_KEY")  # 인기 쇼츠 분석용 (없으면 구글 검색어만 사용)

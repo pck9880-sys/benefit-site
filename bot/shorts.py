@@ -87,7 +87,7 @@ PICK = """당신은 한국 유튜브 쇼츠 채널의 기획자입니다. 아래
 WRITE = """당신은 조회수 높은 한국 유튜브 쇼츠 작가입니다. 아래 조사 내용으로 약 30초 쇼츠를 만드세요.
 - 먼저 '이 영상이 말하려는 핵심 한 줄'을 정하고, 모든 문장이 그 한 줄을 향하게 짭니다.
   구성: ① 훅(무슨 일?) → ② 배경(왜 이슈?) → ③ 핵심 사실(숫자) → ④ 반전·쟁점(의견이 갈리는 지점) → ⑤ 정리 한 줄.
-- 마무리는 시스템이 '님들은 어떻게 생각해요잉?'으로 고정해서 붙이므로 question 은 비워 두고, ⑤가 쟁점을 또렷하게 던지게 씁니다.
+- 마무리는 시스템이 '님들 생각은 어떰?'으로 고정해서 붙이므로 question 은 비워 두고, ⑤가 쟁점을 또렷하게 던지게 씁니다.
 - 조사 내용에 있는 사실만 씁니다. 과장·낚시·지어낸 숫자 금지. 남의 쇼츠 대사를 베끼지 않습니다.
 - 말투: 친구에게 썰 푸는 반말 쇼츠 내레이션 ("~라는데", "근데 여기서 반전", "~했다고 함", "~인 거"). 문장은 짧게.
   '~입니다', '~습니다', '~해요' 같은 존댓말 문장 끝은 절대 쓰지 않습니다.
@@ -175,16 +175,16 @@ def title_html(p):
     return shade + f"""<style>{BASE_CSS}
 .t{{position:absolute;top:110px;left:40px;right:40px;height:{MEDIA_Y - 140}px;display:flex;flex-direction:column;
  justify-content:center;align-items:center;font-weight:900;line-height:1.2;letter-spacing:-.035em}}
-.t div{{white-space:nowrap;font-size:98px}}
+.t div{{white-space:nowrap;font-size:120px}}
 .a{{color:#fff}}.b{{color:#FFE400}}
 .ch{{position:absolute;top:70px;left:0;right:0;text-align:center;font-size:30px;font-weight:700;color:#9ca3af}}</style>
 <div class="ch">{e(config.SHORTS_CHANNEL)}</div>
 <div class="t"><div class="a">{e(p.title_top)}</div><div class="b">{e(p.title_bottom)}</div></div>
 <script>window.fit=function(){{  // 제목이 검은 띠(레터박스) 밖으로 넘치지 않게 글자 크기를 줄임
  const box=document.querySelector('.t');
- for(const d of box.children){{let s=98;while(d.scrollWidth>box.clientWidth&&s>40){{s-=2;d.style.fontSize=s+'px';}}}}
+ for(const d of box.children){{let s=120;while(d.scrollWidth>box.clientWidth&&s>40){{s-=2;d.style.fontSize=s+'px';}}}}
  let s2=parseInt(getComputedStyle(box.children[0]).fontSize);
- while(box.scrollHeight>box.clientHeight&&s2>40){{s2-=2;for(const d of box.children)d.style.fontSize=Math.min(s2,parseInt(d.style.fontSize||98))+'px';}}
+ while(box.scrollHeight>box.clientHeight&&s2>40){{s2-=2;for(const d of box.children)d.style.fontSize=Math.min(s2,parseInt(d.style.fontSize||120))+'px';}}
 }};</script>"""
 
 
