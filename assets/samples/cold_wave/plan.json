@@ -1,0 +1,202 @@
+{
+ "topic": "6년 만의 수능 한파, 내일 더 춥다 (2026-11-19)",
+ "title_top": "갑자기 확 추워진 이유",
+ "title_bottom": "근데 내일이 더 춥대 ㄷㄷ",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "caption_style": "box",
+ "beats": [
+  {
+   "narration": "오늘 갑자기 너무 춥지 않았음?",
+   "card": "갑자기 **너무 춥지** 않았음?",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "서울 아침이 영하로 떨어졌대",
+   "card": "서울 아침 **영하**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "수능날 서울이 영하권인 건 6년 만이라는데",
+   "card": "**6년 만의** 수능 한파",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "headline",
+   "overlay_text": "[날씨] 6년 만의 ’수능 한파’…추위 속 곳곳 비·눈",
+   "overlay_source": "연합뉴스TV"
+  },
+  {
+   "narration": "2020년 수능 이후 처음이래",
+   "card": "2020년 수능 이후 **처음**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "바람까지 불어서 체감온도는 영하 3.5도",
+   "card": "체감온도 **영하 3.5도**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "headline",
+   "overlay_text": "눈 내리는 수능 한파…수능날 서울 체감 영하 3.5도",
+   "overlay_source": "이투데이"
+  },
+  {
+   "narration": "낮 최고기온도 4도밖에 안 됐고",
+   "card": "낮 최고 **4도**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "서쪽엔 눈비까지 내렸는데",
+   "card": "서쪽엔 **눈비**까지",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "근데 진짜는 내일이래",
+   "card": "근데 진짜는 **내일**",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "내일 아침이 오늘보다 더 춥고",
+   "card": "내일 아침 **더 춥다**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "headline",
+   "overlay_text": "[날씨] 내일 오늘보다 더 춥다…전북 최대 8㎝ 눈",
+   "overlay_source": "연합뉴스"
+  },
+  {
+   "narration": "전북엔 최대 8센티 눈 소식까지 있음",
+   "card": "전북 최대 **8cm** 눈",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "밤사이 내린 비랑 눈이 얼어서 도로 살얼음 조심",
+   "card": "도로 **살얼음** 조심",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "이제 진짜 패딩 꺼낼 때 온 듯",
+   "card": "이제 **패딩** 꺼낼 때",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "question": "",
+ "voice": "용식",
+ "outro": "",
+ "media": [
+  {
+   "image": "a_commute.jpg"
+  },
+  {
+   "image": "a_thermo.jpg"
+  },
+  {
+   "image": "a_parents.jpg"
+  },
+  {
+   "zzal": "z3.png"
+  },
+  {
+   "image": "a_commute.jpg"
+  },
+  {
+   "zzal": "z5.png"
+  },
+  {
+   "image": "a_road.jpg"
+  },
+  {
+   "zzal": "z7.png"
+  },
+  {
+   "image": "a_road.jpg"
+  },
+  {
+   "zzal": "z9.png"
+  },
+  {
+   "image": "a_road.jpg"
+  },
+  {
+   "image": "a_coat.jpg"
+  },
+  {
+   "image": "a_parents.jpg"
+  }
+ ],
+ "yt_title": "갑자기 확 추워진 이유, 근데 내일이 더 춥대 ㄷㄷ #shorts",
+ "description": "수능날(11월 19일) 서울 아침 기온이 영하권으로 떨어졌어요. 수능날 서울이 영하권인 건 2020년 이후 6년 만이고, 바람 때문에 체감온도는 영하 3.5도까지 내려갔대요. 내일(20일) 아침은 더 춥고 전북엔 최대 8cm 눈 소식도 있어요. 도로 살얼음 조심하세요!\n\n님들은 어떻게 생각해요잉?\n\n※ 일부 장면은 AI로 만든 이미지예요.\n※ 일러스트: いらすとや (irasutoya.com)\n출처: 연합뉴스·연합뉴스TV·이투데이·헤럴드경제 보도\n\n#날씨 #한파 #수능한파 #영하 #패딩",
+ "tags": [
+  "날씨",
+  "한파",
+  "수능한파",
+  "영하",
+  "패딩",
+  "내일날씨"
+ ],
+ "sources": [
+  "https://www.etoday.co.kr/news/view/2650048",
+  "https://biz.heraldcorp.com/article/10941876",
+  "https://www.wikitree.co.kr/articles/1175780"
+ ]
+}
