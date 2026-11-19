@@ -25,9 +25,21 @@ from pathlib import Path
 src, d = Path(sys.argv[1]), Path(sys.argv[2])
 p = json.loads((src / "plan.json").read_text("utf-8"))
 from bot import config, shorts
+# 저장한 사운드 곡 순서 (사용자 지정 2026-11-20). 종류마다 돌아가며 사용, 순번은 ~/쇼츠작업/song_rotation.json
+SONGS = {"웃긴글": ["Forever Has Always Been (영원은 그렇듯) - Redoor", "Machi No Dorufin - Kingo Hamada", "Helios - Jicmus"],
+         "감동": ["Lily of The Valley (은방울) - Kim Daniel", "꿈꾸던 어른이 되었나요? - 머무르 MEOMURU"]}
+def pick_song(p):
+    import os
+    kind = "감동" if p.get("mood") == "감동" else "웃긴글"  # 핫이슈도 유머 곡 목록 사용
+    f = Path(os.path.expanduser("~/쇼츠작업/song_rotation.json"))
+    rot = json.loads(f.read_text()) if f.exists() else {}
+    n = rot.get(kind, 0)
+    rot[kind] = n + 1
+    f.write_text(json.dumps(rot, ensure_ascii=False))
+    return SONGS[kind][n % len(SONGS[kind])]
 info = {"title": p.get("yt_title"), "description": shorts.full_description(shorts.Plan(**p)),
         "tags": p.get("tags"), "pin_comment": p.get("pin_comment"), "thumb": "thumb.jpg",
-        "music": "저장한 사운드에서 추가(필수)",
+        "music": "저장한 사운드에서 추가(필수)", "song": pick_song(p),
         "music_concept": p.get("music_concept") or {"감동": "잔잔한 감동", "웃긴글": "신나는 코믹"}.get(p.get("mood"), "일상 브이로그")}
 (d / "업로드정보.json").write_text(json.dumps(info, ensure_ascii=False, indent=1), "utf-8")
 outro = p.get("outro") if p.get("outro_custom") else config.SHORTS_OUTRO
