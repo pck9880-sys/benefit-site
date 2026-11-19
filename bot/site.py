@@ -36,6 +36,7 @@ def build():
     env.globals.update(
         site_name=config.SITE_NAME, site_url=config.SITE_URL, site_desc=config.SITE_DESCRIPTION,
         base=base_path, adsense=config.ADSENSE_CLIENT, year=datetime.now().year,
+        mail_user=config.CONTACT_EMAIL.split("@")[0], mail_host=config.CONTACT_EMAIL.split("@")[-1],
         google_verify=config.GOOGLE_SITE_VERIFICATION, naver_verify=config.NAVER_SITE_VERIFICATION,
     )
     out = config.OUT_DIR
@@ -92,7 +93,7 @@ def build():
     for slug, v in cats:
         paginate(v["posts"], f"c/{slug}/", v["name"])
 
-    for name in ("about", "privacy"):
+    for name in ("about", "privacy", "contact"):
         write(f"{name}.html", env.get_template(f"{name}.html").render(canonical=f"{config.SITE_URL}/{name}"))
     write("404.html", env.get_template("404.html").render(canonical=config.SITE_URL))
 

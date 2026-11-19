@@ -43,6 +43,7 @@ REQUIRE_APPROVAL = _env("REQUIRE_APPROVAL", "0") == "1"  # 0이면 승인 없이
 GENERATE_HOUR_KST = int(_env("GENERATE_HOUR_KST", "7"))
 AUTO_APPROVE_HOURS = float(_env("AUTO_APPROVE_HOURS", "0.0833"))  # 5분  # 0이면 승인 없이는 게시 안 함
 MAX_MONTHLY_USD = float(_env("MAX_MONTHLY_USD", "80"))  # 월 API 비용 상한
+CONTACT_EMAIL = _env("CONTACT_EMAIL", "info17476@naver.com")  # 문의 페이지에 표시 (스팸 수집기 방지용으로 나눠서 출력)
 ADSENSE_CLIENT = _env("ADSENSE_CLIENT")  # 예: ca-pub-1234567890123456
 GOOGLE_SITE_VERIFICATION = _env("GOOGLE_SITE_VERIFICATION")
 NAVER_SITE_VERIFICATION = _env("NAVER_SITE_VERIFICATION")
