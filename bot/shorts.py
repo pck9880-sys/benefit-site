@@ -45,6 +45,8 @@ class Plan(BaseModel):
     photo_fallbacks: List[str] = Field(description="사진 검색이 안 될 때 쓸 넓은 영어 검색어 2~3개 (예: 'soccer stadium', 'football fans')")
     hook_video: str = Field(description="첫 장면 AI 영상 프롬프트 (영어, 5초, 역동적인 한 장면)")
     beats: List[Beat] = Field(description="내레이션 4~5문장 (전체 20초 이내). 첫 문장은 제목 내용을 다시 던지는 훅, 마지막은 반전·한마디 정리")
+    outro: str = Field(default="다들 오늘도 행복해요잉~", description="채널 시그니처 마무리 한마디. 반드시 '다들 ~해요잉~' 형식, 주제와 연결된 친근한 당부 "
+                                     "(예: '다들 시험은 정직하게 해요잉~', '다들 손흥민 응원해요잉~'). 20자 이내")
     yt_title: str = Field(description="유튜브 제목 40자 이내, 끝에 #shorts")
     description: str = Field(description="유튜브 설명 2~3줄")
     tags: List[str] = Field(description="해시태그용 키워드 5~8개 (# 없이)")
@@ -67,6 +69,7 @@ WRITE = """당신은 조회수 높은 한국 유튜브 쇼츠 작가입니다. �
 - 조사 내용에 있는 사실만 씁니다. 과장·낚시·지어낸 숫자 금지. 남의 쇼츠 대사를 베끼지 않습니다.
 - 말투: 친구에게 썰 푸는 반말 쇼츠 내레이션 ("~라는데", "근데 여기서 반전", "~했다고 함", "~인 거"). 문장은 짧게.
   '~입니다', '~습니다', '~해요' 같은 존댓말 문장 끝은 절대 쓰지 않습니다.
+- 마무리(outro)는 채널 시그니처: 항상 '다들 ~해요잉~' 형식의 친근한 한마디 (본문 beats 에는 넣지 않음).
 - 제목 2줄: 첫 줄은 상황, 둘째 줄(노란색)은 궁금증 ("~하는 이유", "~라고?", "결과는?").
 - 화면은 요즘 인기 쇼츠처럼 문장마다 컷이 바뀝니다. 문장마다 실제 사진('photo')과 AI 연출 컷('ai')을 섞으세요 (대략 반반).
   · 실존 인물·장소·제품·사건은 'photo' (실제 사진 검색). 실존 인물을 AI로 그리지 않습니다.
@@ -223,8 +226,26 @@ def ff(*args):
 
 
 # ---------- 합성 ----------
+def signature(text):
+    """마무리 멘트를 '다들 ~해요잉~' 시그니처 형태로 맞춤."""
+    t = re.sub(r"[.!~?\s]+$", "", (text or "").strip()) or "다들 오늘도 행복해요잉"
+    if t.endswith("요"):
+        t += "잉"  # 봐요 → 봐요잉, 응원해요 → 응원해요잉
+    elif t.endswith("해"):
+        t += "요잉"  # 조심해 → 조심해요잉
+    elif not t.endswith("요잉"):
+        t += " 해요잉"
+    if not t.startswith("다들"):
+        t = "다들 " + t
+    return t + "~"
+
+
 def make_video(p, media, work):
-    """media: 문장별 ("video"|"image", 경로) 또는 None(글자 카드)"""
+    """media: 문장별 ("video"|"image", 경로) 또는 None(글자 카드). 마지막에 시그니처 마무리 멘트를 붙인다."""
+    p = p.model_copy(deep=True)
+    p.outro = signature(p.outro)
+    p.beats.append(Beat(narration=p.outro, card=p.outro, visual="ai", query="", ai_prompt=""))
+    media = list(media) + [next((m for m in reversed(list(media)) if m), None)]  # 마무리는 마지막 장면 그대로
     segs = []
     # 음성은 브라우저(Playwright)를 열기 전에 미리 만든다 (같은 스레드에서 asyncio 충돌 방지)
     n = [b.narration for b in p.beats]
