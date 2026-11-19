@@ -2,6 +2,8 @@
 
 출처 표기가 필요한 사진은 credit 문구를 돌려주고, 유튜브 설명에 붙인다.
 """
+import re
+
 import requests
 
 from . import config
@@ -37,7 +39,8 @@ def wikimedia(query, n=8):
             ii = (pg.get("imageinfo") or [{}])[0]
             m = ii.get("extmetadata") or {}
             lic = (m.get("LicenseShortName") or {}).get("value", "")
-            if (ii.get("width") or 0) < 640 or not re.search(r"CC|Public domain|PD", lic, re.I) or "NC" in lic:
+            from .ccvideo import license_ok
+            if (ii.get("width") or 0) < 640 or not license_ok(lic):  # CC BY·CC0·PD·공공누리1 만 (SA·NC·ND 제외)
                 continue
             artist = re.sub(r"<[^>]+>", "", (m.get("Artist") or {}).get("value", "unknown"))[:60]
             out.append({"url": ii.get("thumburl") or ii["url"], "id": f"wm{pg['pageid']}",
@@ -80,7 +83,7 @@ def find(query, used, out_path, fallbacks=()):
 
 def _find_one(query, used, out_path):
     fails = []
-    cands = pexels(query) + wikimedia(query) + openverse(query)
+    cands = pexels(query) + wikimedia(query) + [c for c in openverse(query) if not re.search(r"\b(SA|NC|ND)\b", c["credit"])]
     for cand in cands:
         if cand["id"] in used:
             continue
