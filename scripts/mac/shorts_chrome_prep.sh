@@ -27,7 +27,7 @@ p = json.loads((src / "plan.json").read_text("utf-8"))
 from bot import config, shorts
 info = {"title": p.get("yt_title"), "description": shorts.full_description(shorts.Plan(**p)),
         "tags": p.get("tags"), "pin_comment": p.get("pin_comment"), "thumb": "thumb.jpg",
-        "music": "영상에 포함" if p.get("song_premixed") else "보관함에서 추가",
+        "music": "저장한 사운드에서 추가(필수)",
         "music_concept": p.get("music_concept") or {"감동": "잔잔한 감동", "웃긴글": "신나는 코믹"}.get(p.get("mood"), "일상 브이로그")}
 (d / "업로드정보.json").write_text(json.dumps(info, ensure_ascii=False, indent=1), "utf-8")
 outro = p.get("outro") if p.get("outro_custom") else config.SHORTS_OUTRO
