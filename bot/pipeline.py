@@ -10,8 +10,8 @@ KST = timezone(timedelta(hours=9))
 HELP = (
     "🤖 자동 게시 봇\n\n"
     "매일 새 글 초안이 오면 ✅ 승인 / ❌ 거절 버튼만 눌러주세요.\n"
-    f"응답이 없으면 {config.AUTO_APPROVE_HOURS:g}시간 후 자동 게시됩니다 (0이면 자동 게시 안 함).\n"
-    "버튼은 15분 안에 반영되고, 반영되면 메시지가 "✅ 게시됨"으로 바뀝니다.\n\n"
+    f"응답이 없으면 {round(config.AUTO_APPROVE_HOURS * 60)}분 뒤 다음 확인 때 자동 게시됩니다.\n"
+    "버튼은 15분 안에 반영되고, 반영되면 메시지가 「✅ 게시됨」으로 바뀝니다.\n\n"
     "명령어\n/status 현황\n/pause 일시정지\n/resume 재개\n/now 다음 실행 때 바로 글 생성\n/approveall 대기 초안 전부 승인\n"
     "/contest 다음 실행 때 공모전 출품안 받기\n/contestoff 공모전 알림 끄기 · /conteston 켜기"
 )

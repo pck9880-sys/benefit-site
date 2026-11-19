@@ -7,7 +7,7 @@
 ```
 매시간        텔레그램 버튼(승인/거절) 확인 → 반영
 매일 7시      많이 찾는 혜택 5개 선택 → Claude가 글 작성 → 텔레그램으로 전송
-12시간 무응답  자동 게시
+5분 무응답    자동 게시 (15분마다 확인)
 게시 후       사이트 재빌드 (GitHub Pages, 무료)
 ```
 
@@ -45,7 +45,7 @@
 | `CLAUDE_MODEL` | claude-sonnet-5-5 | 비용을 줄이려면 `claude-haiku-5-5`, 품질을 더 올리려면 `claude-opus-5-5` |
 | `POSTS_PER_DAY` | 5 | 하루 생성 글 수 |
 | `GENERATE_HOUR_KST` | 7 | 생성 시각 (한국시간) |
-| `AUTO_APPROVE_HOURS` | 12 | 무응답 시 자동 게시까지 시간 (0 = 승인해야만 게시) |
+| `AUTO_APPROVE_HOURS` | 0.0833 (5분) | 무응답 시 자동 게시까지 시간 (0 = 승인해야만 게시) |
 | `MAX_MONTHLY_USD` | 50 | 월 API 비용 상한 (넘으면 자동 중단) |
 | `ADSENSE_CLIENT` | - | 애드센스 승인 후 `ca-pub-...` |
 | `GOOGLE_SITE_VERIFICATION` / `NAVER_SITE_VERIFICATION` | - | 검색엔진 소유 확인 코드 |

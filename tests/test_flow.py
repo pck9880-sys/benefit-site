@@ -13,7 +13,7 @@ telegram.get_updates = lambda offset: [u for u in queue if u["update_id"] >= off
 
 shutil.rmtree(config.DATA_DIR, ignore_errors=True)
 config.POSTS_PER_DAY = 3
-config.AUTO_APPROVE_HOURS = 12
+config.AUTO_APPROVE_HOURS = 12  # 테스트는 12시간 기준
 
 # 1) 첫 메시지 → 주인 등록, 아직 7시 이전이면 생성 안 될 수 있으니 /now 사용
 queue[:] = [{"update_id": 1, "message": {"chat": {"id": 42, "type": "private"}, "text": "안녕"}},
