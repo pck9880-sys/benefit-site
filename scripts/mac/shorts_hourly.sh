@@ -9,10 +9,15 @@ trap 'rmdir "$LOCK"' EXIT
 export SHORTS_BGM=0  # 음악은 업로드 때 유튜브 저장됨 사운드로
 git pull -q --rebase || true
 BEFORE=$(ls assets/samples)
-EXTRA=""
-[ -n "${SHORTS_FORCE_MOOD:-}" ] && EXTRA="
+# 종류 순서: 유머 2 → 감동 1 → 핫이슈 2 → 반복 (~/쇼츠작업/rotation.txt 에 다음 순번)
+ROT="$HOME/쇼츠작업/rotation.txt"
+SEQ=(웃긴글 웃긴글 감동 이슈 이슈)
+N=$(cat "$ROT" 2>/dev/null || echo 0)
+MOOD="${SHORTS_FORCE_MOOD:-${SEQ[$(( N % 5 + 1 ))]}}"
+[ -z "${SHORTS_FORCE_MOOD:-}" ] && echo $(( N + 1 )) > "$ROT"
+EXTRA="
 
-[이번 회차만] 종류는 순환 대신 '$SHORTS_FORCE_MOOD' 로 고정."
+[이번 회차] 종류: $MOOD"
 caffeinate -i claude -p "$(cat .claude/prompts/shorts-hourly.md)$EXTRA" \
   --permission-mode acceptEdits \
   --allowedTools "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch" \
