@@ -25,6 +25,26 @@ def google_trends():
     return out
 
 
+NEWS = {  # 구글 뉴스 분야별 헤드라인 (키 불필요)
+    "주요": "https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko",
+    "AI·IT": "https://news.google.com/rss/search?q=AI+OR+%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5+when:1d&hl=ko&gl=KR&ceid=KR:ko",
+    "스포츠": "https://news.google.com/rss/headlines/section/topic/SPORTS?hl=ko&gl=KR&ceid=KR:ko",
+    "세계": "https://news.google.com/rss/headlines/section/topic/WORLD?hl=ko&gl=KR&ceid=KR:ko",
+    "연예": "https://news.google.com/rss/headlines/section/topic/ENTERTAINMENT?hl=ko&gl=KR&ceid=KR:ko",
+}
+
+
+def google_news(per=6):
+    out = []
+    for cat, url in NEWS.items():
+        try:
+            root = ET.fromstring(requests.get(url, timeout=20).content)
+            out += [(cat, it.findtext("title") or "") for it in list(root.iter("item"))[:per]]
+        except Exception as e:
+            print("[trends] 뉴스 실패:", cat, type(e).__name__)
+    return out
+
+
 def _yt(path, **params):
     r = requests.get(f"https://www.googleapis.com/youtube/v3/{path}",
                      params={"key": config.YOUTUBE_API_KEY, **params}, timeout=20)
@@ -73,4 +93,6 @@ def collect():
     for x in trends[:20]:
         news = " / ".join(x["news"])
         lines.append(f"- [구글 검색어 · {x['traffic']}] {x['title']}" + (f" — 관련 기사: {news}" if news else ""))
+    for cat, title in google_news():
+        lines.append(f"- [뉴스 · {cat}] {title}")
     return "\n".join(lines)

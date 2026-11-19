@@ -59,7 +59,9 @@ PICK = """당신은 한국 유튜브 쇼츠 채널의 기획자입니다. 아래
 
 최근에 이미 만든 주제 (겹치지 않게): {used}
 
-1) 인기 쇼츠 제목들에서 어떤 소재·훅이 먹히는지 파악하고, 그중 우리가 '새로 만든 AI 영상 + 내레이션'으로 재미있게 풀 수 있는 주제 1개를 고르세요.
+1) 오늘의 핫이슈 후보 3개를 분야가 겹치지 않게 고르세요 (예: AI·IT 신제품/서비스, 스포츠(축구 등), 해외·세계 화제, 생활 트렌드).
+   그중 '내레이션 + AI 이미지'로 15초 안에 가장 재미있게 풀 수 있는 1개를 최종 선택하세요.
+   맨 앞에 "후보: 1) … 2) … 3) …  / 선택: N" 형식으로 한 줄 적으세요.
    좋은 주제: 신기한 사실, 해외 화제, 신기술·신제품, 게임·놀이기구·자동차처럼 장면으로 재연하기 좋은 것, 생활 속 의외의 이유.
    피할 주제: 정치·선거, 사망·사고·재난·범죄 피해, 연예인 사생활·루머, 특정인 비방, 건강·투자 조언, 미성년자.
 2) 웹 검색으로 그 주제의 사실관계를 확인하세요. 검색으로 확인되지 않은 내용은 쓰지 않습니다.
@@ -71,13 +73,17 @@ WRITE = """당신은 조회수 높은 한국 유튜브 쇼츠 작가입니다. �
   '~입니다', '~습니다', '~해요' 같은 존댓말 문장 끝은 절대 쓰지 않습니다.
 - 마무리(outro)는 채널 시그니처: 항상 '다들 ~해요잉~' 형식의 친근한 한마디 (본문 beats 에는 넣지 않음).
 - 제목 2줄: 첫 줄은 상황, 둘째 줄(노란색)은 궁금증 ("~하는 이유", "~라고?", "결과는?").
-- 화면은 요즘 인기 쇼츠처럼 문장마다 컷이 바뀝니다. 문장마다 실제 사진('photo')과 AI 연출 컷('ai')을 섞으세요 (대략 반반).
+- 화면은 요즘 인기 쇼츠처럼 문장마다 컷이 바뀝니다. 기본은 문장마다 내용에 딱 맞는 AI 이미지('ai')이고,
+  실존 인물·브랜드·장소를 꼭 보여줘야 하는 문장만 실제 사진('photo')으로 합니다.
   · 실존 인물·장소·제품·사건은 'photo' (실제 사진 검색). 실존 인물을 AI로 그리지 않습니다.
   · 감정·상황 재연, '만약 내가 ~라면' 같은 장면은 'ai' — 매번 같은 가상 주인공(character)이 나오게 해서 이야기처럼 이어지게.
   · AI 프롬프트는 영어, 실제 사진처럼 (photorealistic, natural light, smartphone photo). 글자·로고·저작권 캐릭터 금지.
 
 [조사 내용]
 {notes}"""
+
+
+PICKED = {}  # 오늘 후보·선택 한 줄 (텔레그램 알림용)
 
 
 def now():
@@ -100,6 +106,7 @@ def plan_short(st):
     used = ", ".join(st.get("shorts_topics", [])[-30:]) or "없음"
     collected = trends.collect() or "(수집 실패 — 웹 검색으로 오늘 한국 화제를 직접 찾으세요)"
     notes, cost = contest._search_call(PICK.format(trends=collected, used=used), max_uses=6)
+    PICKED["line"] = next((ln for ln in notes.splitlines() if "후보" in ln and "선택" in ln), "")
     res = contest._client().messages.parse(
         model=config.CLAUDE_MODEL, max_tokens=6000, output_config={"effort": "medium"}, output_format=Plan,
         messages=[{"role": "user", "content": WRITE.format(notes=notes)}])
@@ -255,17 +262,32 @@ def signature(text):
     return t + "~"
 
 
-def make_video(p, media, work):
-    """media: 문장별 ("video"|"image", 경로) 또는 None(글자 카드). 마지막에 시그니처 마무리 멘트를 붙인다."""
+def with_outro(p):
+    """대본 끝에 시그니처 마무리 멘트('다들 ~해요잉~')를 붙인 복사본."""
     p = p.model_copy(deep=True)
     p.outro = signature(p.outro)
     p.beats.append(Beat(narration=p.outro, card=p.outro, visual="ai", query="", ai_prompt=""))
-    media = list(media) + [next((m for m in reversed(list(media)) if m), None)]  # 마무리는 마지막 장면 그대로
-    segs = []
-    # 음성은 브라우저(Playwright)를 열기 전에 미리 만든다 (같은 스레드에서 asyncio 충돌 방지)
+    return p
+
+
+def voices(p, work):
+    """문장별 음성을 동시에 만든다 (타입캐스트 무료 플랜 동시 2개). p 는 with_outro 를 거친 대본."""
+    from concurrent.futures import ThreadPoolExecutor
     n = [b.narration for b in p.beats]
-    audios = [tts(t, work / f"a{i}.mp3", n[i - 1] if i else "", n[i + 1] if i + 1 < len(n) else "")
-              for i, t in enumerate(n)]
+    with ThreadPoolExecutor(max_workers=config.TTS_WORKERS) as ex:
+        futs = [ex.submit(tts, t, work / f"a{i}.mp3", n[i - 1] if i else "", n[i + 1] if i + 1 < len(n) else "")
+                for i, t in enumerate(n)]
+        return [f.result() for f in futs]
+
+
+def make_video(p, media, work, audios=None):
+    """media: 문장별 ("video"|"image", 경로) 또는 None(글자 카드). 마지막에 시그니처 마무리 멘트를 붙인다.
+    audios 를 미리 만들어 넘기면 그대로 쓴다 (화면 소재와 동시에 만들어 시간 절약)."""
+    from concurrent.futures import ThreadPoolExecutor
+    p = with_outro(p)
+    media = list(media) + [next((m for m in reversed(list(media)) if m), None)]  # 마무리는 마지막 장면 그대로
+    segs, jobs = [], []
+    audios = audios or voices(p, work)
     voiced = sum(1 for a in audios if a)
     events, t_beat = [], 0.0  # 효과음 (시각, 종류)
     with Renderer() as r:
@@ -316,10 +338,14 @@ def make_video(p, media, work):
                 last = f"w{j}"
             fc.append(f"[{last}]format=yuv420p[vout]")
             seg = work / f"seg{i}.mp4"
-            ff(*cmd, "-filter_complex", ";".join(fc), "-map", "[vout]", "-map", f"{a_idx}:a",
-               "-t", f"{dur:.3f}", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-r", "30",
-               "-c:a", "aac", "-b:a", "160k", "-ar", "44100", "-ac", "2", seg)
+            jobs.append([*cmd, "-filter_complex", ";".join(fc), "-map", "[vout]", "-map", f"{a_idx}:a",
+                         "-t", f"{dur:.3f}", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-r", "30",
+                         "-c:a", "aac", "-b:a", "160k", "-ar", "44100", "-ac", "2", seg])
             segs.append(seg)
+    # 장면 영상은 CPU 코어 수만큼 동시에 인코딩
+    import os
+    with ThreadPoolExecutor(max_workers=max(2, os.cpu_count() or 2)) as ex:
+        list(ex.map(lambda a: ff(*a), jobs))
     lst = work / "list.txt"
     lst.write_text("".join(f"file '{s}'\n" for s in segs))
     joined = work / "joined.mp4"
@@ -502,11 +528,20 @@ def run(force=False):
     try:
         p, cost = plan_short(ss)
         print(f"[shorts] 주제: {p.topic} / 문장 {len(p.beats)} / AI컷 {sum(b.visual == 'ai' for b in p.beats)}")
-        media, credits, cost2 = gather_media(p, work)
+        if PICKED.get("line"):
+            pipeline.notify(st, "🎬 오늘의 숏츠 주제\n" + PICKED["line"][:600])
+        import time
+        from concurrent.futures import ThreadPoolExecutor
+        t0 = time.time()
+        with ThreadPoolExecutor(max_workers=2) as ex:  # 화면 소재와 더빙을 동시에
+            f_media = ex.submit(gather_media, p, work)
+            f_voice = ex.submit(voices, with_outro(p), work)
+            media, credits, cost2 = f_media.result()
+            audios = f_voice.result()
         cost += cost2
         ss.setdefault("cost", {})[month] = round(ss.get("cost", {}).get(month, 0) + cost, 4)
-        video, voiced = make_video(p, media, work)
-        print(f"[shorts] 완성 {duration(video):.1f}초, 음성 {voiced}/{len(p.beats)}")
+        video, voiced = make_video(p, media, work, audios)
+        print(f"[shorts] 완성 {duration(video):.1f}초, 음성 {voiced}/{len(p.beats) + 1}, 소재+더빙+렌더 {time.time() - t0:.0f}초")
         uploaded = None
         try:
             uploaded = upload_youtube(video, p, credits)
