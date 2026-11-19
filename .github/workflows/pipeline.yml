@@ -36,6 +36,9 @@ jobs:
       SUBMIT_BIRTH: ${{ secrets.SUBMIT_BIRTH }}
       SITE_NAME: ${{ vars.SITE_NAME }}
       SITE_URL: ${{ vars.SITE_URL }}
+      CF_PAGES_PROJECT: ${{ vars.CF_PAGES_PROJECT || 'jiwon-hyetaek' }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
       POSTS_PER_DAY: ${{ vars.POSTS_PER_DAY }}
       GENERATE_HOUR_KST: ${{ vars.GENERATE_HOUR_KST }}
@@ -75,15 +78,24 @@ jobs:
       - name: 사이트 빌드
         if: always()
         run: |
-          if [ -z "$SITE_URL" ]; then export SITE_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}"; fi
           python -m bot build
+          if [ -n "$CLOUDFLARE_API_TOKEN" ]; then python -m bot redirect; else cp -r _site _ghpages; fi
+
+      - name: Cloudflare Pages 배포
+        if: always() && env.CLOUDFLARE_API_TOKEN != ''
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          preCommands: npx wrangler pages project create "$CF_PAGES_PROJECT" --production-branch=main || true
+          command: pages deploy _site --project-name=${{ env.CF_PAGES_PROJECT }} --branch=main --commit-dirty=true
 
       - uses: actions/configure-pages@v5
         if: always()
       - uses: actions/upload-pages-artifact@v3
         if: always()
         with:
-          path: _site
+          path: _ghpages
       - id: deploy
         if: always()
         uses: actions/deploy-pages@v4

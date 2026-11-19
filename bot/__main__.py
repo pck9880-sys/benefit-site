@@ -7,6 +7,9 @@ if cmd == "tick":
     pipeline.tick()
 elif cmd == "build":
     site.build()
+elif cmd == "redirect":
+    from . import config
+    site.build_redirect(config.SITE_URL, config.ROOT / "_ghpages")
 else:
     print("usage: python -m bot [tick|build]")
     sys.exit(1)

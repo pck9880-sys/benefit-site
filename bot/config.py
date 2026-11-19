@@ -25,6 +25,9 @@ TELEGRAM_CHAT_ID = _env("TELEGRAM_CHAT_ID")  # 비워두면 봇에 처음 메시
 SITE_NAME = _env("SITE_NAME", "정부혜택 한눈에")
 _repo = os.environ.get("GITHUB_REPOSITORY", "")
 _default_url = f"https://{_repo.split('/')[0]}.github.io/{_repo.split('/')[1]}" if "/" in _repo else "http://localhost:8000"
+CF_PAGES_PROJECT = _env("CF_PAGES_PROJECT", "jiwon-hyetaek")
+if _env("CLOUDFLARE_API_TOKEN"):  # Cloudflare Pages 를 쓰면 그 주소가 기본
+    _default_url = f"https://{CF_PAGES_PROJECT}.pages.dev"
 SITE_URL = _env("SITE_URL", _default_url).rstrip("/")
 SITE_DESCRIPTION = _env(
     "SITE_DESCRIPTION",

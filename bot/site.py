@@ -100,3 +100,19 @@ def build():
         write("ads.txt", f"google.com, {pub}, DIRECT, f08c47fec0942fa0\n")
     (out / ".nojekyll").write_text("")
     print(f"built {len(posts)} posts → {out}")
+
+
+def build_redirect(new_url, out_dir):
+    """Cloudflare 로 옮긴 뒤 옛 GitHub Pages 주소로 들어온 사람을 새 주소의 같은 페이지로 보낸다."""
+    import pathlib
+    out = pathlib.Path(out_dir)
+    if out.exists():
+        shutil.rmtree(out)
+    out.mkdir(parents=True)
+    page = f"""<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="robots" content="noindex">
+<link rel="canonical" href="{new_url}/"><title>주소가 바뀌었어요</title>
+<script>var p=location.pathname.replace(/^\\/[^/]+/,'');location.replace("{new_url}"+p+location.search+location.hash);</script>
+</head><body>주소가 <a href="{new_url}/">{new_url}</a> 로 바뀌었어요.</body></html>"""
+    for name in ("index.html", "404.html"):
+        (out / name).write_text(page, "utf-8")
+    (out / ".nojekyll").write_text("")
