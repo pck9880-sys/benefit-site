@@ -18,7 +18,7 @@
   11,
   12
  ],
- "ai_images": 3,
+ "ai_images": 4,
  "thumb_ai": true,
  "zzal": {
   "min": 1,
@@ -27,7 +27,7 @@
  },
  "real_photos": {
   "min": 0,
-  "max": 3
+  "max": 0
  },
  "media_pattern": [
   "post",
@@ -38,14 +38,14 @@
   "ai",
   "post",
   "ira",
-  "real",
+  "ai",
   "post",
   "zzal",
   "ai"
  ],
- "image_style": "Ultra photorealistic photo that looks like a real candid smartphone snapshot, natural lighting, real textures, slightly exaggerated funny/dramatic situation, fictional people only, no text, no letters, no logos, no watermark",
+ "image_style": "Hyper-realistic photo that clearly looks like a real smartphone snapshot (real skin, real textures, natural light, slight motion blur), exaggerated funny/dramatic situation, fictional people only, no text, no letters, no logos, no watermark",
  "disclaimers": [
-  "※ 출처: 커뮤니티 인기글 (얼굴은 모자이크 처리함)"
+  "※ 장면 일부는 AI로 만든 이미지임."
  ],
  "tags": [
   "유머",

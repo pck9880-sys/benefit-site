@@ -107,7 +107,7 @@ def _layout(p, d, t):
             media.append({"image": pools["ai"][i % len(pools["ai"])]} if pools["ai"] else media[-1])
     # 규칙(2026-11-20): AI 2장 연속 뒤엔 실사 또는 일본짤 — AI 가 3장 연속이면 남은 실사·일본짤로 바꿈
     ai_set = set(pools["ai"])
-    real_left = [x for x in pools["real"] + pools["post"] + pools["ira"] if not any(x in m.values() for m in media)]
+    real_left = [x for x in pools["real"] + pools["post"] + pools["ira"] + pools["zzal"] if not any(x in m.values() for m in media)]
     streak = 0
     for i, m in enumerate(media):
         if m.get("image") in ai_set:
@@ -226,14 +226,14 @@ def check(slug):
     ira = t.get("ira", {"min": 0})
     if n_ira < ira["min"]:
         errs.append(f"일본짤(いらすとや) {n_ira}장 (최소 {ira['min']}: python -m bot.irasutoya <일본어> → bot.irasutoya.save(url, 'assets/samples/<slug>/i1.png'))")
-    if n_real < max(1, t["real_photos"]["min"]):
-        errs.append(f"실사 {n_real}장 (최소 1: python -m bot.photos get \"<영어 검색어>\" assets/samples/<slug>/rN.jpg auto, 또는 beat real_query)")
+    if t["real_photos"]["min"] and n_real < t["real_photos"]["min"]:
+        errs.append(f"실사 {n_real}장 (최소 {t['real_photos']['min']})")
     if n_ai < 1:
         errs.append("AI 이미지(실사풍) 장면 없음")
     if t["zzal"]["min"] and n_zz < t["zzal"]["min"]:
         errs.append(f"반응 짤 {n_zz}장 (최소 {t['zzal']['min']}, {t['zzal']['source']})")
-    if (n_real + n_ira) < n_ai // 2:
-        errs.append(f"AI 장면 {n_ai}개에 실사·일본짤 {n_real + n_ira}개 → AI 2장마다 실사 또는 일본짤 1장")
+    if (n_real + n_ira + n_zz) < n_ai // 3:
+        errs.append(f"AI 장면 {n_ai}개에 짤 {n_ira + n_zz}개 → 일본짤·페페짤을 더 섞기")
     if kind == "감동" and any(re.match(r"^z\d+\.png$", m.get("zzal", "")) for m in p["media"]):
         p["media"] = _layout(p, d, t)  # 감동은 페페 짤 없음 (일본짤은 허용)
 
