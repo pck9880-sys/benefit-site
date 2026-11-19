@@ -135,5 +135,6 @@
   "start": 14,
   "lufs": -24,
   "credit": "Music: \"Our Obdurate Past\" by Christiaan Bakker (Jamendo) License: http://creativecommons.org/licenses/by/3.0/"
- }
+ },
+ "outro_custom": true
 }

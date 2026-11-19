@@ -2,25 +2,107 @@
  "topic": "GTA6 출시일 (2026-11-19)",
  "title_top": "오늘 직장인들 연차",
  "title_bottom": "몰린 이유 ㄷㄷ",
- "character": "", "hook_video": "", "photo_fallbacks": [],
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
  "caption_style": "box",
  "beats": [
-  {"narration": "오늘 해외에서 연차 신청이 32%나 늘었대", "card": "해외 연차 신청 **32%** 증가", "twist": false, "visual": "ai", "query": "", "ai_prompt": "",
-   "overlay": "quote", "overlay_text": "올해 GTA6 때문에 연차를 냈다는 직원이 수두룩하다", "overlay_source": "국내 게임사 관계자 (위키트리)"},
-  {"narration": "이유는 13년 만에 나온 GTA6", "card": "**13년 만에** 나온 GTA6", "twist": false, "visual": "ai", "query": "", "ai_prompt": "",
-   "overlay": "headline", "overlay_text": "13년 만에 돌아온 GTA6 초대박…판매량·매출 '상상초월'", "overlay_source": "위키트리"},
-  {"narration": "출시 당일에만 1710만 장 팔렸다는데", "card": "출시 당일 **1710만 장**", "twist": false, "visual": "ai", "query": "", "ai_prompt": "", "overlay": "none", "overlay_text": "", "overlay_source": ""},
-  {"narration": "메타크리틱 99점, 역대 최고 공동 1위래", "card": "메타크리틱 **99점**", "twist": false, "visual": "ai", "query": "", "ai_prompt": "",
-   "overlay": "score", "overlay_text": "Metacritic|99|100", "overlay_source": "보도 기준"},
-  {"narration": "근데 용량이 212기가라 서버까지 터짐", "card": "근데 용량 **212GB**… 서버 터짐", "twist": true, "visual": "ai", "query": "", "ai_prompt": "", "overlay": "none", "overlay_text": "", "overlay_source": ""}
+  {
+   "narration": "오늘 해외에서 연차 신청이 32%나 늘었대",
+   "card": "해외 연차 신청 **32%** 증가",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "quote",
+   "overlay_text": "올해 GTA6 때문에 연차를 냈다는 직원이 수두룩하다",
+   "overlay_source": "국내 게임사 관계자 (위키트리)"
+  },
+  {
+   "narration": "이유는 13년 만에 나온 GTA6",
+   "card": "**13년 만에** 나온 GTA6",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "headline",
+   "overlay_text": "13년 만에 돌아온 GTA6 초대박…판매량·매출 '상상초월'",
+   "overlay_source": "위키트리"
+  },
+  {
+   "narration": "출시 당일에만 1710만 장 팔렸다는데",
+   "card": "출시 당일 **1710만 장**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "메타크리틱 99점, 역대 최고 공동 1위래",
+   "card": "메타크리틱 **99점**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "score",
+   "overlay_text": "Metacritic|99|100",
+   "overlay_source": "보도 기준"
+  },
+  {
+   "narration": "근데 용량이 212기가라 서버까지 터짐",
+   "card": "근데 용량 **212GB**… 서버 터짐",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
  ],
  "question": "근데 너넨 출시 첫날 연차 씀, 주말까지 참음?",
  "voice": "용식",
  "outro": "솔직히 오늘은 일 손에 안 잡히지",
  "outro_free": true,
- "media": [{"video": "clip0.mp4"}, {"video": "clip1.mp4"}, {"image": "img2.jpg"}, {"video": "clip3.mp4"}, {"video": "clip4.mp4"}, {"video": "clip5.mp4"}, {"video": "clip6.mp4"}],
+ "media": [
+  {
+   "video": "clip0.mp4"
+  },
+  {
+   "video": "clip1.mp4"
+  },
+  {
+   "image": "img2.jpg"
+  },
+  {
+   "video": "clip3.mp4"
+  },
+  {
+   "video": "clip4.mp4"
+  },
+  {
+   "video": "clip5.mp4"
+  },
+  {
+   "video": "clip6.mp4"
+  }
+ ],
  "yt_title": "오늘 직장인들 연차 몰린 이유 ㄷㄷ GTA6 #shorts",
  "description": "13년 만에 나온 GTA6가 오늘(11월 19일) PS5·Xbox로 출시됐어요. 출시 당일 약 1710만 장(센서타워 추정), 메타크리틱 99점(보도 기준), 용량 212GB로 출시 직후 PSN·Xbox 접속 장애 신고가 이어졌대요.\n\n※ 게임 영상·이미지: Rockstar Games 공식 미디어 자료 (rockstargames.com/VI/media)\n\n출처: 위키트리, AP(RBC-Україна 인용)",
- "tags": ["GTA6", "GTA", "그랜드테프트오토6", "락스타", "게임", "연차"],
- "sources": ["https://www.wikitree.co.kr/articles/1175920", "https://www.rbc.ua/rus/news/fayl-212-gigabaytiv-i-perevantazheni-serveri-1795074776.html"]
+ "tags": [
+  "GTA6",
+  "GTA",
+  "그랜드테프트오토6",
+  "락스타",
+  "게임",
+  "연차"
+ ],
+ "sources": [
+  "https://www.wikitree.co.kr/articles/1175920",
+  "https://www.rbc.ua/rus/news/fayl-212-gigabaytiv-i-perevantazheni-serveri-1795074776.html"
+ ],
+ "outro_custom": true
 }

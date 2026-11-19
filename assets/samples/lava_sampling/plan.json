@@ -106,5 +106,6 @@
   "Video: France Pinoy (CC BY 3.0) https://commons.wikimedia.org/wiki/File:ICELAND_CRAZY_BED_OF_VOLCANO_LAVA_Geldingadalur_Volcano_Eruption_in_Iceland_April_1,_2021.webm",
   "Video: U.S. Geological Survey (USGS) (Public domain) https://commons.wikimedia.org/wiki/File:Volcano_Lava_Sample.webm"
  ],
- "outro_free": true
+ "outro_free": true,
+ "outro_custom": true
 }

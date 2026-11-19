@@ -61,6 +61,7 @@ SHORTS_CHANNEL = _env("SHORTS_CHANNEL", "")  # 영상 맨 위에 작게 표시�
 SHORTS_BGM_VOLUME = float(_env("SHORTS_BGM_VOLUME", "0.12"))  # (예전 설정, 미사용)
 SHORTS_BGM = _env("SHORTS_BGM", "1") == "1"  # 배경음악 사용 (즐겨찾기 곡만: Born Free - Pokki DJ, 연주곡)
 SHORTS_BGM_LUFS = float(_env("SHORTS_BGM_LUFS", "-33"))  # 배경음악 크기 (목소리 -14 기준, 낮을수록 작게)
+SHORTS_OUTRO = _env("SHORTS_OUTRO", "님들은 어떻게 생각해요잉?")  # 기본 마무리 (plan 의 outro_custom=true 면 outro 그대로)
 SHORTS_SFX = _env("SHORTS_SFX", "0") == "1"  # 효과음 사용 안 함
 SHORTS_SFX_VOLUME = float(_env("SHORTS_SFX_VOLUME", "0.35"))  # 효과음 크기 (assets/sfx)
 YOUTUBE_API_KEY = _env("YOUTUBE_API_KEY")  # 인기 쇼츠 분석용 (없으면 구글 검색어만 사용)
@@ -80,7 +81,7 @@ TYPECAST_VOICE_NAME = _env("TYPECAST_VOICE_NAME", "용식")
 SHORTS_VOICE_CHAR = _env("SHORTS_VOICE_CHAR", "용식")  # 숏츠 기본 목소리 (요청 시 박창수·태우), 마무리 시그니처 없음
 TYPECAST_ONLY = _env("TYPECAST_ONLY", "1") == "1"  # 1이면 항상 타입캐스트(박창수)만 — 실패하면 무료 음성으로 바꾸지 않고 중단
 TYPECAST_CREDIT = _env("TYPECAST_CREDIT", "0") == "1"  # 무료 플랜일 때만 출처 표기 필요 (베이직 유료라 끔)
-SHORTS_MAX_SECONDS = float(_env("SHORTS_MAX_SECONDS", "25"))  # 숏츠 최대 길이
+SHORTS_MAX_SECONDS = float(_env("SHORTS_MAX_SECONDS", "30"))  # 숏츠 최대 길이
 VOICE_FILE_TEMPO = float(_env("VOICE_FILE_TEMPO", "1.4"))  # 직접 만든 음성 파일(1.0배속)을 이 배속으로
 TTS_WORKERS = int(_env("TTS_WORKERS", "2"))  # 음성 동시 생성 수 (타입캐스트 무료 플랜 최대 2)
 TYPECAST_TEMPO = float(_env("TYPECAST_TEMPO", "1.0"))  # 목소리 배속 (1.0 = 원래 속도)

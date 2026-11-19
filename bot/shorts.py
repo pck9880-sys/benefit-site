@@ -58,7 +58,8 @@ class Plan(BaseModel):
                                                  "의견이 둘로 갈리게, 욕설·비하·혐오·정치 편가르기·특정인 공격 금지. 20자 이내")
     outro_impact: bool = Field(default=False, description="마무리 장면을 강렬하게 (플래시 + 큰 자막)")
     caption_style: str = Field(default="meme", description="'meme'(기본: 가운데 굵은 밈 자막, 줄마다 다른 색) / 'box' / 'epic'")
-    outro_free: bool = Field(default=True, description="마무리 한마디를 그대로 사용 (채널 시그니처 없음)")
+    outro_free: bool = Field(default=True, description="마무리 한마디를 그대로 사용")
+    outro_custom: bool = Field(default=False, description="true 면 outro 를 그대로, false 면 기본 마무리('님들은 어떻게 생각해요잉?')")
     voice: str = Field(default="", description="비워두세요 (시스템이 정함)")
     outro: str = Field(default="", description="마무리 한마디: 시청자(대중) 입장에서 공감하는 반말 한 줄 "
                                      "(예: '솔직히 이 정도면 인정이지'). 시그니처 문구 없음. 20자 이내")
@@ -83,7 +84,10 @@ PICK = """당신은 한국 유튜브 쇼츠 채널의 기획자입니다. 아래
 3) 정리: 주제, 왜 뜨는지, 확인된 사실 5~8개(숫자·이름은 정확히), 출처 URL, 시청자가 '오?' 할 반전 포인트,
    실제 기사 제목 2~3개(언론사명 포함, 원문 그대로), 기사·커뮤니티에 인용된 실제 여론·반응 2~3개(원문 그대로, 욕설 제외)."""
 
-WRITE = """당신은 조회수 높은 한국 유튜브 쇼츠 작가입니다. 아래 조사 내용으로 30~40초 쇼츠를 만드세요.
+WRITE = """당신은 조회수 높은 한국 유튜브 쇼츠 작가입니다. 아래 조사 내용으로 약 30초 쇼츠를 만드세요.
+- 먼저 '이 영상이 말하려는 핵심 한 줄'을 정하고, 모든 문장이 그 한 줄을 향하게 짭니다.
+  구성: ① 훅(무슨 일?) → ② 배경(왜 이슈?) → ③ 핵심 사실(숫자) → ④ 반전·쟁점(의견이 갈리는 지점) → ⑤ 정리 한 줄.
+- 마무리는 시스템이 '님들은 어떻게 생각해요잉?'으로 고정해서 붙이므로 question 은 비워 두고, ⑤가 쟁점을 또렷하게 던지게 씁니다.
 - 조사 내용에 있는 사실만 씁니다. 과장·낚시·지어낸 숫자 금지. 남의 쇼츠 대사를 베끼지 않습니다.
 - 말투: 친구에게 썰 푸는 반말 쇼츠 내레이션 ("~라는데", "근데 여기서 반전", "~했다고 함", "~인 거"). 문장은 짧게.
   '~입니다', '~습니다', '~해요' 같은 존댓말 문장 끝은 절대 쓰지 않습니다.
@@ -437,7 +441,7 @@ def has_audio(f):
 def with_outro(p):
     """대본 끝에 토론 질문 + 마무리 한마디(대중 입장)를 붙인 복사본."""
     p = p.model_copy(deep=True)
-    p.outro = signature(p.outro)
+    p.outro = config.SHORTS_OUTRO if (config.SHORTS_OUTRO and not p.outro_custom) else signature(p.outro)
     if p.question.strip():  # 토론 유도 질문 (마지막 장면 위에)
         p.beats.append(Beat(narration=p.question.strip(), card=p.question.strip(), twist=True, visual="ai", query="", ai_prompt=""))
     p.beats.append(Beat(narration=p.outro, card=p.outro, visual="ai", query="", ai_prompt="", impact=p.outro_impact))
@@ -517,6 +521,17 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
                 flash = "fade=t=in:st=0:d=0.35:color=white," if b.impact else ""
                 media_f = (f"[1:v]{slow}scale={MEDIA}:{MEDIA}:force_original_aspect_ratio=increase,"
                            f"crop={MEDIA}:{MEDIA},{zoom}{flash}setsar=1,fps=30[m]")
+            elif kind == "zzal":  # 짤(일러스트): 흰 바탕 가운데에 통째로, 살짝 통통 튀게
+                flat = work / f"zz{i}.jpg"  # 투명 배경 PNG → 흰 바탕으로
+                subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(src), "-f", "lavfi", "-i", "color=white:s=64x64",
+                                "-filter_complex", "[1][0]scale2ref[b][z];[b][z]overlay=format=auto", "-frames:v", "1",
+                                "-q:v", "2", str(flat)], check=True)
+                cmd += ["-loop", "1", "-i", flat]
+                zz = int(MEDIA * 0.78)
+                media_f = (f"[1:v]scale={zz}:{zz}:force_original_aspect_ratio=decrease,"
+                           f"pad={MEDIA}:{MEDIA}:(ow-iw)/2:(oh-ih)/2:color=white,setsar=1,"
+                           f"zoompan=z='1+0.04*abs(sin(on/9))':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'"
+                           f":d={frames}:s={MEDIA}x{MEDIA}:fps=30[m]")
             elif kind in ("image", "card"):  # 사진: 정사각으로 자르고 천천히 확대/축소 (카드는 글자가 안 잘리게 살짝만)
                 cmd += ["-loop", "1", "-i", src]
                 zmax, step = (1.04, 0.0006) if kind == "card" else (1.15, 0.0015)
@@ -906,10 +921,11 @@ def render_sample(folder):
     raw = json.loads((d / "plan.json").read_text("utf-8"))
     p = Plan(**raw)
     if raw.get("media"):  # 장면별 소재 지정: {"video": "clip0.mp4", "start": 0} / {"image": "img3.jpg"}
-        media = [("video", d / m["video"], float(m.get("start", 0))) if "video" in m else ("image", d / m["image"])
-                 for m in raw["media"]]
-    else:
-        media = [("image", f) if (f := d / f"img{i}.jpg").exists() else None for i in range(len(p.beats))]
+        media = [("video", d / m["video"], float(m.get("start", 0))) if "video" in m
+                 else ("zzal", d / m["zzal"]) if "zzal" in m else ("image", d / m["image"]) for m in raw["media"]]
+    else:  # imgN.jpg (AI·사진) 또는 zN.png (짤: 이라스토야 등 일러스트)
+        media = [("zzal", z) if (z := d / f"z{i}.png").exists() else ("image", f) if (f := d / f"img{i}.jpg").exists()
+                 else None for i in range(len(p.beats))]
     work = Path(tempfile.mkdtemp(prefix="sample-"))
     audios = None
     voice = next((d / f"voice.{ext}" for ext in ("mp3", "wav", "m4a", "mp4") if (d / f"voice.{ext}").exists()), None)
