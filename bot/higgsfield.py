@@ -83,3 +83,37 @@ def make_clips(prompts, out_dir, seconds=5):
             print("[higgsfield]", type(e).__name__, e)
             files.append(None)
     return files, cost
+
+
+def make_images(prompts, out_dir):
+    """AI 사진 여러 장을 한꺼번에 요청하고 기다림. (파일 경로 목록 — 실패한 자리는 None, 예상 비용 USD)"""
+    model = config.HIGGSFIELD_IMAGE_MODEL
+    jobs, cost = [], 0.0
+    for p in prompts:
+        body = {"prompt": p, "aspect_ratio": "1:1", "resolution": "2K", "num_images": 1}
+        try:
+            r = requests.post(f"{BASE}/{model}", headers={**_h(), "Idempotency-Key": str(uuid.uuid4())},
+                              json=body, timeout=60)
+            if r.status_code >= 300:
+                raise RuntimeError(f"HTTP {r.status_code}: {r.text[:200]}")
+            jobs.append(r.json()["status_url"])
+            cost += estimate(body, model)
+        except Exception as e:
+            print("[higgsfield] 이미지 요청 실패:", e)
+            jobs.append(None)
+    files = []
+    for i, url in enumerate(jobs):
+        f = None
+        if url:
+            try:
+                s = wait(url, timeout=300)
+                if s.get("status") == "completed" and s.get("images"):
+                    f = out_dir / f"ai{i}.png"
+                    f.write_bytes(requests.get(s["images"][0]["url"], timeout=120).content)
+                else:
+                    print("[higgsfield] 이미지 안 됨:", s.get("status"), s.get("error"))
+            except Exception as e:
+                print("[higgsfield] 이미지", type(e).__name__, e)
+                f = None
+        files.append(f)
+    return files, cost

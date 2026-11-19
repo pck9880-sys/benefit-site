@@ -30,15 +30,18 @@ CAP_Y = 1330  # 자막 위치 (영상 아래쪽에 겹침)
 class Beat(BaseModel):
     narration: str = Field(description="읽을 문장 1개. 28자 이내, 쇼츠 썰 푸는 말투 ('~라는데', '~거든요', '~했다고 함')")
     card: str = Field(description="AI 영상이 없을 때 화면 가운데 카드에 띄울 짧은 문구 (20자 이내)")
-    scene: int = Field(description="이 문장 동안 보여줄 장면 번호 (scenes 목록의 0부터 시작하는 순번)")
+    visual: str = Field(description="'photo' (실제 사진: 실존 인물·장소·물건·사건 현장) 또는 'ai' (재연 장면·주인공 연출 컷)")
+    query: str = Field(description="실제 사진 검색어 (영어 2~4단어, 예: 'baseball pitcher stadium'). ai 장면이어도 대체용으로 반드시 작성")
+    ai_prompt: str = Field(description="AI 이미지 프롬프트 (영어). 주인공이 나오면 'the protagonist' 로 지칭. 사실적인 사진 느낌, 글자·로고 없음")
 
 
 class Plan(BaseModel):
     topic: str = Field(description="고른 주제 한 줄")
     title_top: str = Field(description="상단 제목 첫 줄 (흰색), 13자 이내")
     title_bottom: str = Field(description="상단 제목 둘째 줄 (노란색, 궁금증 포인트), 13자 이내")
-    scenes: List[str] = Field(description="AI 영상 장면 3~4개. 영어 프롬프트, 사실적·영화 같은 한 장면 묘사. "
-                                          "실존 인물 얼굴, 브랜드 로고, 글자, 게임·영화 캐릭터는 넣지 않음")
+    character: str = Field(description="AI 장면에 계속 나올 주인공(가상 인물)의 생김새 영어 묘사 (나이·성별·옷·분위기). "
+                                       "실존 인물을 닮게 만들지 않음 — 실존 인물은 'photo' 장면으로만 보여줌")
+    hook_video: str = Field(description="첫 장면 AI 영상 프롬프트 (영어, 5초, 역동적인 한 장면)")
     beats: List[Beat] = Field(description="내레이션 6~8문장 (전체 35초 이내). 첫 문장은 제목 내용을 다시 던지는 훅, 마지막은 반전·한마디 정리")
     yt_title: str = Field(description="유튜브 제목 40자 이내, 끝에 #shorts")
     description: str = Field(description="유튜브 설명 2~3줄")
@@ -62,7 +65,10 @@ WRITE = """당신은 조회수 높은 한국 유튜브 쇼츠 작가입니다. �
 - 조사 내용에 있는 사실만 씁니다. 과장·낚시·지어낸 숫자 금지. 남의 쇼츠 대사를 베끼지 않습니다.
 - 말투: 친구에게 썰 푸는 쇼츠 내레이션 ("~라는데", "근데 여기서 반전", "~했다고 함"). 문장은 짧게.
 - 제목 2줄: 첫 줄은 상황, 둘째 줄(노란색)은 궁금증 ("~하는 이유", "~라고?", "결과는?").
-- 장면 프롬프트는 영어로, 내레이션 흐름에 맞춰 3~4개. 실존 인물·로고·글자·저작권 캐릭터 금지.
+- 화면은 요즘 인기 쇼츠처럼 문장마다 컷이 바뀝니다. 문장마다 실제 사진('photo')과 AI 연출 컷('ai')을 섞으세요 (대략 반반).
+  · 실존 인물·장소·제품·사건은 'photo' (실제 사진 검색). 실존 인물을 AI로 그리지 않습니다.
+  · 감정·상황 재연, '만약 내가 ~라면' 같은 장면은 'ai' — 매번 같은 가상 주인공(character)이 나오게 해서 이야기처럼 이어지게.
+  · AI 프롬프트는 영어, 실제 사진처럼 (photorealistic, natural light, smartphone photo). 글자·로고·저작권 캐릭터 금지.
 
 [조사 내용]
 {notes}"""
@@ -76,10 +82,12 @@ def plan_short(st):
     """(Plan, 비용)"""
     if config.MOCK or not config.ANTHROPIC_API_KEY:
         return Plan(topic="테스트 주제", title_top="미국 놀이공원에서", title_bottom="난리 난 기구의 정체",
-                    scenes=["a giant roller coaster at sunset", "people screaming on a drop tower"],
-                    beats=[Beat(narration="미국 놀이공원에 새로 생긴 기구가 난리라는데", card="미국 놀이공원 신상 기구", scene=0),
-                           Beat(narration="높이가 무려 백 미터가 넘는다고 함", card="높이 100m 이상", scene=1),
-                           Beat(narration="근데 여기서 반전이 있음", card="근데 반전", scene=0)],
+                    character="a Korean man in his 20s wearing a hoodie", hook_video="a roller coaster drops at sunset",
+                    beats=[Beat(narration="미국 놀이공원에 새로 생긴 기구가 난리라는데", card="미국 놀이공원 신상 기구",
+                                visual="photo", query="roller coaster", ai_prompt=""),
+                           Beat(narration="높이가 무려 백 미터가 넘는다고 함", card="높이 100m 이상",
+                                visual="ai", query="drop tower ride", ai_prompt="the protagonist screaming on a drop tower"),
+                           Beat(narration="근데 여기서 반전이 있음", card="근데 반전", visual="photo", query="amusement park", ai_prompt="")],
                     yt_title="미국 놀이공원 신상 기구 #shorts", description="테스트", tags=["놀이기구"],
                     sources=["https://example.com"]), 0.0
     from . import contest, trends
@@ -93,9 +101,6 @@ def plan_short(st):
     if res.stop_reason == "refusal" or res.parsed_output is None:
         raise RuntimeError(f"숏츠 대본 생성 실패 (stop_reason={res.stop_reason})")
     p = res.parsed_output
-    p.scenes = p.scenes[:config.HIGGSFIELD_CLIPS] or ["cinematic establishing shot"]
-    for b in p.beats:
-        b.scene = min(max(b.scene, 0), len(p.scenes) - 1)
     return p, cost
 
 
@@ -152,7 +157,14 @@ class Renderer:
 
 
 # ---------- 음성 ----------
-def tts(text, out):
+def tts(text, out, prev="", nxt=""):
+    """타입캐스트(키 있을 때) → 실패하면 무료 음성."""
+    from . import typecast
+    if typecast.enabled():
+        try:
+            return typecast.tts(text, out, prev, nxt)
+        except Exception as ex:
+            print(f"[shorts] 타입캐스트 실패 → 무료 음성: {str(ex)[:150]}")
     try:
         import edge_tts
 
@@ -193,11 +205,13 @@ def ff(*args):
 
 
 # ---------- 합성 ----------
-def make_video(p, clips, work):
-    used = {}  # 장면별로 클립의 어디까지 썼는지 (같은 장면이 이어지면 이어서 재생)
+def make_video(p, media, work):
+    """media: 문장별 ("video"|"image", 경로) 또는 None(글자 카드)"""
     segs = []
     # 음성은 브라우저(Playwright)를 열기 전에 미리 만든다 (같은 스레드에서 asyncio 충돌 방지)
-    audios = [tts(b.narration, work / f"a{i}.mp3") for i, b in enumerate(p.beats)]
+    n = [b.narration for b in p.beats]
+    audios = [tts(t, work / f"a{i}.mp3", n[i - 1] if i else "", n[i + 1] if i + 1 < len(n) else "")
+              for i, t in enumerate(n)]
     voiced = sum(1 for a in audios if a)
     with Renderer() as r:
         title = r.png(title_html(p), work / "title.png")
@@ -211,26 +225,30 @@ def make_video(p, clips, work):
                 d = dur * len(text) / total_chars
                 caps.append((r.png(caption_html(text), work / f"c{i}_{j}.png"), t, t + d))
                 t += d
-            clip = clips[b.scene] if b.scene < len(clips) else None
+            kind, src = media[i] if i < len(media) and media[i] else (None, None)
             cmd = ["-f", "lavfi", "-i", f"color=c=black:s={W}x{H}:r=30:d={dur:.3f}"]
-            if clip:
-                off = used.get(b.scene, 0.0) % max(duration(clip) - 0.3, 1)
-                used[b.scene] = off + dur
-                cmd += ["-stream_loop", "-1", "-ss", f"{off:.2f}", "-i", clip]
-                media = (f"[1:v]scale={MEDIA}:{MEDIA}:force_original_aspect_ratio=increase,"
-                         f"crop={MEDIA}:{MEDIA},setsar=1,fps=30[m]")
+            frames = int(dur * 30) + 1
+            if kind == "video":
+                cmd += ["-stream_loop", "-1", "-i", src]
+                media_f = (f"[1:v]scale={MEDIA}:{MEDIA}:force_original_aspect_ratio=increase,"
+                           f"crop={MEDIA}:{MEDIA},setsar=1,fps=30[m]")
+            elif kind == "image":  # 사진: 정사각으로 자르고 천천히 확대/축소 (번갈아)
+                cmd += ["-loop", "1", "-i", src]
+                z = "min(1.0+on*0.0015,1.15)" if i % 2 == 0 else "max(1.15-on*0.0015,1.0)"
+                media_f = (f"[1:v]scale={MEDIA * 2}:{MEDIA * 2}:force_original_aspect_ratio=increase,"
+                           f"crop={MEDIA * 2}:{MEDIA * 2},setsar=1,zoompan=z='{z}':x='iw/2-(iw/zoom/2)'"
+                           f":y='ih/2-(ih/zoom/2)':d={frames}:s={MEDIA}x{MEDIA}:fps=30[m]")
             else:
                 card = r.png(card_html(b.card), work / f"k{i}.png", MEDIA, MEDIA, transparent=False)
-                frames = int(dur * 30) + 1
                 cmd += ["-loop", "1", "-i", card]
-                media = (f"[1:v]scale={int(MEDIA * 1.1)}:-2,zoompan=z='min(zoom+0.0008,1.06)':x='iw/2-(iw/zoom/2)'"
+                media_f = (f"[1:v]scale={int(MEDIA * 1.1)}:-2,zoompan=z='min(zoom+0.0008,1.06)':x='iw/2-(iw/zoom/2)'"
                          f":y='ih/2-(ih/zoom/2)':d={frames}:s={MEDIA}x{MEDIA}:fps=30[m]")
             cmd += ["-i", title]
             for c, _, _ in caps:
                 cmd += ["-i", c]
             cmd += (["-i", audio] if audio else ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"])
             a_idx = 3 + len(caps)
-            fc = [media, f"[0:v][m]overlay=0:{MEDIA_Y}:shortest=1[v0]", "[v0][2:v]overlay=0:0[v1]"]
+            fc = [media_f, f"[0:v][m]overlay=0:{MEDIA_Y}:shortest=1[v0]", "[v0][2:v]overlay=0:0[v1]"]
             last = "v1"
             for j, (_, t0, t1) in enumerate(caps):
                 fc.append(f"[{last}][{3 + j}:v]overlay=0:0:enable='between(t,{t0:.2f},{t1:.2f})'[w{j}]")
@@ -257,14 +275,52 @@ def make_video(p, clips, work):
     return out, voiced
 
 
+# ---------- 화면 소재 모으기 ----------
+def gather_media(p, work):
+    """문장별 화면: 첫 문장은 AI 영상(가능하면), 'ai' 는 AI 이미지, 'photo' 는 무료 실사 사진. 없으면 대체.
+    (media 목록, 사진 출처 목록, 비용)"""
+    from . import higgsfield, photos
+    media, credits, used, cost = [None] * len(p.beats), [], set(), 0.0
+    if higgsfield.enabled():
+        ai_idx = [i for i, b in enumerate(p.beats) if b.visual == "ai"]
+        prompts = [f"{p.beats[i].ai_prompt}. The protagonist: {p.character}. Photorealistic, natural light, "
+                   f"candid smartphone photo, no text, no logos" for i in ai_idx]
+        files, c = higgsfield.make_images(prompts, work)
+        cost += c
+        for i, f in zip(ai_idx, files):
+            if f:
+                media[i] = ("image", f)
+        if config.HIGGSFIELD_CLIPS > 0:
+            clips, c = higgsfield.make_clips([f"{p.hook_video}. Photorealistic, cinematic, no text"], work,
+                                             config.HIGGSFIELD_SECONDS)
+            cost += c
+            if clips and clips[0]:
+                media[0] = ("video", clips[0])
+        print(f"[shorts] 힉스필드: 이미지 {sum(1 for f in files if f)}/{len(files)}, 예상 ${cost:.2f}")
+    for i, b in enumerate(p.beats):
+        if media[i]:
+            continue
+        f, credit = photos.find(b.query, used, work / f"p{i}.jpg")
+        if f:
+            media[i] = ("image", f)
+            credits.append(credit)
+    print(f"[shorts] 화면: 영상 {sum(1 for m in media if m and m[0] == 'video')}, "
+          f"사진·이미지 {sum(1 for m in media if m and m[0] == 'image')}, 글자카드 {sum(1 for m in media if not m)}")
+    return media, credits, cost
+
+
 # ---------- 업로드 ----------
-def full_description(p):
+def full_description(p, credits=()):
+    from . import typecast
     tags = " ".join("#" + t.replace(" ", "") for t in p.tags[:8])
     src = "\n".join(f"- {u}" for u in p.sources[:3])
-    return f"{p.description}\n\n출처\n{src}\n\n※ 장면은 AI로 재연한 영상이에요.\n\n{tags} #shorts"
+    photo = ("\n\n사진 출처\n" + "\n".join(f"- {c}" for c in dict.fromkeys(credits))) if credits else ""
+    voice = (f"\n\nThis content was produced with Typecast, an AI virtual actor service. "
+             f"Characters casted: {config.TYPECAST_VOICE_NAME} https://typecast.ai") if typecast.enabled() else ""
+    return (f"{p.description}\n\n출처\n{src}{photo}\n\n※ 일부 장면은 AI로 만든 이미지예요.{voice}\n\n{tags} #shorts")
 
 
-def upload_youtube(video, p):
+def upload_youtube(video, p, credits=()):
     if not (config.UPLOAD_POST_API_KEY and config.UPLOAD_POST_USER):
         return None
     with open(video, "rb") as f:
@@ -274,7 +330,7 @@ def upload_youtube(video, p):
                      "Idempotency-Key": "shorts-" + re.sub(r"\W", "", p.topic)[:40] + now().strftime("%Y%m%d")},
             data=[("user", config.UPLOAD_POST_USER), ("platform[]", "youtube"),
                   ("title", p.yt_title[:100]), ("youtube_title", p.yt_title[:100]),
-                  ("youtube_description", full_description(p)[:4900]),
+                  ("youtube_description", full_description(p, credits)[:4900]),
                   *[("tags[]", t) for t in p.tags[:8]],
                   ("privacyStatus", config.SHORTS_PRIVACY), ("selfDeclaredMadeForKids", "false"),
                   ("containsSyntheticMedia", "true"), ("defaultLanguage", "ko"), ("defaultAudioLanguage", "ko"),
@@ -285,7 +341,7 @@ def upload_youtube(video, p):
     return r.json()
 
 
-def send_telegram(st, video, p, uploaded):
+def send_telegram(st, video, p, uploaded, credits):
     chat = st.get("owner_chat_id") or config.TELEGRAM_CHAT_ID
     if not chat or not telegram.enabled():
         return
@@ -303,7 +359,7 @@ def send_telegram(st, video, p, uploaded):
         print("[shorts] 텔레그램 영상 전송 실패:", type(ex).__name__)
     if uploaded is None:
         telegram.send(chat, f"제목\n<code>{e(p.yt_title)}</code>", html=True)
-        telegram.send(chat, f"설명\n<code>{e(full_description(p))}</code>", html=True)
+        telegram.send(chat, f"설명\n<code>{e(full_description(p, credits))}</code>", html=True)
 
 
 # ---------- 실행 ----------
@@ -333,21 +389,18 @@ def run(force=False):
     st["shorts_tried"] = now().isoformat(timespec="minutes")
     try:
         p, cost = plan_short(st)
-        print(f"[shorts] 주제: {p.topic} / 장면 {len(p.scenes)} / 문장 {len(p.beats)}")
-        clips = [None] * len(p.scenes)
-        if higgsfield.enabled():
-            clips, hcost = higgsfield.make_clips(p.scenes, work, config.HIGGSFIELD_SECONDS)
-            cost += hcost
-            print(f"[shorts] AI 영상 {sum(1 for c in clips if c)}/{len(clips)}개, 예상 ${hcost:.2f}")
+        print(f"[shorts] 주제: {p.topic} / 문장 {len(p.beats)} / AI컷 {sum(b.visual == 'ai' for b in p.beats)}")
+        media, credits, cost2 = gather_media(p, work)
+        cost += cost2
         st.setdefault("cost", {})[month] = round(st.get("cost", {}).get(month, 0) + cost, 4)
-        video, voiced = make_video(p, clips, work)
+        video, voiced = make_video(p, media, work)
         print(f"[shorts] 완성 {duration(video):.1f}초, 음성 {voiced}/{len(p.beats)}")
         uploaded = None
         try:
-            uploaded = upload_youtube(video, p)
+            uploaded = upload_youtube(video, p, credits)
         except Exception as ex:
             pipeline.notify(st, f"⚠️ 유튜브 자동 업로드 실패 → 영상을 텔레그램으로 보낼게요\n{str(ex)[:300]}")
-        send_telegram(st, video, p, uploaded)
+        send_telegram(st, video, p, uploaded, credits)
         if config.SHORTS_KEEP:
             shutil.copy(video, config.ROOT / "shorts_preview.mp4")
         st["shorts_topics"] = (st.get("shorts_topics", []) + [p.topic])[-60:]

@@ -32,6 +32,10 @@ jobs:
       HIGGSFIELD_MODEL: ${{ vars.HIGGSFIELD_MODEL }}
       HIGGSFIELD_CLIPS: ${{ vars.HIGGSFIELD_CLIPS }}
       SHORTS_CHANNEL: ${{ vars.SHORTS_CHANNEL }}
+      PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+      TYPECAST_API_KEY: ${{ secrets.TYPECAST_API_KEY }}
+      TYPECAST_VOICE_ID: ${{ vars.TYPECAST_VOICE_ID }}
+      TYPECAST_VOICE_NAME: ${{ vars.TYPECAST_VOICE_NAME }}
       SITE_URL: ${{ vars.SITE_URL }}
       CF_PAGES_PROJECT: ${{ vars.CF_PAGES_PROJECT || 'jiwon-hyetaek' }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -60,6 +64,10 @@ jobs:
           pip install edge-tts playwright
           python -m playwright install --with-deps chromium
           sudo apt-get install -y ffmpeg fonts-noto-cjk >/dev/null
+
+      - name: 타입캐스트 목소리 확인
+        if: steps.due.outputs.go == '1'
+        run: python -m bot typecast-check || true
 
       - name: 숏츠 제작 + 업로드
         if: steps.due.outputs.go == '1'
