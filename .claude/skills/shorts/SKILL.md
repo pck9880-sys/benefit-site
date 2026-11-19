@@ -137,3 +137,13 @@ gh workflow run shorts-upload.yml --ref main -f folder=assets/samples/<slug> \
 - **현장음형은 'A vs B 뭐가 더 좋음?' 질문을 넣지 않는다** (`"question": ""`). 마무리는 강렬한 한마디(예: "이게 **대한민국 공군**이다").
 - 장면 전환 때 현장음은 자동으로 짧게 페이드(끊김 방지). 장면 첫 1초가 엉뚱하면 media 에 `"start"` 로 건너뛰기.
 - 실제 음성(인터뷰·MC) 찾기: 원본 오디오를 16kHz wav 로 뽑아 `faster-whisper`(pip, 모델 small/medium)로 받아쓰기 → 신뢰도 높은 구간만 자막과 함께 사용. 불확실하면 쓰지 않는다.
+
+
+## 예능 편집형 (동물·일상 CC 영상 + 예능 자막)
+- 공중파·유튜브 예능 클립은 저작권 때문에 사용 불가 → CC BY 동물·일상 영상에 예능 자막을 입힌다.
+- 위키미디어 검색은 학명이 정확함 (예: Pygoscelis papua, Ailurus fulgens, Enhydra lutris).
+- `"caption_style": "variety"` — 색 박스(노랑·핑크·하늘·연두·주황 순환) + 검은 테두리 + 살짝 기울기 + 부드럽게 등장.
+  beat 에 `"sticker": "ㅋㅋㅋ"` 같은 리액션 스티커(오른쪽 위).
+- **더빙은 첫 문장만**: `"keep_audio": true, "intro_voice": true, "durations": [0, ...]` (0 = 첫 장면 길이를 목소리 길이에 자동 맞춤).
+  사용자에게 첫 문장만 녹음받아 `voice.mp3` 로 → 1.4배속, 목소리 나올 때 현장음 자동으로 줄임. 녹음 없으면 임시 음성.
+- 마무리는 대중 입장 공감 한마디 (해요잉·질문 없음). 예시: `assets/samples/penguin/`.

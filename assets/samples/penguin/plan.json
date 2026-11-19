@@ -1,0 +1,118 @@
+{
+ "topic": "남극 젠투펭귄 출근길 (예능 편집)",
+ "title_top": "남극 펭귄들",
+ "title_bottom": "출근길 브이로그 ㅋㅋㅋ",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "caption_style": "variety",
+ "keep_audio": true,
+ "intro_voice": true,
+ "question": "",
+ "outro_free": true,
+ "voice": "용식",
+ "beats": [
+  {
+   "narration": "남극 펭귄들 출근길이라는데",
+   "card": "남극 펭귄들 출근길이라는데",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "**뒤뚱뒤뚱** 출근 중",
+   "card": "**뒤뚱뒤뚱** 출근 중",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "sticker": "뒤뚱"
+  },
+  {
+   "narration": "갑자기 **멈칫** ㅋㅋㅋ",
+   "card": "갑자기 **멈칫** ㅋㅋㅋ",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "sticker": "?!"
+  },
+  {
+   "narration": "날개 쭉~ **기지개** 타임",
+   "card": "날개 쭉~ **기지개** 타임",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "sticker": "ㅋㅋㅋ"
+  },
+  {
+   "narration": "단체로 **우르르** 몰려옴",
+   "card": "단체로 **우르르** 몰려옴",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "sticker": "우르르"
+  }
+ ],
+ "outro": "출근하기 싫은 건 **펭귄도 똑같음**",
+ "durations": [
+  0,
+  3.4,
+  3.2,
+  3.4,
+  3.4,
+  3.8
+ ],
+ "media": [
+  {
+   "video": "clip0.mp4"
+  },
+  {
+   "video": "clip0.mp4",
+   "start": 2.5
+  },
+  {
+   "video": "clip1.mp4"
+  },
+  {
+   "video": "clip2.mp4"
+  },
+  {
+   "video": "clip3.mp4"
+  },
+  {
+   "video": "clip4.mp4"
+  }
+ ],
+ "yt_title": "남극 펭귄들 출근길 브이로그 ㅋㅋㅋ #shorts",
+ "description": "남극 네코 하버의 젠투펭귄들. 뒤뚱뒤뚱 출근(?)하는 모습이에요.\n\n영상 출처\n- Video: Bettina May (CC BY 3.0) https://commons.wikimedia.org/wiki/File:Gentoo_penguins_(Pygoscelis_papua)_in_Antarctica.webm",
+ "tags": [
+  "펭귄",
+  "젠투펭귄",
+  "남극",
+  "동물",
+  "귀여운동물",
+  "shorts"
+ ],
+ "sources": [
+  "https://commons.wikimedia.org/wiki/File:Gentoo_penguins_(Pygoscelis_papua)_in_Antarctica.webm"
+ ]
+}
