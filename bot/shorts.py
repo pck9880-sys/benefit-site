@@ -6,6 +6,7 @@
 남의 영상은 쓰지 않는다 (주제만 참고, 대본·영상은 새로 만듦). 영상 파일은 저장소에 남기지 않는다.
 """
 import asyncio
+import os
 import random
 import re
 import shutil
@@ -1103,6 +1104,9 @@ def render_sample(folder):
             ff("-i", fast, "-af", f"apad=pad_dur={END_PAD}", padded)
             fast = padded
         durs = split_voice(fast, len(texts), work, texts)
+        gap = float(os.environ.get("SHORTS_SENTENCE_GAP", "0.35"))  # 문장 사이 숨 쉬는 틈 (2026-11-20 사용자 요청)
+        if gap > 0 and len(durs) > 1:
+            fast, durs = add_gaps(fast, durs, gap, work)
         video, voiced = make_video(p, media, work, voice_track=fast, durations=durs)
     elif True:
         video, voiced = make_video(p, media, work, audios)
@@ -1145,6 +1149,27 @@ def upload_file(video, plan_json, music_credit_text=""):
     st = pipeline.load_state()
     pipeline.notify(st, f"🎬 유튜브 업로드: {p.yt_title}\n{url or '처리 중 (유튜브 스튜디오에서 확인)'}")
     print("[upload] URL:", url)
+
+
+def add_gaps(voice, durs, gap, work):
+    """문장 경계마다 gap 초 무음을 넣어 숨 쉬는 틈을 만든다 (마지막 문장 뒤는 제외). (새 음성, 새 장면 길이)"""
+    pieces, t0 = [], 0.0
+    sil = work / "gap.wav"
+    ff("-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo", "-t", f"{gap:.3f}", sil)
+    for i, dur in enumerate(durs):
+        f = work / f"g{i}.wav"
+        ff("-i", voice, "-ss", f"{t0:.3f}", "-t", f"{dur:.3f}", "-ar", "44100", "-ac", "2", f)
+        pieces.append(f)
+        if i < len(durs) - 1:
+            pieces.append(sil)
+        t0 += dur
+    lst = work / "gaps.txt"
+    lst.write_text("".join(f"file '{x}'\n" for x in pieces))
+    out = work / "voice_gaps.wav"
+    ff("-f", "concat", "-safe", "0", "-i", lst, "-ar", "44100", "-ac", "2", out)
+    new = [round(d + (gap if i < len(durs) - 1 else 0), 3) for i, d in enumerate(durs)]
+    print(f"[voice] 문장 사이 {gap}초 틈 → {sum(durs):.1f}초 → {sum(new):.1f}초")
+    return out, new
 
 
 def speed_up(voice, work, tempo=None):

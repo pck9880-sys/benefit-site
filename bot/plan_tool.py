@@ -50,24 +50,54 @@ def new(slug, kind):
           "end_comments(실제 댓글 3~5), yt_title, description, pin_comment, sources")
 
 
+def prep_post_images(d):
+    """커뮤니티 원글 이미지(p*.jpg) → 장면용 정사각(sN.jpg). 얼굴 모자이크(auto), 긴 캡처는 위에서부터 나눠 여러 장면으로,
+    가로·세로 비율이 안 맞으면 흐린 배경 위에 통째로 (글자가 잘리지 않게). 이미 만든 건 건너뜀."""
+    from PIL import Image, ImageFilter
+    from . import realimg
+    out = []
+    srcs = sorted(d.glob("p[0-9]*.jpg"), key=lambda x: int(re.sub(r"\D", "", x.stem) or 0))
+    if srcs and not (d / "s1.jpg").exists():
+        k = 0
+        for f in srcs:
+            realimg.process(f, f, "auto")  # 사람 얼굴 모자이크
+            im = Image.open(f).convert("RGB")
+            w, h = im.size
+            parts = [im]
+            if h > w * 1.35:  # 긴 캡처: 가로폭 x (가로폭*1.1) 조각으로
+                step = int(w * 1.1)
+                parts = [im.crop((0, y, w, min(h, y + step))) for y in range(0, h, step) if min(h, y + step) - y > w * 0.25]
+            for part in parts:
+                k += 1
+                S = 1080
+                bg = part.resize((S, S)).filter(ImageFilter.GaussianBlur(40))
+                pw, ph = part.size
+                sc = min(S / pw, S / ph)
+                fg = part.resize((max(1, int(pw * sc)), max(1, int(ph * sc))))
+                bg.paste(fg, ((S - fg.size[0]) // 2, (S - fg.size[1]) // 2))
+                bg.save(d / f"s{k}.jpg", quality=92)
+    return sorted((x.name for x in d.glob("s[0-9]*.jpg")), key=lambda n: int(re.sub(r"\D", "", n)))
+
+
 def _layout(p, d, t):
     """템플릿 순서대로 AI·짤·실제 사진을 장면에 배치 (같은 종류가 모자라면 다른 종류로)."""
     pools = {
         "ai": [g["file"] for g in p.get("gpt_images", []) if not g["file"].startswith("thumb")],
         "zzal": sorted(x.name for x in d.glob("z*.png")),
         "real": sorted(x.name for x in d.glob("r[0-9]*.jpg")),
+        "post": prep_post_images(d),
     }
     used = {k: 0 for k in pools}
     media = []
     n = len(p["beats"])
     for i in range(n):
         want = t["media_pattern"][i % len(t["media_pattern"])]
-        order = [want, "ai", "real", "zzal"]
+        order = [want, "post", "ai", "real", "zzal"]
         if t["zzal"]["max"] == 0:
             order = [x for x in order if x != "zzal"]
         for k in order:
             lim = t["zzal"]["max"] if k == "zzal" else (t["real_photos"]["max"] if k == "real" else 99)
-            if pools[k] and used[k] < max(lim, 0) and (k == "ai" or used[k] < len(pools[k])):
+            if pools[k] and used[k] < max(lim, 0) and (k == "ai" or used[k] < len(pools[k])):  # 원글·짤·사진은 한 번씩
                 f = pools[k][used[k] % len(pools[k])]
                 used[k] += 1
                 media.append({"zzal": f} if k == "zzal" else {"image": f})
@@ -131,7 +161,10 @@ def check(slug):
     if not t["zzal"]["min"] <= nz <= max(t["zzal"]["max"], t["zzal"]["min"]):
         errs.append(f"짤 {nz}장 (필요 {t['zzal']['min']}~{t['zzal']['max']}, {t['zzal']['source'] or '사용 안 함'})")
     nr = len(list(d.glob("r[0-9]*.jpg")))
-    if nr < t["real_photos"]["min"]:
+    npost = len(list(d.glob("p[0-9]*.jpg")))
+    if t.get("post_min") and npost < t["post_min"]:
+        errs.append(f"원글 이미지 {npost}장 (최소 {t['post_min']}: python -m bot.community grab <URL> assets/samples/<slug>)")
+    if nr < t["real_photos"]["min"] and not npost:
         errs.append(f"실제 사진 {nr}장 (최소 {t['real_photos']['min']}, bot.realimg 로 모자이크 처리해서 rN.jpg)")
 
     # 장면 배치: 비었거나 없는 파일을 가리키면 템플릿 순서로 다시
@@ -160,6 +193,11 @@ def check(slug):
             continue
         if line not in desc:
             desc = desc.rstrip() + "\n\n" + line
+    pj = d / "post.json"
+    if pj.exists():
+        site = json.loads(pj.read_text("utf-8")).get("site", "")
+        if site and site not in desc:
+            desc = desc.rstrip() + f"\n※ 출처: {site} 인기글"
     p["description"] = desc.strip()
     p["tags"] = list(dict.fromkeys((p.get("tags") or []) + t["tags"]))[:12]
     if p.get("yt_title") and "#shorts" not in p["yt_title"]:
