@@ -1,0 +1,136 @@
+{
+ "topic": "누리호 발사 (순수 국내 기술 우주발사체)",
+ "title_top": "순수 우리 기술로 만든",
+ "title_bottom": "누리호 발사 순간 ㄷㄷ",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "caption_style": "epic",
+ "outro_impact": true,
+ "outro_free": true,
+ "keep_audio": true,
+ "question": "",
+ "voice": "용식",
+ "beats": [
+  {
+   "narration": "전남 고흥 **나로우주센터**",
+   "card": "전남 고흥 **나로우주센터**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "**순수 국내 기술**로 만든 누리호",
+   "card": "**순수 국내 기술**로 만든 누리호",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "slowmo": true
+  },
+  {
+   "narration": "설계부터 조립까지 **전부 우리 손으로**",
+   "card": "설계부터 조립까지 **전부 우리 손으로**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "하늘을 찢고 올라가는 **불기둥**",
+   "card": "하늘을 찢고 올라가는 **불기둥**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "로켓 **3단 내부** 카메라 시점",
+   "card": "로켓 **3단 내부** 카메라 시점",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "자력 위성 발사 **세계 7번째** 나라",
+   "card": "자력 위성 발사 **세계 7번째** 나라",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "outro": "이게 **대한민국 우주 기술**이다",
+ "durations": [
+  3.0,
+  4.0,
+  3.4,
+  3.2,
+  3.2,
+  3.6,
+  4.6
+ ],
+ "media": [
+  {
+   "video": "clip0.mp4"
+  },
+  {
+   "video": "clip1.mp4"
+  },
+  {
+   "video": "clip2.mp4"
+  },
+  {
+   "video": "clip3.mp4"
+  },
+  {
+   "video": "clip4.mp4"
+  },
+  {
+   "video": "clip5.mp4"
+  },
+  {
+   "video": "clip6.mp4"
+  }
+ ],
+ "bgm": {
+  "file": "bgm.mp3",
+  "start": 92,
+  "lufs": -24,
+  "credit": "Music: \"Dauntless horns\" by bog (Jamendo) License: http://creativecommons.org/licenses/by/3.0/"
+ },
+ "yt_title": "순수 우리 기술로 만든 누리호 발사 순간 ㄷㄷ #shorts",
+ "description": "설계·제작·조립 모두 국내 기술로 개발한 한국형 발사체 누리호. 2022년 2차 발사 성공으로 자력으로 위성을 발사할 수 있는 세계 7번째 나라가 됐어요. 소리 켜고 보세요!\n\n영상 출처 (한국항공우주연구원, CC BY 3.0)\n- Video: 한국항공우주연구원 KARI TV (CC BY 3.0) https://commons.wikimedia.org/wiki/File:Second_launch_of_the_Korean_Space_Launch_Vehicle-II_on_21_June_2022.webm\n- Video: 한국항공우주연구원 KARI TV (CC BY 3.0) https://commons.wikimedia.org/wiki/File:Third_launch_of_the_Korean_Space_Launch_Vehicle-II_on_25_May_2023.webm\n- Video: 한국항공우주연구원(KARI) (CC BY 3.0) https://commons.wikimedia.org/wiki/File:%EB%88%84%EB%A6%AC%ED%98%B8_1%EC%B0%A8_%EC%8B%9C%ED%97%98_%EB%B0%9C%EC%82%AC_%EC%9E%A5%EB%A9%B4.webm\n\nMusic: \"Dauntless horns\" by bog (Jamendo) License: http://creativecommons.org/licenses/by/3.0/",
+ "tags": [
+  "누리호",
+  "KSLV2",
+  "나로우주센터",
+  "대한민국",
+  "우주",
+  "국뽕"
+ ],
+ "sources": [
+  "https://www.newsis.com/view/NISX20220621_0001914924",
+  "https://www.mt.co.kr/tech/2022/06/21/2022062117202564968"
+ ]
+}
