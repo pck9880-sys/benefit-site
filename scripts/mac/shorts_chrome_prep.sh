@@ -37,7 +37,27 @@ EOF
 
 # 2) 로컬 파일 서버 (크롬 저장 창·파일 선택 창 대신)
 python3 "$REPO/scripts/mac/drop_server.py" "$DIR" "$PORT" & SERVER=$!
-trap 'kill $SERVER 2>/dev/null' EXIT
+trap 'kill $SERVER 2>/dev/null; rm -f "$DIR/_recv.html" "$DIR/_send.html"' EXIT
+# 크롬은 공개 사이트 → 127.0.0.1 요청을 막음 → 로컬 페이지를 팝업으로 열고 postMessage 로 주고받기
+cat > "$DIR/_recv.html" <<'HTML'
+<!doctype html><meta charset="utf-8"><title>recv</title><body>recv ready
+<script>
+window.addEventListener('message', async (e) => { const d = e.data || {}; if (!d.file || !d.blob) return;
+  try { const r = await fetch('/' + d.file, {method: 'PUT', body: d.blob}); e.source.postMessage({ack: d.file, status: r.status}, '*'); }
+  catch (err) { e.source.postMessage({ack: d.file, error: String(err)}, '*'); } });
+if (window.opener) window.opener.postMessage({ready: true}, '*');
+</script>
+HTML
+cat > "$DIR/_send.html" <<'HTML'
+<!doctype html><meta charset="utf-8"><title>send</title><body>send ready
+<script>
+// opener 가 {get: '더빙용/영상.mp4'} 를 보내면 파일을 읽어 {file, blob} 으로 돌려줌
+window.addEventListener('message', async (e) => { const d = e.data || {}; if (!d.get) return;
+  try { const b = await (await fetch('/' + d.get)).blob(); e.source.postMessage({file: d.get, blob: b}, '*'); }
+  catch (err) { e.source.postMessage({file: d.get, error: String(err)}, '*'); } });
+if (window.opener) window.opener.postMessage({ready: true}, '*');
+</script>
+HTML
 sleep 1
 
 PRIVACY=$([ "${SHORTS_PUBLISH:-1}" = "0" ] && echo 비공개 || echo 공개)  # SHORTS_PUBLISH=0 → 테스트(비공개)

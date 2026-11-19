@@ -9,9 +9,10 @@
    둘 중 선택: 직전 편에 쓴 캐릭터({{LAST_VOICE}})가 아닌 쪽. 직전 기록이 없으면 영상 분위기에 더 맞는 쪽.
    고른 캐릭터 이름을 {{DIR}}/voice_used.txt 에 한 줄로 쓴다.
 3) 새 프로젝트에 대본을 한 줄에 한 문장씩 그대로 입력. 속도·톤 등 전부 기본값(1.0).
-4) 전체 합치기 mp3 로 받는다. **다운로드 버튼을 누르면 저장 창이 떠서 멈춘다 → 누르지 말 것.**
-   대신 다운로드 링크(또는 생성 응답의 오디오 URL)를 찾아 페이지 안에서:
-   `const b = await (await fetch(URL)).blob(); await fetch('http://127.0.0.1:{{PORT}}/더빙용/voice.mp3', {method:'PUT', body:b});`
-   응답 201 이면 성공. Bash 로 `ls -l {{DIR}}/더빙용/voice.mp3` 확인(100KB 이상).
+4) 전체 합치기 mp3 로 받는다. **저장 창이 뜨지 않게** 다운로드 동작을 막고 오디오 주소(cdn.typecast.ai/...)만 얻는다.
+   타입캐스트 페이지에서 127.0.0.1 로 바로 보내면 크롬이 막는다 → 수신 페이지를 거친다:
+   `const w = window.open('http://127.0.0.1:{{PORT}}/_recv.html')` (팝업이 막히면 페이지에 임시 버튼을 넣어 클릭으로 연다)
+   → ready 메시지 후 `const b = await (await fetch(오디오주소)).blob(); w.postMessage({file:'더빙용/voice.mp3', blob:b}, '*')`
+   → ack status 201 이면 성공. Bash 로 `ls -l {{DIR}}/더빙용/voice.mp3` 확인(100KB 이상). 팝업은 닫는다.
 5) 업그레이드·결제 창이 뜨면 닫고 '실패: 요금제 한도' 를 결과.txt 에 쓰고 끝.
 6) 확인창(confirm/alert)을 띄우는 동작 금지. 연 탭은 끝나면 닫는다.
