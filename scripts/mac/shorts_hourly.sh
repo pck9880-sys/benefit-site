@@ -1,7 +1,11 @@
 #!/bin/zsh
-# Mac 에서 3시간마다 숏츠 1편 자동 제작 → 크롬 Claude 더빙 → 유튜브 자동 업로드 (중간 보고 없음). cron/launchd 가 이 파일을 실행.
+# Mac 숏츠 자동 제작 (크론: 0~8시 2시간마다, 그 외 3시간마다) → 크롬 Claude 더빙 → 유튜브 자동 업로드 (중간 보고 없음). cron/launchd 가 이 파일을 실행.
 export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
 cd "$HOME/benefit-site" || exit 1
+# 이전 편이 아직 돌고 있으면 이번 회차는 건너뜀 (겹침 방지)
+LOCK=/tmp/shorts_hourly.lock
+if ! mkdir "$LOCK" 2>/dev/null; then echo "$(date) 이전 실행 중 → 건너뜀" >> shorts_hourly.log; exit 0; fi
+trap 'rmdir "$LOCK"' EXIT
 export SHORTS_BGM=0  # 음악은 업로드 때 유튜브 저장됨 사운드로
 git pull -q --rebase || true
 BEFORE=$(ls assets/samples)
