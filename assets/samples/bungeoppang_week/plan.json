@@ -1,0 +1,228 @@
+{
+ "topic": "붕어빵 장사 1주일 해 본 후기 + 어묵 국물 논쟁 (커뮤니티 썰 재구성)",
+ "mood": "기본",
+ "kind": "썰",
+ "title_top": "붕어빵 직접 1주일 팔아봤더니",
+ "title_bottom": "매출 보고 진짜 놀람",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "caption_style": "mix",
+ "beats": [
+  {
+   "narration": "붕어빵 없는 겨울 못 참아서 직접 팔아봄",
+   "card": "붕어빵 **직접** 팔아봄",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "동네 붕어빵 마차가 철거된다길래",
+   "card": "동네 마차 **철거** 소식",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "틀이랑 남은 재료 10만원에 다 받아옴",
+   "card": "틀+재료 **10만원**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "본업 가게 테라스에 자리 깔았지",
+   "card": "가게 **테라스**에 오픈",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "김치치즈, 고구마치즈 메뉴까지 만듦",
+   "card": "**김치치즈** 붕어빵까지",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "카드 결제 된다니까 손님들 다 놀람",
+   "card": "붕어빵인데 **카드** 됨",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "comment",
+   "overlay_text": "카드 되는 붕어빵이라니 ㅋㅋㅋㅋㅋ장사하는 사람은 역시 다르네 메뉴 다양한거 보소..... 니즈도 맞춰주고 짱이다",
+   "overlay_source": "커뮤니티 반응"
+  },
+  {
+   "narration": "중학생들이 슈치즈 해달래서 그것도 만듦",
+   "card": "주문 제작 **슈치즈**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "근데 중간에 붕어 태워먹고 혼자 황당함",
+   "card": "붕어 **태워먹음**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "comment",
+   "overlay_text": "ㅋㅋㅋㅋ아 태워먹고 황당해하는 붕어 졸라웃겨 진짜 ㅜㅜㅜ",
+   "overlay_source": "커뮤니티 반응"
+  },
+  {
+   "narration": "어묵 국물만 마셔도 되냐는 손님도 옴",
+   "card": "**어묵 국물** 마셔도 돼요?",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "붕어빵 샀으면 국물은 당연히 서비스지",
+   "card": "국물은 **서비스**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "comment",
+   "overlay_text": "아잇 서비스에요 어묵국물 냄새 붕어빵 냄새 이 둘이 사람을 끌어 모으는 것인데 어묵국물 정도야",
+   "overlay_source": "커뮤니티 반응"
+  },
+  {
+   "narration": "근데 일주일 매출 보고 진짜 놀람",
+   "card": "일주일 **매출** 보고 깜놀",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "140만원 넘게 팔았고 절반은 남음",
+   "card": "**140만원** 넘게 팔림",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "question": "",
+ "voice": "용식",
+ "outro": "",
+ "media": [
+  {
+   "image": "img0.jpg"
+  },
+  {
+   "image": "img1.jpg"
+  },
+  {
+   "zzal": "i_taiyakiki.png"
+  },
+  {
+   "image": "img2.jpg"
+  },
+  {
+   "image": "r1.jpg"
+  },
+  {
+   "image": "img2.jpg"
+  },
+  {
+   "image": "img0.jpg"
+  },
+  {
+   "image": "img3.jpg"
+  },
+  {
+   "image": "r2.jpg"
+  },
+  {
+   "image": "r1.jpg"
+  },
+  {
+   "image": "img2.jpg"
+  },
+  {
+   "image": "r2.jpg"
+  }
+ ],
+ "gpt_images": [
+  {
+   "file": "img0.jpg",
+   "prompt": "Photorealistic vertical 9:16 photo, cold winter evening on a Korean neighborhood street, a small fish-shaped bread (bungeoppang) street stall glowing with warm light, steam rising from cast-iron fish molds, a fictional young adult in a padded winter jacket and knit beanie happily holding a paper bag of fish-shaped pastries, breath visible in the cold air, cozy mood, no text, no logos, no signs with letters"
+  },
+  {
+   "file": "img1.jpg",
+   "prompt": "Photorealistic vertical 9:16 photo, an empty old street food cart on a quiet Korean residential street at dusk, covered with a faded blue tarp and tied with rope as if closing down, a few dry leaves on the pavement, wintry melancholy mood, no people, no text, no logos"
+  },
+  {
+   "file": "img2.jpg",
+   "prompt": "Photorealistic vertical 9:16 photo, the outdoor terrace of a small cozy shop turned into a pop-up fish-shaped bread (bungeoppang) stand, a fictional friendly adult shop owner in an apron and work gloves pouring batter into a row of cast-iron fish molds, a small card payment terminal on the counter, warm string lights, two fictional teenage customers in school-style winter coats waiting in line seen from behind, no text, no logos, no readable signs"
+  },
+  {
+   "file": "img3.jpg",
+   "prompt": "Photorealistic vertical 9:16 close-up photo, an open cast-iron fish-shaped bread mold with two overcooked burnt black fish-shaped pastries, a little smoke curling up, a gloved hand holding tongs frozen in surprise at the edge of the frame, humorous everyday mood, warm street stall lighting, no face visible, no text, no logos"
+  },
+  {
+   "file": "thumb_src.jpg",
+   "prompt": "Square 1:1 photorealistic photo for a YouTube Shorts thumbnail. A beautiful Korean adult woman in her late 20s with a slim, well-proportioned figure, wearing a stylish form-fitting outfit (fitted knit top or slim cardigan with high-waist jeans) that shows her body silhouette tastefully, surprised expression with wide eyes and slightly open mouth, pointing at the viewer. Reaction relates to this topic: 붕어빵 장사 1주일 해 본 후기 + 어묵 국물 논쟁 (커뮤니티 썰 재구성). Waist-up framing, face in the upper third, bright clean studio light, soft pastel background, high contrast, sharp focus, Instagram-model look. fully clothed, no lingerie, no swimwear, no cleavage focus, no suggestive pose, not resembling any real person, no text, no logo, no watermark."
+  }
+ ],
+ "music_concept": "일상 브이로그",
+ "thumb_caption": "일주일 매출 실화?",
+ "yt_title": "붕어빵 장사 일주일 해봤더니 매출 실화? #shorts",
+ "description": "붕어빵 없는 겨울을 못 참아서 본업 가게 테라스에서 직접 붕어빵을 팔아 봤다는 썰. 철거하는 마차에서 틀과 재료를 10만원에 받아 오고, 김치치즈·고구마치즈에 카드 결제, 주문 제작까지… 어묵 국물만 마셔도 되냐는 손님도 왔대요. 일주일 매출은 과연?\n\n님들은 어떻게 생각해요잉?\n\n※ 커뮤니티 실제 사연 여러 개를 재구성했어요.\n※ 일부 실제 사진(음식 사진, 사람 없음)이 섞여 있어요.\n출처: 인스티즈, 다음카페 여성시대\n사진: Wikimedia Commons (Bungeoppang-01.jpg 퍼블릭 도메인 / Boong o bbang.jpg CC BY-SA 4.0)\n일러스트: いらすとや (irasutoya.com)\n\n#붕어빵 #붕어빵장사 #겨울간식 #썰 #일상썰",
+ "tags": [
+  "붕어빵",
+  "붕어빵장사",
+  "겨울간식",
+  "어묵국물",
+  "썰",
+  "일상썰",
+  "부업"
+ ],
+ "sources": [
+  "https://www.instiz.net/pt/7794177",
+  "https://instiz.net/pt/7652923",
+  "https://commons.wikimedia.org/wiki/File:Bungeoppang-01.jpg",
+  "https://commons.wikimedia.org/wiki/File:Boong_o_bbang.jpg"
+ ],
+ "pin_comment": "붕어빵 사면서 어묵 국물 한 모금…🅰 서비스니까 괜찮다 / 🅱 그래도 물어보고 마셔야 — 님들은 어떻게 생각해요잉?"
+}
