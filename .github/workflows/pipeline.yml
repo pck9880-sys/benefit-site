@@ -90,6 +90,16 @@ jobs:
           preCommands: npx wrangler pages project create "$CF_PAGES_PROJECT" --production-branch=main || true
           command: pages deploy _site --project-name=${{ env.CF_PAGES_PROJECT }} --branch=main --commit-dirty=true
 
+      - name: 검색엔진에 새 페이지 알림 (IndexNow)
+        if: success() && env.CLOUDFLARE_API_TOKEN != ''
+        run: |
+          sleep 20
+          python -m bot indexnow
+          git add data/indexnow_sent.json 2>/dev/null || true
+          if ! git diff --cached --quiet; then
+            git commit -m "auto: indexnow" && (git push || (git pull --rebase && git push))
+          fi
+
       - uses: actions/configure-pages@v5
         if: always()
       - uses: actions/upload-pages-artifact@v3
