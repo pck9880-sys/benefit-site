@@ -1,0 +1,30 @@
+name: cc-find
+on:
+  workflow_dispatch:
+    inputs:
+      queries:
+        description: "영어 검색어들 (| 로 구분, 예: rocket launch|octopus camouflage)"
+        required: true
+permissions:
+  contents: read
+jobs:
+  find:
+    runs-on: ubuntu-latest
+    env:
+      PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+      QUERIES: ${{ inputs.queries }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: |
+          command -v ffmpeg || (curl -sL https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz | tar -xJ -C /tmp && sudo cp /tmp/ffmpeg-*-static/ffmpeg /tmp/ffmpeg-*-static/ffprobe /usr/local/bin/)
+          IFS='|' read -ra Q <<< "$QUERIES"
+          python -m bot cc-find "${Q[@]}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cc
+          path: cc_out/
+          retention-days: 2

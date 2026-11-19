@@ -76,6 +76,10 @@ elif cmd == "youtube-connect":  # Upload-Post 에 유튜브 연결 링크를 만
     if ok:
         pipeline.notify(st, "🔗 유튜브 연결 링크 (48시간 유효)\n아래 링크를 눌러 숏츠를 올릴 유튜브 채널로 로그인·허용해주세요.\n"
                             + r.json()["access_url"])
+elif cmd == "cc-find":  # CC 영상 후보 찾기: python -m bot cc-find "검색어1" "검색어2" ...
+    from pathlib import Path
+    from . import ccvideo
+    ccvideo.find_cli(sys.argv[2:], Path("cc_out"))
 elif cmd == "shorts-due":  # 워크플로에서 숏츠를 만들 차례인지 확인 (0=만들기)
     from . import shorts
     sys.exit(0 if shorts.due(pipeline.load_state()) else 1)

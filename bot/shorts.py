@@ -404,7 +404,9 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None):
                 events.append((t_beat + t, "pop"))  # 자막 뜰 때 '뽁'
                 t += d
             t_beat += dur
-            kind, src = media[i] if i < len(media) and media[i] else (None, None)
+            mi = media[i] if i < len(media) and media[i] else (None, None)
+            kind, src = mi[0], mi[1]
+            start = mi[2] if len(mi) > 2 else 0.0  # CC 영상은 구간 시작점
             ov = getattr(b, "overlay", "none")
             if ov in ("headline", "comment", "quote") and b.overlay_text:  # 기사 제목·여론·발언 카드
                 bg_src = src if kind == "image" else next((m[1] for m in media if m and m[0] == "image"), None)
@@ -421,7 +423,7 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None):
             cmd = ["-f", "lavfi", "-i", f"color=c=black:s={W}x{H}:r=30:d={dur:.3f}"]
             frames = int(dur * 30) + 1
             if kind == "video":
-                cmd += ["-stream_loop", "-1", "-i", src]
+                cmd += ["-ss", f"{start:.2f}", "-stream_loop", "-1", "-i", src]
                 media_f = (f"[1:v]scale={MEDIA}:{MEDIA}:force_original_aspect_ratio=increase,"
                            f"crop={MEDIA}:{MEDIA},setsar=1,fps=30[m]")
             elif kind in ("image", "card"):  # 사진: 정사각으로 자르고 천천히 확대/축소 (카드는 글자가 안 잘리게 살짝만)
@@ -772,6 +774,9 @@ def upload_file(video, plan_json, music_credit_text=""):
 def speed_up(voice, work, tempo=None):
     """목소리 높낮이는 그대로, 속도만 올림 (기본 1.2배)."""
     tempo = tempo or config.VOICE_FILE_TEMPO
+    if duration(voice) / tempo > config.SHORTS_MAX_SECONDS:  # 최대 길이를 넘으면 더 빠르게
+        tempo = round(duration(voice) / config.SHORTS_MAX_SECONDS, 3)
+        print(f"[voice] {config.SHORTS_MAX_SECONDS}초 제한 → {tempo}배속으로 조정")
     out = work / "voice_fast.mp3"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(voice), "-vn", "-af", f"atempo={tempo}",
                     "-ar", "44100", "-ac", "2", str(out)], check=True)
