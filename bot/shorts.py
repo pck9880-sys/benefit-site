@@ -513,9 +513,9 @@ def render_sample(folder):
     shutil.copy(video, out)
     from . import typecast
     n_tc = ENGINES.count("typecast")
-    voice = (f"타입캐스트 {config.TYPECAST_VOICE_NAME} {n_tc}/{len(p.beats)}문장" if n_tc else "무료 음성") + \
+    voice = (f"타입캐스트 {config.TYPECAST_VOICE_NAME} {n_tc}/{len(p.beats) + 1}문장" if n_tc else "무료 음성") + \
         ("" if typecast.enabled() else " (타입캐스트 키 없음)")
-    print(f"[sample] {duration(out):.1f}초, 음성 {voiced}/{len(p.beats)} ({voice})")
+    print(f"[sample] {duration(out):.1f}초, 음성 {voiced}/{len(p.beats) + 1} ({voice})")
     st = pipeline.load_state()
     send_telegram(st, out, p, uploaded=None, credits=())
     pipeline.notify(st, f"🧪 틀 테스트 영상: {duration(out):.1f}초 · 목소리 {voice}")
