@@ -1,0 +1,20 @@
+name: youtube-connect
+on:
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  link:
+    runs-on: ubuntu-latest
+    env:
+      UPLOAD_POST_API_KEY: ${{ secrets.UPLOAD_POST_API_KEY }}
+      UPLOAD_POST_USER: ${{ vars.UPLOAD_POST_USER }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: python -m bot youtube-connect

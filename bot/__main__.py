@@ -64,6 +64,18 @@ elif cmd == "bgm-get":  # 즐겨찾기 배경음악 받기 / calm: 잔잔한 연
 elif cmd == "shorts-upload":  # 완성 영상 올리기: python -m bot shorts-upload 영상.mp4 plan.json "음악 출처"
     from . import shorts
     shorts.upload_file(sys.argv[2], sys.argv[3], sys.argv[4] if len(sys.argv) > 4 else "")
+elif cmd == "youtube-connect":  # Upload-Post 에 유튜브 연결 링크를 만들어 텔레그램으로만 보냄 (로그에 남기지 않음)
+    import requests
+    from . import config
+    r = requests.post("https://api.upload-post.com/api/uploadposts/users/generate-jwt", timeout=30,
+                      headers={"Authorization": f"Apikey {config.UPLOAD_POST_API_KEY}"},
+                      json={"username": config.UPLOAD_POST_USER, "platforms": ["youtube"]})
+    ok = r.ok and r.json().get("access_url")
+    print("연결 링크 생성:", "성공" if ok else f"실패 HTTP {r.status_code}")
+    st = pipeline.load_state()
+    if ok:
+        pipeline.notify(st, "🔗 유튜브 연결 링크 (48시간 유효)\n아래 링크를 눌러 숏츠를 올릴 유튜브 채널로 로그인·허용해주세요.\n"
+                            + r.json()["access_url"])
 elif cmd == "shorts-due":  # 워크플로에서 숏츠를 만들 차례인지 확인 (0=만들기)
     from . import shorts
     sys.exit(0 if shorts.due(pipeline.load_state()) else 1)
