@@ -183,7 +183,7 @@ def title_html(p):
 <div class="t"><div class="a">{e(p.title_top)}</div><div class="b">{e(p.title_bottom)}</div></div>
 <script>window.fit=function(){{  // 제목이 검은 띠(레터박스) 밖으로 넘치지 않게 글자 크기를 줄임
  const box=document.querySelector('.t');
- for(const d of box.children){{let s=120;while(d.scrollWidth>box.clientWidth&&s>40){{s-=2;d.style.fontSize=s+'px';}}}}
+ for(const d of box.children){{let s=120;while(d.scrollWidth>box.clientWidth&&s>22){{s-=1;d.style.fontSize=s+'px';}}}}
  let s2=parseInt(getComputedStyle(box.children[0]).fontSize);
  while(box.scrollHeight>box.clientHeight&&s2>40){{s2-=2;for(const d of box.children)d.style.fontSize=Math.min(s2,parseInt(d.style.fontSize||120))+'px';}}
 }};</script>"""
@@ -223,14 +223,14 @@ def font_css(family, file):
 # 섞어 쓰는 자막 4종 (사용자 참고 이미지 2026-11-20): 장면마다 돌아가며
 MIX_STYLES = [
     # 흰 글씨 + 검은 테두리 (기본 설명 문장)
-    dict(font=("Pretendard", None), fill="#fff", stroke="#111", sw=11, shadow="0 8px 18px rgba(0,0,0,.55)", weight=900),
+    dict(font=("Pretendard", None), fill="#fff", stroke="#111", sw=6, shadow="0 8px 18px rgba(0,0,0,.55)", weight=900),
     # 빨간 글씨 + 흰 테두리 + 어두운 그림자 (강조·반발)
-    dict(font=("BHS", "BlackHanSans-Regular.ttf"), fill="#e8121c", stroke="#fff", sw=12,
-         shadow="4px 5px 0 rgba(40,0,0,.85)", weight=400),
+    dict(font=("BHS", "BlackHanSans-Regular.ttf"), fill="#e8121c", stroke="#fff", sw=6,
+         shadow="2px 3px 0 rgba(40,0,0,.85)", weight=400),
     # 검은 글씨 + 흰 테두리, 둥근 글씨 (말투·인용)
-    dict(font=("Jua", "Jua-Regular.ttf"), fill="#111", stroke="#fff", sw=12, shadow="0 6px 14px rgba(0,0,0,.45)", weight=400),
+    dict(font=("Jua", "Jua-Regular.ttf"), fill="#111", stroke="#fff", sw=6, shadow="0 6px 14px rgba(0,0,0,.45)", weight=400),
     # 주황·빨강 그라데이션 + 검은 테두리 + 붉은 번짐 (전환·반전)
-    dict(font=("DoHyeon", "DoHyeon-Regular.ttf"), fill="linear-gradient(#ff7a1a,#d0141c)", stroke="#1a0000", sw=13,
+    dict(font=("DoHyeon", "DoHyeon-Regular.ttf"), fill="linear-gradient(#ff7a1a,#d0141c)", stroke="#1a0000", sw=7,
          shadow="0 0 22px rgba(255,60,0,.55)", weight=400),
 ]
 
@@ -258,12 +258,12 @@ def mix_caption_html(text, idx=0, impact=False):
     fam, file = st["font"]
     css_font = font_css(fam, file) if file else ""
     plain = re.sub(r"\*\*(.+?)\*\*", r"\1", text).strip()
-    body = e(balance_lines(plain, 11))
+    body = e(balance_lines(plain, 20))
     grad = st["fill"].startswith("linear")
     fill = (f"background:{st['fill']};-webkit-background-clip:text;color:transparent;" if grad else f"color:{st['fill']};")
-    size = 78 if impact else 67  # 2026-11-20: 96px 의 70%
+    size = 39 if impact else 34  # 2026-11-20: 67px 의 50% (사용자 요청)
     return f"""<style>{css_font}{BASE_CSS}
-.c{{position:absolute;top:{MEDIA_Y + MEDIA - 220}px;left:60px;right:60px;height:190px;display:flex;align-items:flex-end;
+.c{{position:absolute;top:{MEDIA_Y + MEDIA - 150}px;left:80px;right:80px;height:120px;display:flex;align-items:flex-end;
  justify-content:center;text-align:center}}
 .w{{position:relative;display:inline-block;font-family:'{fam}',Pretendard,sans-serif;font-weight:{st['weight']};
  font-size:{size}px;line-height:1.18;letter-spacing:-.02em;word-break:keep-all;white-space:pre}}
@@ -271,7 +271,7 @@ def mix_caption_html(text, idx=0, impact=False):
 .w .f{{position:relative;{fill}}}</style>
 <div class="c"><div class="w"><div class="o">{body}</div><div class="f">{body}</div></div></div>
 <script>window.fit=function(){{const c=document.querySelector('.c'),w=document.querySelector('.w');let s={size};
- while((w.scrollWidth>c.clientWidth||w.scrollHeight>c.clientHeight)&&s>40){{s-=2;w.style.fontSize=s+'px';
+ while((w.scrollWidth>c.clientWidth||w.scrollHeight>c.clientHeight)&&s>22){{s-=1;w.style.fontSize=s+'px';
   w.querySelectorAll('.o').forEach(o=>o.style.webkitTextStroke=Math.round(s*0.17)+'px {st["stroke"]}');}}}};</script>"""
 
 
