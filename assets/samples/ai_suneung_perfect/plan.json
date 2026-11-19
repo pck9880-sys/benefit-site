@@ -1,0 +1,190 @@
+{
+ "topic": "AI가 2027 수능 10분 만에 만점 (AI 시리즈)",
+ "title_top": "AI한테 올해 수능 시켰더니",
+ "title_bottom": "10분 만에 만점 ㄷㄷ",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "caption_style": "box",
+ "beats": [
+  {
+   "narration": "올해 수능을 AI한테 풀게 했더니 결과가 충격임",
+   "card": "AI한테 수능 풀게 했더니?",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "수험생은 하루 종일 치는 시험인데",
+   "card": "수험생은 **하루 종일**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "챗GPT는 수학을 2분 40초 만에 만점",
+   "card": "챗GPT 수학 **2분 40초** 만점",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "headline",
+   "overlay_text": "“올해 수능 풀어줘” AI에 입력하니…챗GPT 10분도 안돼 만점 [팩플]",
+   "overlay_source": "중앙일보"
+  },
+  {
+   "narration": "다른 AI는 국어 전 문항을 2분 만에 다 맞혔대",
+   "card": "국어 **2분 만에** 다 맞힘",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "근데 다 잘한 건 아니라는데",
+   "card": "근데 다 잘한 건 **아님**",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "제미나이는 수학이 50점대에 그쳤고",
+   "card": "제미나이 수학 **50점대**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "headline",
+   "overlay_text": "챗GPT·클로드 국영수 만점, 제미나이는 수학 반타작",
+   "overlay_source": "중앙일보"
+  },
+  {
+   "narration": "무료 버전은 틀린 답을 정답이라고 내놓기도 했대",
+   "card": "무료 버전은 **오답**도",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "근데 작년엔 AI가 국어 53점이었거든",
+   "card": "작년엔 국어 **53점**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "1년 만에 만점까지 올라온 거",
+   "card": "1년 만에 **만점**",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "그래서 올해 시험장에 AI 안경 검사까지 생긴 거고",
+   "card": "그래서 **AI 안경 검사**까지",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "근데 AI가 10분이면 푸는 시험, 계속 이렇게 봐야 할까?",
+   "card": "계속 **이렇게** 봐야 할까?",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "question": "",
+ "voice": "용식",
+ "outro": "",
+ "media": [
+  {
+   "image": "a_robot.jpg"
+  },
+  {
+   "image": "a_tired.jpg"
+  },
+  {
+   "image": "a_laptop.jpg"
+  },
+  {
+   "zzal": "z_100.png"
+  },
+  {
+   "zzal": "z_shock.png"
+  },
+  {
+   "image": "a_wrong.jpg"
+  },
+  {
+   "image": "a_wrong.jpg"
+  },
+  {
+   "zzal": "z_brain.png"
+  },
+  {
+   "image": "a_laptop.jpg"
+  },
+  {
+   "image": "a_robot.jpg"
+  },
+  {
+   "image": "a_tired.jpg"
+  },
+  {
+   "image": "a_robot.jpg"
+  }
+ ],
+ "yt_title": "[AI 시리즈] AI한테 올해 수능 시켰더니 10분 만에 만점 ㄷㄷ #shorts",
+ "description": "2027 수능 문제를 AI에게 풀게 한 언론사 테스트에서 챗GPT는 수학을 2분 40초 만에 만점, 다른 AI는 국어를 약 2분 만에 전부 맞혔대요. 반면 제미나이는 수학 50점대에 그쳤고, 무료 버전은 틀린 답을 내놓기도 했어요. 작년엔 AI가 국어 53점이었는데 1년 만에 만점까지 왔어요.\n※ 결과는 언론사별 테스트 기준이며 모델·설정에 따라 달라요.\n\n님들은 어떻게 생각해요잉?\n\n※ 일부 장면은 AI로 만든 이미지예요.\n※ 일러스트: いらすとや (irasutoya.com)\n출처: 중앙일보 팩플, JTBC, 문화일보 보도\n\n#수능 #AI #챗GPT #2027수능 #인공지능",
+ "pin_comment": "AI가 10분이면 푸는 수능…🅰 그래도 지금처럼 본다 / 🅱 시험 방식 바꿔야 한다 — 님들은 어떻게 생각해요잉?",
+ "tags": [
+  "수능",
+  "AI",
+  "챗GPT",
+  "2027수능",
+  "인공지능",
+  "AI시리즈"
+ ],
+ "sources": [
+  "https://www.koreadaily.com/article/20261119011332295",
+  "https://www.koreadaily.com/article/20261119070147065",
+  "https://www.munhwa.com/article/11632668",
+  "https://m.news.nate.com/view/20261119n18428"
+ ]
+}
