@@ -206,7 +206,58 @@ MEME_COLORS = ["#ffffff", "#ff3ef5", "#ffe600", "#3ef0ff"]
 VARIETY = [("#FFE600", "#111"), ("#FF4D8D", "#fff"), ("#38D9FF", "#111"), ("#8CFF5A", "#111"), ("#FF9A2E", "#111")]
 
 
+_FONTS = {}
+
+
+def font_css(family, file):
+    """assets/fonts 의 OFL 폰트를 data URI 로 (브라우저가 로컬 파일을 못 읽어서)."""
+    if family not in _FONTS:
+        import base64
+        f = config.ROOT / "assets" / "fonts" / file
+        _FONTS[family] = (f"@font-face{{font-family:'{family}';src:url(data:font/ttf;base64,"
+                          f"{base64.b64encode(f.read_bytes()).decode()}) format('truetype')}}") if f.exists() else ""
+    return _FONTS[family]
+
+
+# 섞어 쓰는 자막 4종 (사용자 참고 이미지 2026-11-20): 장면마다 돌아가며
+MIX_STYLES = [
+    # 흰 글씨 + 검은 테두리 (기본 설명 문장)
+    dict(font=("Pretendard", None), fill="#fff", stroke="#111", sw=20, shadow="0 8px 18px rgba(0,0,0,.55)", weight=900),
+    # 빨간 글씨 + 흰 테두리 + 어두운 그림자 (강조·반발)
+    dict(font=("BHS", "BlackHanSans-Regular.ttf"), fill="#e8121c", stroke="#fff", sw=22,
+         shadow="6px 8px 0 rgba(40,0,0,.85)", weight=400),
+    # 검은 글씨 + 흰 테두리, 둥근 글씨 (말투·인용)
+    dict(font=("Jua", "Jua-Regular.ttf"), fill="#111", stroke="#fff", sw=22, shadow="0 6px 14px rgba(0,0,0,.45)", weight=400),
+    # 주황·빨강 그라데이션 + 검은 테두리 + 붉은 번짐 (전환·반전)
+    dict(font=("DoHyeon", "DoHyeon-Regular.ttf"), fill="linear-gradient(#ff7a1a,#d0141c)", stroke="#1a0000", sw=24,
+         shadow="0 0 22px rgba(255,60,0,.55)", weight=400),
+]
+
+
+def mix_caption_html(text, idx=0, impact=False):
+    st = MIX_STYLES[idx % len(MIX_STYLES)]
+    fam, file = st["font"]
+    css_font = font_css(fam, file) if file else ""
+    body = re.sub(r"\*\*(.+?)\*\*", r"\1", e(text))
+    grad = st["fill"].startswith("linear")
+    fill = (f"background:{st['fill']};-webkit-background-clip:text;color:transparent;" if grad else f"color:{st['fill']};")
+    size = 140 if impact else 128
+    return f"""<style>{css_font}{BASE_CSS}
+.c{{position:absolute;top:{MEDIA_Y + MEDIA - 330}px;left:16px;right:16px;height:300px;display:flex;align-items:flex-end;
+ justify-content:center;text-align:center}}
+.w{{position:relative;display:inline-block;font-family:'{fam}',Pretendard,sans-serif;font-weight:{st['weight']};
+ font-size:{size}px;line-height:1.12;letter-spacing:-.02em;word-break:keep-all}}
+.w .o{{position:absolute;inset:0;color:{st['stroke']};-webkit-text-stroke:{st['sw']}px {st['stroke']};text-shadow:{st['shadow']}}}
+.w .f{{position:relative;{fill}}}</style>
+<div class="c"><div class="w"><div class="o">{body}</div><div class="f">{body}</div></div></div>
+<script>window.fit=function(){{const c=document.querySelector('.c'),w=document.querySelector('.w');let s={size};
+ while((w.scrollWidth>c.clientWidth||w.scrollHeight>c.clientHeight)&&s>56){{s-=3;w.style.fontSize=s+'px';
+  w.querySelectorAll('.o').forEach(o=>o.style.webkitTextStroke=Math.round(s*0.16)+'px {st["stroke"]}');}}}};</script>"""
+
+
 def caption_html(text, style="box", impact=False, idx=0, sticker=""):
+    if style == "mix":  # 4종 자막을 장면마다 섞어 씀
+        return mix_caption_html(text, idx, impact)
     if style == "meme":  # 밈 자막: 영상 가운데, 굵은 기울임 글씨 + 두꺼운 검은 테두리, 줄마다 색이 다름
         col = MEME_COLORS[idx % len(MEME_COLORS)]
         hi = "#ffe600" if col == "#ffffff" else "#ffffff"
