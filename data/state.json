@@ -1,13 +1,19 @@
 {
  "owner_chat_id": 9155167765,
  "tg_offset": 196950772,
- "last_generate_date": "",
+ "last_generate_date": "2026-11-19",
  "paused": false,
- "force_generate": true,
+ "force_generate": false,
  "cost": {
-  "2026-11": 2.28326
+  "2026-11": 2.45266
  },
- "used_ids": [],
+ "used_ids": [
+  "149200000026",
+  "105100000001",
+  "149200005007",
+  "B55140800003",
+  "161300000103"
+ ],
  "contest_seen": [
   "202611180019",
   "202611170025",
@@ -33,7 +39,7 @@
    "address": true,
    "birth": true
   },
-  "at": "2026-11-19T09:43+09:00"
+  "at": "2026-11-19T09:49+09:00"
  },
  "contest_last_date": "2026-11-19"
 }
