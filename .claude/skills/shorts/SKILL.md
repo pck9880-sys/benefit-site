@@ -159,3 +159,12 @@ gh workflow run shorts-upload.yml --ref main -f folder=assets/samples/<slug> \
 - 실사: 같은 주제의 위키미디어 CC BY/CC0/PD 사진·영상 (SA 제외) — `photo-check.yml -f "query=검색어1|검색어2"` → 아티팩트 photos.
 - AI 이미지: 게임과 현실을 잇는 장면 (예: 1403년 도시 재현).
 - 길이 최대 30초 (`SHORTS_MAX_SECONDS` 기본 25 — 게임형은 대본을 짧게 유지). 예시: `assets/samples/crimson_desert/`, `assets/samples/kcd2/`.
+
+
+## 밈 자막 + 게임 대사 섞기 (게임형 추천 조합)
+- `"caption_style": "meme"` — Black Han Sans(assets/fonts, OFL), 영상 가운데, 기울임 + 두꺼운 검은 테두리, **줄마다 색이 다름**(흰·핑크·노랑·하늘), 대사는 “따옴표”. 제목도 두 줄 모두 흰색 큰 글씨.
+- `"mixed_audio": true` + 대사 장면 beat 에 `"orig_audio": true` → 그 장면은 **게임 원본 대사**(자막은 한국어 번역), 나머지 장면만 더빙.
+  durations 는 대사 장면만 초 단위(나머지 0 = 더빙 길이 자동). 대사 클립은 소리 포함해서 자르기.
+- 대사 찾기: 트레일러 오디오를 faster-whisper 로 받아쓰기 → 또렷한 문장 구간 사용.
+- 사용자에게는 **더빙 문장만**(대사 장면 제외) 녹음 요청 → 1.4배속, 대사 사이 빈 구간에 자동 배치.
+- 시네마 레터박스는 `ffmpeg cropdetect` 로 확인 후 클립 자를 때 crop.
