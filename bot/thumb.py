@@ -16,7 +16,7 @@ from pathlib import Path
 
 from . import config, songs
 
-SAFE = ("adult woman in her late 20s, fully clothed, no lingerie, no swimwear, no cleavage focus, "
+SAFE = ("adult woman in her late 20s, fully clothed, high neckline, no cleavage, no lingerie, no swimwear, "
         "no suggestive pose, not resembling any real person, no text, no logo, no watermark")
 
 REACTION = {
@@ -32,7 +32,7 @@ def prompt(raw):
     topic = raw.get("topic", "")
     return ("Square 1:1 photorealistic photo for a YouTube Shorts thumbnail. A beautiful Korean "
             f"{SAFE.split(',')[0]} with a slim, well-proportioned figure, wearing a stylish form-fitting outfit "
-            "(fitted knit top or slim cardigan with high-waist jeans) that shows her body silhouette tastefully, "
+            "(fitted crew-neck knit top with high neckline, or slim cardigan buttoned up, with high-waist jeans) that shows her body silhouette tastefully, "
             f"{REACTION[mood]}. Reaction relates to this topic: {topic}. Waist-up framing, face in the upper third, "
             "bright clean studio light, soft pastel background, high contrast, sharp focus, Instagram-model look. "
             + ", ".join(SAFE.split(", ")[1:]) + ".")

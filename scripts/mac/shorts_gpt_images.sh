@@ -11,7 +11,19 @@ cd "$REPO" || exit 1
 python3 -c "import json,sys; sys.exit(0 if json.load(open('$DIR/plan.json')).get('gpt_images') else 1)" || { echo "gpt_images 없음"; exit 0; }
 
 python3 scripts/mac/drop_server.py "$DIR" "$PORT" & SERVER=$!
-trap 'kill $SERVER 2>/dev/null' EXIT
+trap 'kill $SERVER 2>/dev/null; rm -f "$DIR/_recv.html"' EXIT
+cat > "$DIR/_recv.html" <<'HTML'
+<!doctype html><meta charset="utf-8"><title>recv</title><body>recv ready
+<script>
+window.addEventListener('message', async (e) => {
+  const d = e.data || {};
+  if (!d.file || !d.blob) return;
+  try { const r = await fetch('/' + d.file, {method: 'PUT', body: d.blob}); e.source.postMessage({ack: d.file, status: r.status}, '*'); }
+  catch (err) { e.source.postMessage({ack: d.file, error: String(err)}, '*'); }
+});
+if (window.opener) window.opener.postMessage({ready: true}, '*');
+</script>
+HTML
 sleep 1
 caffeinate -u claude -p --chrome "$(sed -e "s#{{DIR}}#$DIR#g" -e "s#{{PORT}}#$PORT#g" .claude/prompts/shorts-chrome-gpt.md)" \
   --permission-mode acceptEdits --allowedTools "Bash,Read,Write,Glob,Grep,mcp__claude-in-chrome" >> "$DIR/gpt.log" 2>&1
