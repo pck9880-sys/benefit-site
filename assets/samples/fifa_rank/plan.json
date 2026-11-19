@@ -1,0 +1,82 @@
+{
+ "topic": "사우디전 3실점 패배에도 FIFA 랭킹 상승",
+ "title_top": "사우디한테 3골 먹었는데",
+ "title_bottom": "FIFA 랭킹이 올랐다고?",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "beats": [
+  {
+   "narration": "한국이 사우디한테 42년 만에 3골이나 먹혔는데",
+   "card": "42년 만의 3실점",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "근데 FIFA 랭킹은 오히려 2계단 올랐다는데",
+   "card": "랭킹 2계단 상승",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "headline",
+   "overlay_text": "[오피셜] '사우디에 2-3 패배' 한국, FIFA 랭킹 **오히려 2계단 상승**→30위 됐다",
+   "overlay_source": "SPOTV NEWS"
+  },
+  {
+   "narration": "오세훈 결승골로 카타르를 1대0으로 이겨서 30위가 된 거",
+   "card": "오세훈 결승골 1-0",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "근데 일본은 브라질을 잡고 17위라고 함",
+   "card": "일본 17위",
+   "twist": true,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "headline",
+   "overlay_text": "한국 축구, FIFA 랭킹 30위…**브라질 잡은 일본은 17위**",
+   "overlay_source": "동아일보"
+  },
+  {
+   "narration": "아시아에선 일본, 이란, 호주 다음 4위인 거",
+   "card": "아시아 4위",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "voice": "용식",
+ "outro": "다들 대표팀 응원해요잉~",
+ "yt_title": "사우디한테 3골 먹었는데 FIFA 랭킹이 올랐다고? #shorts",
+ "description": "사우디전 2-3 패배에도 카타르전 1-0 승리로 한국 축구 FIFA 랭킹이 32위에서 30위로 올랐어요. 일본은 17위.\n\n사진(오세훈, 2019): Nori Picture (CC BY 4.0) https://commons.wikimedia.org/wiki/File:191103_%EB%B6%80%EC%82%B0%EC%95%84%EC%9D%B4%ED%8C%8C%ED%81%AC_VS_%EC%95%84%EC%82%B0%EB%AC%B4%EA%B6%81%ED%99%94,_%EC%98%A4%EC%84%B8%ED%9B%88_1.jpg",
+ "tags": [
+  "축구",
+  "축구국가대표",
+  "FIFA랭킹",
+  "사우디",
+  "카타르",
+  "모레노호"
+ ],
+ "sources": [
+  "https://inside.fifa.com/fifa-world-ranking/men",
+  "https://www.newsis.com",
+  "https://www.spotvnews.co.kr"
+ ]
+}
