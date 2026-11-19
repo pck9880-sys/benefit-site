@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
   pages: write
   id-token: write
 
@@ -74,6 +75,13 @@ jobs:
             git commit -m "auto: $(date -u +%Y-%m-%dT%H:%MZ)"
             git push
           fi
+
+      - name: 숏츠 차례면 숏츠 워크플로 시작
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if python -m bot shorts-due; then gh workflow run shorts.yml --ref main || true; fi
 
       - name: 사이트 빌드
         if: always()

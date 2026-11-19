@@ -1,0 +1,72 @@
+name: shorts
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "시간과 상관없이 지금 1개 만들기"
+        type: boolean
+        default: false
+  schedule:
+    - cron: "40 3 * * *"   # 낮 12:40 KST (메인 워크플로가 못 불렀을 때 대비)
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pipeline           # 메인 워크플로와 동시에 data/ 를 고치지 않도록
+  cancel-in-progress: false
+
+jobs:
+  shorts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      UPLOAD_POST_API_KEY: ${{ secrets.UPLOAD_POST_API_KEY }}
+      UPLOAD_POST_USER: ${{ vars.UPLOAD_POST_USER }}
+      SITE_URL: ${{ vars.SITE_URL }}
+      CF_PAGES_PROJECT: ${{ vars.CF_PAGES_PROJECT || 'jiwon-hyetaek' }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
+      MAX_MONTHLY_USD: ${{ vars.MAX_MONTHLY_USD }}
+      SHORTS_PER_DAY: ${{ vars.SHORTS_PER_DAY }}
+      SHORTS_HOUR_KST: ${{ vars.SHORTS_HOUR_KST }}
+      SHORTS_VOICE: ${{ vars.SHORTS_VOICE }}
+      SHORTS_PRIVACY: ${{ vars.SHORTS_PRIVACY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+
+      - name: 만들 차례인지 확인
+        id: due
+        run: |
+          if [ "${{ inputs.force }}" = "true" ] || python -m bot shorts-due; then echo "go=1" >> "$GITHUB_OUTPUT"; fi
+
+      - name: 영상 도구 설치
+        if: steps.due.outputs.go == '1'
+        run: |
+          pip install edge-tts playwright
+          python -m playwright install --with-deps chromium
+          sudo apt-get install -y ffmpeg fonts-noto-cjk >/dev/null
+
+      - name: 숏츠 제작 + 업로드
+        if: steps.due.outputs.go == '1'
+        run: python -m bot shorts ${{ inputs.force == true && '--force' || '' }}
+
+      - name: 변경사항 저장
+        if: always() && steps.due.outputs.go == '1'
+        run: |
+          git config user.name "auto-bot"
+          git config user.email "auto-bot@users.noreply.github.com"
+          git add data
+          if ! git diff --cached --quiet; then
+            git commit -m "auto: shorts $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push || (git pull --rebase && git push)
+          fi

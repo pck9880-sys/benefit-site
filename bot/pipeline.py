@@ -13,7 +13,7 @@ HELP = (
     f"응답이 없으면 {round(config.AUTO_APPROVE_HOURS * 60)}분 뒤 다음 확인 때 자동 게시됩니다.\n"
     "버튼은 15분 안에 반영되고, 반영되면 메시지가 「✅ 게시됨」으로 바뀝니다.\n\n"
     "명령어\n/status 현황\n/pause 일시정지\n/resume 재개\n/now 다음 실행 때 바로 글 생성\n/approveall 대기 초안 전부 승인\n"
-    "/post 지금 글 1개 올리기 · /post 3 (3개) · /post 청년 월세 (주제 지정)\n/kpi 성과 리포트 보기 (매일 저녁 9시 자동 전송)\n/contest 다음 실행 때 공모전 출품안 받기\n/contestoff 공모전 알림 끄기 · /conteston 켜기"
+    "/post 지금 글 1개 올리기 · /post 3 (3개) · /post 청년 월세 (주제 지정)\n/kpi 성과 리포트 보기 (매일 저녁 9시 자동 전송)\n/contest 다음 실행 때 공모전 출품안 받기\n/contestoff 공모전 알림 끄기 · /conteston 켜기\n/shorts 지금 유튜브 숏츠 1개 만들기 (매일 낮 12시 자동)"
 )
 
 
@@ -135,6 +135,9 @@ def handle_updates(st):
         elif text == "/conteston":
             st["contest_off"] = False
             notify(st, "🏆 공모전 알림을 켰습니다.")
+        elif text == "/shorts":
+            st["shorts_request"] = True
+            notify(st, "🎬 숏츠를 만들기 시작할게요 (영상 완성까지 약 5~10분)")
         elif text == "/kpi":
             from . import kpi
             notify(st, kpi.report(st))
