@@ -5,7 +5,7 @@
  "paused": false,
  "force_generate": false,
  "cost": {
-  "2026-11": 2.45266
+  "2026-11": 2.50543
  },
  "used_ids": [
   "149200000026",
@@ -39,7 +39,9 @@
    "address": true,
    "birth": true
   },
-  "at": "2026-11-19T09:59+09:00"
+  "at": "2026-11-19T10:03+09:00"
  },
- "contest_last_date": "2026-11-19"
+ "contest_last_date": "2026-11-19",
+ "blog_date": "2026-11-19",
+ "blog_count": 2
 }
