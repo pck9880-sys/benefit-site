@@ -29,6 +29,11 @@ jobs:
       DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
       TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      SUBMIT_NAME: ${{ secrets.SUBMIT_NAME }}
+      SUBMIT_PHONE: ${{ secrets.SUBMIT_PHONE }}
+      SUBMIT_EMAIL: ${{ secrets.SUBMIT_EMAIL }}
+      SUBMIT_ADDRESS: ${{ secrets.SUBMIT_ADDRESS }}
+      SUBMIT_BIRTH: ${{ secrets.SUBMIT_BIRTH }}
       SITE_NAME: ${{ vars.SITE_NAME }}
       SITE_URL: ${{ vars.SITE_URL }}
       CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}

@@ -17,7 +17,7 @@ from typing import List
 import requests
 from pydantic import BaseModel, Field
 
-from . import config, telegram
+from . import config, submit, telegram
 
 KST = timezone(timedelta(hours=9))
 BASE = "https://www.contestkorea.com/sub"
@@ -81,6 +81,7 @@ def fetch_detail(code, sid):
         "home": html.unescape(home_m.group(1)) if home_m else "",
         "detail": (detail_m.group(1).strip() if detail_m else "")[:3500],
     }
+    d["targets"] = submit.find_targets(raw, d["detail"], d["home"])
     m = re.search(r"(\d{4})\.(\d{2})\.(\d{2})\s*~\s*(\d{4})\.(\d{2})\.(\d{2})", d["period"])
     d["deadline"] = f"{m.group(4)}-{m.group(5)}-{m.group(6)}" if m else ""
     return d
@@ -290,17 +291,49 @@ def format_messages(d, r, cost):
         m1.append("🚫 기존 문구와 비슷해 뺀 후보: " + " / ".join(dropped))
     m1 += ["", f"형식: {pkg.format_rules}", f"1인 접수: {pkg.per_person_limit} · AI 규정: {pkg.ai_policy}",
            f"발표: {pkg.announce}", "", "🔎 조사 요약", notes, f"(비용 ${cost:.3f})"]
-    link = d["home"] or d["url"]
-    m2 = ["📮 <b>제출하기</b> (회색 글자를 탭하면 복사돼요)", "",
-          "① 출품작", f"<code>{e(best.text)}</code>", f"({_len_ko(best.text)}자, 공백·부호 제외)", "",
-          "② 작품설명", f"<code>{e(best.explanation)}</code>", "",
-          f"③ 접수 링크: {e(link)}", f"   접수 방법: {e(pkg.submit_method)}",
-          f"④ 직접 입력: {e(', '.join(pkg.personal_fields) or '-')}",
-          f"⑤ 제출 서류: {e(', '.join(pkg.required_docs) or '없음')}", "",
-          "✅ 제출 전: 1인 접수 개수 · 글자 수 · 출품작 인터넷 검색"]
-    if pkg.email_template:
-        m2 += ["", "✉️ 이메일 접수 틀 (탭하면 복사)", f"<code>{e(pkg.email_template)}</code>"]
-    return [("\n".join(m1), False), ("\n".join(m2), True)]
+    m2 = submit_message(d, pkg, best)
+    return [("\n".join(m1), False), (m2, True)]
+
+
+def submit_message(d, pkg, best):
+    """휴대폰 제출용 메시지: 가능한 경우 내용이 미리 채워진 접수 링크."""
+    from html import escape as e
+    info = submit.me()
+    t = d.get("targets") or {"gforms": [], "nforms": [], "emails": []}
+    values = {"entry": best.text, "explanation": best.explanation, **info}
+    lines = ["📮 <b>제출하기</b>", ""]
+    pre = None
+    for g in t["gforms"]:
+        pre = submit.gform_prefill(g, values)
+        if pre:
+            break
+    if pre:
+        names = {"entry": "출품작", "explanation": "설명", "name": "이름", "phone": "연락처", "email": "이메일",
+                 "address": "주소", "birth": "생년월일"}
+        lines += [f'👉 <a href="{e(pre["url"])}">미리 채워진 접수 폼 열기</a>',
+                  "채워진 항목: " + ", ".join(names.get(x, x) for x in pre["filled"]),
+                  "열어서 빈 칸·동의 체크만 하고 <b>제출</b>을 누르세요.", ""]
+    elif t["emails"] and re.search(r"이메일|e-?mail|메일", pkg.submit_method, re.I):
+        to = t["emails"][0]
+        body = (f"안녕하세요. {d['title']}에 응모합니다.\n\n■ 출품작: {best.text}\n■ 작품설명: {best.explanation}\n\n"
+                f"■ 성명: {info['name'] or '[이름]'}\n■ 연락처: {info['phone'] or '[연락처]'}\n■ 이메일: {info['email'] or '[이메일]'}\n\n감사합니다.")
+        subj = f"[{d['title'][:30]}] 응모 - {info['name'] or '[이름]'}"
+        lines += [f'👉 <a href="{e(submit.email_link(to, subj, body))}">채워진 메일 쓰기 화면 열기</a>',
+                  f"받는 사람: {e(to)}", "신청서 파일 첨부가 필요한 공모전이면 첨부 후 <b>보내기</b>를 누르세요.", ""]
+    else:
+        link = (t["nforms"] or [d["home"] or d["url"]])[0]
+        lines += [f'👉 <a href="{e(link)}">접수 페이지 열기</a>',
+                  "이 접수처는 미리 채우기를 지원하지 않아요. 아래 회색 글자를 탭해 복사 → 붙여넣기 하세요.", ""]
+    lines += ["① 출품작", f"<code>{e(best.text)}</code>", f"({_len_ko(best.text)}자, 공백·부호 제외)", "",
+              "② 작품설명", f"<code>{e(best.explanation)}</code>", ""]
+    mine = [(k, v) for k, v in (("이름", info["name"]), ("연락처", info["phone"]), ("이메일", info["email"])) if v]
+    if mine:
+        lines += ["③ 내 정보 (탭해서 복사)"] + [f"{k}: <code>{e(v)}</code>" for k, v in mine] + [""]
+    else:
+        lines += ["③ 내 정보 자동 입력은 아직 설정 전이에요 (GitHub 비밀에 SUBMIT_NAME 등 등록)", ""]
+    lines += [f"접수 방법(공고 기준): {e(pkg.submit_method)}", f"제출 서류: {e(', '.join(pkg.required_docs) or '없음')}",
+              "✅ 제출 전: 1인 접수 개수 · 글자 수 · 개인정보 동의 확인"]
+    return "\n".join(lines)
 
 
 def needs_document(d):

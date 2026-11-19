@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>메일 작성</title>
+<style>body{font-family:-apple-system,"Apple SD Gothic Neo",sans-serif;padding:24px;line-height:1.6;color:#222}
+a.btn{display:block;text-align:center;background:#1a5fd0;color:#fff;padding:16px;border-radius:12px;font-weight:700;text-decoration:none;margin:16px 0}
+pre{white-space:pre-wrap;background:#f4f4f4;padding:12px;border-radius:8px}</style></head>
+<body>
+<h3>📮 공모전 이메일 접수</h3>
+<p>메일 앱이 자동으로 열립니다. 안 열리면 아래 버튼을 누르세요. 내용 확인 후 <b>보내기</b>만 누르면 됩니다.</p>
+<a class="btn" id="go" href="#">메일 앱에서 열기</a>
+<p>받는 사람: <b id="to"></b></p><p>제목: <b id="s"></b></p><pre id="b"></pre>
+<script>
+// 내용은 주소의 # 뒤에만 있어서 서버로 전송되지 않습니다.
+var p=new URLSearchParams(location.hash.slice(1)),to=p.get('to')||'',s=p.get('s')||'',b=p.get('b')||'';
+var m='mailto:'+to+'?subject='+encodeURIComponent(s)+'&body='+encodeURIComponent(b);
+document.getElementById('go').href=m;['to','s','b'].forEach(function(k){document.getElementById(k).textContent=p.get(k)||''});
+if(to)setTimeout(function(){location.href=m},300);
+</script></body></html>
