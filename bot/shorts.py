@@ -28,7 +28,7 @@ CAP_Y = 1330  # 자막 위치 (영상 아래쪽에 겹침)
 
 
 class Beat(BaseModel):
-    narration: str = Field(description="읽을 문장 1개. 35자 이내, 쇼츠 썰 푸는 말투 ('~라는데', '~거든요', '~했다고 함')")
+    narration: str = Field(description="읽을 문장 1개. 28자 이내, 쇼츠 썰 푸는 말투 ('~라는데', '~거든요', '~했다고 함')")
     card: str = Field(description="AI 영상이 없을 때 화면 가운데 카드에 띄울 짧은 문구 (20자 이내)")
     scene: int = Field(description="이 문장 동안 보여줄 장면 번호 (scenes 목록의 0부터 시작하는 순번)")
 
@@ -39,7 +39,7 @@ class Plan(BaseModel):
     title_bottom: str = Field(description="상단 제목 둘째 줄 (노란색, 궁금증 포인트), 13자 이내")
     scenes: List[str] = Field(description="AI 영상 장면 3~4개. 영어 프롬프트, 사실적·영화 같은 한 장면 묘사. "
                                           "실존 인물 얼굴, 브랜드 로고, 글자, 게임·영화 캐릭터는 넣지 않음")
-    beats: List[Beat] = Field(description="내레이션 7~9문장. 첫 문장은 제목 내용을 다시 던지는 훅, 마지막은 반전·한마디 정리")
+    beats: List[Beat] = Field(description="내레이션 6~8문장 (전체 35초 이내). 첫 문장은 제목 내용을 다시 던지는 훅, 마지막은 반전·한마디 정리")
     yt_title: str = Field(description="유튜브 제목 40자 이내, 끝에 #shorts")
     description: str = Field(description="유튜브 설명 2~3줄")
     tags: List[str] = Field(description="해시태그용 키워드 5~8개 (# 없이)")
