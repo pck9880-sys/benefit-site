@@ -1,0 +1,14 @@
+{
+ "label": "유머",
+ "plan": {"mood": "웃긴글", "kind": "", "caption_style": "mix", "music_concept": "신나는 코믹", "question": "",
+          "character": "", "hook_video": "", "photo_fallbacks": []},
+ "intro": {"emoji": "🤣", "board": "유머 • 정보 게시판"},
+ "beats": [11, 12],
+ "ai_images": 4, "thumb_ai": true,
+ "zzal": {"min": 2, "max": 3, "source": "pepe"},
+ "real_photos": {"min": 0, "max": 2},
+ "media_pattern": ["ai", "ai", "zzal", "ai", "real", "zzal", "ai", "ai", "real", "zzal", "ai", "ai"],
+ "image_style": "Photorealistic candid photo, bright natural light, funny everyday situation, exaggerated but realistic reaction, fictional people only, no text, no letters, no logos, no watermark",
+ "disclaimers": ["※ 커뮤니티 실제 사연 여러 개 재구성함."],
+ "tags": ["유머", "썰", "웃긴썰", "공감", "쇼츠"]
+}

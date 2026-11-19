@@ -1,58 +1,80 @@
 #!/bin/zsh
-# 숏츠 1편: 로컬 작업 폴더 정리 → 크롬 Claude 로 타입캐스트 더빙(찜한 두 캐릭터) → 더빙 렌더 → 유튜브 자동 업로드(공개).
-# 음악은 영상에 넣지 않고, 업로드 때 유튜브 '저장됨' 사운드에서 컨셉에 맞게 고른다.
+# 숏츠 1편: 로컬 작업 폴더 정리 → 크롬 Claude 로 타입캐스트 더빙(찜한 두 캐릭터) → 더빙 렌더 → 유튜브 업로드.
 # 사용: scripts/mac/shorts_chrome_prep.sh <slug>
-# 결과: ~/쇼츠작업/<날짜>_<slug>/{원본,더빙용}/영상.mp4, thumb.jpg, 업로드정보.json, 결과.txt
+#   SHORTS_DUB_ONLY=1  더빙만 하고 끝 (이미지 생성과 동시에 돌릴 때)
+#   SHORTS_PUBLISH=0   테스트(비공개)
+#   SHORTS_CHROME_MODEL 크롬 단계 모델 (기본 sonnet: 버튼 조작이라 가볍게, 사용량 절약)
+# 음악: 지정 곡 파일이 ~/쇼츠작업/음원/ 에 있으면 영상에 직접 깔고 공개. 없으면 PC 스튜디오에선 저장한 사운드를
+#       넣을 수 없으므로(2026-11-20 확인) 비공개로 올리고 결과.txt 에 '음악: 앱에서 추가 필요'.
+# 결과: ~/쇼츠작업/<날짜>_<slug>/{더빙용}/영상.mp4, thumb.jpg, 업로드정보.json, 결과.txt / 기록: ~/쇼츠작업/usage.tsv
 set -u
-export SHORTS_BGM=0  # 배경음악 미리 깔지 않음
-export VOICE_FILE_TEMPO=1.2 SHORTS_MAX_SECONDS=60  # 더빙 1.2배 고정 (길어도 더 빠르게 하지 않음)
+export SHORTS_BGM=0
+export VOICE_FILE_TEMPO=1.2 SHORTS_MAX_SECONDS=60  # 더빙 1.2배 고정
 SLUG="$1"
 REPO="$HOME/benefit-site"
 SRC="$REPO/assets/samples/$SLUG"
 WORK="$HOME/쇼츠작업"
 DIR="$WORK/$(date +%Y%m%d)_$SLUG"
 PORT=$((18000 + RANDOM % 1000))
+MODEL="${SHORTS_CHROME_MODEL:-sonnet}"
 cd "$REPO" || exit 1
 [ -f "$SRC/plan.json" ] || { echo "plan.json 없음: $SRC"; exit 1; }
-mkdir -p "$DIR/원본" "$DIR/더빙용"
+mkdir -p "$DIR/더빙용"
+touch "$DIR/결과.txt"
 
-# 1) 썸네일 + 업로드 정보 + 더빙 대본 (임시 음성 영상은 만들지 않음: 더빙 받은 뒤 한 번만 합성)
-[ -f "$SRC/preview.mp4" ] && cp "$SRC/preview.mp4" "$DIR/원본/영상.mp4"
-python3 -m bot.thumb "assets/samples/$SLUG" && cp "$SRC/thumb.jpg" "$DIR/thumb.jpg" 2>/dev/null
+# 단계별 시간·사용량 기록 (claude -p --output-format json)
+run_claude() {  # run_claude <단계이름> <프롬프트파일>
+  local step=$1 t0=$(date +%s) out
+  out=$(caffeinate -u claude -p --chrome --model "$MODEL" "$(fill "$2")" --output-format json \
+          --permission-mode acceptEdits --allowedTools "Bash,Read,Write,Glob,Grep,mcp__claude-in-chrome" 2>>"$DIR/chrome.log")
+  print -r -- "$out" | python3 "$REPO/scripts/mac/usage_log.py" "$SLUG" "$step" "$(( $(date +%s) - t0 ))" >> "$DIR/chrome.log"
+}
+
+# 1) 업로드 정보 + 더빙 대본 + 곡 정하기
 python3 - "$SRC" "$DIR" <<'EOF'
-import json, re, sys
+import json, os, re, sys
 from pathlib import Path
 src, d = Path(sys.argv[1]), Path(sys.argv[2])
 p = json.loads((src / "plan.json").read_text("utf-8"))
 from bot import config, shorts
-# 저장한 사운드 곡 순서 (사용자 지정 2026-11-20). 종류마다 돌아가며 사용, 순번은 ~/쇼츠작업/song_rotation.json
-SONGS = {"웃긴글": ["Forever Has Always Been (영원은 그렇듯) - Redoor", "Machi No Dorufin - Kingo Hamada", "Helios - Jicmus"],
-         "감동": ["Lily of The Valley (은방울) - Kim Daniel", "꿈꾸던 어른이 되었나요? - 머무르 MEOMURU"]}
-def pick_song(p):
-    import os
-    kind = "감동" if p.get("mood") == "감동" else "웃긴글"  # 핫이슈도 유머 곡 목록 사용
+# 저장한 사운드 곡 순서 (사용자 지정 2026-11-20). 종류마다 돌아가며, 순번은 ~/쇼츠작업/song_rotation.json
+SONGS = {"웃긴글": [("Forever Has Always Been (영원은 그렇듯) - Redoor", ("forever", "영원")),
+                  ("Machi No Dorufin - Kingo Hamada", ("machi", "dorufin")),
+                  ("Helios - Jicmus", ("helios",))],
+         "감동": [("Lily of The Valley (은방울) - Kim Daniel", ("lily", "은방울")),
+                ("꿈꾸던 어른이 되었나요? - 머무르 MEOMURU", ("꿈꾸던",))]}
+kind = "감동" if p.get("mood") == "감동" else "웃긴글"  # 핫이슈도 유머 곡 목록
+info_f = d / "업로드정보.json"
+old = json.loads(info_f.read_text("utf-8")) if info_f.exists() else {}
+if old.get("song") and any(old["song"] == s for s, _ in SONGS[kind]):  # 같은 편 재실행: 곡 순번 유지
+    song = old["song"]
+else:
     f = Path(os.path.expanduser("~/쇼츠작업/song_rotation.json"))
     rot = json.loads(f.read_text()) if f.exists() else {}
     n = rot.get(kind, 0)
     rot[kind] = n + 1
     f.write_text(json.dumps(rot, ensure_ascii=False))
-    return SONGS[kind][n % len(SONGS[kind])]
+    song = SONGS[kind][n % len(SONGS[kind])][0]
+keys = next(k for s, k in SONGS[kind] if s == song)
+lib = Path(os.path.expanduser("~/쇼츠작업/음원"))
+files = [x for x in lib.rglob("*") if x.suffix.lower() in (".mp3", ".m4a", ".wav") and any(k in x.name.lower() for k in keys)]
+song_file = str(files[0]) if files else ""
 info = {"title": p.get("yt_title"), "description": shorts.full_description(shorts.Plan(**p)),
         "tags": p.get("tags"), "pin_comment": p.get("pin_comment"), "thumb": "thumb.jpg",
-        "music": "저장한 사운드에서 추가(필수)", "song": pick_song(p),
-        "music_concept": p.get("music_concept") or {"감동": "잔잔한 감동", "웃긴글": "신나는 코믹"}.get(p.get("mood"), "일상 브이로그")}
-(d / "업로드정보.json").write_text(json.dumps(info, ensure_ascii=False, indent=1), "utf-8")
+        "song": song, "song_file": song_file, "music": "영상에 포함" if song_file else "앱에서 추가 필요",
+        "music_concept": p.get("music_concept", "")}
+info_f.write_text(json.dumps(info, ensure_ascii=False, indent=1), "utf-8")
 outro = p.get("outro") if p.get("outro_custom") else config.SHORTS_OUTRO
 lines = [b["narration"] for b in p["beats"] if not b.get("orig_audio")] + ([outro] if outro else [])
 (d / "더빙용" / "대본.txt").write_text("\n".join(re.sub(r"\*\*", "", x) for x in lines) + "\n", "utf-8")
 (d / "mood").write_text(p.get("mood") or "기본", "utf-8")
+(d / "song_file").write_text(song_file, "utf-8")
 EOF
-: > "$DIR/결과.txt"
 
-# 2) 로컬 파일 서버 (크롬 저장 창·파일 선택 창 대신)
+# 2) 로컬 파일 서버 (크롬 저장 창·파일 선택 창 대신). 크롬은 공개 사이트 → 127.0.0.1 요청을 막으므로
+#    로컬 페이지(_recv: 받기, _send: 보내기)를 팝업으로 열고 postMessage 로 주고받는다.
 python3 "$REPO/scripts/mac/drop_server.py" "$DIR" "$PORT" & SERVER=$!
 trap 'kill $SERVER 2>/dev/null; rm -f "$DIR/_recv.html" "$DIR/_send.html"' EXIT
-# 크롬은 공개 사이트 → 127.0.0.1 요청을 막음 → 로컬 페이지를 팝업으로 열고 postMessage 로 주고받기
 cat > "$DIR/_recv.html" <<'HTML'
 <!doctype html><meta charset="utf-8"><title>recv</title><body>recv ready
 <script>
@@ -65,7 +87,6 @@ HTML
 cat > "$DIR/_send.html" <<'HTML'
 <!doctype html><meta charset="utf-8"><title>send</title><body>send ready
 <script>
-// opener 가 {get: '더빙용/영상.mp4'} 를 보내면 파일을 읽어 {file, blob} 으로 돌려줌
 window.addEventListener('message', async (e) => { const d = e.data || {}; if (!d.get) return;
   try { const b = await (await fetch('/' + d.get)).blob(); e.source.postMessage({file: d.get, blob: b}, '*'); }
   catch (err) { e.source.postMessage({file: d.get, error: String(err)}, '*'); } });
@@ -74,28 +95,36 @@ if (window.opener) window.opener.postMessage({ready: true}, '*');
 HTML
 sleep 1
 
-PRIVACY=$([ "${SHORTS_PUBLISH:-1}" = "0" ] && echo 비공개 || echo 공개)  # SHORTS_PUBLISH=0 → 테스트(비공개)
+SONG_FILE=$(cat "$DIR/song_file")
+if [ "${SHORTS_PUBLISH:-1}" = "0" ] || [ -z "$SONG_FILE" ]; then PRIVACY=비공개; else PRIVACY=공개; fi
 LAST_VOICE=$(cat "$WORK/last_voice.txt" 2>/dev/null || echo "없음")
 ACCOUNT=$(cat "$WORK/upload_account.txt" 2>/dev/null)  # 업로드할 구글 계정 (저장소에 안 올림)
 fill() { sed -e "s#{{DIR}}#$DIR#g" -e "s#{{PORT}}#$PORT#g" -e "s#{{MOOD}}#$(cat "$DIR/mood")#g" \
              -e "s#{{LAST_VOICE}}#$LAST_VOICE#g" -e "s#{{PRIVACY}}#$PRIVACY#g" -e "s#{{ACCOUNT}}#$ACCOUNT#g" "$1"; }
-TOOLS="Bash,Read,Write,Glob,Grep,mcp__claude-in-chrome"
 
 # 3) 타입캐스트 더빙 (이미 voice.mp3 가 있으면 건너뜀)
 if [ ! -f "$SRC/voice.mp3" ]; then
-  caffeinate -u claude -p --chrome "$(fill .claude/prompts/shorts-chrome-dub.md)" \
-    --permission-mode acceptEdits --allowedTools "$TOOLS" >> "$DIR/chrome.log" 2>&1
+  run_claude 더빙 .claude/prompts/shorts-chrome-dub.md
   [ -s "$DIR/더빙용/voice.mp3" ] && cp "$DIR/더빙용/voice.mp3" "$SRC/voice.mp3"
   [ -s "$DIR/voice_used.txt" ] && cp "$DIR/voice_used.txt" "$WORK/last_voice.txt"
 else
   cp "$SRC/voice.mp3" "$DIR/더빙용/voice.mp3"
 fi
+[ "${SHORTS_DUB_ONLY:-0}" = "1" ] && exit 0
 
-# 4) 더빙 넣어 렌더 → 5) 자동 업로드. 더빙이 없으면 올리지 않음 (임시 음성 영상은 올리지 않음)
-if [ -f "$SRC/voice.mp3" ] && python3 -c "from bot import shorts; shorts.render_sample('assets/samples/$SLUG')" \
+# 4) 썸네일 + 더빙 넣어 렌더 (지정 곡 파일이 있으면 영상에 직접 깔기)
+python3 -m bot.thumb "assets/samples/$SLUG" && cp "$SRC/thumb.jpg" "$DIR/thumb.jpg" 2>/dev/null
+t0=$(date +%s)
+PREMIX=0; [ -n "$SONG_FILE" ] && PREMIX=1
+if [ -f "$SRC/voice.mp3" ] && SHORTS_SONG_PREMIX=$PREMIX SHORTS_SONG_FILE="$SONG_FILE" \
+     python3 -c "from bot import shorts; shorts.render_sample('assets/samples/$SLUG')" \
    && cp shorts_sample.mp4 "$DIR/더빙용/영상.mp4" && cp shorts_sample.mp4 "$SRC/final.mp4"; then
-  caffeinate -u claude -p --chrome "$(fill .claude/prompts/shorts-chrome-upload.md)" \
-    --permission-mode acceptEdits --allowedTools "$TOOLS" >> "$DIR/chrome.log" 2>&1
+  print -r -- '{"total_cost_usd":0,"num_turns":0}' | python3 scripts/mac/usage_log.py "$SLUG" 합성 "$(( $(date +%s) - t0 ))" >/dev/null
+  # 5) 업로드
+  run_claude 업로드 .claude/prompts/shorts-chrome-upload.md
+  if [ -z "$SONG_FILE" ]; then
+    echo "음악: 지정 곡은 PC 스튜디오에서 못 넣음 → 비공개. 앱에서 사운드 추가 후 공개하거나, 곡 파일을 ~/쇼츠작업/음원/ 에 넣으면 다음부터 자동 공개" >> "$DIR/결과.txt"
+  fi
 else
   echo "실패: 더빙 없음 → 업로드 안 함" >> "$DIR/결과.txt"
 fi

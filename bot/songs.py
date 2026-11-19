@@ -60,6 +60,17 @@ def pick(raw, main=False):
     기본은 꺼짐 (2026-11-20: 음악은 미리 깔지 않고 유튜브 '저장됨' 사운드 사용). SHORTS_SONG_PREMIX=1 일 때만."""
     if os.environ.get("SHORTS_SONG_PREMIX") != "1":
         return None
+    fixed = os.environ.get("SHORTS_SONG_FILE")  # 순서대로 정해진 곡 파일 (shorts_chrome_prep.sh)
+    if fixed and Path(fixed).exists():
+        f = Path(fixed)
+        m = _meta().get(f.name, {})
+        start = m.get("start")
+        if start is None:
+            bl = _length(f)
+            start = round(bl * 0.3, 1) if bl > 60 else 0
+        print(f"[songs] 지정 곡 {f.name} ({start}초부터)")
+        return {"file": str(f), "start": float(start), "lufs": LUFS_MAIN if main else LUFS_UNDER_VOICE,
+                "credit": m.get("credit") or f"Music: {f.stem}", "mood": mood_of(raw)}
     mood = mood_of(raw)
     want = raw.get("song")
     f = None

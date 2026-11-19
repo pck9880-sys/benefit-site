@@ -25,8 +25,11 @@ if (window.opener) window.opener.postMessage({ready: true}, '*');
 </script>
 HTML
 sleep 1
-caffeinate -u claude -p --chrome "$(sed -e "s#{{DIR}}#$DIR#g" -e "s#{{PORT}}#$PORT#g" .claude/prompts/shorts-chrome-gpt.md)" \
-  --permission-mode acceptEdits --allowedTools "Bash,Read,Write,Glob,Grep,mcp__claude-in-chrome" >> "$DIR/gpt.log" 2>&1
+T0=$(date +%s)
+OUT=$(caffeinate -u claude -p --chrome --model "${SHORTS_CHROME_MODEL:-sonnet}" --output-format json \
+  "$(sed -e "s#{{DIR}}#$DIR#g" -e "s#{{PORT}}#$PORT#g" .claude/prompts/shorts-chrome-gpt.md)" \
+  --permission-mode acceptEdits --allowedTools "Bash,Read,Write,Glob,Grep,mcp__claude-in-chrome" 2>>"$DIR/gpt.log")
+print -r -- "$OUT" | python3 scripts/mac/usage_log.py "$1" 이미지 "$(( $(date +%s) - T0 ))" >> "$DIR/gpt.log"
 
 python3 - "$DIR" <<'EOF'
 import json, shutil, sys
