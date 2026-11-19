@@ -77,7 +77,7 @@ PEXELS_API_KEY = _env("PEXELS_API_KEY")  # 무료 실사 사진 (없으면 Openv
 TYPECAST_API_KEY = _env("TYPECAST_API_KEY")  # 타입캐스트 음성 (없으면 무료 음성)
 TYPECAST_VOICE_ID = _env("TYPECAST_VOICE_ID")  # 타입캐스트 voice_id (비우면 이름으로 검색)
 TYPECAST_VOICE_NAME = _env("TYPECAST_VOICE_NAME", "용식")
-SHORTS_VOICE_CHAR = _env("SHORTS_VOICE_CHAR", "용식")  # 숏츠 기본 목소리 (용식·박창수: 다들 ~해요잉~ / 태우: 다들 ~하자!)
+SHORTS_VOICE_CHAR = _env("SHORTS_VOICE_CHAR", "용식")  # 숏츠 기본 목소리 (요청 시 박창수·태우), 마무리 시그니처 없음
 TYPECAST_ONLY = _env("TYPECAST_ONLY", "1") == "1"  # 1이면 항상 타입캐스트(박창수)만 — 실패하면 무료 음성으로 바꾸지 않고 중단
 TYPECAST_CREDIT = _env("TYPECAST_CREDIT", "0") == "1"  # 무료 플랜일 때만 출처 표기 필요 (베이직 유료라 끔)
 SHORTS_MAX_SECONDS = float(_env("SHORTS_MAX_SECONDS", "25"))  # 숏츠 최대 길이

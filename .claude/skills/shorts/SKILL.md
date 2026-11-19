@@ -1,11 +1,17 @@
 ---
 name: shorts
-description: "이슈해요잉" 유튜브 숏츠 1편을 빠르게 만드는 작업 순서 (뉴스 이슈형 + CC 영상 재가공형). 사용자가 숏츠/쇼츠 제작, 오늘 이슈 영상, 더빙 파일(mp3) 첨부, 영상 업로드를 요청할 때 사용. 주제 3개 추천 → 사실 확인 → 대본 → Figma GPT 이미지 → 타입캐스트 더빙 프롬프트 → 합성·미리보기 → 컨펌 후 업로드.
+description: 유튜브 숏츠 1편을 빠르게 만드는 작업 순서 (뉴스 이슈형 + CC 영상 재가공형). 사용자가 숏츠/쇼츠 제작, 오늘 이슈 영상, 더빙 파일(mp3) 첨부, 영상 업로드를 요청할 때 사용. 주제 3개 추천 → 사실 확인 → 대본 → Figma GPT 이미지 → 타입캐스트 더빙 프롬프트 → 합성·미리보기 → 컨펌 후 업로드.
 ---
 
 # 숏츠 1편 제작 (반자동)
 
 답변은 한국어 **요약 형식**(표·짧은 목록)으로. 사용자는 휴대폰으로 본다.
+
+## ★ 기본 템플릿 = 밈 자막 + 게임 대사 섞기
+새 숏츠는 특별한 요청이 없으면 아래 '밈 자막 + 게임 대사 섞기' 형식으로 만든다 (기준 예시: `assets/samples/kcd2/`).
+- `caption_style: "meme"`, `mixed_audio: true`, 대사 장면 `orig_audio: true`, 더빙 장면 durations 0, 길이 최대 30초.
+- 끝: 토론 질문(A냐 B냐) + 대중 입장 한마디. **시그니처 문구(해요잉 등) 사용 안 함.**
+- 사용자에게 더빙 문장만(대사 장면 제외) 1.0배속 녹음 요청 → 코드가 1.4배속.
 
 ## 0. 원칙 (꼭 지킬 것)
 - 주제: 그날 핫이슈. **스포츠는 축구만**. 정치·선거, 사망·사고·자살, 범죄 피해자, 연예인 사생활·루머, 특정 개인 비방은 제외.
@@ -31,7 +37,8 @@ WebSearch + web-fetch 에이전트로 기사 본문 2~4개. 확인할 것: 숫�
 - 제목 2줄: `title_top`(상황, 13자 내외) / `title_bottom`(노란색, 궁금증·ㄷㄷ).
 - beats 5개: 반말 썰 말투("~라는데", "~거든", "~했다고 함"), 문장당 24자 이내, '~입니다/~해요' 금지.
 - 카드: beats 중 2~3개에 `overlay`: `headline`(기사 제목 원문, `overlay_source`=언론사) / `comment`(실제 반응, source="온라인 반응") / `quote`. 강조는 `**굵게**`.
-- 목소리: 기본 **용식** → `outro` = "다들 ~해요잉~" / 요청 시 **박창수**(해요잉~) 또는 **태우**("다들 ~하자!"). `voice` 필드에 이름.
+- 목소리: 기본 **용식** / 요청 시 **박창수**·**태우**. `voice` 필드에 이름.
+- 마무리(`outro`): **시그니처(해요잉 등) 쓰지 않음** → 시청자(대중) 입장 공감 한마디 (예: "솔직히 이 정도면 인정이지").
 - 폴더: `assets/samples/<영문슬러그>/plan.json` (형식은 `assets/samples/suneung_alert/plan.json` 참고. 필드: topic,title_top,title_bottom,character,hook_video,photo_fallbacks,beats[narration,card,twist,visual,query,ai_prompt,overlay,overlay_text,overlay_source],voice,outro,yt_title(#shorts),description,tags,sources).
 
 ## 4. 이미지 5장 (Figma GPT 이미지)
@@ -105,7 +112,7 @@ gh workflow run shorts-upload.yml --ref main -f folder=assets/samples/<slug> \
 7. plan.json 에 `"media"` 로 장면별 소재 지정 (beats + question + outro 순서, 질문·마무리는 마지막 영상 재사용):
    `[{"video":"clip0.mp4"},{"video":"clip1.mp4","start":0},{"image":"img3.jpg"}, ...]`
    설명란에 `영상 출처` 목록(candidates.json 의 credit)을 넣기 — CC BY 필수 조건.
-8. 마무리: CC 영상형은 '해요잉' 시그니처를 쓰지 않는다 → `"outro_free": true` + 시청자(대중) 입장 한마디 (예: '솔직히 난 열 배 줘도 못 함'). 질문은 그대로 둔다.
+8. 마무리: 시청자(대중) 입장 한마디 (예: '솔직히 난 열 배 줘도 못 함'). 질문은 그대로 둔다.
 9. 더빙(용식, 1.0으로 녹음 → 코드가 1.4배속, **25초 넘으면 자동으로 더 빠르게**) → 합성 → 미리보기 → 컨펌 → 업로드 (위 6·7단계와 동일).
    예시 폴더: `assets/samples/lava_sampling/`.
 
@@ -146,7 +153,7 @@ gh workflow run shorts-upload.yml --ref main -f folder=assets/samples/<slug> \
   beat 에 `"sticker": "ㅋㅋㅋ"` 같은 리액션 스티커(오른쪽 위).
 - **더빙은 첫 문장만**: `"keep_audio": true, "intro_voice": true, "durations": [0, ...]` (0 = 첫 장면 길이를 목소리 길이에 자동 맞춤).
   사용자에게 첫 문장만 녹음받아 `voice.mp3` 로 → 1.4배속, 목소리 나올 때 현장음 자동으로 줄임. 녹음 없으면 임시 음성.
-- 마무리는 대중 입장 공감 한마디 (해요잉·질문 없음). 예시: `assets/samples/penguin/`.
+- 마무리는 대중 입장 공감 한마디 (질문 없음). 예시: `assets/samples/penguin/`.
 
 
 ## 게임형 (스팀 공식 영상 + 평점/실사/AI)

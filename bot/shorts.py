@@ -57,11 +57,11 @@ class Plan(BaseModel):
     question: str = Field(default="", description="마무리 직전 토론 유도 질문 1문장 (예: '근데 이거 실력임, 운빨임?'). "
                                                  "의견이 둘로 갈리게, 욕설·비하·혐오·정치 편가르기·특정인 공격 금지. 20자 이내")
     outro_impact: bool = Field(default=False, description="마무리 장면을 강렬하게 (플래시 + 큰 자막)")
-    caption_style: str = Field(default="box", description="'box'(기본 검은 박스) / 'epic'(영화 예고편 스타일)")
-    outro_free: bool = Field(default=False, description="true 면 마무리를 시그니처('해요잉' 등)로 바꾸지 않고 그대로 (CC 영상형)")
+    caption_style: str = Field(default="meme", description="'meme'(기본: 가운데 굵은 밈 자막, 줄마다 다른 색) / 'box' / 'epic'")
+    outro_free: bool = Field(default=True, description="마무리 한마디를 그대로 사용 (채널 시그니처 없음)")
     voice: str = Field(default="", description="비워두세요 (시스템이 정함)")
-    outro: str = Field(default="", description="채널 시그니처 마무리 한마디. 지시된 목소리 형식('다들 ~하자!' 또는 '다들 ~해요잉~'), 주제와 연결된 친근한 당부 "
-                                     "(예: '다들 손흥민 응원하자!' / '다들 손흥민 응원해요잉~'). 20자 이내")
+    outro: str = Field(default="", description="마무리 한마디: 시청자(대중) 입장에서 공감하는 반말 한 줄 "
+                                     "(예: '솔직히 이 정도면 인정이지'). 시그니처 문구 없음. 20자 이내")
     yt_title: str = Field(description="유튜브 제목 40자 이내, 끝에 #shorts")
     description: str = Field(description="유튜브 설명 2~3줄")
     tags: List[str] = Field(description="해시태그용 키워드 5~8개 (# 없이)")
@@ -91,7 +91,7 @@ WRITE = """당신은 조회수 높은 한국 유튜브 쇼츠 작가입니다. �
   실제 여론 카드 1~2개(comment, 조사 자료에 인용된 네티즌·시민 반응만 — 없으면 넣지 않음), 필요하면 실제 발언 카드(quote).
   카드 문구는 절대 지어내지 않습니다. 욕설·비방·사망/피해자 관련 조롱은 넣지 않습니다.
 - 마무리 직전 question: 댓글 토론이 붙도록 의견이 갈리는 질문 1개 (A냐 B냐 형식). 자극적이어도 욕설·비하·혐오·정치 편가르기는 금지.
-- 마무리(outro)는 채널 시그니처 (본문 beats 에는 넣지 않음): {outro_rule}
+- 마무리(outro)는 시청자(대중) 입장 공감 한마디 (본문 beats 에는 넣지 않음): {outro_rule}
 - 제목 2줄: 첫 줄은 상황, 둘째 줄(노란색)은 궁금증 ("~하는 이유", "~라고?", "결과는?").
 - 화면은 요즘 인기 쇼츠처럼 문장마다 컷이 바뀝니다. 모든 문장은 내용에 딱 맞는 AI 이미지('ai')로 연출합니다
   (뉴스 화면·실제 사진은 쓰지 않음). ai_prompt 는 그 문장 내용이 한눈에 보이도록 구체적으로 (장소·사물·행동·분위기).
@@ -120,8 +120,7 @@ def pick_voice(st, ss):
 
 
 def outro_rule(voice):
-    v = VOICES.get(voice) or VOICES[config.SHORTS_VOICE_CHAR]
-    return f"반드시 '{'다들 ~하자!' if v['style'] == '하자' else '다들 ~해요잉~'}' 형식 (예: {v['example']})"
+    return "짧은 반말 공감 한 줄, 채널 시그니처('해요잉' 등) 금지 (예: '솔직히 이 정도면 인정이지')"
 
 
 def plan_short(st, voice=None):
@@ -416,11 +415,7 @@ def ff(*args):
 
 
 # ---------- 합성 ----------
-VOICES = {  # 목소리별 마무리 시그니처
-    "용식": {"style": "해요잉", "example": "다들 수험생들 응원해요잉~"},
-    "태우": {"style": "하자", "example": "다들 수험생들 응원하자!"},
-    "박창수": {"style": "해요잉", "example": "다들 수험생들 응원해요잉~"},
-}
+VOICES = {"용식": {}, "태우": {}, "박창수": {}}  # 사용 가능한 목소리 (마무리 시그니처 없음)
 
 
 def voice_of(p):
@@ -428,32 +423,9 @@ def voice_of(p):
 
 
 def signature(text, voice=None):
-    """마무리 멘트를 목소리별 시그니처로 맞춤: 태우 '다들 ~하자!' / 박창수 '다들 ~해요잉~'."""
-    voice = voice if voice in VOICES else config.SHORTS_VOICE_CHAR
-    t = re.sub(r"[.!~?\s]+$", "", (text or "").strip())
-    if VOICES[voice]["style"] == "하자":
-        if not t:
-            return "다들 오늘도 힘내자!"
-        t = re.sub(r"요잉$", "", t)
-        t = re.sub(r"(해요|해|하세요|합시다)$", "하", t)
-        t = re.sub(r"봐요$", "보", t)
-        if not t.endswith("자"):
-            t = t + "자" if t.endswith("하") or t.endswith("보") else t + " 하자"
-        if not t.startswith("다들"):
-            t = "다들 " + t
-        return t + "!"
-    t = t or "다들 오늘도 행복해요잉"
-    t = re.sub(r"하자$", "해요", t)
-    t = re.sub(r"보자$", "봐요", t)
-    if t.endswith("요"):
-        t += "잉"  # 봐요 → 봐요잉, 응원해요 → 응원해요잉
-    elif t.endswith("해"):
-        t += "요잉"  # 조심해 → 조심해요잉
-    elif not t.endswith("요잉"):
-        t += " 해요잉"
-    if not t.startswith("다들"):
-        t = "다들 " + t
-    return t + "~"
+    """마무리 멘트 정리 (시그니처 문구 없이 그대로, '해요잉' 꼬리는 제거)."""
+    t = re.sub(r"\s*(해요잉|요잉)[~!.]*$", "", (text or "").strip())
+    return t or "솔직히 이건 인정이지"
 
 
 def has_audio(f):
@@ -463,9 +435,9 @@ def has_audio(f):
 
 
 def with_outro(p):
-    """대본 끝에 시그니처 마무리 멘트('다들 ~해요잉~')를 붙인 복사본."""
+    """대본 끝에 토론 질문 + 마무리 한마디(대중 입장)를 붙인 복사본."""
     p = p.model_copy(deep=True)
-    p.outro = p.outro.strip() if p.outro_free else signature(p.outro, voice_of(p))
+    p.outro = signature(p.outro)
     if p.question.strip():  # 토론 유도 질문 (마지막 장면 위에)
         p.beats.append(Beat(narration=p.question.strip(), card=p.question.strip(), twist=True, visual="ai", query="", ai_prompt=""))
     p.beats.append(Beat(narration=p.outro, card=p.outro, visual="ai", query="", ai_prompt="", impact=p.outro_impact))
