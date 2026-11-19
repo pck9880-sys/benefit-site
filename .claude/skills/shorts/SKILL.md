@@ -11,6 +11,7 @@ description: 유튜브 숏츠 1편을 빠르게 만드는 작업 순서 (뉴스 
   - 기본: 커뮤니티 실제 썰 2~3개 재구성 + 실제 댓글 카드. / 웃긴글: 페페 짤(`~/쇼츠작업/짤/페페/`, 혐오 변형 금지). / 감동: 짤 0장.
 - **음악**: 영상에 미리 깔지 않음(`SHORTS_BGM=0`). 업로드 때 유튜브 **'저장됨' 사운드**에서 `music_concept` 에 맞게 선택.
 - **더빙**: 타입캐스트에서 **찜한 두 캐릭터만**, 편마다 번갈아 (`~/쇼츠작업/last_voice.txt`).
+- **첫 장면**: `shorts.intro_card` — 커뮤니티 글 첫 화면 카드(이모지·게시판 이름 초록 + 글 제목). 기본 켜짐, `"intro_post": false` 로 끔.
 - **자막**: `caption_style: "mix"` — 4종(흰/검정테두리, 빨강/흰테두리, 검정/흰테두리 Jua, 주황빨강 그라데이션/검정테두리 도현)을 장면마다 돌아가며. 폰트는 assets/fonts(OFL).
 - **AI 이미지**: Figma 대신 **ChatGPT 웹**(크롬 Claude) — plan `gpt_images` → `scripts/mac/shorts_gpt_images.sh <slug>`. 실패 장면은 폴더의 다른 이미지로 채움.
 - **실제 사진**: `python -m bot.realimg <URL> rN.jpg auto|all|none` — 사람 얼굴·머리 자동 모자이크(macOS Vision, `scripts/mac/faces`), 군중은 전체 흐림, 제품은 그대로. AI 이미지와 섞어 씀.

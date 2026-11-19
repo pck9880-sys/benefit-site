@@ -724,6 +724,37 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
     return out, voiced
 
 
+INTRO_BOARD = {"웃긴글": ("🤣", "유머 • 정보 게시판"), "감동": ("🥹", "감동 • 사연 게시판"),
+               "이슈": ("🔥", "이슈 • 뉴스 게시판"), "기본": ("😮", "자유 • 일상 게시판")}
+
+
+def intro_card(raw, out):
+    """첫 장면: 커뮤니티 글 첫 화면처럼 (흰 바탕 + 이모지·게시판 이름 + 글 제목). plan "intro_post": false 면 안 씀.
+    plan "intro_post": {"emoji": "🤣", "board": "유머 • 정보 게시판", "title": "화성 탐사선의\n충격적인 근황"} 으로 바꿀 수 있음."""
+    from . import songs
+    ip = raw.get("intro_post") if isinstance(raw.get("intro_post"), dict) else {}
+    kind = "이슈" if raw.get("kind") == "이슈" else songs.mood_of(raw)
+    emoji, board = INTRO_BOARD.get(kind, INTRO_BOARD["기본"])
+    emoji, board = ip.get("emoji", emoji), ip.get("board", board)
+    title = ip.get("title") or f"{raw.get('title_top', '')}\n{raw.get('title_bottom', '')}"
+    lines = "".join(f"<div>{e(x)}</div>" for x in title.split("\n") if x.strip())
+    html = f"""<style>{BASE_CSS}
+body{{width:1080px;height:1080px;background:#fff}}
+.w{{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0 70px}}
+.b{{font-size:46px;color:#2e8b57;font-weight:500;letter-spacing:-.02em;margin-bottom:46px;white-space:nowrap}}
+.b .em{{font-size:50px;margin-right:18px}}.b .bar{{color:#9ca3af;margin-right:14px}}
+.t{{text-align:center;font-size:108px;font-weight:500;color:#1f1f1f;line-height:1.3;letter-spacing:-.03em}}
+.t div{{white-space:nowrap}}</style>
+<div class="w"><div class="b"><span class="em">{e(emoji)}</span><span class="bar">|</span>{e(board)} &gt;</div><div class="t">{lines}</div></div>
+<script>window.fit=function(){{const t=document.querySelector('.t');let s=108;
+ while([...t.children].some(d=>d.scrollWidth>940)&&s>50){{s-=3;t.style.fontSize=s+'px';}}}};</script>"""
+    png = Path(out).with_suffix(".png")
+    with Renderer() as r:
+        r.png(html, png, 1080, 1080, transparent=False)
+    ff("-i", png, "-q:v", "2", out)
+    return Path(out)
+
+
 # ---------- 화면 소재 모으기 ----------
 def gather_media(p, work):
     """문장별 화면: 첫 문장은 AI 영상(가능하면), 'ai' 는 AI 이미지, 'photo' 는 무료 실사 사진. 없으면 대체.
@@ -989,6 +1020,11 @@ def render_sample(folder):
                  else None for i in range(len(p.beats))]
     work = Path(tempfile.mkdtemp(prefix="sample-"))
     audios = None
+    if raw.get("intro_post", True) is not False and media:  # 첫 장면 = 커뮤니티 글 첫 화면 카드
+        try:
+            media[0] = ("image", intro_card(raw, work / "intro.jpg"))
+        except Exception as ex:
+            print("[intro] 카드 실패:", ex)
     global SONG_SPEC
     SONG_SPEC = None
     if raw.get("song") is not False and not raw.get("bgm"):  # "song": false 면 인기곡 안 씀
