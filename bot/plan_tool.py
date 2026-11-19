@@ -37,7 +37,7 @@ def new(slug, kind):
     d.mkdir(parents=True, exist_ok=True)
     n_ai = t["ai_images"]
     p = {"topic": "", "title_top": "", "title_bottom": "", **t["plan"],
-         "intro_post": {"emoji": t["intro"]["emoji"], "board": t["intro"]["board"]},
+         "intro_post": False,
          "beats": [_beat() for _ in range(t["beats"][1])],
          "outro": "", "media": [],
          "gpt_images": [{"file": f"img{i}.jpg", "prompt": ""} for i in range(n_ai)],
@@ -93,7 +93,7 @@ def _layout(p, d, t):
     n = len(p["beats"])
     for i in range(n):
         want = t["media_pattern"][i % len(t["media_pattern"])]
-        order = [want, "post", "ai", "real", "ira", "zzal"]
+        order = [want, "ai", "ira", "zzal"]  # 2026-11-20: 원글 캡처·실사 등 '실제 글자 있는 이미지' 안 씀
         if t["zzal"]["max"] == 0:
             order = [x for x in order if x != "zzal"]
         for k in order:
@@ -192,7 +192,7 @@ def check(slug):
         errs.append(f"짤 {nz}장 (필요 {t['zzal']['min']}~{t['zzal']['max']}, {t['zzal']['source'] or '사용 안 함'})")
     nr = len(list(d.glob("r[0-9]*.jpg")))
     npost = len(list(d.glob("p[0-9]*.jpg")))
-    if t.get("post_min") and npost < t["post_min"]:
+    if t.get("post_min") and npost < t["post_min"]:  # (현재 템플릿엔 없음)
         errs.append(f"원글 이미지 {npost}장 (최소 {t['post_min']}: python -m bot.community grab <URL> assets/samples/<slug>)")
     if nr < t["real_photos"]["min"] and not npost:
         errs.append(f"실제 사진 {nr}장 (최소 {t['real_photos']['min']}, bot.realimg 로 모자이크 처리해서 rN.jpg)")
@@ -238,10 +238,16 @@ def check(slug):
         p["media"] = _layout(p, d, t)  # 감동은 페페 짤 없음 (일본짤은 허용)
 
     # 첫·끝 장면, 설명·태그
-    ip = p.get("intro_post") if isinstance(p.get("intro_post"), dict) else {}
-    ip.setdefault("emoji", t["intro"]["emoji"])
-    ip.setdefault("board", t["intro"]["board"])
-    p["intro_post"] = ip
+    if t.get("intro_card", True):
+        ip = p.get("intro_post") if isinstance(p.get("intro_post"), dict) else {}
+        ip.setdefault("emoji", t["intro"]["emoji"])
+        ip.setdefault("board", t["intro"]["board"])
+        p["intro_post"] = ip
+    else:
+        p["intro_post"] = False  # 첫 장면도 AI 이미지 (글자 카드 없음)
+    if not t.get("text_cards", True):  # 중간 기사·댓글 글자 카드 없음 (댓글은 끝 장면에만)
+        for b in beats:
+            b["overlay"], b["overlay_text"], b["overlay_source"] = "none", "", ""
     ec = p.get("end_comments") or []
     if not 3 <= len(ec) <= 5:
         errs.append(f"end_comments {len(ec)}개 (원글 실제 댓글 3~5개)")

@@ -30,18 +30,12 @@
   "max": 0
  },
  "media_pattern": [
-  "post",
   "ai",
   "ira",
-  "post",
-  "zzal",
-  "ai",
-  "post",
   "ira",
-  "ai",
-  "post",
   "zzal",
-  "ai"
+  "ai",
+  "ira"
  ],
  "image_style": "Hyper-realistic photo that clearly looks like a real smartphone snapshot (real skin, real textures, natural light, slight motion blur), exaggerated funny/dramatic situation, fictional people only, no text, no letters, no logos, no watermark",
  "disclaimers": [
@@ -54,9 +48,10 @@
   "공감",
   "쇼츠"
  ],
- "post_min": 1,
  "ira": {
-  "min": 1,
-  "max": 3
- }
+  "min": 3,
+  "max": 6
+ },
+ "intro_card": false,
+ "text_cards": false
 }

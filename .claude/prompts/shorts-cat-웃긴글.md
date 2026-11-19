@@ -2,12 +2,10 @@
 - 글 고르기: `python -m bot.community hot 15` (루리웹 유머 베스트·개드립 인기, 댓글 많은 순).
   **정치·선거·사망·사고·범죄·특정인 비방·성적인 글 제외**, 이미 만든 주제(assets/samples/*/plan.json topic) 제외.
   댓글 많고, 이미지(캡처·짤·만화)가 있고, 반전·황당 포인트가 분명한 글 1개.
-- 가져오기: `python -m bot.community grab <URL> assets/samples/<slug>` → p1.jpg… 원글 이미지 + post.json(본문·베스트 댓글).
+- 가져오기: `python -m bot.community grab <URL> assets/samples/<slug>` → post.json(본문·베스트 댓글) + p*.jpg(내용 파악용, 영상엔 안 씀).
   **여러 글을 섞지 않는다. 그 글 하나를 그대로 소개한다.** p*.jpg 를 Read 로 직접 보고 내용·웃긴 포인트를 파악.
 - 대본: 원글 흐름 그대로(이미지 순서대로) 풀어 주는 음슴체 내레이션. 원글의 웃긴 표현·대사는 살린다(따옴표).
   첫 문장은 펀치라인을 암시하는 훅. 마지막 1~2문장은 반전·결말.
-- end_comments: post.json 의 best_comments 중 웃긴 것 3~5개 그대로. 중간 댓글 카드(overlay comment)도 거기서 1~2개.
-- 장면은 원글 이미지가 중심(도구가 sN.jpg 로 자동 정리·얼굴 모자이크). AI 이미지는 2장만(첫 훅·중간 전환용).
-- 짤: 페페(Pepe the Frog) 1~2장 — 리액션용. 보관함 ~/쇼츠작업/짤/페페/ → z1.png, z2.png. 혐오·정치 상징 페페 금지.
+- end_comments: post.json 의 best_comments 중 웃긴 것 3~5개 그대로 (끝 장면 댓글 캡처 + 구리가 읽음).
+- 원글 캡처 이미지는 영상에 넣지 않는다(실제 글자 이미지 금지). 장면은 AI·일본짤·페페 고정 순서.
 - sources 에 원글 URL, description 에 '출처: <사이트> 인기글'.
-- 일본짤(いらすとや) 필수: 1~3장 → i1.png …
