@@ -183,6 +183,5 @@ gh workflow run shorts-upload.yml --ref main -f folder=assets/samples/<slug> \
 - 트레일러 소리는 빼고(-an) 더빙 + 배경음악. 설명란에 "게임사 공식 미디어 자료" 표기. 록스타는 수익 영상은 정책 범위 밖 → 사용자에게 신고 위험 안내.
 - 예시: `assets/samples/gta6_launch/`.
 
-## 효과음 (기본 켜짐)
-- 자막이 뜰 때마다 '똑'(assets/sfx/pop.wav), 반전(twist) 자막 첫 줄은 '띵'(ding.wav). 직접 합성한 소리라 저작권 문제 없음.
-- 끄려면 `SHORTS_SFX=0`, 크기는 `SHORTS_SFX_VOLUME`(기본 0.35).
+## 효과음
+- 사용하지 않는다 (사용자 요청으로 전부 삭제, SHORTS_SFX=0).

@@ -61,7 +61,7 @@ SHORTS_CHANNEL = _env("SHORTS_CHANNEL", "")  # 영상 맨 위에 작게 표시�
 SHORTS_BGM_VOLUME = float(_env("SHORTS_BGM_VOLUME", "0.12"))  # (예전 설정, 미사용)
 SHORTS_BGM = _env("SHORTS_BGM", "1") == "1"  # 배경음악 사용 (즐겨찾기 곡만: Born Free - Pokki DJ, 연주곡)
 SHORTS_BGM_LUFS = float(_env("SHORTS_BGM_LUFS", "-33"))  # 배경음악 크기 (목소리 -14 기준, 낮을수록 작게)
-SHORTS_SFX = _env("SHORTS_SFX", "1") == "1"  # 자막 뜰 때 효과음 (똑 / 반전 자막은 띵)
+SHORTS_SFX = _env("SHORTS_SFX", "0") == "1"  # 효과음 사용 안 함
 SHORTS_SFX_VOLUME = float(_env("SHORTS_SFX_VOLUME", "0.35"))  # 효과음 크기 (assets/sfx)
 YOUTUBE_API_KEY = _env("YOUTUBE_API_KEY")  # 인기 쇼츠 분석용 (없으면 구글 검색어만 사용)
 OPENAI_API_KEY = _env("OPENAI_API_KEY")  # GPT 이미지 (있으면 최우선 사용)
