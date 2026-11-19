@@ -46,7 +46,7 @@
 | `POSTS_PER_DAY` | 5 | 하루 생성 글 수 |
 | `GENERATE_HOUR_KST` | 7 | 생성 시각 (한국시간) |
 | `AUTO_APPROVE_HOURS` | 12 | 무응답 시 자동 게시까지 시간 (0 = 승인해야만 게시) |
-| `MAX_MONTHLY_USD` | 30 | 월 API 비용 상한 (넘으면 자동 중단) |
+| `MAX_MONTHLY_USD` | 50 | 월 API 비용 상한 (넘으면 자동 중단) |
 | `ADSENSE_CLIENT` | - | 애드센스 승인 후 `ca-pub-...` |
 | `GOOGLE_SITE_VERIFICATION` / `NAVER_SITE_VERIFICATION` | - | 검색엔진 소유 확인 코드 |
 

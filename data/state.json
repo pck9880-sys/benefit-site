@@ -3,7 +3,7 @@
  "tg_offset": 196950772,
  "last_generate_date": "",
  "paused": false,
- "force_generate": false,
+ "force_generate": true,
  "cost": {
   "2026-11": 2.28326
  },
