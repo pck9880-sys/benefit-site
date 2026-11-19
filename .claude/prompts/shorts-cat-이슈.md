@@ -4,3 +4,4 @@
 - 기사 제목 카드: beat 2~3개에 overlay "headline", overlay_text(실제 기사 제목 원문), overlay_source(언론사명).
 - end_comments 는 기사에 인용된 실제 반응·커뮤니티 실제 댓글.
 - 짤은 쓰지 않거나 いらすとや 1장(`python -m bot.irasutoya <일본어>`).
+- 일본짤(いらすとや) 필수: 1~3장 → i1.png …

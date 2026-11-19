@@ -18,7 +18,7 @@
   11,
   12
  ],
- "ai_images": 2,
+ "ai_images": 3,
  "thumb_ai": true,
  "zzal": {
   "min": 1,
@@ -27,23 +27,23 @@
  },
  "real_photos": {
   "min": 0,
-  "max": 0
+  "max": 3
  },
  "media_pattern": [
   "post",
-  "post",
+  "ai",
+  "ira",
   "post",
   "zzal",
-  "post",
-  "post",
   "ai",
   "post",
+  "ira",
+  "real",
   "post",
   "zzal",
-  "post",
   "ai"
  ],
- "image_style": "Photorealistic candid photo, bright natural light, funny everyday situation, exaggerated but realistic reaction, fictional people only, no text, no letters, no logos, no watermark",
+ "image_style": "Ultra photorealistic photo that looks like a real candid smartphone snapshot, natural lighting, real textures, slightly exaggerated funny/dramatic situation, fictional people only, no text, no letters, no logos, no watermark",
  "disclaimers": [
   "※ 출처: 커뮤니티 인기글 (얼굴은 모자이크 처리함)"
  ],
@@ -54,5 +54,9 @@
   "공감",
   "쇼츠"
  ],
- "post_min": 1
+ "post_min": 1,
+ "ira": {
+  "min": 1,
+  "max": 3
+ }
 }

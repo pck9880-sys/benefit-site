@@ -83,7 +83,8 @@ def _layout(p, d, t):
     """템플릿 순서대로 AI·짤·실제 사진을 장면에 배치 (같은 종류가 모자라면 다른 종류로)."""
     pools = {
         "ai": [g["file"] for g in p.get("gpt_images", []) if not g["file"].startswith("thumb")],
-        "zzal": sorted(x.name for x in d.glob("z*.png")),
+        "zzal": sorted(x.name for x in d.glob("z*.png")),  # 반응 짤 (페페 등)
+        "ira": sorted(x.name for x in d.glob("i[0-9]*.png")),  # 일본 무료 일러스트 いらすとや
         "real": sorted(x.name for x in d.glob("r[0-9]*.jpg")),
         "post": prep_post_images(d),
     }
@@ -92,27 +93,28 @@ def _layout(p, d, t):
     n = len(p["beats"])
     for i in range(n):
         want = t["media_pattern"][i % len(t["media_pattern"])]
-        order = [want, "post", "ai", "real", "zzal"]
+        order = [want, "post", "ai", "real", "ira", "zzal"]
         if t["zzal"]["max"] == 0:
             order = [x for x in order if x != "zzal"]
         for k in order:
-            lim = t["zzal"]["max"] if k == "zzal" else (t["real_photos"]["max"] if k == "real" else 99)
+            lim = {"zzal": t["zzal"]["max"], "real": t["real_photos"]["max"], "ira": t.get("ira", {}).get("max", 0)}.get(k, 99)
             if pools[k] and used[k] < max(lim, 0) and (k == "ai" or used[k] < len(pools[k])):  # 원글·짤·사진은 한 번씩
                 f = pools[k][used[k] % len(pools[k])]
                 used[k] += 1
-                media.append({"zzal": f} if k == "zzal" else {"image": f})
+                media.append({"zzal": f} if k in ("zzal", "ira") else {"image": f})
                 break
         else:
             media.append({"image": pools["ai"][i % len(pools["ai"])]} if pools["ai"] else media[-1])
-    # 규칙(2026-11-20): AI 이미지 2장마다 실사(실제 사진·원글 이미지) 1장 — AI 가 3장 연속이면 남은 실사로 바꿈
+    # 규칙(2026-11-20): AI 2장 연속 뒤엔 실사 또는 일본짤 — AI 가 3장 연속이면 남은 실사·일본짤로 바꿈
     ai_set = set(pools["ai"])
-    real_left = [x for x in pools["real"] + pools["post"] if not any(x in m.values() for m in media)]
+    real_left = [x for x in pools["real"] + pools["post"] + pools["ira"] if not any(x in m.values() for m in media)]
     streak = 0
     for i, m in enumerate(media):
         if m.get("image") in ai_set:
             streak += 1
             if streak > 2 and real_left:
-                media[i] = {"image": real_left.pop(0)}
+                x = real_left.pop(0)
+                media[i] = {"zzal": x} if x.endswith(".png") else {"image": x}
                 streak = 0
         else:
             streak = 0
@@ -141,6 +143,9 @@ def check(slug):
     lo, hi = t["beats"]
     if not lo <= len(beats) <= hi:
         errs.append(f"문장 {len(beats)}개 (필요 {lo}~{hi})")
+    total = sum(len(re.sub(r"\*\*|\s", "", b["narration"])) for b in beats)
+    if total > 190:  # 1.2배속 기준 약 35초 (유머 테스트: 260자 → 55초로 너무 김)
+        errs.append(f"대본 전체 {total}자 (공백 빼고 190자 이내, 35초 안팎) → 문장을 짧게")
     for i, b in enumerate(beats):
         s = re.sub(r"\*\*", "", b["narration"]).strip()
         if len(s) > 30:
@@ -183,7 +188,7 @@ def check(slug):
 
     # 짤·실제 사진 수
     nz = len(list(d.glob("z*.png")))
-    if not t["zzal"]["min"] <= nz <= max(t["zzal"]["max"], t["zzal"]["min"]):
+    if nz > max(t["zzal"]["max"], t["zzal"]["min"]):
         errs.append(f"짤 {nz}장 (필요 {t['zzal']['min']}~{t['zzal']['max']}, {t['zzal']['source'] or '사용 안 함'})")
     nr = len(list(d.glob("r[0-9]*.jpg")))
     npost = len(list(d.glob("p[0-9]*.jpg")))
@@ -213,16 +218,24 @@ def check(slug):
             p["media"][i] = {"image": f.name}
         elif not f.exists():
             errs.append(f"문장{i + 1} 실사 '{q}' 못 찾음 → real_query 를 다른 영어 검색어로")
+    # 필수 구성(2026-11-20): 썸네일·일본짤(いらすとや)·실사·AI(실사풍)·반응(페페 짤 또는 댓글 카드) — 개수는 종류마다
     ai_names = {g["file"] for g in gi if not g["file"].startswith("thumb")}
+    used = lambda pat: sum(1 for m in p["media"] if re.match(pat, m.get("image") or m.get("zzal") or ""))
     n_ai = sum(1 for m in p["media"] if m.get("image") in ai_names)
-    n_real = sum(1 for m in p["media"] if re.match(r"^[rs]\d+\.jpg$", m.get("image", "")))
-    need = (n_ai + 1) // 2
-    if n_real < need:
-        errs.append(f"AI 장면 {n_ai}개에 실사 {n_real}개 → AI 2장당 실사 1장 필수: 실사 {need - n_real}장 더 "
-                    f"(python -m bot.photos get \"<영어 검색어>\" assets/samples/<slug>/rN.jpg auto)")
-    if kind == "감동" and any("zzal" in m for m in p["media"]):
-        p["media"] = [m for m in p["media"] if "zzal" not in m] or p["media"]
-        p["media"] = _layout(p, d, t)
+    n_real, n_ira, n_zz = used(r"^[rs]\d+\.jpg$"), used(r"^i\d+\.png$"), used(r"^z\d+\.png$")
+    ira = t.get("ira", {"min": 0})
+    if n_ira < ira["min"]:
+        errs.append(f"일본짤(いらすとや) {n_ira}장 (최소 {ira['min']}: python -m bot.irasutoya <일본어> → bot.irasutoya.save(url, 'assets/samples/<slug>/i1.png'))")
+    if n_real < max(1, t["real_photos"]["min"]):
+        errs.append(f"실사 {n_real}장 (최소 1: python -m bot.photos get \"<영어 검색어>\" assets/samples/<slug>/rN.jpg auto, 또는 beat real_query)")
+    if n_ai < 1:
+        errs.append("AI 이미지(실사풍) 장면 없음")
+    if t["zzal"]["min"] and n_zz < t["zzal"]["min"]:
+        errs.append(f"반응 짤 {n_zz}장 (최소 {t['zzal']['min']}, {t['zzal']['source']})")
+    if (n_real + n_ira) < n_ai // 2:
+        errs.append(f"AI 장면 {n_ai}개에 실사·일본짤 {n_real + n_ira}개 → AI 2장마다 실사 또는 일본짤 1장")
+    if kind == "감동" and any(re.match(r"^z\d+\.png$", m.get("zzal", "")) for m in p["media"]):
+        p["media"] = _layout(p, d, t)  # 감동은 페페 짤 없음 (일본짤은 허용)
 
     # 첫·끝 장면, 설명·태그
     ip = p.get("intro_post") if isinstance(p.get("intro_post"), dict) else {}
