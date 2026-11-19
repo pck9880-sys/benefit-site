@@ -64,6 +64,9 @@ SHORTS_BGM_LUFS = float(_env("SHORTS_BGM_LUFS", "-33"))  # 배경음악 크기 (
 SHORTS_SFX = _env("SHORTS_SFX", "0") == "1"  # 효과음 사용 여부 (현재 끔)
 SHORTS_SFX_VOLUME = float(_env("SHORTS_SFX_VOLUME", "0.35"))  # 효과음 크기 (assets/sfx)
 YOUTUBE_API_KEY = _env("YOUTUBE_API_KEY")  # 인기 쇼츠 분석용 (없으면 구글 검색어만 사용)
+OPENAI_API_KEY = _env("OPENAI_API_KEY")  # GPT 이미지 (있으면 최우선 사용)
+OPENAI_IMAGE_MODEL = _env("OPENAI_IMAGE_MODEL", "gpt-image-1.5")
+OPENAI_IMAGE_QUALITY = _env("OPENAI_IMAGE_QUALITY", "medium")  # low / medium / high
 HIGGSFIELD_KEY = _env("HIGGSFIELD_KEY")  # 힉스필드 API "키ID:시크릿" (없으면 글자 카드 화면)
 HIGGSFIELD_MODEL = _env("HIGGSFIELD_MODEL", "kling-video/v3.0-turbo/text-to-video")
 HIGGSFIELD_CLIPS = int(_env("HIGGSFIELD_CLIPS", "1"))  # 숏츠 1개당 AI 영상 수 (첫 장면에만 사용, 0이면 사진만)

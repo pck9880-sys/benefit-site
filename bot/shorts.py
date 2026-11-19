@@ -395,9 +395,20 @@ def make_video(p, media, work, audios=None):
 def gather_media(p, work):
     """문장별 화면: 첫 문장은 AI 영상(가능하면), 'ai' 는 AI 이미지, 'photo' 는 무료 실사 사진. 없으면 대체.
     (media 목록, 사진 출처 목록, 비용)"""
-    from . import higgsfield, photos
+    from . import gpt_image, higgsfield, photos
     media, credits, used, cost = [None] * len(p.beats), [], set(), 0.0
-    if higgsfield.enabled():
+    if gpt_image.enabled():  # 1순위: GPT 이미지
+        ai_idx = [i for i, b in enumerate(p.beats) if b.visual == "ai"]
+        prompts = [f"{p.beats[i].ai_prompt}. The protagonist: {p.character}. Photorealistic candid photo, natural light, "
+                   f"shallow depth of field, Korean context if relevant. No readable text, no logos, no watermark"
+                   for i in ai_idx]
+        files, c = gpt_image.make_images(prompts, work)
+        cost += c
+        for i, f in zip(ai_idx, files):
+            if f:
+                media[i] = ("image", f)
+        print(f"[shorts] GPT 이미지 {sum(1 for f in files if f)}/{len(files)}장, 약 ${c:.2f}")
+    elif higgsfield.enabled():
         ai_idx = [i for i, b in enumerate(p.beats) if b.visual == "ai"]
         prompts = [f"{p.beats[i].ai_prompt}. The protagonist: {p.character}. Photorealistic, natural light, "
                    f"candid smartphone photo, no text, no logos" for i in ai_idx]
