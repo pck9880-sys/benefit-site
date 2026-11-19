@@ -53,7 +53,7 @@ def wikimedia(query, n=8):
 
 def openverse(query, n=10):
     try:
-        r = requests.get("https://api.openverse.org/v1/images/", headers=UA, timeout=20,
+        r = requests.get("https://api.openverse.org/v1/images/", headers=UA, timeout=45,
                          params={"q": query, "license_type": "commercial,modification", "page_size": n,
                                  "mature": "false"})
         r.raise_for_status()
@@ -103,6 +103,17 @@ def _find_one(query, used, out_path):
 
 
 def get(query, out, mode="auto"):
+    """검색어가 너무 구체적이면 결과가 없으니 뒤쪽 핵심 단어로 줄여 가며 다시 찾는다 (예: huge pile of kimchi → of kimchi → kimchi)."""
+    words = query.split()
+    tries = [query] + [" ".join(words[-k:]) for k in (2, 1) if len(words) > k]
+    for q in dict.fromkeys(tries):
+        r = _get(q, out, mode)
+        if r is not None:
+            return r
+    return None
+
+
+def _get(query, out, mode="auto"):
     """실사 사진 1장 받기: Pexels(키) → Openverse(CC, 재시도) → 위키미디어. 사람 있으면 모자이크(bot.realimg).
     출처는 같은 폴더 credits.json 에 모아 설명란에 붙인다. 성공하면 출처 문구, 실패하면 None."""
     import json
@@ -111,12 +122,12 @@ def get(query, out, mode="auto"):
     from . import realimg
     out = Path(out)
     cands = pexels(query)
-    for _ in range(3):
+    for k in range(4):  # Openverse 는 처음 검색이 느리고(15초+) 가끔 504 → 넉넉히 재시도
         if cands:
             break
         cands = openverse(query)
         if not cands:
-            time.sleep(2)
+            time.sleep(3 + k * 3)
     cands = cands or wikimedia(query)
     cands = [c for c in cands if "SA" not in c.get("credit", "")]  # 동일조건변경허락(SA)은 영상에 못 씀
     for c in cands[:5]:

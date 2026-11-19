@@ -12,6 +12,7 @@ if ! mkdir "$LOCK" 2>/dev/null; then echo "$(date) 이전 실행 중 → 건너�
 trap 'rmdir "$LOCK"' EXIT
 export SHORTS_BGM=0
 export VOICE_FILE_TEMPO=1.2 SHORTS_MAX_SECONDS=60  # 더빙 1.2배 고정
+[ -f "$HOME/쇼츠작업/pexels_key.txt" ] && export PEXELS_API_KEY="$(cat "$HOME/쇼츠작업/pexels_key.txt")"  # 실사 사진 (무료 키, 저장소에 안 올림)
 git pull -q --rebase || true
 BEFORE=$(ls assets/samples)
 
