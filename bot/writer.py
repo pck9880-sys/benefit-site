@@ -12,7 +12,9 @@ class FAQ(BaseModel):
 
 
 class Article(BaseModel):
-    title: str = Field(description="검색에 잘 걸리는 제목. 서비스명 + '지원대상·신청방법' 같은 핵심어. 45자 이내")
+    title: str = Field(description="검색에 잘 걸리는 제목, 45자 이내. 서비스명을 앞에 두고 뒤는 글마다 다르게: "
+                                   "'자격 조건과 신청 방법', '얼마나 받을 수 있나', '신청 기간·필요 서류', '누가 대상인가' 등. "
+                                   "'총정리', '완벽 정리', '꿀팁' 같은 상투어는 쓰지 않는다")
     description: str = Field(description="검색결과에 노출될 요약 1~2문장, 120자 이내")
     summary_points: List[str] = Field(description="핵심 요약 3~5개 (누가, 무엇을, 얼마나, 언제까지, 어떻게)")
     body_markdown: str = Field(description="본문 마크다운. ## 소제목 사용, 표/목록 활용")
