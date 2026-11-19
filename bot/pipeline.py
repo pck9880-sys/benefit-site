@@ -9,7 +9,7 @@ KST = timezone(timedelta(hours=9))
 
 HELP = (
     "🤖 자동 게시 봇\n\n"
-    "매일 새 글 초안이 오면 ✅ 승인 / ❌ 거절 버튼만 눌러주세요.\n"
+    "지원금 글은 1시간에 1개씩 승인 없이 자동 게시되고, 결과는 저녁 9시 KPI 리포트로 알려드려요.\n"
     f"응답이 없으면 {round(config.AUTO_APPROVE_HOURS * 60)}분 뒤 다음 확인 때 자동 게시됩니다.\n"
     "버튼은 15분 안에 반영되고, 반영되면 메시지가 「✅ 게시됨」으로 바뀝니다.\n\n"
     "명령어\n/status 현황\n/pause 일시정지\n/resume 재개\n/now 다음 실행 때 바로 글 생성\n/approveall 대기 초안 전부 승인\n"
@@ -151,6 +151,8 @@ def should_generate(st):
     if st["force_generate"]:
         return True
     t = now()
+    if config.SCHEDULE == "hourly":
+        return st.get("last_generate_hour") != t.strftime("%Y-%m-%d %H")
     return t.hour >= config.GENERATE_HOUR_KST and st["last_generate_date"] != t.strftime("%Y-%m-%d")
 
 
@@ -163,14 +165,22 @@ def generate(st):
         return
 
     used = set(st["used_ids"])
-    services = [s for s in gov24.list_services() if s.get("서비스ID") and s["서비스ID"] not in used
-                and s.get("지원내용") and s.get("지원대상")]
-    services.sort(key=lambda s: int(s.get("조회수") or 0), reverse=True)  # 많이 찾는 것부터
+    queue = [q for q in st.get("queue", []) if q.get("서비스ID") not in used]
+    if len(queue) < 5:  # 대기열이 비면 정부24 목록을 다시 받아 많이 찾는 순으로 채움
+        services = [s for s in gov24.list_services() if s.get("서비스ID") and s["서비스ID"] not in used
+                    and s.get("지원내용") and s.get("지원대상")]
+        services.sort(key=lambda s: int(s.get("조회수") or 0), reverse=True)
+        keep = ["서비스ID", "서비스명", "서비스분야", "소관기관명", "조회수", "지원대상", "지원내용", "신청방법",
+                "신청기한", "상세조회URL", "사용자구분", "전화문의", "수정일시", "선정기준", "서비스목적요약", "지원유형"]
+        queue = [{k: s.get(k) for k in keep if s.get(k)} for s in services[:60]]
+    services = queue
     st["last_generate_date"] = now().strftime("%Y-%m-%d")  # 목록 조회 성공 후에만 '오늘 완료' 처리
+    st["last_generate_hour"] = now().strftime("%Y-%m-%d %H")
+    limit = config.POSTS_PER_HOUR if config.SCHEDULE == "hourly" else config.POSTS_PER_DAY
 
     made = 0
     for svc in services:
-        if made >= config.POSTS_PER_DAY:
+        if made >= limit:
             break
         sid = svc["서비스ID"]
         st["used_ids"].append(sid)
@@ -201,17 +211,22 @@ def generate(st):
         path = config.DRAFTS_DIR / f"{sid}.json"
         save_json(path, d)
         made += 1
+        if not config.REQUIRE_APPROVAL:
+            publish(st, path, "자동")  # 승인 없이 바로 게시 (텔레그램 알림은 저녁 KPI 리포트로 대신)
+            continue
         if telegram.enabled() and st.get("owner_chat_id"):
             a = d["article"]
             preview = (
-                f"📝 새 초안 ({made}/{config.POSTS_PER_DAY})\n\n{a['title']}\n\n"
+                f"📝 새 초안 ({made}/{limit})\n\n{a['title']}\n\n"
                 + "\n".join(f"• {p}" for p in a["summary_points"])
                 + f"\n\n출처: {d['source']['url'] or '-'}\n비용: ${cost:.4f}"
             )
             d["message_id"] = notify(st, preview, [[{"text": "✅ 승인", "callback_data": f"ok:{sid}"},
                                                     {"text": "❌ 거절", "callback_data": f"no:{sid}"}]])
             save_json(path, d)
-    print(f"generated {made} drafts")
+    done = set(st["used_ids"])
+    st["queue"] = [q for q in queue if q.get("서비스ID") not in done]
+    print(f"generated {made} posts")
 
 
 # ---------- 자동 승인 ----------

@@ -43,11 +43,14 @@
 | `SITE_NAME` | 정부혜택 한눈에 | 사이트 이름 |
 | `SITE_URL` | 자동 (github.io 주소) | 도메인 연결 시 변경 |
 | `CLAUDE_MODEL` | claude-sonnet-5-5 | 비용을 줄이려면 `claude-haiku-5-5`, 품질을 더 올리려면 `claude-opus-5-5` |
-| `POSTS_PER_DAY` | 5 | 하루 생성 글 수 |
+| `SCHEDULE` | hourly | hourly = 매시간 생성, daily = 하루 1번 |
+| `POSTS_PER_HOUR` | 1 | 매시간 생성 글 수 |
+| `REQUIRE_APPROVAL` | 0 | 1이면 텔레그램 승인 후 게시 |
+| `POSTS_PER_DAY` | 5 | daily 모드일 때 하루 생성 글 수 |
 | `GENERATE_HOUR_KST` | 7 | 생성 시각 (한국시간) |
 | `AUTO_APPROVE_HOURS` | 0.0833 (5분) | 무응답 시 자동 게시까지 시간 (0 = 승인해야만 게시) |
 | `BLOG_PER_DAY` | 2 | 하루에 보낼 네이버 블로그용 글 수 (0이면 끔) |
-| `MAX_MONTHLY_USD` | 50 | 월 API 비용 상한 (넘으면 자동 중단) |
+| `MAX_MONTHLY_USD` | 80 | 월 API 비용 상한 (넘으면 자동 중단) |
 | `ADSENSE_CLIENT` | - | 애드센스 승인 후 `ca-pub-...` |
 | `GOOGLE_SITE_VERIFICATION` / `NAVER_SITE_VERIFICATION` | - | 검색엔진 소유 확인 코드 |
 
