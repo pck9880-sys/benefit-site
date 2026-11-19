@@ -425,6 +425,8 @@ def run(st, notify):
             elif notify(st, msg[:3900], html=html) is None:
                 st["contest_last_error"] = "telegram " + telegram.last_error
         sent += 1
+        from . import kpi
+        kpi.bump(st, "contests_sent")
     print(f"[contest] 후보 {len(candidates)}개 중 {sent}개 전송")
     if not config.MOCK:
         if candidates and sent == 0:
