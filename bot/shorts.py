@@ -353,6 +353,12 @@ def signature(text, voice=None):
     return t + "~"
 
 
+def has_audio(f):
+    r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index", "-of", "csv=p=0",
+                        str(f)], capture_output=True, text=True)
+    return bool(r.stdout.strip())
+
+
 def with_outro(p):
     """대본 끝에 시그니처 마무리 멘트('다들 ~해요잉~')를 붙인 복사본."""
     p = p.model_copy(deep=True)
@@ -373,7 +379,7 @@ def voices(p, work):
         return [f.result() for f in futs]
 
 
-def make_video(p, media, work, audios=None, voice_track=None, durations=None):
+def make_video(p, media, work, audios=None, voice_track=None, durations=None, keep_audio=False):
     """media: 문장별 ("video"|"image", 경로) 또는 None(글자 카드). 마지막에 시그니처 마무리 멘트를 붙인다.
     audios 를 미리 만들어 넘기면 그대로 쓴다 (화면 소재와 동시에 만들어 시간 절약)."""
     from concurrent.futures import ThreadPoolExecutor
@@ -382,10 +388,10 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None):
     last = next((m for m in reversed(list(media)) if m), None)
     media = list(media) + [last] * max(0, len(p.beats) - len(media))  # 질문·마무리는 마지막 장면 그대로
     segs, jobs = [], []
-    if voice_track:  # 통 녹음 하나를 그대로 깔고, 장면은 durations 길이로 전환
+    if voice_track or keep_audio:  # 통 녹음 / 원본 현장음: 장면은 durations 길이로 전환
         audios = [None] * len(p.beats)
     audios = audios or voices(p, work)
-    voiced = len(p.beats) if voice_track else sum(1 for a in audios if a)
+    voiced = len(p.beats) if (voice_track or keep_audio) else sum(1 for a in audios if a)
     events, t_beat = [], 0.0  # 효과음 (시각, 종류)
     with Renderer() as r:
         title = r.png(title_html(p), work / "title.png")
@@ -444,6 +450,8 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None):
                 cmd += ["-i", c]
             cmd += (["-i", audio] if audio else ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"])
             a_idx = 3 + len(caps)
+            if keep_audio and kind == "video" and has_audio(src):  # 원본 영상 소리 살리기
+                a_idx = 1
             fc = [media_f, f"[0:v][m]overlay=0:{MEDIA_Y}:shortest=1[v0]", "[v0][2:v]overlay=0:0[v1]"]
             last = "v1"
             for j, (_, t0, t1) in enumerate(caps):
@@ -466,13 +474,16 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None):
     out = work / "shorts.mp4"
     # 오디오 믹스: 음성 + 배경음악(옅게) + 효과음
     inputs, chains, labels = ["-i", joined], [], ["[0:a]"]
+    if keep_audio:  # 현장음 크기 맞추기 (배경음악 없음)
+        chains.append("[0:a]loudnorm=I=-14:TP=-1.5,aresample=44100[orig]")
+        labels = ["[orig]"]
     if voice_track:  # 장면 음성(무음) 대신 통 녹음을 목소리로
         inputs += ["-i", voice_track]
         chains.append("[1:a]loudnorm=I=-14:TP=-1.5,aresample=44100,aformat=channel_layouts=stereo[vo]")
         labels = ["[vo]"]
     from . import music
     global LAST_BGM, LAST_BGM_CREDIT
-    bgm, LAST_BGM_CREDIT = music.pick(work) if config.SHORTS_BGM else (None, "NONE")  # 배경음악 꺼져 있으면 없음
+    bgm, LAST_BGM_CREDIT = music.pick(work) if (config.SHORTS_BGM and not keep_audio) else (None, "NONE")  # 배경음악 꺼져 있으면 없음
     if LAST_BGM_CREDIT == "NONE":  # 즐겨찾기만 쓰기로 했는데 못 받은 경우
         LAST_BGM_CREDIT = None
     elif not bgm:
@@ -499,7 +510,7 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None):
         chains.append(f"[{k}:a]adelay={ms}|{ms},volume={vol[kind]}[s{j}]")
         labels.append(f"[s{j}]")
         k += 1
-    if len(labels) > 1 or voice_track:
+    if len(labels) > 1 or voice_track or keep_audio:
         chains.append("".join(labels) + f"amix=inputs={len(labels)}:duration=first:dropout_transition=0:normalize=0[a]"
                       if len(labels) > 1 else f"{labels[0]}anull[a]")
         ff(*inputs, "-filter_complex", ";".join(chains), "-map", "0:v", "-map", "[a]", "-c:v", "copy",
@@ -729,12 +740,14 @@ def render_sample(folder):
     work = Path(tempfile.mkdtemp(prefix="sample-"))
     audios = None
     voice = next((d / f"voice.{ext}" for ext in ("mp3", "wav", "m4a", "mp4") if (d / f"voice.{ext}").exists()), None)
-    if voice:  # 타입캐스트 웹에서 직접 만든 더빙 (반자동, 1.0배속으로 받아서 여기서 1.2배속)
+    if raw.get("keep_audio"):  # 더빙 없이 원본 현장음 + 자막만 (장면 길이는 durations)
+        video, voiced = make_video(p, media, work, durations=raw["durations"], keep_audio=True)
+    elif voice:  # 타입캐스트 웹에서 직접 만든 더빙 (반자동, 1.0배속으로 받아서 여기서 1.2배속)
         texts = [b.narration for b in with_outro(p).beats]
         fast = speed_up(voice, work)
         durs = split_voice(fast, len(texts), work, texts)
         video, voiced = make_video(p, media, work, voice_track=fast, durations=durs)
-    else:
+    elif True:
         video, voiced = make_video(p, media, work, audios)
     out = config.ROOT / "shorts_sample.mp4"
     shutil.copy(video, out)

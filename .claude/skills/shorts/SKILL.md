@@ -114,3 +114,16 @@ gh workflow run shorts-upload.yml --ref main -f folder=assets/samples/<slug> \
 - 대신 유튜브 CC 영상 상당수가 **위키미디어 공용에 라이선스 검수 후 옮겨져 있음**(video2commons) → cc-find 가 그걸 찾는다.
 - 유튜브에서 찾은 영상을 쓰고 싶으면: 같은 제목으로 위키미디어 검색 → 있으면 사용. 없으면 사용자가 원작자 공식 채널인지·CC BY인지 확인 후 직접 받아 첨부(사용자 판단·책임) → `assets/samples/<slug>/` 에 넣고 같은 순서.
 - 재사용 콘텐츠 정책: 자르기만 하면 수익화 거절 → 반드시 내레이션·자막·카드·질문으로 재가공.
+
+
+## 더빙 없이 현장음 살리기 모드 (keep_audio)
+- plan.json 에 `"keep_audio": true`, `"durations": [장면별 초 ...]`(beats+question+outro 개수, 합계 25초 이하) → 원본 영상 소리를 장면마다 그대로 쓰고 자막만 띄움. 배경음악 자동 끔, 소리 크기 자동 맞춤(-14 LUFS).
+- 클립은 소리 포함해서 자르기: `ffmpeg -ss <t> -t 6 -i candN.webm -vf scale=-2:720 -c:v libx264 -preset veryfast -crf 23 -c:a aac -b:a 160k -ar 44100 -ac 2 clipK.mp4`
+- 자를 때 `volumedetect` 로 mean_volume 확인 — -60dB 이하는 무음이라 다른 구간으로 교체.
+- beats 의 narration 은 '자막 문구'(짧게, 12자 내외). 예시: `assets/samples/black_eagles/`.
+
+## 국내 사용 가능 영상
+- 위키미디어의 **공공누리 1유형(KOGL Type 1)** 허용 (코드 반영) — 국방부·KTV 등. 2~4유형은 제외.
+- 미 국방부·NASA 촬영본은 퍼블릭 도메인 (한국 행사여도 미군 촬영이면 가능, 예: 서울 ADEX).
+- 위키미디어 검색은 영어 단어가 엉뚱하게 매칭될 수 있음(예: drum→buk) → 결과 제목 꼭 확인.
+- 경복궁 수문장 교대식처럼 SA 라이선스만 있는 주제는 불가 → 사용자가 공공누리(kogl.or.kr) 1유형 영상을 직접 받아 첨부하면 사용.

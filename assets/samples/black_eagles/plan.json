@@ -1,0 +1,117 @@
+{
+ "topic": "서울 ADEX 2023 블랙이글스 에어쇼 현장음",
+ "title_top": "한국 공군 블랙이글스",
+ "title_bottom": "에어쇼 현장 소리 ㄷㄷ",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "beats": [
+  {
+   "narration": "서울 ADEX 2023 현장",
+   "card": "서울 ADEX 2023 현장",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "대한민국 공군 블랙이글스 등장",
+   "card": "대한민국 공군 블랙이글스 등장",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "하늘에 그려지는 연기 쇼",
+   "card": "하늘에 그려지는 연기 쇼",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "관객들 다 같이 손 흔드는 중",
+   "card": "관객들 다 같이 손 흔드는 중",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "소리 켜고 들어보세요",
+   "card": "소리 켜고 들어보세요",
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "question": "직관 vs 영상, 뭐가 더 좋음?",
+ "outro": "솔직히 이건 직관해야 함",
+ "outro_free": true,
+ "voice": "용식",
+ "keep_audio": true,
+ "durations": [
+  3.2,
+  3.8,
+  3.6,
+  3.4,
+  3.6,
+  3.2,
+  2.6
+ ],
+ "yt_title": "한국 공군 블랙이글스 에어쇼 현장 소리 ㄷㄷ #shorts",
+ "description": "서울 ADEX 2023 현장, 대한민국 공군 블랙이글스 에어쇼를 현장 소리 그대로 담았어요. 소리 켜고 보세요!\n\n영상 출처 (퍼블릭 도메인, 미 국방부 촬영)\n- Video: Sgt Elijah Florence (Public domain) https://commons.wikimedia.org/wiki/File:Seoul_ADEX_23_B-roll.webm\n- Video: Senior Airman Nash Truitt (Public domain) https://commons.wikimedia.org/wiki/File:B-roll_ADEX_2023.webm",
+ "tags": [
+  "블랙이글스",
+  "에어쇼",
+  "서울ADEX",
+  "공군",
+  "대한민국공군",
+  "현장음"
+ ],
+ "sources": [
+  "https://commons.wikimedia.org/wiki/File:Seoul_ADEX_23_B-roll.webm",
+  "https://commons.wikimedia.org/wiki/File:B-roll_ADEX_2023.webm"
+ ],
+ "media": [
+  {
+   "video": "clip0.mp4"
+  },
+  {
+   "video": "clip1.mp4"
+  },
+  {
+   "video": "clip2.mp4"
+  },
+  {
+   "video": "clip3.mp4"
+  },
+  {
+   "video": "clip4.mp4"
+  },
+  {
+   "video": "clip5.mp4"
+  },
+  {
+   "video": "clip5.mp4",
+   "start": 3.2
+  }
+ ]
+}
