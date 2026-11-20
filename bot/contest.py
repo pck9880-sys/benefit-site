@@ -395,6 +395,8 @@ def run(st, notify):
     sent = 0
     limit = st.pop("contest_limit_once", None) or config.CONTESTS_PER_DAY
     tried = 0
+    failed, skipped = [], []  # 진짜 오류(다시 시도) / 조건 안 맞아 건너뜀(다시 시도 안 함)
+    st.pop("contest_last_error", None)
     for d in candidates:
         if sent >= limit or tried >= limit + 2:  # 문서형으로 판정돼 건너뛰는 경우 대비 최대 2개 더 시도
             break
@@ -404,20 +406,23 @@ def run(st, notify):
         except Exception as e:
             print(f"[contest] 생성 실패 {d['id']}: {e}")
             st["contest_last_error"] = f"{type(e).__name__}: {str(e)[:400]}"
+            failed.append(d)
             continue
         st.setdefault("cost", {})[month] = round(st["cost"].get(month, 0) + cost, 5)
-        st.pop("contest_last_error", None)
         if not r["pkg"].text_only or not r["top"]:
             print(f"[contest] {d['id']} 문서·파일 필요 또는 후보 없음 → 건너뜀")
+            skipped.append((d, "문서·파일 제출 필요"))
             continue
         if not r["pkg"].no_signup:
             print(f"[contest] {d['id']} 회원가입·로그인 필요 → 건너뜀")
+            skipped.append((d, "사이트 회원가입·로그인 필요"))
             continue
         try:
             msgs = format_messages(d, r, cost)
         except Exception as e:
             st["contest_last_error"] = f"format {type(e).__name__}: {str(e)[:300]}"
             print("[contest]", st["contest_last_error"])
+            failed.append(d)
             continue
         for msg, html in msgs:
             if config.MOCK:
@@ -429,8 +434,11 @@ def run(st, notify):
         kpi.bump(st, "contests_sent")
     print(f"[contest] 후보 {len(candidates)}개 중 {sent}개 전송")
     if not config.MOCK:
-        if candidates and sent == 0:
-            st["contest_retry"] = candidates[:config.CONTESTS_PER_DAY]  # 다음 실행 때 다시 시도
+        if failed and sent == 0:  # 진짜 오류만 다시 시도 (하루 1번까지)
+            st["contest_retry"] = failed[:config.CONTESTS_PER_DAY]
             notify(st, "⚠️ 공모전 출품안 생성 중 오류가 나서 다음 실행 때 다시 시도합니다.\n" + st.get("contest_last_error", ""))
+        elif skipped and sent == 0:  # 오류 아님: 조건이 안 맞아 건너뜀
+            notify(st, "🏆 오늘 새 공모전 " + str(len(skipped)) + "개를 확인했지만 출품안을 만들지 않았어요.\n" +
+                   "\n".join(f"· {d['title'][:40]} → {why}" for d, why in skipped[:3]))
         elif not candidates:
             notify(st, "🏆 오늘은 조건에 맞는 새 공모전이 없어요.")

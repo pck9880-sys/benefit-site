@@ -74,7 +74,10 @@ jobs:
           git add data
           if ! git diff --cached --quiet; then
             git commit -m "auto: $(date -u +%Y-%m-%dT%H:%MZ)"
-            git push
+            for i in 1 2 3; do  # 다른 커밋이 먼저 올라가 있으면 받아서 다시 푸시 (상태 파일은 이번 실행 것을 우선)
+              git push && break
+              git pull --rebase -X theirs || { git rebase --abort; sleep 5; }
+            done
           fi
 
       - name: 숏츠 차례면 숏츠 워크플로 시작
@@ -96,7 +99,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          preCommands: npx wrangler pages project create "$CF_PAGES_PROJECT" --production-branch=main || true
+          preCommands: npx --yes wrangler pages project create "$CF_PAGES_PROJECT" --production-branch=main || true
           command: pages deploy _site --project-name=${{ env.CF_PAGES_PROJECT }} --branch=main --commit-dirty=true
 
       - name: 검색엔진에 새 페이지 알림 (IndexNow)
