@@ -1,0 +1,9 @@
+{
+ "clip_hook.mp4": {"type": "ship_float", "seconds": 4, "label": "쇳덩이 배는 왜 뜰까?"},
+ "clip_old.mp4": {"type": "nail_sink", "seconds": 4, "label": "쇠못 하나는 꼬르륵"},
+ "clip_think.mp4": {"type": "archimedes", "mode": "think", "seconds": 4, "label": "뜨는 이유가 뭘까?"},
+ "clip_flip.mp4": {"type": "archimedes", "mode": "flip", "seconds": 4},
+ "clip_exp.mp4": {"type": "bath", "seconds": 4, "label": "몸이 들어간 만큼 물이 넘침"},
+ "clip_why.mp4": {"type": "buoy", "seconds": 4, "label": "밀어낸 물 무게 = 부력"},
+ "clip_proof.mp4": {"type": "float_proof", "seconds": 13, "label": "물 1L ≈ 1kg 떠받침", "label2": "그릇 모양이면 둥둥!", "drop": 3.0}
+}

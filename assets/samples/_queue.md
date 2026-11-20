@@ -221,3 +221,21 @@ PSG에서 트로피만 12개 들었다고 함
 공기 속 미생물이 썩게 해서, 그 덕분에 저온살균법이 생긴 겁니다. 정말 신기하죠?
 ```
 - 참고: Britannica 'Louis Pasteur — Spontaneous generation', OpenStax Microbiology 3.1, Memorial Univ. 백조목 실험 해설. 실험 연도는 자료마다 1859~1862.
+
+
+## 12. archimedes_float — [과학] 쇳덩이 배가 / 왜 물에 뜰까?
+- 만든 시각: 2026-11-20 20:13 (KST) · 종류: 과학 · 핵심: 물에 잠긴 물체는 밀어낸 물의 무게만큼 떠받쳐짐(아르키메데스의 원리·부력, 물 1L≈1kg) → 같은 쇠도 속 빈 그릇·배 모양이면 물을 많이 밀어내 뜸
+- 화면: 3D 7종(scene3d_pro 새 type: ship_float·nail_sink·archimedes think/flip·bath·buoy·float_proof 13초) · 썸네일 원본 thumb_src.jpg(증명 클립 프레임) · 더빙 필재
+- 녹음 대본:
+```
+쇳덩이 배는 왜 물에 뜰까요?
+쇠못 하나는 바로 가라앉는데요
+아르키메데스도 이게 궁금했습니다
+이것 때문에 미쳐서 공중제비를 돌아버립니다
+욕조에서 넘치는 물을 봤다고 하죠
+밀어낸 물만큼 뜨는 힘, 부력이죠
+물 1리터당 약 1kg을 받쳐 줍니다
+그릇 모양 쇠는 물을 더 밀어 뜨죠
+속을 비워 물을 많이 밀어내서, 부력 덕분에 쇠배가 뜨게 된 겁니다. 정말 신기하죠?
+```
+- 참고: Britannica 'Archimedes' principle', OpenStax University Physics 14.4. 욕조·유레카는 비트루비우스가 전한 일화(설명란에 표기).
