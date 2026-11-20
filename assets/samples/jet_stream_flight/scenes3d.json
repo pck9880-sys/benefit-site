@@ -1,0 +1,4 @@
+{
+ "clip_globe.mp4": {"type": "globe_route", "from": [37.46, 126.44, "인천"], "to": [33.94, -118.41, "LA"], "seconds": 7},
+ "clip_plane.mp4": {"type": "orbit_plane", "seconds": 5}
+}
