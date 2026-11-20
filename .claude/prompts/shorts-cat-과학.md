@@ -23,3 +23,4 @@
 - yt_title, description(출처·계산 방법·이미지 출처), tags, sources, pin_comment, credits.
 
 - **애니메이션 키트 참고**(2026-11-20): `.claude/skills/shorts/animation-kit.md` 를 읽고 장면을 고른다 — 수치=graph식 카운트업, 구조=breakdown식 분해도+지시선, 우주=플랫 우주풍, 캐릭터=zach식 만화 얼굴(눈꺼풀·입 표정)+피사계심도+비네트·그레인. 렌더 전 스틸 확인.
+- **자막 겹침 금지**(2026-11-20): 대본 자막은 정사각 아래 약 21%. 장면 속 글씨는 엔진이 자동으로 그 위로 올림 — --snap 스틸의 빨간 띠 안에 글씨가 없는지 확인.

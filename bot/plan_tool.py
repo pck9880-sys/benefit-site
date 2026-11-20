@@ -1,6 +1,6 @@
 """숏츠 카테고리 템플릿 도구 — 대본 쓰는 Claude 가 형식을 덜 고민하게 해서 빠르고 일정하게.
 
-  python -m bot.plan_tool new <slug> <웃긴글|감동|이슈>   → 폴더 + 뼈대 plan.json (템플릿 값 채움, 빈칸만 채우면 됨)
+  python -m bot.plan_tool new <slug> <웃긴글|감동|이슈|과학|과학실사>   → 폴더 + 뼈대 plan.json (템플릿 값 채움, 빈칸만 채우면 됨)
   python -m bot.plan_tool check <slug>                   → 자동 보정(장면 배치·썸네일 문구·고지문·태그) + 규칙 검사
                                                            문제가 있으면 목록 출력 후 종료코드 1 → 고치고 다시 실행
 템플릿: templates/shorts/<종류>.json
@@ -14,7 +14,8 @@ from . import config
 
 TPL_DIR = config.ROOT / "templates" / "shorts"
 SAMPLES = config.ROOT / "assets" / "samples"
-KINDS = {"웃긴글": "웃긴글", "유머": "웃긴글", "감동": "감동", "이슈": "이슈", "핫이슈": "이슈", "과학": "과학"}
+KINDS = {"웃긴글": "웃긴글", "유머": "웃긴글", "감동": "감동", "이슈": "이슈", "핫이슈": "이슈", "과학": "과학", "과학실사": "과학실사"}
+SCI = ("과학", "과학실사")
 BAD_END = re.compile(r"(요|니다|해요잉|어요|아요|세요|죠)[.!?~ㅋㅎ\s]*$")
 
 
@@ -23,7 +24,7 @@ def tpl(kind):
 
 
 def kind_of(p):
-    if p.get("kind") in ("이슈", "과학"):
+    if p.get("kind") in ("이슈",) + SCI:
         return p["kind"]
     return "감동" if p.get("mood") == "감동" else "웃긴글"
 
@@ -46,12 +47,24 @@ def new(slug, kind):
          "thumb_caption": "", "end_comments": [], "yt_title": "", "description": "", "tags": list(t["tags"]),
          "sources": [], "pin_comment": ""}
     if t.get("story"):   # 과학(위인 3D): 8단계 흐름 + 3D 장면 뼈대
-        for b, st in zip(p["beats"], t["story"]):
-            b["visual"] = "video"; b["card"] = f"[{st['step']}] {st['guide']}"
-        sc = {st["scene"]["file"]: {k: v for k, v in st["scene"].items() if k != "file"}
-              for st in t["story"] if not st["scene"].get("same_as_prev")}
-        p["media"] = [{"video": st["scene"]["file"], "start": 0} for st in t["story"]]
-        p["gpt_images"] = []; p["end_comments"] = False; p["outro"] = t.get("outro_pattern", "")
+        p["end_comments"] = False; p["outro"] = t.get("outro_pattern", ""); p["gpt_images"] = []; p["media"] = []; sc = {}
+        for i, (b, st) in enumerate(zip(p["beats"], t["story"])):
+            b["card"] = f"[{st['step']}] {st['guide']}"
+            kind_m = st.get("media", "video")
+            if kind_m == "real":   # 실제 사진: real_url(공식 원본) 또는 real_query
+                b.update(visual="real", real_url="", real_credit="", real_query="")
+                p["media"].append({"image": f"r{100 + i}.jpg"})
+            elif kind_m == "ai":
+                b["visual"] = "ai"; f = f"img{i}.jpg"
+                p["gpt_images"].append({"file": f, "prompt": ""}); p["media"].append({"image": f})
+            elif kind_m == "flip":
+                b["visual"] = "video"; sc["clip_flip.mp4"] = {"type": "scientist", "mode": "flip", "seconds": 4}
+                p["media"].append({"video": "clip_flip.mp4", "start": 0})
+            else:
+                b["visual"] = "video"
+                if not st["scene"].get("same_as_prev"):
+                    sc[st["scene"]["file"]] = {k: v for k, v in st["scene"].items() if k != "file"}
+                p["media"].append({"video": st["scene"]["file"], "start": 0})
         (d / "scenes3d.json").write_text(json.dumps(sc, ensure_ascii=False, indent=1), "utf-8")
         print("\n".join(["[과학 템플릿] 기준 예시: " + t.get("example", "")] + [f"  {st['step']}: {st['guide']}" for st in t["story"]] + t.get("steps", [])))
     (d / "plan.json").write_text(json.dumps(p, ensure_ascii=False, indent=1), "utf-8")
@@ -113,6 +126,42 @@ def proof_photo(src, out):
     dr.text((56, 44), label, font=font, fill=(255, 255, 255))
     bg.save(out, quality=92)
     return out
+
+
+def real_from_url(url, out, credit="", mode="auto"):
+    """공식 기관 원본 사진(퍼블릭 도메인 우선)을 주소로 직접 받아 사람 얼굴 모자이크 → 출처 credits.json."""
+    import requests
+    from . import realimg
+    r = requests.get(url, timeout=40, headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+                     "(KHTML, like Gecko) Chrome/124 Safari/537.36"})
+    r.raise_for_status()
+    tmp = Path(out).with_suffix(".src"); tmp.write_bytes(r.content)
+    realimg.process(tmp, out, mode); tmp.unlink(missing_ok=True)
+    cf = Path(out).parent / "credits.json"
+    cr = json.loads(cf.read_text("utf-8")) if cf.exists() else {}
+    cr[Path(out).name] = credit or url
+    cf.write_text(json.dumps(cr, ensure_ascii=False, indent=1), "utf-8")
+    print(f"[real] {Path(out).name} ← {credit or url}")
+
+
+def real_badge(f):
+    """정사각 맞춤(흐린 배경) + 왼쪽 위 '실제 사진' 표시 — AI 이미지와 구분. 한 번만."""
+    from PIL import Image, ImageDraw, ImageFilter, ImageFont
+    f = Path(f); mark = f.with_suffix(".badge")
+    if mark.exists():
+        return
+    im = Image.open(f).convert("RGB"); S = 1080
+    bg = im.resize((S, S)).filter(ImageFilter.GaussianBlur(40))
+    sc = min(S / im.size[0], S / im.size[1]); fg = im.resize((max(1, int(im.size[0] * sc)), max(1, int(im.size[1] * sc))))
+    bg.paste(fg, ((S - fg.size[0]) // 2, (S - fg.size[1]) // 2))
+    dr = ImageDraw.Draw(bg)
+    try:
+        font = ImageFont.truetype("/System/Library/Fonts/AppleSDGothicNeo.ttc", 40, index=6)
+    except Exception:
+        font = ImageFont.load_default()
+    w = dr.textlength("실제 사진", font=font)
+    dr.rounded_rectangle((36, 36, 36 + w + 40, 100), radius=14, fill=(20, 20, 20)); dr.text((56, 44), "실제 사진", font=font, fill=(255, 255, 255))
+    bg.save(f, quality=92); mark.write_text("1")
 
 
 def _layout(p, d, t):
@@ -182,7 +231,7 @@ def check(slug):
     total = sum(len(re.sub(r"\*\*|\s", "", b["narration"])) for b in beats)
     if total > 130:  # 28초 미만 (2026-11-20): 1.2배속 본문 약 19초 + 댓글 반응 약 6초
         errs.append(f"대본 전체 {total}자 (공백 빼고 130자 이내 — 영상 28초 미만) → 문장 수·길이 줄이기")
-    science = kind == "과학"
+    science = kind in SCI
     if science:
         p["voices"] = t.get("voices", ["필재", "필재"])
         p["outro_custom"] = True
@@ -200,7 +249,7 @@ def check(slug):
         if BAD_END.search(s):
             errs.append(f"문장{i + 1} 존댓말/해요체 끝: {s} → 음슴체(~함/~했음/~임)로")
         b.setdefault("card", s)
-    ends = [] if kind == "과학" else [re.sub(r"[^가-힣]", "", re.sub(r"\*\*", "", b["narration"]))[-2:] for b in beats]
+    ends = [] if kind in SCI else [re.sub(r"[^가-힣]", "", re.sub(r"\*\*", "", b["narration"]))[-2:] for b in beats]
     for i in range(2, len(ends)):
         if ends[i] and ends[i] == ends[i - 1] == ends[i - 2]:
             errs.append(f"문장{i - 1}~{i + 1} 끝맺음 '{ends[i]}' 3번 연속 → 이어 주는 말(~했는데/~하더니/~해서)·명사 끝 등으로 섞기")
@@ -245,7 +294,7 @@ def check(slug):
         errs.append(f"실제 사진 {nr}장 (최소 {t['real_photos']['min']}, bot.realimg 로 모자이크 처리해서 rN.jpg)")
 
     # 장면 배치: 비었거나 없는 파일을 가리키면 템플릿 순서로 다시
-    pending = {g["file"] for g in gi}
+    pending = {g["file"] for g in gi} | {f"r{100 + i}.jpg" for i, b in enumerate(beats) if b.get("real_url") or b.get("real_query")}
     ok = p.get("media") and len(p["media"]) >= len(beats) and all(
         (d / (m.get("image") or m.get("zzal") or m.get("video", ""))).exists()
         or (m.get("image") in pending) for m in p["media"])
@@ -269,11 +318,21 @@ def check(slug):
     from . import photos
     for i, b in enumerate(beats):
         q = (b.get("real_query") or "").strip()
-        if not q:
+        u = (b.get("real_url") or "").strip()
+        if not q and not u:
+            if kind == "과학실사" and b.get("visual") == "real":
+                errs.append(f"문장{i + 1} 실제 사진 자리: real_url(공식 원본 주소+real_credit) 또는 real_query 비어 있음")
             continue
         f = d / f"r{100 + i}.jpg"
-        if not f.exists():
+        if not f.exists() and u:
+            try:
+                real_from_url(u, f, b.get("real_credit", ""), b.get("real_mode", "auto"))
+            except Exception as ex:
+                errs.append(f"문장{i + 1} real_url 받기 실패({type(ex).__name__})")
+        if not f.exists() and q:
             photos.get(q, f, b.get("real_mode", "auto"))
+        if f.exists() and kind == "과학실사":
+            real_badge(f)
         if f.exists() and i < len(p["media"]):
             p["media"][i] = {"image": f.name}
         elif not f.exists():
@@ -283,7 +342,14 @@ def check(slug):
     used = lambda pat: sum(1 for m in p["media"] if re.match(pat, m.get("image") or m.get("zzal") or ""))
     n_ai = sum(1 for m in p["media"] if m.get("image") in ai_names)
     n_real, n_ira, n_zz = used(r"^[rs]\d+\.jpg$"), used(r"^i\d+\.png$"), used(r"^z\d+\.png$")
-    if kind == "과학":  # 과학(정보형 3D): 장면은 직접 지정, 3D 장면·공중제비가 있어야 함
+    if kind == "과학실사":  # 실제 사진 3장+ · AI 2장+ · 3D 공중제비
+        if n_real < t["real_photos"]["min"]:
+            errs.append(f"과학실사: 실제 사진 {n_real}장 (최소 {t['real_photos']['min']})")
+        if n_ai < 2:
+            errs.append(f"과학실사: AI 이미지 {n_ai}장 (최소 2)")
+        if not any("video" in m for m in p["media"]):
+            errs.append("과학실사: 3D 공중제비 클립(clip_flip.mp4) 없음")
+    elif kind == "과학":  # 과학(정보형 3D): 장면은 직접 지정, 3D 장면·공중제비가 있어야 함
         if not any("video" in m or "flip" in m for m in p["media"]):
             errs.append("과학: 3D 장면(bot.scene3d) 또는 공중제비(flip) 장면이 없음")
     else:
@@ -313,7 +379,7 @@ def check(slug):
         for b in beats:
             b["overlay"], b["overlay_text"], b["overlay_source"] = "none", "", ""
     ec = p.get("end_comments") or []
-    if kind == "과학":
+    if kind in SCI:
         p["end_comments"] = False
     elif not 3 <= len(ec) <= 5:
         errs.append(f"end_comments {len(ec)}개 (원글 실제 댓글 3~5개)")

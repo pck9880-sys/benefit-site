@@ -1,0 +1,118 @@
+{
+ "plan": {
+  "mood": "기본",
+  "kind": "과학실사",
+  "caption_style": "box",
+  "music_concept": "잔잔한 과학",
+  "question": "",
+  "character": "",
+  "hook_video": "",
+  "photo_fallbacks": []
+ },
+ "intro": {
+  "emoji": "🔬",
+  "board": "과학 게시판"
+ },
+ "disclaimers": [
+  "※ 숫자는 공식 자료·공식 계산으로 확인한 값입니다."
+ ],
+ "tags": [
+  "과학",
+  "상식",
+  "원리",
+  "쇼츠"
+ ],
+ "voices": [
+  "필재",
+  "필재"
+ ],
+ "ending": "정말 신기하죠?",
+ "image_style": "Photorealistic cinematic science photo, natural light, high detail, no text, no letters, no numbers, no logos, no watermark, no real person's face",
+ "label": "과학실사 (실제 사진 + AI 이미지 + 3D 공중제비)",
+ "beats": [
+  8,
+  8
+ ],
+ "ai_images": 3,
+ "thumb_ai": false,
+ "zzal": {
+  "min": 0,
+  "max": 0,
+  "source": ""
+ },
+ "ira": {
+  "min": 0,
+  "max": 0
+ },
+ "real_photos": {
+  "min": 3,
+  "max": 5
+ },
+ "media_pattern": [
+  "real",
+  "ai",
+  "real",
+  "flip",
+  "ai",
+  "real",
+  "real",
+  "ai"
+ ],
+ "intro_card": false,
+ "text_cards": false,
+ "char_target": [
+  105,
+  115
+ ],
+ "story": [
+  {
+   "step": "① 훅 (실제 사진)",
+   "guide": "눈을 의심할 실제 현상 한 줄 — 공식 기관 사진",
+   "media": "real"
+  },
+  {
+   "step": "② 오해 (AI)",
+   "guide": "다들 이렇게 생각하죠 — 상식/오해를 장면으로",
+   "media": "ai"
+  },
+  {
+   "step": "③ 진짜 문제 (실제 사진)",
+   "guide": "그런데 실제로는… 이상한 점",
+   "media": "real"
+  },
+  {
+   "step": "④ 공중제비 (3D)",
+   "guide": "이것 때문에 과학자들이 미쳐서 공중제비를 돌아버립니다 (고정)",
+   "media": "flip"
+  },
+  {
+   "step": "⑤ 해결 (AI)",
+   "guide": "전문 용어 1개를 쉬운 말로",
+   "media": "ai"
+  },
+  {
+   "step": "⑥ 원리 (실제 사진)",
+   "guide": "원리 한 줄 + 확인한 숫자",
+   "media": "real"
+  },
+  {
+   "step": "⑦ 증거 (실제 사진)",
+   "guide": "실제 관측·실험·기록 (연도·기관)",
+   "media": "real"
+  },
+  {
+   "step": "⑧ 결과 (AI, 마무리까지 이어짐)",
+   "guide": "그래서 지금 이렇게 된 것",
+   "media": "ai"
+  }
+ ],
+ "outro_pattern": "~해서, 그 덕분에 ~된 겁니다. 정말 신기하죠?",
+ "steps": [
+  "1. python -m bot.plan_tool new <slug> 과학실사 → plan.json(장면 종류 지정) + scenes3d.json(공중제비)",
+  "2. 실제 사진: beat 에 real_url(공식 기관 원본 이미지 주소: NASA·NOAA·USGS 등 퍼블릭 도메인 우선)+real_credit, 또는 real_query(영어 검색어). SA 라이선스 제외, 사람 얼굴 자동 모자이크, 왼쪽 위 '실제 사진' 표시 자동",
+  "3. AI 이미지: gpt_images 프롬프트(영어, 글자·실존 인물 얼굴 없음) → scripts/mac/shorts_gpt_images.sh <slug>",
+  "4. 공중제비 3D: scenes3d.json 의 clip_flip.mp4 (주제에 맞는 캐릭터·배경색으로 새로 렌더)",
+  "5. 대본 8문장 존댓말, 공백 빼고 105~115자. 화면 속 글씨는 위쪽에만 — 아래 20%는 자막 자리",
+  "6. plan_tool check → scripts/mac/shorts_chrome_prep.sh <slug>"
+ ]
+}

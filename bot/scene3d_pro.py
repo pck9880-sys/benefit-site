@@ -13,7 +13,7 @@ type:
   incline      경사면에 공이 굴러가며 1:3:5:7 구간 표시 (갈릴레이 홀수 법칙)
   vacuum       유리관 두 개: 공기 있음(깃털 천천히) vs 공기 없음(공·깃털 동시)
   moon_drop    달 표면·착륙선, 망치와 깃털이 동시에 떨어짐(슬로모션·먼지) — 긴 클립(라벨 label/label2, drop 초)
-  ※ 모든 장면에 비네트+필름 그레인(애니메이션 키트 기법)
+  ※ 모든 장면에 비네트+필름 그레인(애니메이션 키트 기법). 장면 속 글씨는 자막 자리(아래 ~21%)에 들어가면 자동으로 위로 올림. --snap 스틸엔 자막 자리 빨간 띠 표시
 실존 인물 사진·초상은 쓰지 않는다 (캐릭터는 흰 머리·콧수염의 만화풍 과학자).
 """
 import asyncio
@@ -349,6 +349,17 @@ if (CFG.type==='moon_drop') {
     gradePass.uniforms.uT.value=s; composer.render(); };
 }
 
+// ── 자막 자리 비우기: 장면 속 글씨(스프라이트)가 정사각 아래 ~21%(대본 자막 상자) 안으로 들어가면 렌더 순간 위로 올림 ──
+const CAP_NDC = -0.56;
+const _render = composer.render.bind(composer);
+composer.render = function(){ const saved=[]; camera.updateMatrixWorld(); const up=new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld,1).normalize();
+  const k=Math.tan(camera.fov*Math.PI/360);
+  scene.traverse(o=>{ if(!o.isSprite||!o.visible||o.parent===camera) return; let vis=true; o.traverseAncestors(a=>{ if(!a.visible) vis=false; }); if(!vis) return;
+    const wp=new THREE.Vector3(); o.getWorldPosition(wp); const v=wp.clone().project(camera); if(v.z>1||Math.abs(v.x)>1.2) return;
+    const dist=wp.distanceTo(camera.position), ws=new THREE.Vector3(); o.getWorldScale(ws);
+    const bottom=v.y-(ws.y*.25)/(dist*k); if(bottom>=CAP_NDC) return;
+    const nw=wp.clone().addScaledVector(up,(CAP_NDC-bottom)*dist*k); saved.push([o,o.position.clone()]); o.parent.worldToLocal(nw); o.position.copy(nw); });
+  _render(); saved.forEach(([o,q])=>o.position.copy(q)); };
 window.draw=draw; window.ready=new Promise(r=>setTimeout(r,800));
 </script></body></html>"""
 
@@ -397,6 +408,10 @@ async def _snap(cfg, ts, out_prefix):
         for t in ts:
             await pg.evaluate(f"window.draw({t})"); o = f"{out_prefix}_{t:.2f}.jpg"
             await pg.screenshot(path=o, type="jpeg", quality=80); outs.append(o)
+            from PIL import Image, ImageDraw   # 자막 자리 표시(빨간 띠) — 여기에 장면 글씨가 있으면 안 됨
+            im = Image.open(o).convert("RGBA"); ov = Image.new("RGBA", im.size, (0, 0, 0, 0))
+            ImageDraw.Draw(ov).rectangle((0, int(S * .79), S, int(S * .97)), fill=(255, 0, 0, 60), outline=(255, 0, 0, 200), width=4)
+            Image.alpha_composite(im, ov).convert("RGB").save(o, quality=80)
         await b.close()
     return outs
 
