@@ -18,9 +18,9 @@ BEFORE=$(ls assets/samples)
 
 # 종류 순서: 유머 2 → 감동 1 → 핫이슈 2 → 반복 (~/쇼츠작업/rotation.txt 에 다음 순번)
 ROT="$HOME/쇼츠작업/rotation.txt"
-SEQ=(웃긴글 웃긴글 감동 이슈 이슈)
+SEQ=(${=SHORTS_SEQ:-과학})  # 2026-11-20 사용자: 당분간 과학만 (원래 순서는 SHORTS_SEQ="웃긴글 웃긴글 감동 이슈 이슈")
 N=$(cat "$ROT" 2>/dev/null || echo 0)
-MOOD="${SHORTS_FORCE_MOOD:-${SEQ[$(( N % 5 + 1 ))]}}"
+MOOD="${SHORTS_FORCE_MOOD:-${SEQ[$(( N % ${#SEQ} + 1 ))]}}"
 [ -z "${SHORTS_FORCE_MOOD:-}" ] && echo $(( N + 1 )) > "$ROT"
 
 # ① 대본·자료 (공통 규칙 + 카테고리 규칙)

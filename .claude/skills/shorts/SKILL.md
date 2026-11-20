@@ -6,6 +6,7 @@ description: 유튜브 숏츠 1편을 빠르게 만드는 작업 순서 (뉴스 
 # 숏츠 1편 제작 (반자동)
 
 ## ★ 기본값 (2026-11-20, 자동 운영)
+- **지금은 과학만 (2026-11-20~)**: 정보형 3D(대권항로 편 방식), 더빙 필재 고정, 마지막 멘트는 결론 + "정말 신기하죠?" 로 끝(plan_tool 이 자동 추가). 규칙 .claude/prompts/shorts-cat-과학.md, 템플릿 templates/shorts/과학.json. 원래 순서는 SHORTS_SEQ="웃긴글 웃긴글 감동 이슈 이슈".
 - **주기**: 하루 6편(0·3·6·12·16·20시) 제작 → 크롬 Claude 더빙 → 합성 → **iCloud Drive/쇼츠업로드/** 에 전달 (영상·썸네일·업로드정보.txt). **업로드는 사용자가 휴대폰 앱으로** (사운드 추가 → 저장됨). `SHORTS_UPLOAD=1` 이면 예전 크롬 자동 업로드.
 - **카테고리 템플릿(2026-11-20)**: `templates/shorts/{웃긴글,감동,이슈}.json` + `python -m bot.plan_tool new|check <slug>` (뼈대 생성 → 빈칸만 채움 → 자동 보정·검사).
   프롬프트: 공통 `.claude/prompts/shorts-hourly.md` + 종류별 `shorts-cat-<종류>.md`.

@@ -1,0 +1,59 @@
+{
+ "label": "과학",
+ "plan": {
+  "mood": "기본",
+  "kind": "과학",
+  "caption_style": "box",
+  "music_concept": "잔잔한 과학",
+  "question": "",
+  "character": "",
+  "hook_video": "",
+  "photo_fallbacks": []
+ },
+ "intro": {
+  "emoji": "🔬",
+  "board": "과학 게시판"
+ },
+ "beats": [
+  8,
+  9
+ ],
+ "ai_images": 2,
+ "thumb_ai": false,
+ "zzal": {
+  "min": 0,
+  "max": 1,
+  "source": "pepe"
+ },
+ "ira": {
+  "min": 1,
+  "max": 2
+ },
+ "real_photos": {
+  "min": 0,
+  "max": 0
+ },
+ "media_pattern": [
+  "ai",
+  "ai",
+  "ira",
+  "ai"
+ ],
+ "intro_card": false,
+ "text_cards": false,
+ "image_style": "Clean cinematic photorealistic science illustration style, soft light, no text, no letters, no logos, no watermark",
+ "disclaimers": [
+  "※ 숫자는 공식 자료·공식 계산으로 확인한 값입니다."
+ ],
+ "tags": [
+  "과학",
+  "상식",
+  "원리",
+  "쇼츠"
+ ],
+ "voices": [
+  "필재",
+  "필재"
+ ],
+ "ending": "정말 신기하죠?"
+}

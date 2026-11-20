@@ -14,7 +14,7 @@ from . import config
 
 TPL_DIR = config.ROOT / "templates" / "shorts"
 SAMPLES = config.ROOT / "assets" / "samples"
-KINDS = {"웃긴글": "웃긴글", "유머": "웃긴글", "감동": "감동", "이슈": "이슈", "핫이슈": "이슈"}
+KINDS = {"웃긴글": "웃긴글", "유머": "웃긴글", "감동": "감동", "이슈": "이슈", "핫이슈": "이슈", "과학": "과학"}
 BAD_END = re.compile(r"(요|니다|해요잉|어요|아요|세요|죠)[.!?~ㅋㅎ\s]*$")
 
 
@@ -23,7 +23,9 @@ def tpl(kind):
 
 
 def kind_of(p):
-    return "이슈" if p.get("kind") == "이슈" else ("감동" if p.get("mood") == "감동" else "웃긴글")
+    if p.get("kind") in ("이슈", "과학"):
+        return p["kind"]
+    return "감동" if p.get("mood") == "감동" else "웃긴글"
 
 
 def _beat():
@@ -171,14 +173,25 @@ def check(slug):
     total = sum(len(re.sub(r"\*\*|\s", "", b["narration"])) for b in beats)
     if total > 130:  # 28초 미만 (2026-11-20): 1.2배속 본문 약 19초 + 댓글 반응 약 6초
         errs.append(f"대본 전체 {total}자 (공백 빼고 130자 이내 — 영상 28초 미만) → 문장 수·길이 줄이기")
+    science = kind == "과학"
+    if science:
+        p["voices"] = t.get("voices", ["필재", "필재"])
+        p["outro_custom"] = True
+        o = (p.get("outro") or "").strip()
+        if not o.endswith(t["ending"]):
+            p["outro"] = (o.rstrip(" .") + ". " if o else "") + t["ending"]
     for i, b in enumerate(beats):
         s = re.sub(r"\*\*", "", b["narration"]).strip()
+        if science:
+            if len(s) > 30:
+                errs.append(f"문장{i + 1} 30자 넘음: {s}")
+            continue
         if len(s) > 30:
             errs.append(f"문장{i + 1} 30자 넘음: {s}")
         if BAD_END.search(s):
             errs.append(f"문장{i + 1} 존댓말/해요체 끝: {s} → 음슴체(~함/~했음/~임)로")
         b.setdefault("card", s)
-    ends = [re.sub(r"[^가-힣]", "", re.sub(r"\*\*", "", b["narration"]))[-2:] for b in beats]
+    ends = [] if kind == "과학" else [re.sub(r"[^가-힣]", "", re.sub(r"\*\*", "", b["narration"]))[-2:] for b in beats]
     for i in range(2, len(ends)):
         if ends[i] and ends[i] == ends[i - 1] == ends[i - 2]:
             errs.append(f"문장{i - 1}~{i + 1} 끝맺음 '{ends[i]}' 3번 연속 → 이어 주는 말(~했는데/~하더니/~해서)·명사 끝 등으로 섞기")
@@ -189,7 +202,7 @@ def check(slug):
             return False
         return (ord(ch) - 0xAC00) % 28 == 16
     eum = sum(1 for e in ends if e and _jong_m(e[-1]))
-    if beats and eum > len(beats) * 0.55:
+    if ends and eum > len(beats) * 0.55:
         errs.append(f"'~음/~함' 끝이 {eum}/{len(beats)}문장 → 절반 이하로. '~했는데/~하더니/~해서/~니까', 명사 끝, 'ㅋㅋ' 로 이어 쓰기")
     for k in ("yt_title", "pin_comment", "description"):
         if "해요잉" in p.get(k, ""):
@@ -261,17 +274,21 @@ def check(slug):
     used = lambda pat: sum(1 for m in p["media"] if re.match(pat, m.get("image") or m.get("zzal") or ""))
     n_ai = sum(1 for m in p["media"] if m.get("image") in ai_names)
     n_real, n_ira, n_zz = used(r"^[rs]\d+\.jpg$"), used(r"^i\d+\.png$"), used(r"^z\d+\.png$")
-    ira = t.get("ira", {"min": 0})
-    if n_ira < ira["min"]:
-        errs.append(f"일본짤(いらすとや) {n_ira}장 (최소 {ira['min']}: python -m bot.irasutoya <일본어> → bot.irasutoya.save(url, 'assets/samples/<slug>/i1.png'))")
-    if t["real_photos"]["min"] and n_real < t["real_photos"]["min"]:
-        errs.append(f"실사 {n_real}장 (최소 {t['real_photos']['min']})")
-    if n_ai < 1:
-        errs.append("AI 이미지(실사풍) 장면 없음")
-    if t["zzal"]["min"] and n_zz < t["zzal"]["min"]:
-        errs.append(f"반응 짤 {n_zz}장 (최소 {t['zzal']['min']}, {t['zzal']['source']})")
-    if (n_real + n_ira + n_zz) < n_ai // 3:
-        errs.append(f"AI 장면 {n_ai}개에 짤 {n_ira + n_zz}개 → 일본짤·페페짤을 더 섞기")
+    if kind == "과학":  # 과학(정보형 3D): 장면은 직접 지정, 3D 장면·공중제비가 있어야 함
+        if not any("video" in m or "flip" in m for m in p["media"]):
+            errs.append("과학: 3D 장면(bot.scene3d) 또는 공중제비(flip) 장면이 없음")
+    else:
+        ira = t.get("ira", {"min": 0})
+        if n_ira < ira["min"]:
+            errs.append(f"일본짤(いらすとや) {n_ira}장 (최소 {ira['min']}: python -m bot.irasutoya <일본어> → bot.irasutoya.save(url, 'assets/samples/<slug>/i1.png'))")
+        if t["real_photos"]["min"] and n_real < t["real_photos"]["min"]:
+            errs.append(f"실사 {n_real}장 (최소 {t['real_photos']['min']})")
+        if n_ai < 1:
+            errs.append("AI 이미지(실사풍) 장면 없음")
+        if t["zzal"]["min"] and n_zz < t["zzal"]["min"]:
+            errs.append(f"반응 짤 {n_zz}장 (최소 {t['zzal']['min']}, {t['zzal']['source']})")
+        if (n_real + n_ira + n_zz) < n_ai // 3:
+            errs.append(f"AI 장면 {n_ai}개에 짤 {n_ira + n_zz}개 → 일본짤·페페짤을 더 섞기")
     if kind == "감동" and any(re.match(r"^z\d+\.png$", m.get("zzal", "")) for m in p["media"]):
         p["media"] = _layout(p, d, t)  # 감동은 페페 짤 없음 (일본짤은 허용)
 
@@ -287,7 +304,9 @@ def check(slug):
         for b in beats:
             b["overlay"], b["overlay_text"], b["overlay_source"] = "none", "", ""
     ec = p.get("end_comments") or []
-    if not 3 <= len(ec) <= 5:
+    if kind == "과학":
+        p["end_comments"] = False
+    elif not 3 <= len(ec) <= 5:
         errs.append(f"end_comments {len(ec)}개 (원글 실제 댓글 3~5개)")
     desc = p.get("description", "")
     for line in t["disclaimers"]:
