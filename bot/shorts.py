@@ -612,7 +612,7 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
             elif kind in ("image", "card"):  # 사진: 정사각으로 자르고 천천히 확대/축소 (카드는 글자가 안 잘리게 살짝만)
                 cmd += ["-loop", "1", "-i", src]
                 # 2026-11-20: 확대는 조금만 (기존 1.15 → 1.05), 같은 사진이 이어지면 이어서 확대
-                zmax, step = (1.03, 0.0004) if kind == "card" else (float(os.environ.get("SHORTS_ZOOM_MAX", "1.05")), 0.0005)
+                zmax, step = (1.03, 0.0004) if kind == "card" else (float(__import__("os").environ.get("SHORTS_ZOOM_MAX", "1.05")), 0.0005)
                 same = i > 0 and media[i] == media[i - 1]
                 run_frames = run_frames if same else 0
                 z = f"min(1.0+(on+{run_frames})*{step},{zmax})"
