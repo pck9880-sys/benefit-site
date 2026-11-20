@@ -261,7 +261,7 @@ def mix_caption_html(text, idx=0, impact=False):
     body = e(balance_lines(plain, 15))
     grad = st["fill"].startswith("linear")
     fill = (f"background:{st['fill']};-webkit-background-clip:text;color:transparent;" if grad else f"color:{st['fill']};")
-    size = 55 if impact else 47  # 2026-11-20: 67px 의 70% (사용자 요청)
+    size = 60 if impact else 52  # 2026-11-20: 47px 에서 약간 키움 (사용자 요청)
     return f"""<style>{css_font}{BASE_CSS}
 .c{{position:absolute;top:{MEDIA_Y + MEDIA - 180}px;left:70px;right:70px;height:150px;display:flex;align-items:flex-end;
  justify-content:center;text-align:center}}
@@ -798,7 +798,7 @@ body{{width:1080px;height:1080px;background:#f2f3f5}}
 .tx{{font-size:40px;line-height:1.38;color:#222;font-weight:500;word-break:keep-all;letter-spacing:-.02em}}
 .mt{{margin-top:10px;font-size:28px;color:#9ca3af}}
 .best{{position:absolute;right:0;top:24px;background:#ff4d4f;color:#fff;font-size:24px;font-weight:800;padding:4px 12px;border-radius:8px}}</style>
-<div class="w"><div class="h">댓글 반응 <span>{len(items)}</span></div>{rows}</div>
+<div class="w"><div class="h">{e(raw.get("end_label") or "댓글 반응")} <span>{len(items)}</span></div>{rows}</div>
 <script>window.fit=function(){{const w=document.querySelector('.w');let s=40;
  while(w.scrollHeight>w.clientHeight&&s>26){{s-=2;document.querySelectorAll('.tx').forEach(t=>t.style.fontSize=s+'px');}}}};</script>"""
     png = Path(out).with_suffix(".png")

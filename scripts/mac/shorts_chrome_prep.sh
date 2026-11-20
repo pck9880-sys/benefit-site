@@ -72,8 +72,8 @@ def _clean(c):
     c = re.sub(r"[ㅋㅎㅠㅜ]{2,}|[ㅋㅎㅠㅜ]+$|[~;]+|\^+", " ", c)
     return re.sub(r"\s+", " ", c).strip(" .")
 cm = [_clean(c.get("text", "") if isinstance(c, dict) else str(c)) for c in (p.get("end_comments") or [])]
-cm = [c for c in cm if 2 <= len(c) <= 25][:2]  # 28초 미만 유지: 짧은 댓글 2개만
-outro_lines = (["댓글 반응."] + [c + "." for c in cm] if cm else []) + ([outro] if outro else [])
+cm = [c for c in cm if 2 <= len(c) <= (60 if p.get("end_label") else 25)][:2]  # 28초 미만 유지: 짧은 댓글 2개만
+outro_lines = ([(p.get("end_label") or "댓글 반응") + "."] + [c + "." for c in cm] if cm else []) + ([outro] if outro else [])
 (d / "더빙용" / "대본.txt").write_text("\n".join(body + outro_lines) + "\n", "utf-8")
 (d / "더빙용" / "대본_본문.txt").write_text("\n".join(body) + "\n", "utf-8")
 (d / "더빙용" / "대본_마무리.txt").write_text("\n".join(outro_lines) + "\n", "utf-8")

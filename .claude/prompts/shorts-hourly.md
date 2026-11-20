@@ -17,7 +17,7 @@
      **실제 글자가 적힌 이미지(커뮤니티 캡처·기사 화면·글자 카드)는 쓰지 않는다.** 필요 수(문장 10개 기준): AI 4장, 일본짤 i1~i5.png 5장, 페페 z1~z2.png 2장.
      · 일본짤: `python -m bot.irasutoya <일본어 검색어>` → `python -c "from bot import irasutoya; irasutoya.save('<URL>', 'assets/samples/<slug>/i1.png')"` (i1.png, i2.png …)
        문장 상황에 맞는 것 (예: 驚く, 怒る母, キムチ, 冷蔵庫). 한 작품 20장 이하 규약. 장면마다 다른 그림으로.
-     · 페페짤: ~/쇼츠작업/짤/페페/ 에서 상황에 맞는 것 → z1.png, z2.png (부족하면 WebSearch 로 찾아 curl 로 보관함에 추가, 혐오·정치 상징 금지).
+     · 페페짤: ~/쇼츠작업/짤/페페/ (파일 이름 = 감정: classy_wine·happy_propeller·confused_question·thinking_hmm·silence_dots·laughing·angry·crying·surprised·clapping·sweating·love_heart·sad·smug·teary·shocked) 에서 **그 문장 감정에 딱 맞는 것** → z1.png, z2.png (부족하면 WebSearch 로 찾아 curl 로 보관함에 추가, 혐오·정치 상징 금지).
      · AI 이미지는 **진짜 사진처럼** (스마트폰 실사 느낌, 과장된 상황). 짤과 번갈아 배치(도구가 자동).
    - gpt_images[].prompt: 장면별 영어 프롬프트 (구체적으로, 사람은 가상 인물). 스타일 꼬리·썸네일 문구는 도구가 자동으로 붙인다.
    - 대본 길이: 공백 빼고 **130자 이내** (영상 28초 미만). 문장은 짧게(15자 안팎).
