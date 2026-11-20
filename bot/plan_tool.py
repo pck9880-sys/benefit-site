@@ -380,6 +380,8 @@ def check(slug):
         p["intro_post"] = False  # 첫 장면도 AI 이미지 (글자 카드 없음)
     if not t.get("text_cards", True):  # 중간 기사·댓글 글자 카드 없음 (댓글은 끝 장면에만)
         for b in beats:
+            if b.get("overlay") == "jp":  # 해외 실제 댓글(원문+번역) 카드는 유지 (2026-11-20 사용자 요청)
+                continue
             b["overlay"], b["overlay_text"], b["overlay_source"] = "none", "", ""
     ec = p.get("end_comments") or []
     if kind in SCI:

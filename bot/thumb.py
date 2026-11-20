@@ -62,7 +62,10 @@ def compose(folder):
     if len(cap) > 16:  # 어절 단위로 자르기 (단어 중간 끊김 금지)
         cut = cap[:16].rsplit(" ", 1)[0]
         cap = (cut if len(cut) >= 6 else cap[:15]).rstrip(" ,") + "…"
-    html = f"""<style>{BASE_CSS}
+    from .shorts import font_css
+    tf = raw.get("caption_font") or ""  # plan caption_font(예: Jua 둥근 글씨) 를 썸네일 제목·자막에도
+    tcss = (font_css(tf, f"{tf}-Regular.ttf") + f".t,.c span{{font-family:'{tf}',Pretendard,sans-serif;font-weight:400!important}}") if tf else ""
+    html = f"""<style>{BASE_CSS}{tcss}
 body{{background:#000}}
 .t{{position:absolute;top:110px;left:40px;right:40px;height:{MEDIA_Y - 140}px;display:flex;flex-direction:column;
  justify-content:center;align-items:center;font-weight:900;line-height:1.2;letter-spacing:-.035em}}

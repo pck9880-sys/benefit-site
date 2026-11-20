@@ -44,12 +44,15 @@ class Beat(BaseModel):
     overlay_text: str = Field(default="", description="카드 문구. headline 은 기사 제목 그대로, comment·quote 는 조사 자료에 실제로 "
                                                       "나온 반응·발언만 (지어내기·욕설·특정인 비방 금지). 강조할 부분은 **굵게**")
     overlay_source: str = Field(default="", description="headline 은 언론사명, comment 는 '온라인 커뮤니티' 같은 출처, quote 는 말한 사람·기관")
+    voice: str = Field(default="", description="이 문장만 다른 타입캐스트 캐릭터로 (예: 번역 읽기 '구리'). 비우면 본문 목소리")
+    caption: str = Field(default="", description="화면 자막을 내레이션 대신 이 글로 (예: 번역 카드 장면엔 '일본 유튜브 반응')")
 
 
 class Plan(BaseModel):
     topic: str = Field(description="고른 주제 한 줄")
     title_top: str = Field(description="상단 제목 첫 줄 (흰색), 13자 이내")
     title_bottom: str = Field(description="상단 제목 둘째 줄 (노란색, 궁금증 포인트), 13자 이내")
+    caption_font: str = Field(default="", description="자막·제목 글꼴 고정 (예: 'Jua' 둥근 글씨). 비우면 자막 스타일 기본")
     character: str = Field(description="AI 장면에 계속 나올 주인공(가상 인물)의 생김새 영어 묘사 (나이·성별·옷·분위기). "
                                        "실존 인물을 닮게 만들지 않음 — 실존 인물은 'photo' 장면으로만 보여줌")
     photo_fallbacks: List[str] = Field(description="사진 검색이 안 될 때 쓸 넓은 영어 검색어 2~3개 (예: 'soccer stadium', 'football fans')")
@@ -173,9 +176,11 @@ def title_html(p):
     shade = (f'<div style="position:absolute;left:0;right:0;top:{MEDIA_Y + MEDIA - 420}px;height:420px;'
              f'background:linear-gradient(to bottom,rgba(0,0,0,0),rgba(0,0,0,.55))"></div>'
              if getattr(p, "caption_style", "box") == "epic" else "")  # 자막 뒤를 자연스럽게 어둡게
+    tf = getattr(p, "caption_font", "") or ""
+    tcss = (font_css(tf, f"{tf}-Regular.ttf") + f".t{{font-family:'{tf}',Pretendard,sans-serif;font-weight:400!important}}") if tf else ""
     return shade + f"""<style>{BASE_CSS}
 .t{{position:absolute;top:110px;left:40px;right:40px;height:{MEDIA_Y - 140}px;display:flex;flex-direction:column;
- justify-content:center;align-items:center;font-weight:900;line-height:1.2;letter-spacing:-.035em}}
+ justify-content:center;align-items:center;font-weight:900;line-height:1.2;letter-spacing:-.035em}}{tcss}
 .t div{{white-space:nowrap;font-size:120px}}
 .a{{color:#fff}}.b{{color:#FFE400}}
 .ch{{position:absolute;top:70px;left:0;right:0;text-align:center;font-size:30px;font-weight:700;color:#9ca3af}}</style>
@@ -190,6 +195,7 @@ def title_html(p):
 
 
 _MEME_FONT = None
+CAPTION_FONT = ""  # make_video 에서 plan caption_font 로 설정
 
 
 def meme_font_css():
@@ -256,6 +262,9 @@ def balance_lines(text, max_one=13):
 def mix_caption_html(text, idx=0, impact=False):
     st = MIX_STYLES[idx % len(MIX_STYLES)]
     fam, file = st["font"]
+    if CAPTION_FONT:  # plan caption_font: 모든 자막을 둥근 글씨 등 한 글꼴로 (색·테두리 스타일은 그대로 섞음)
+        fam, file = CAPTION_FONT, f"{CAPTION_FONT}-Regular.ttf"
+        st = dict(st, weight=400)
     css_font = font_css(fam, file) if file else ""
     plain = re.sub(r"\*\*(.+?)\*\*", r"\1", text).strip()
     body = e(balance_lines(plain, 15))
@@ -348,6 +357,19 @@ def overlay_html(kind, text, source, bg_uri):
               f"font-family:Pretendard,sans-serif;word-break:keep-all;overflow:hidden;position:relative}}"
               f".wrap{{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:70px}}"
               f"b{{text-decoration:underline;text-decoration-color:#ff3b30;text-decoration-thickness:6px;text-underline-offset:10px}}</style>")
+    if kind == "jp":  # 일본 실제 댓글: 원문(일본어) 위 + 한국어 번역 아래. overlay_text = "원문||번역", source = "YouTube 댓글|좋아요 12"
+        jp, _, ko = text.partition("||")
+        src_l, _, meta = source.partition("|")
+        col = "#ff0033" if "YouTube" in src_l else "#7b2cbf" if "Yahoo" in src_l else "#111"
+        card = (f'<div style="background:#fff;border-radius:30px;padding:40px 46px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.55)">'
+                f'<div style="display:flex;align-items:center;gap:14px;margin-bottom:22px">'
+                f'<span style="background:{col};color:#fff;font-size:30px;font-weight:800;padding:6px 16px;border-radius:10px">{e(src_l.strip())}</span>'
+                f'<span style="color:#9ca3af;font-size:28px;filter:blur(1.5px)">●●●●●</span>'
+                f'<span style="margin-left:auto;color:#6b7280;font-size:28px;font-weight:700">{e(meta.strip())}</span></div>'
+                f'<div style="font-family:Hiragino Sans,Hiragino Kaku Gothic ProN,sans-serif;font-size:40px;line-height:1.45;color:#222;font-weight:600;word-break:normal;line-break:strict;overflow-wrap:anywhere">{e(jp.strip())}</div>'
+                f'<div style="height:2px;background:#e5e7eb;margin:26px 0"></div>'
+                f'<div style="font-size:50px;line-height:1.38;color:#111;font-weight:900;letter-spacing:-.03em">{_rich(ko.strip())}</div></div>')
+        return common + bg + f'<div class="wrap">{card}</div>'
     if kind == "headline":
         tag = ""
         m = re.match(r"^\s*\[(.+?)\]\s*", text)
@@ -537,6 +559,8 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
                intro_voice=None):
     """media: 문장별 ("video"|"image", 경로) 또는 None(글자 카드). 마지막에 시그니처 마무리 멘트를 붙인다.
     audios 를 미리 만들어 넘기면 그대로 쓴다 (화면 소재와 동시에 만들어 시간 절약)."""
+    global CAPTION_FONT
+    CAPTION_FONT = getattr(p, "caption_font", "") or ""
     from concurrent.futures import ThreadPoolExecutor
     global LAST_BGM, LAST_BGM_CREDIT
     CURRENT_VOICE["name"] = voice_of(p)
@@ -556,7 +580,7 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
         for i, b in enumerate(p.beats):
             audio = audios[i]
             dur = durations[i] if durations else (duration(audio) + 0.05) if audio else max(2.2, len(b.narration) * 0.11)
-            parts = [b.card if (p.caption_style == "box" and getattr(b, "card", "") and
+            parts = [b.caption] if getattr(b, "caption", "") else [b.card if (p.caption_style == "box" and getattr(b, "card", "") and
                                 re.sub(r"\*\*", "", b.card) == re.sub(r"\*\*", "", b.narration)) else b.narration]  # 한 문장 = 한 자막 (끊지 않음)
             total_chars = sum(len(x) for x in parts) or 1
             caps, t = [], 0.0
@@ -576,7 +600,7 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
                 start = prev_vid[1]
             prev_vid = (str(src), start + dur) if kind == "video" else None
             ov = getattr(b, "overlay", "none")
-            if ov in ("headline", "comment", "quote", "score", "steam") and b.overlay_text:  # 기사 제목·여론·발언 카드
+            if ov in ("headline", "comment", "quote", "score", "steam", "jp") and b.overlay_text:  # 기사 제목·여론·발언 카드
                 bg_src = src if kind == "image" else next((m[1] for m in media if m and m[0] == "image"), None)
                 if kind == "video":  # 영상 장면이면 그 장면의 한 프레임을 흐린 배경으로
                     fr = work / f"ovfr{i}.jpg"

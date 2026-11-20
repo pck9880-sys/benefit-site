@@ -75,7 +75,9 @@ cm = [_clean(c.get("text", "") if isinstance(c, dict) else str(c)) for c in (p.g
 cm = [c for c in cm if 2 <= len(c) <= (60 if p.get("end_label") else 25)][:int(p.get("outro_read", 2))]  # 28초 미만 유지: 짧은 댓글 2개만 (plan outro_read 로 줄임)
 outro_lines = ([(p.get("end_label") or "댓글 반응") + "."] + [c + "." for c in cm] if cm else []) + ([outro] if outro else [])
 (d / "더빙용" / "대본.txt").write_text("\n".join(body + outro_lines) + "\n", "utf-8")
-(d / "더빙용" / "대본_본문.txt").write_text("\n".join(body) + "\n", "utf-8")
+# 문장별 다른 목소리(beat "voice", 예: 번역 읽기 '구리') → 본문 대본 줄 앞에 [이름] 표시 (크롬 Claude 가 그 줄만 그 캐릭터로)
+body_tagged = [(f"[{b['voice']}] " if b.get("voice") else "") + re.sub(r"\*\*", "", b["narration"]) for b in p["beats"] if not b.get("orig_audio")]
+(d / "더빙용" / "대본_본문.txt").write_text("\n".join(body_tagged) + "\n", "utf-8")
 (d / "더빙용" / "대본_마무리.txt").write_text("\n".join(outro_lines) + "\n", "utf-8")
 p["outro_spoken"] = " ".join(outro_lines)  # 합성 때 문장 경계 계산용 (자막은 마무리 멘트만)
 (src / "plan.json").write_text(json.dumps(p, ensure_ascii=False, indent=1), "utf-8")
