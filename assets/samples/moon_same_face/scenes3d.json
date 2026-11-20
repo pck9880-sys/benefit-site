@@ -1,0 +1,52 @@
+{
+ "clip_face.mp4": {
+  "type": "moon_face",
+  "seconds": 6,
+  "label": "늘 보이는 달의 앞면"
+ },
+ "clip_norot.mp4": {
+  "type": "moon_lock",
+  "locked": false,
+  "seconds": 6,
+  "label": "자전 안 하면 면이 바뀜"
+ },
+ "clip_lock.mp4": {
+  "type": "moon_lock",
+  "locked": true,
+  "seconds": 9,
+  "label": "늘 같은 면이 지구를 봄"
+ },
+ "clip_far.mp4": {
+  "type": "moon_far",
+  "seconds": 5,
+  "label": "지구에선 못 보는 뒷면"
+ },
+ "clip_an_un.mp4": {
+  "type": "analogy",
+  "locked": false,
+  "seconds": 5,
+  "label": "안 돌면 등을 보이게 됨"
+ },
+ "clip_an_lock.mp4": {
+  "type": "analogy",
+  "locked": true,
+  "seconds": 10,
+  "label": "보면서 돌면 몸도 한 바퀴"
+ },
+ "clip_dial.mp4": {
+  "type": "two_dials",
+  "seconds": 2.6,
+  "days": 27.3,
+  "left": "공전",
+  "right": "자전"
+ },
+ "clip_pb.mp4": {
+  "type": "moon_pullback",
+  "seconds": 10,
+  "label": "늘 이 면만 지구 쪽"
+ },
+ "clip_stars.mp4": {
+  "type": "starfield",
+  "seconds": 1
+ }
+}

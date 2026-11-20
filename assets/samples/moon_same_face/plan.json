@@ -1,0 +1,175 @@
+{
+ "topic": "달은 왜 항상 같은 면만 보일까 (조석 고정)",
+ "mood": "기본",
+ "kind": "과학",
+ "title_top": "달은 왜 늘",
+ "title_bottom": "같은 면만 보일까",
+ "intro_post": false,
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "caption_style": "box",
+ "beats": [
+  {
+   "narration": "달은 늘 똑같은 얼굴만 보여줍니다",
+   "card": "달은 늘 똑같은 얼굴만 보여줍니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "뒷면은 지구에서 볼 수가 없죠",
+   "card": "뒷면은 지구에서 볼 수가 없죠",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "자전을 안 하면 이렇게 면이 바뀌어야 하는데요",
+   "card": "자전을 안 하면 이렇게 면이 바뀌어야 하는데요",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "이 이상한 달 때문에 미쳐서 공중제비를 돌아버립니다",
+   "card": "이 이상한 달 때문에 미쳐서 공중제비를 돌아버립니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "비밀은 '조석 고정'입니다",
+   "card": "비밀은 '조석 고정'입니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "달은 지구를 한 바퀴 돌 때 자기도 한 바퀴 돕니다",
+   "card": "달은 지구를 한 바퀴 돌 때 자기도 한 바퀴 돕니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "둘 다 약 27.3일로 똑같습니다",
+   "card": "둘 다 약 27.3일로 똑같습니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "그래서 늘 같은 면이 지구를 향하죠",
+   "card": "그래서 늘 같은 면이 지구를 향하죠",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "question": "",
+ "outro": "지구 중력이 달을 붙잡아서, 그 덕분에 같은 면만 보이게 된 겁니다. 정말 신기하죠?",
+ "outro_custom": true,
+ "media": [
+  {
+   "video": "clip_face.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_far.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_an_un.mp4",
+   "start": 0
+  },
+  {
+   "flip": "astronaut.png",
+   "bg": "stars_bg.jpg"
+  },
+  {
+   "video": "clip_an_lock.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_an_lock.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_dial.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_pb.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_pb.mp4",
+   "start": 0
+  }
+ ],
+ "gpt_images": [],
+ "end_comments": false,
+ "yt_title": "달 뒷면이 안 보이는 진짜 이유 #shorts",
+ "description": "달은 늘 같은 면만 지구를 향합니다. 비밀은 '조석 고정' — 달이 지구를 한 바퀴 도는 시간과 스스로 한 바퀴 도는 시간이 약 27.3일로 같기 때문입니다.\n(실제로는 '칭동' 때문에 지구에서 달 표면의 약 59%까지 볼 수 있습니다.)\n\n참고: NASA 'Tidal Locking', Space.com 'Does the moon rotate?', BBC Sky at Night 'Why we always see the same side of the Moon'\n이미지: NASA SVS CGI Moon Kit · NASA Visible Earth (퍼블릭 도메인) · 일러스트 いらすとや\n\n※ 숫자는 공식 자료·공식 계산으로 확인한 값입니다.",
+ "tags": [
+  "달",
+  "조석고정",
+  "우주",
+  "과학",
+  "천문",
+  "상식",
+  "쇼츠",
+  "원리"
+ ],
+ "sources": [
+  "https://science.nasa.gov/moon/tidal-locking/",
+  "https://www.space.com/24871-does-the-moon-rotate.html",
+  "https://skyatnightmagazine.com/space-science/why-always-see-same-side-moon"
+ ],
+ "pin_comment": "달 뒷면, 한 번이라도 보고 싶지 않나요? 🌕",
+ "thumb_caption": "뒷면은 못 봄",
+ "credits": [
+  "달 텍스처: NASA SVS CGI Moon Kit (Public domain)",
+  "3D: three.js (MIT)",
+  "우주비행사 일러스트: いらすとや"
+ ],
+ "music_concept": "잔잔한 과학",
+ "voices": [
+  "필재",
+  "필재"
+ ],
+ "outro_spoken": "지구 중력이 달을 붙잡아서, 그 덕분에 같은 면만 보이게 된 겁니다. 정말 신기하죠?"
+}

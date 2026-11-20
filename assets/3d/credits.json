@@ -1,1 +1,5 @@
-{"earth_nasa_land_ocean_ice_2048.jpg": "NASA Visible Earth, Land Ocean Ice 2048 (Public domain) https://commons.wikimedia.org/wiki/File:Land_ocean_ice_2048.jpg", "three.min.js": "three.js r128 (MIT) https://threejs.org"}
+{
+ "earth_nasa_land_ocean_ice_2048.jpg": "NASA Visible Earth, Land Ocean Ice 2048 (Public domain) https://commons.wikimedia.org/wiki/File:Land_ocean_ice_2048.jpg",
+ "three.min.js": "three.js r128 (MIT) https://threejs.org",
+ "moon_nasa_lroc_1k.jpg": "NASA SVS CGI Moon Kit, LROC color 1k (Public domain) https://svs.gsfc.nasa.gov/4720"
+}

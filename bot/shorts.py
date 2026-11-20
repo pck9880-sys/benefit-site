@@ -552,6 +552,7 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
     with Renderer() as r:
         title = r.png(title_html(p), work / "title.png")
         run_frames = 0  # 같은 사진이 이어지는 동안 확대를 끊김 없이 이어 가기 (화면 전환 줄이기)
+        prev_vid = None
         for i, b in enumerate(p.beats):
             audio = audios[i]
             dur = durations[i] if durations else (duration(audio) + 0.05) if audio else max(2.2, len(b.narration) * 0.11)
@@ -570,6 +571,10 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
             mi = media[i] if i < len(media) and media[i] else (None, None)
             kind, src = mi[0], mi[1]
             start = mi[2] if len(mi) > 2 else 0.0  # CC 영상은 구간 시작점
+            # 같은 영상이 바로 앞 장면에서 이어지면, 앞 장면이 끝난 지점부터 그대로 (화면 튐 방지, 2026-11-20)
+            if kind == "video" and i > 0 and prev_vid and prev_vid[0] == str(src) and not keep_audio:
+                start = prev_vid[1]
+            prev_vid = (str(src), start + dur) if kind == "video" else None
             ov = getattr(b, "overlay", "none")
             if ov in ("headline", "comment", "quote", "score", "steam") and b.overlay_text:  # 기사 제목·여론·발언 카드
                 bg_src = src if kind == "image" else next((m[1] for m in media if m and m[0] == "image"), None)

@@ -7,8 +7,11 @@
   ③ 해결: 전문 용어 1~2개 쉬운 말로 ④ 원리(숫자·용어 정확히)
   ⑤ 결론은 outro 에: "**~해서 ~덕분에 ~된 겁니다**" — 도구가 뒤에 "정말 신기하죠?" 를 자동으로 붙인다(직접 쓰지 않아도 됨).
 - 화면 (media 를 문장 수만큼 직접 지정, 화면 전환 적게):
-  · 3D 장면: `python -m bot.scene3d <장면.json> assets/samples/<slug>/clip_*.mp4` — 쓸 수 있는 type: globe_route(지구본 위 두 지점 항로),
-    map_compare(평면 지도 직선 vs 곡선 + 숫자 라벨), orbit_plane(비행기 클로즈업). 주제에 맞는 것만. 장면 설정은 scenes3d.json 에 저장.
+  · 3D 장면: `python -m bot.scene3d <장면.json> assets/samples/<slug>/clip_*.mp4` — type: globe_route, map_compare, orbit_plane,
+    moon_face(달 앞면), moon_far(달 뒷면 보이기), moon_lock(달 공전), moon_pullback(달에서 멀어지기), analogy(가운데를 보며 도는 사람 비유),
+    two_dials(두 주기 비교 숫자 카운트, seconds 는 그 문장 길이에 맞게 2~3초), starfield(공중제비 배경용). 장면 설정은 scenes3d.json 에.
+  · **같은 그림·클립 재탕 금지**(한 편 안에서 장면마다 다른 화면, 이전 편 장면 재사용 금지). 주제와 상관없는 지구본 끼워 넣기 금지.
+  · 같은 클립을 두 문장에 이어 쓰면 자동으로 끊김 없이 이어짐(start 는 0 으로 둬도 됨).
     같은 클립을 이어 쓸 땐 {"video": "clip.mp4", "start": 초}, 클립보다 긴 장면은 마지막 프레임 이미지(`ffmpeg -sseof -0.1 -i clip.mp4 -frames:v 1 x.jpg`).
   · 3D 로 표현하기 어려운 장면은 gpt_images(극사실, 글자 없음) 1~2장.
   · 공중제비: {"flip": "<いらすとや 주인공>.png", "bg": "<배경 jpg>"} — 주제에 맞는 いらすとや 인물(`python -m bot.irasutoya <일본어>`).
