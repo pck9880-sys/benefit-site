@@ -80,7 +80,7 @@ outro_lines = ([(p.get("end_label") or "댓글 반응") + "."] + [c + "." for c 
 p["outro_spoken"] = " ".join(outro_lines)  # 합성 때 문장 경계 계산용 (자막은 마무리 멘트만)
 (src / "plan.json").write_text(json.dumps(p, ensure_ascii=False, indent=1), "utf-8")
 # 목소리 고정 (2026-11-20): 본문 = 제롬(모든 종류), 마무리 댓글 반응 읽기 = 구리
-vm, vo = "제롬", "구리"
+vm, vo = (p.get("voices") or ["제롬", "구리"])[:2]  # plan "voices" 로 편마다 바꿀 수 있음 (예: 김기장)
 info["voices"] = [vm, vo]
 info_f.write_text(json.dumps(info, ensure_ascii=False, indent=1), "utf-8")
 (d / "voices").write_text(f"{vm} {vo}", "utf-8")
