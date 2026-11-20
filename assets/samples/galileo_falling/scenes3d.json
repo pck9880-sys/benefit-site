@@ -1,0 +1,40 @@
+{
+ "clip_tower.mp4": {
+  "type": "tower",
+  "seconds": 4,
+  "label": "무거운 공 vs 가벼운 공"
+ },
+ "clip_ancient.mp4": {
+  "type": "ancient",
+  "seconds": 4,
+  "label": "옛 상식: 무거울수록 빨리"
+ },
+ "clip_think.mp4": {
+  "type": "galileo",
+  "mode": "think",
+  "seconds": 4,
+  "label": "정말 그럴까?"
+ },
+ "clip_flip.mp4": {
+  "type": "galileo",
+  "mode": "flip",
+  "seconds": 4
+ },
+ "clip_incline.mp4": {
+  "type": "incline",
+  "seconds": 4,
+  "label": "경사면 실험"
+ },
+ "clip_vacuum.mp4": {
+  "type": "vacuum",
+  "seconds": 4,
+  "label": "공기가 없으면 → 동시에"
+ },
+ "clip_moon.mp4": {
+  "type": "moon_drop",
+  "seconds": 13,
+  "label": "1971년 · 아폴로 15호 · 달",
+  "label2": "동시에 착지!",
+  "drop": 3.1
+ }
+}
