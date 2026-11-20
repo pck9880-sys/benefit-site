@@ -1073,6 +1073,21 @@ def render_mixed(p, raw, d, media, work, voice):
     return make_video(p, media, work, durations=durs, keep_audio="mixed", voice_track=track, bgm_spec=spec)
 
 
+def make_flip(bg, char, out, seconds=6.0, period=1.3, flips=1):
+    """'공중제비' 장면: 배경 위에서 주인공(투명 PNG)이 점프하며 360도 회전 (반복). 영상 파일로 만들어 장면에 씀."""
+    spin = 0.9  # 회전에 걸리는 시간 (나머지는 착지 후 잠깐 멈춤)
+    ph = f"mod(t,{period})"
+    ang = f"if(lt({ph},{spin}),{flips}*2*PI*{ph}/{spin},0)"
+    jump = f"if(lt({ph},{spin}),420*sin(PI*{ph}/{spin}),0)"
+    ff("-loop", "1", "-t", f"{seconds}", "-i", bg, "-loop", "1", "-t", f"{seconds}", "-i", char, "-filter_complex",
+       f"[0:v]scale={MEDIA}:{MEDIA}:force_original_aspect_ratio=increase,crop={MEDIA}:{MEDIA},setsar=1,fps=30[b];"
+       f"[1:v]scale=560:560:force_original_aspect_ratio=decrease,format=rgba,"
+       f"pad=800:800:(ow-iw)/2:(oh-ih)/2:color=black@0,rotate='{ang}':c=none:ow=800:oh=800[c];"
+       f"[b][c]overlay=x=(W-w)/2:y='(H-h)/2+140-{jump}':eval=frame,format=yuv420p[v]",
+       "-map", "[v]", "-t", f"{seconds}", "-r", "30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", out)
+    return out
+
+
 def render_sample(folder):
     """assets/samples/<이름>/plan.json + img0.jpg… 로 영상만 만들어 텔레그램으로 보냄 (업로드 안 함)."""
     import json
@@ -1081,8 +1096,10 @@ def render_sample(folder):
     raw = json.loads((d / "plan.json").read_text("utf-8"))
     p = Plan(**raw)
     if raw.get("media"):  # 장면별 소재 지정: {"video": "clip0.mp4", "start": 0} / {"image": "img3.jpg"}
-        media = [("video", d / m["video"], float(m.get("start", 0))) if "video" in m
-                 else ("zzal", d / m["zzal"]) if "zzal" in m else ("image", d / m["image"]) for m in raw["media"]]
+        flips = Path(tempfile.mkdtemp(prefix="flip-"))
+        media = [("video", make_flip(d / m["bg"], d / m["flip"], flips / f"flip{i}.mp4"), 0.0) if "flip" in m  # 공중제비
+                 else ("video", d / m["video"], float(m.get("start", 0))) if "video" in m
+                 else ("zzal", d / m["zzal"]) if "zzal" in m else ("image", d / m["image"]) for i, m in enumerate(raw["media"])]
     else:  # imgN.jpg (AI·사진) 또는 zN.png (짤: 이라스토야 등 일러스트)
         media = [("zzal", z) if (z := d / f"z{i}.png").exists() else ("image", f) if (f := d / f"img{i}.jpg").exists()
                  else None for i in range(len(p.beats))]
