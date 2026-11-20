@@ -275,7 +275,7 @@ def check(slug):
             errs.append(f"gpt_images {g['file']} 프롬프트 비어 있음")
         elif "no text" not in g["prompt"].lower():
             g["prompt"] = g["prompt"].rstrip(". ") + ". " + t["image_style"]
-    if t["thumb_ai"]:
+    if t["thumb_ai"] and not p.get("thumb_locked"):   # thumb_locked: 직접 만든 thumb_src.jpg 유지
         from . import thumb
         gi.append({"file": "thumb_src.jpg", "prompt": thumb.prompt(p)})
         if not p.get("thumb_caption"):
@@ -298,7 +298,7 @@ def check(slug):
     ok = p.get("media") and len(p["media"]) >= len(beats) and all(
         (d / (m.get("image") or m.get("zzal") or m.get("video", ""))).exists()
         or (m.get("image") in pending) for m in p["media"])
-    if not ok:
+    if not ok and not p.get("media_locked"):   # media_locked: 사용자 짤로 직접 짠 장면 순서 유지
         p["media"] = _layout(p, d, t)
         notes.append("장면 배치를 템플릿 순서로 채움")
     # 감동: 마지막 장면(댓글 직전)은 원문에 실린 실제 사진 = 인증 (2026-11-20 사용자 요청)
@@ -342,7 +342,9 @@ def check(slug):
     used = lambda pat: sum(1 for m in p["media"] if re.match(pat, m.get("image") or m.get("zzal") or ""))
     n_ai = sum(1 for m in p["media"] if m.get("image") in ai_names)
     n_real, n_ira, n_zz = used(r"^[rs]\d+\.jpg$"), used(r"^i\d+\.png$"), used(r"^z\d+\.png$")
-    if kind == "과학실사":  # 실제 사진 3장+ · AI 2장+ · 3D 공중제비
+    if p.get("media_locked"):
+        notes.append("장면 직접 지정(media_locked) — 구성 개수 검사 생략")
+    elif kind == "과학실사":  # 실제 사진 3장+ · AI 2장+ · 3D 공중제비
         if n_real < t["real_photos"]["min"]:
             errs.append(f"과학실사: 실제 사진 {n_real}장 (최소 {t['real_photos']['min']})")
         if n_ai < t.get("ai_images", 1):

@@ -1,0 +1,189 @@
+{
+ "topic": "북한판 챗GPT '지혜의 샘 1.0' 공개 — 사회정치 질문 금지 경고문",
+ "mood": "기본",
+ "kind": "이슈",
+ "title_top": "북한판 챗GPT 근황",
+ "title_bottom": "정치 질문 금지ㅋㅋ",
+ "thumb_caption": "질문 잘못하면 책임짐",
+ "caption_style": "mix",
+ "beats": [
+  {
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "북한도 챗GPT를 만들었다는데",
+   "card": "북한도 챗GPT를 만들었다는데"
+  },
+  {
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "이름이 '지혜의 샘 1.0'이래",
+   "card": "이름이 '지혜의 샘 1.0'이래"
+  },
+  {
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "김일성종합대학이 만들었고",
+   "card": "김일성종합대학이 만들었고"
+  },
+  {
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "과학 질문엔 척척 답함",
+   "card": "과학 질문엔 척척 답함"
+  },
+  {
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "근데 화면 아래 경고문이 압권ㅋㅋ",
+   "card": "근데 화면 아래 경고문이 압권ㅋㅋ"
+  },
+  {
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "\"사회정치적 질문은 제기하지 말 것\"",
+   "card": "\"사회정치적 질문은 제기하지 말 것\""
+  },
+  {
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "후과는 전적으로 본인 책임이라고",
+   "card": "후과는 전적으로 본인 책임이라고"
+  },
+  {
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "두뇌는 구글·알리바바 모델일 거라는 분석",
+   "card": "두뇌는 구글·알리바바 모델일 거라는 분석"
+  },
+  {
+   "twist": false,
+   "visual": "ai",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "AI한테도 입조심부터 가르친 셈",
+   "card": "AI한테도 입조심부터 가르친 셈"
+  }
+ ],
+ "media": [
+  {
+   "image": "s1.jpg"
+  },
+  {
+   "image": "s2.jpg"
+  },
+  {
+   "image": "s3.jpg"
+  },
+  {
+   "image": "img4.jpg"
+  },
+  {
+   "image": "s5.jpg"
+  },
+  {
+   "image": "s6.jpg"
+  },
+  {
+   "image": "s7.jpg"
+  },
+  {
+   "image": "s8.jpg"
+  },
+  {
+   "image": "s9.jpg"
+  }
+ ],
+ "gpt_images": [
+  {
+   "file": "img4.jpg",
+   "prompt": "Photorealistic wide photo of an empty, tidy university computer lab: rows of older beige desktop computers on long wooden desks, each monitor showing a plain blue chat interface with blurred unreadable lines, grey curtains, cold fluorescent ceiling lights, no people at all, documentary style. No people, no faces, no text, no letters, no logos, no watermark"
+  }
+ ],
+ "yt_title": "북한판 챗GPT 경고문 수준ㅋㅋ #shorts",
+ "sources": [
+  "https://ichannela.com/news/detail/000000560868.do",
+  "https://www.38north.org/2026/11/north-korea-shows-off-an-ai-chatbot/"
+ ],
+ "intro_post": false,
+ "media_locked": true,
+ "thumb_locked": true,
+ "voices": [
+  "제롬",
+  "구리"
+ ],
+ "end_label": "기사 댓글",
+ "end_comments": [
+  {
+   "text": "그러니까 순수히 이공계 보조용이라는거네"
+  },
+  {
+   "text": "보여주기식이라도 남들 하는건 다 해보고싶은가부네..."
+  },
+  {
+   "text": "그냥 중국산 AI에 북한식 한국말 패치해서 자기들 것인양 쓰는 거더만~"
+  }
+ ],
+ "description": "북한 김일성종합대학 인공지능기술연구소와 평양 소프트웨어 업체 푸른하늘무역회사가 만든 챗봇 '인공지능봉사체계 1.0 지혜의 샘'이 공개됐음. 한국어·영어로 과학기술 질문에 답하고 번역도 하지만, 화면 아래엔 \"사회정치적인 내용의 질문을 하지 말아야 한다\"는 경고문이 붙어 있음. 미국 북한 전문 매체 38노스는 챗봇의 두뇌가 구글 젬마·알리바바 큐웬 같은 해외 모델일 가능성이 높다고 분석함.\n\n출처: 채널A(2026-11-20), 38 North 'North Korea Shows Off an AI Chatbot', 로이터\n댓글: 네이버 뉴스 실제 댓글(연합뉴스·채널A·KBS 관련 기사)\n썸네일 로고는 패러디 합성이며 OpenAI와 무관함.\n\n※ 장면 일부는 AI로 만든 이미지임.",
+ "tags": [
+  "북한",
+  "챗GPT",
+  "지혜의샘",
+  "AI",
+  "이슈",
+  "뉴스",
+  "핫이슈",
+  "쇼츠",
+  "요즘"
+ ],
+ "pin_comment": "북한판 챗GPT한테 제일 먼저 뭐 물어보고 싶음? 🤔",
+ "music_concept": "긴장감 이슈",
+ "question": "",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "outro_spoken": "기사 댓글. 그러니까 순수히 이공계 보조용이라는거네. 님들 생각은 어떰?",
+ "outro_read": 1
+}
