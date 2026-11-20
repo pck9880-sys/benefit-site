@@ -1,0 +1,172 @@
+{
+ "topic": "푸코: 지구가 도는 걸 눈으로 보여 준 진자 (1851년 판테온)",
+ "title_top": "땅이 도는 걸",
+ "title_bottom": "눈으로 봄",
+ "mood": "기본",
+ "kind": "과학",
+ "caption_style": "box",
+ "music_concept": "잔잔한 과학",
+ "question": "",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "intro_post": false,
+ "beats": [
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "지구가 돈다면 왜 못 느낄까요?",
+   "card": "지구가 돈다면 왜 못 느낄까요?"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "옛날엔 땅은 멈춰 있다고 봤죠",
+   "card": "옛날엔 땅은 멈춰 있다고 봤죠"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "푸코는 증거를 보고 싶었습니다",
+   "card": "푸코는 증거를 보고 싶었습니다"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "이것 때문에 미쳐서 공중제비를 돌아버립니다",
+   "card": "이것 때문에 미쳐서 공중제비를 돌아버립니다"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "67m 줄에 무거운 추를 달았죠",
+   "card": "67m 줄에 무거운 추를 달았죠"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "진자는 흔들리던 방향을 지키죠",
+   "card": "진자는 흔들리던 방향을 지키죠"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "그런데 그 아래 땅이 돌아갑니다",
+   "card": "그런데 그 아래 땅이 돌아갑니다"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "파리에선 시간당 약 11도씩 돌았죠",
+   "card": "파리에선 시간당 약 11도씩 돌았죠"
+  }
+ ],
+ "outro": "진자는 그대로인데 땅이 돌아서, 그 덕분에 지구 자전을 눈으로 본 겁니다. 정말 신기하죠?",
+ "media": [
+  {
+   "video": "clip_hook.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_old.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_think.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_flip.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_exp.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_why.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_proof.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_proof.mp4",
+   "start": 0
+  }
+ ],
+ "gpt_images": [],
+ "thumb_caption": "지구가 돈다는 증거",
+ "end_comments": false,
+ "yt_title": "지구가 도는 걸 눈으로 본 방법, 푸코 진자 #shorts",
+ "description": "1851년, 프랑스 물리학자 레옹 푸코는 파리 판테온 돔 아래에 약 67m 길이의 줄로 약 28kg짜리 추를 매달아 흔들었습니다.\n진자는 한번 흔들리기 시작하면 흔들리는 방향(진동면)을 그대로 지키려 합니다. 그런데 몇 시간이 지나자 바닥에서 보기엔 진동면이 시계 방향으로 조금씩 돌아갔습니다. 진자가 돈 게 아니라, 그 아래의 땅(지구)이 돈 것입니다. 지구가 자전한다는 것을 하늘을 보지 않고 땅 위 실험만으로 보여 준 유명한 증명입니다.\n\n계산 방법: 진동면이 도는 빠르기 = 지구 자전 빠르기(약 15°/시간, 항성일 23.93시간) × sin(위도).\n파리(북위 약 48.85°)는 sin ≈ 0.75 → 약 11.3°/시간, 한 바퀴(360°)에 약 31.8시간(≈32시간). 북극에선 약 24시간, 적도에선 돌지 않습니다.\n※ 실제 진자는 줄의 흔들림·공기 저항 때문에 오차가 생기며, 영상 속 시간은 빨리 감은 것입니다. 추 재질은 자료마다 표현이 조금씩 다릅니다(납을 채운 놋쇠 추 등).\n참고: Britannica 'Foucault pendulum' / APS News 'February 3, 1851: Léon Foucault Demonstrates That Earth Rotates' / UNSW Physics 'Precession of a Foucault pendulum'\n※ 캐릭터는 푸코를 본뜬 만화풍 3D 캐릭터, 장면은 모두 직접 만든 3D입니다.\n\n※ 숫자는 공식 자료·공식 계산으로 확인한 값입니다.",
+ "tags": [
+  "푸코",
+  "푸코진자",
+  "지구자전",
+  "진자",
+  "판테온",
+  "과학",
+  "물리",
+  "쇼츠",
+  "상식",
+  "원리"
+ ],
+ "sources": [
+  "https://www.britannica.com/science/Foucault-pendulum",
+  "https://aps.org/apsnews/2007/02/foucault-earth-rotates",
+  "https://animations.physics.unsw.edu.au/jw/pendulumdetails.html"
+ ],
+ "pin_comment": "과학관에서 푸코 진자 본 적 있으세요? 서울(북위 약 37.6°)에선 한 바퀴에 약 39시간 걸린답니다 🌍",
+ "voices": [
+  "필재",
+  "필재"
+ ],
+ "outro_custom": true,
+ "outro_spoken": "진자는 그대로인데 땅이 돌아서, 그 덕분에 지구 자전을 눈으로 본 겁니다. 정말 신기하죠?",
+ "credits": [
+  "3D: three.js (MIT) — 직접 만든 장면·캐릭터",
+  "기법 참고: claude-animation-skills (MIT)"
+ ]
+}

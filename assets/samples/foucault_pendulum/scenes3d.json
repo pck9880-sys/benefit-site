@@ -1,0 +1,9 @@
+{
+ "clip_hook.mp4": {"type": "spin_hook", "seconds": 4, "label": "지구는 도는데 왜 몰라?"},
+ "clip_old.mp4": {"type": "sky_old", "seconds": 4, "label": "옛 상식: 땅은 가만히", "tag": "하늘이 돈다?"},
+ "clip_think.mp4": {"type": "foucault", "mode": "think", "seconds": 4, "label": "눈으로 볼 순 없을까?"},
+ "clip_flip.mp4": {"type": "foucault", "mode": "flip", "seconds": 4},
+ "clip_exp.mp4": {"type": "pantheon", "seconds": 4, "label": "1851년 · 파리 판테온", "tag": "줄 67m", "tag2": "추 28kg"},
+ "clip_why.mp4": {"type": "swing_plane", "seconds": 4, "label": "받침이 돌아도 그대로", "tag": "흔들리는 방향 유지"},
+ "clip_proof.mp4": {"type": "fou_proof", "seconds": 13, "label": "그 아래 땅이 돈다", "label2": "파리: 시간당 약 11°", "drop": 3.0}
+}

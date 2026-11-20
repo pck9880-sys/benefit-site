@@ -275,3 +275,21 @@ PSG에서 트로피만 12개 들었다고 함
 햇빛 속 색이 저마다 다르게 꺾여서, 그 덕분에 무지개가 생긴 겁니다. 정말 신기하죠?
 ```
 - 참고: Oxford History of Science Museum 'Newton's prism experiment', Princeton 'Experimentum Crucis', UNSW Physics, WMO 국제구름도감 'Primary rainbow', The Physics Classroom. 일곱 색 구분은 뉴턴이 정한 것(설명란 표기), 각도는 자료마다 40.6~42.4°.
+
+
+## 15. foucault_pendulum — [과학] 땅이 도는 걸 / 눈으로 봄
+- 만든 시각: 2026-11-21 (KST) · 종류: 과학 · 핵심: 1851년 푸코가 판테온 돔 아래 67m 줄·28kg 추 진자를 흔듦 → 진자는 흔들림 방향을 지키는데 바닥 기준으로 방향이 돌아감 = 땅(지구)이 돈다는 증거. 파리(북위 약 49°)에서 시간당 약 11.3°, 약 32시간에 한 바퀴(15°/시간 × sin 위도)
+- 화면: 3D 7종(scene3d_pro 새 type: spin_hook·sky_old·foucault think/flip·pantheon·swing_plane·fou_proof 13초) · 썸네일 원본 thumb_src.jpg(증명 클립 프레임) · 더빙 필재
+- 녹음 대본:
+```
+지구가 돈다면 왜 못 느낄까요?
+옛날엔 땅은 멈춰 있다고 봤죠
+푸코는 증거를 보고 싶었습니다
+이것 때문에 미쳐서 공중제비를 돌아버립니다
+67m 줄에 무거운 추를 달았죠
+진자는 흔들리던 방향을 지키죠
+그런데 그 아래 땅이 돌아갑니다
+파리에선 시간당 약 11도씩 돌았죠
+진자는 그대로인데 땅이 돌아서, 그 덕분에 지구 자전을 눈으로 본 겁니다. 정말 신기하죠?
+```
+- 참고: Britannica 'Foucault pendulum', APS News(2007-02) 'Foucault Demonstrates That Earth Rotates', UNSW Physics. 영상 속 시간은 빨리 감기(설명란 표기), 추 재질 표현은 자료마다 다름.
