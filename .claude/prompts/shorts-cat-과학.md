@@ -19,3 +19,5 @@
   · **과학엔 일본짤(いらすとや) 안 씀** (2026-11-20). 공중제비는 3D 캐릭터(scientist flip 등)로.
 - 더빙은 **필재 고정**(도구가 자동). 반응 댓글 카드 없음. 웍스엔 제목만 보낸다.
 - yt_title, description(출처·계산 방법·이미지 출처), tags, sources, pin_comment, credits.
+
+- **애니메이션 키트 참고**(2026-11-20): `.claude/skills/shorts/animation-kit.md` 를 읽고 장면을 고른다 — 수치=graph식 카운트업, 구조=breakdown식 분해도+지시선, 우주=플랫 우주풍, 캐릭터=zach식 만화 얼굴(눈꺼풀·입 표정)+피사계심도+비네트·그레인. 렌더 전 스틸 확인.

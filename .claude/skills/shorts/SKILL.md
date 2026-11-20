@@ -240,3 +240,5 @@ gh workflow run shorts-upload.yml --ref main -f folder=assets/samples/<slug> \
   - media 에 `{"video":"clip_map.mp4","start":3.0}` 처럼 이어서 쓰고, 클립 길이를 넘는 장면은 마지막 프레임 이미지(`ffmpeg -sseof -0.1`)로.
   - 지구 텍스처: assets/3d/earth_nasa_land_ocean_ice_2048.jpg (NASA, 퍼블릭 도메인), three.js MIT — 출처 assets/3d/credits.json, plan.json "credits".
   - 예시: `assets/samples/great_circle_icn_nyc/` (scenes3d.json 에 장면 설정).
+
+- 3D·애니메이션 기법 모음: `animation-kit.md` (graph·map-route·breakdown·만화 캐릭터 등 11개 스킬 정리)
