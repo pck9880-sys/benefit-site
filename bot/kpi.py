@@ -75,8 +75,24 @@ def report(st):
     return "\n".join(lines)
 
 
+ADSENSE_MIN_POSTS = 35  # 글이 이만큼 쌓이면 애드센스 신청 알림 (한 번만)
+
+
+def adsense_alert(st, notify):
+    n = len(list(config.POSTS_DIR.glob("*.json")))
+    if n < ADSENSE_MIN_POSTS or st.get("adsense_alert_sent") or not st.get("owner_chat_id"):
+        return
+    notify(st, f"💰 혜택 사이트 글이 {n}개가 됐어요! 이제 구글 애드센스를 신청할 때예요.\n"
+               f"1) adsense.google.com 접속 → 본인 구글 계정으로 시작\n"
+               f"2) 사이트 주소: {config.SITE_URL}\n"
+               f"3) 받은 확인 코드(ca-pub-…)를 Claude 작업방에 알려주면 사이트에 넣어드려요\n"
+               f"(개인정보처리방침·소개·문의 페이지는 이미 있어요)")
+    st["adsense_alert_sent"] = True
+
+
 def run(st, notify):
     """매일 저녁 9시에 한 번 자동 전송."""
+    adsense_alert(st, notify)
     t = now()
     if t.hour >= REPORT_HOUR_KST and st.get("kpi_last_date") != t.strftime("%Y-%m-%d") and st.get("owner_chat_id"):
         notify(st, report(st))
