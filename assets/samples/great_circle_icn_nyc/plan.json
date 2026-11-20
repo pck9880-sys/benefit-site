@@ -1,0 +1,179 @@
+{
+ "topic": "비행기는 왜 휘어서 날까? 대권항로 (인천→뉴욕)",
+ "mood": "기본",
+ "kind": "정보",
+ "title_top": "비행기는 왜",
+ "title_bottom": "휘어서 날까?",
+ "intro_post": false,
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "caption_style": "box",
+ "beats": [
+  {
+   "narration": "지도로 보면 인천에서 뉴욕은 오른쪽 직선입니다",
+   "card": "지도로 보면 인천에서 뉴욕은 오른쪽 직선입니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "그런데 비행기는 북쪽으로 크게 휘어서 갑니다",
+   "card": "그런데 비행기는 북쪽으로 크게 휘어서 갑니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "괜히 돌아가는 것 같아 늘 답답했습니다",
+   "card": "괜히 돌아가는 것 같아 늘 답답했습니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "이 휘어진 길 때문에 미쳐서 공중제비를 돌아버립니다",
+   "card": "이 휘어진 길 때문에 미쳐서 공중제비를 돌아버립니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "정답은 '대권항로'라는 길입니다",
+   "card": "정답은 '대권항로'라는 길입니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "둥근 지구 위 두 점을 잇는 가장 짧은 길이죠",
+   "card": "둥근 지구 위 두 점을 잇는 가장 짧은 길이죠",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "지구본에서 보면 이 길이 곧게 뻗어 있습니다",
+   "card": "지구본에서 보면 이 길이 곧게 뻗어 있습니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "평평한 지도가 둥근 지구를 펼쳐서 휘어 보일 뿐입니다",
+   "card": "평평한 지도가 둥근 지구를 펼쳐서 휘어 보일 뿐입니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "같은 방향으로만 가는 길보다 약 2,700km 짧습니다",
+   "card": "같은 방향으로만 가는 길보다 약 2,700km 짧습니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "question": "",
+ "outro": "지구가 둥글어서, 대권항로 덕분에 더 짧게 날게 된 겁니다",
+ "outro_custom": true,
+ "media": [
+  {
+   "video": "clip_map.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_map.mp4",
+   "start": 3.0
+  },
+  {
+   "video": "clip_plane.mp4",
+   "start": 0
+  },
+  {
+   "flip": "pilot.png",
+   "bg": "sky_bg.jpg"
+  },
+  {
+   "video": "clip_globe.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_globe.mp4",
+   "start": 2.5
+  },
+  {
+   "video": "clip_globe.mp4",
+   "start": 4.5
+  },
+  {
+   "image": "map_final.jpg"
+  },
+  {
+   "image": "map_final.jpg"
+  },
+  {
+   "image": "map_final.jpg"
+  }
+ ],
+ "end_comments": false,
+ "voice": "용식",
+ "yt_title": "비행기가 휘어서 나는 진짜 이유 #shorts",
+ "description": "지도에서는 인천→뉴욕이 직선인데, 비행기는 왜 북쪽으로 휘어서 갈까요? 답은 '대권항로'. 둥근 지구 위 두 점을 잇는 가장 짧은 길입니다.\n\n거리: 하버사인 공식으로 계산한 값(대권 약 11,090km, 같은 방위로 가는 항정선 약 13,800km). 실제 항로는 바람·항공로 사정에 따라 조금씩 달라집니다.\n\n참고: Flightradar24 'Flight paths and great circles', OAG 'Great Circle Routes', 위키 '항로'\n지구 이미지: NASA Visible Earth (퍼블릭 도메인) · 일러스트: いらすとや",
+ "tags": [
+  "대권항로",
+  "비행기",
+  "항로",
+  "지구",
+  "과학",
+  "상식",
+  "쇼츠"
+ ],
+ "sources": [
+  "https://www.flightradar24.com/blog/aviation-explainer-series/flight-paths-and-great-circles-why-are-great-circles-the-shortest-flight-path/",
+  "https://www.oag.com/blog/great-circle-routes-flight-paths",
+  "https://thewiki.kr/w/항로"
+ ],
+ "pin_comment": "지도에선 직선, 지구에선 곡선… 이거 알고 계셨나요? ✈️",
+ "credits": [
+  "지구 텍스처: NASA Visible Earth Land Ocean Ice 2048 (Public domain)",
+  "3D 렌더: three.js (MIT)",
+  "파일럿 일러스트: いらすとや"
+ ]
+}

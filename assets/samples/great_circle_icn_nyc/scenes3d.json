@@ -1,0 +1,38 @@
+{
+ "clip_map.mp4": {
+  "type": "map_compare",
+  "from": [
+   37.46,
+   126.44,
+   "인천"
+  ],
+  "to": [
+   40.64,
+   -73.78,
+   "뉴욕"
+  ],
+  "seconds": 7,
+  "labels": {
+   "straight": "항정선 약 13,800km",
+   "curve": "대권항로 약 11,090km"
+  }
+ },
+ "clip_globe.mp4": {
+  "type": "globe_route",
+  "from": [
+   37.46,
+   126.44,
+   "인천"
+  ],
+  "to": [
+   40.64,
+   -73.78,
+   "뉴욕"
+  ],
+  "seconds": 7
+ },
+ "clip_plane.mp4": {
+  "type": "orbit_plane",
+  "seconds": 5
+ }
+}

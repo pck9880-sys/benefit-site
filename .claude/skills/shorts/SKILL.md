@@ -230,4 +230,12 @@ gh workflow run shorts-upload.yml --ref main -f folder=assets/samples/<slug> \
 - 마무리는 '님들은 어떻게 생각해요잉?' 쓰지 않음 → plan 에 `"outro_custom": true` + outro = 결론 문장 (또는 결론을 마지막 beat 로 두고 outro 비우지 않기).
 - 제목 2줄, 강조 단어 빨간색. 자막 box, 한 문장 = 한 자막. 더빙 용식.
 - **공중제비 장면**: media 에 `{"flip": "char.png", "bg": "img2.jpg"}` → 주인공(투명 PNG, 주제에 맞는 いらすとや 인물: 예 パイロット → kid_job_boy_pilot.png)이 배경 위에서 점프하며 360도 회전 (shorts.make_flip).
-- 화면: 지도·도식(점선·화살표·숫자 라벨) + AI 이미지(위기 장면). 지도 애니메이션 엔진은 아직 미완 → 그 전엔 AI 이미지 + 짤로.
+- 화면: 지도·도식(점선·화살표·숫자 라벨) + AI 이미지(위기 장면).
+- **3D 장면 만드는 법 (2026-11-20)**: `python -m bot.scene3d <장면.json> <출력.mp4>` — three.js(WebGL) 장면을 Playwright 로 프레임마다 찍어 1080x1080 30fps mp4.
+  (Blender 4.2 도 ~/Applications 에 설치했지만 이 iMac 에선 Eevee 가 화면 없는 실행에서 충돌, Cycles 는 프레임당 7초라 안 씀. three.js 는 30프레임 약 11초.)
+  - `{"type":"globe_route","from":[위도,경도,"이름"],"to":[...],"seconds":7}` 지구본 위 대권항로(점선 궤적 + 비행기)
+  - `{"type":"map_compare", ... ,"labels":{"straight":"항정선 약 ○km","curve":"대권항로 약 ○km"}}` 평면 지도 직선 vs 곡선 + 숫자 라벨 (거리는 bot.scene3d.great_circle/rhumb 로 계산)
+  - `{"type":"orbit_plane","seconds":5}` 하늘에서 카메라가 도는 비행기 클로즈업
+  - media 에 `{"video":"clip_map.mp4","start":3.0}` 처럼 이어서 쓰고, 클립 길이를 넘는 장면은 마지막 프레임 이미지(`ffmpeg -sseof -0.1`)로.
+  - 지구 텍스처: assets/3d/earth_nasa_land_ocean_ice_2048.jpg (NASA, 퍼블릭 도메인), three.js MIT — 출처 assets/3d/credits.json, plan.json "credits".
+  - 예시: `assets/samples/great_circle_icn_nyc/` (scenes3d.json 에 장면 설정).
