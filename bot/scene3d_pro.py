@@ -30,6 +30,12 @@ type:
   shadow_stick 알렉산드리아 막대(오벨리스크)에 7.2° 기운 햇빛과 짧은 그림자, 각도 호 (label, tag)
   earth_angle  지구 단면: 평행한 햇빛 + 두 막대 → 중심각 7.2° = 원의 1/50 (그림은 과장 각도) (label)
   earth_proof  긴 클립: 두 도시 사이 호가 ×1→×50 으로 지구를 한 바퀴 채움 → 인공위성·오늘날 값 (label/label2, drop 초)
+  rainbow_hook 언덕 위 하늘에 무지개가 차오르고 큰 물음표 (label)
+  prism_old    옛 생각: 유리 프리즘이 빛을 '물들인다' — 색이 바뀌는 한 줄기 빛 + 붓 (label)
+  newton       뉴턴풍 만화 학자(어깨까지 물결 머리·수염 없음·흰 크라바트) mode: "think"(작은 프리즘+물음표) / "flip"
+  dark_room    1666년 어두운 방: 덧문 구멍 햇빛 → 프리즘 → 벽에 색 띠 (label)
+  refract      프리즘 단면 광선 추적: 빨강은 덜, 보라는 많이 꺾임 (label, tag/tag2)
+  drop_proof   긴 클립: 빗방울 속 굴절·반사 광선(빨강 42°·보라 40°) → 뒤로 빠지며 무지개 (label/label2, drop 초)
   ※ 모든 장면에 비네트+필름 그레인(애니메이션 키트 기법). 장면 속 글씨는 자막 자리(아래 ~21%)에 들어가면 자동으로 위로 올림. --snap 스틸엔 자막 자리 빨간 띠 표시
 실존 인물 사진·초상은 쓰지 않는다 (캐릭터는 흰 머리·콧수염의 만화풍 과학자).
 """
@@ -207,8 +213,12 @@ function galileo(o){ o=o||{};
   for(const x of [-1,1]) H.add(sph(.13,hairM,[x*.36,.02,-.05],[.6,1.1,1.1],24));
   if (o.top){ const cap=new THREE.Mesh(new THREE.SphereGeometry(.43,48,24,0,Math.PI*2,0,Math.PI*.36), hairM); cap.position.y=.03; cap.rotation.x=-.32; cap.castShadow=true; H.add(cap);
     const part=sph(.16,hairM,[-.12,.3,.18],[1.6,.5,1],24); H.add(part); }   // 덮인 앞머리(가르마)
-  H.add(sph(.31,hairM,[0,-.3,.15],o.beard||[1.08,1.2,.82],40));               // 수염
-  const must=sph(.12,hairM,[0,-.1,.385],[1.7,.48,.6],24); H.add(must);
+  if (!o.nobeard){ H.add(sph(.31,hairM,[0,-.3,.15],o.beard||[1.08,1.2,.82],40));               // 수염
+    H.add(sph(.12,hairM,[0,-.1,.385],[1.7,.48,.6],24)); }
+  else H.add(sph(.3,skin,[0,-.2,.08],[1.0,.8,.95],32));                                         // 수염 없는 턱
+  if (o.wig){ for(let i=0;i<46;i++){ const a=(i%2?1:-1)*(1.45+rnd()*1.6), y=.2-(i/46)*.95;     // 어깨까지 내려오는 물결 머리
+      const c=sph(.11+rnd()*.05,hairM,[Math.sin(a)*(.4+.05*(1-y)),y,Math.cos(a)*.38-.04],[1,1.25,1],16); H.add(c); } }
+  if (o.cravat){ const cm=new THREE.MeshStandardMaterial({color:0xf6f2ea, roughness:.6}); g.add(sph(.09,cm,[0,1.45,.42],[1.1,.6,.4],16)); g.add(sph(.06,cm,[0,1.34,.45],[.8,1.2,.35],12)); }
   H.add(sph(.072,skin,[0,.0,.42],[1,1.3,1.2],24));                  // 코
   for(const x of [-1,1]) H.add(sph(.07,skin,[x*.4,0,0],[.5,1,.8],20));  // 귀
   const mouth=sph(.06,new THREE.MeshStandardMaterial({color:0x3a1414, roughness:.6}),[0,-.2,.43],[1.2,.25,.4],20); H.add(mouth);
@@ -732,6 +742,160 @@ if (CFG.type==='earth_proof') {
     sat.visible=s>T1; if(sat.visible){ const a=(s-T1)*.9; sat.position.set(Math.cos(a)*(R+.55), Math.sin(a)*.4*(R+.55), Math.sin(a)*(R+.55)); sat.lookAt(0,0,0); }
     hudA.visible=s<T1; hudB.visible=s>=T1;
     const c=ease(Math.min(1,s/SEC*1.5)); camera.position.set(.2, .3, 7.4-1.0*c); camera.lookAt(0,.1,0); gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+// ── 뉴턴 편: 프리즘·빛의 분산·무지개 ──
+const SPEC=['#ff2a2a','#ff8a1a','#ffe02a','#3ad63a','#2a9bff','#3a3aff','#a03aff'];   // 빨→보
+const NEWTON={hair:0x6b4a32, robe:0x3a2a22, top:true, nobeard:true, wig:true, cravat:true};
+function prismMesh(r,len){ const g=new THREE.Group(); const geo=new THREE.CylinderGeometry(r,r,len,3);
+  const m=new THREE.Mesh(geo,new THREE.MeshPhysicalMaterial({color:0xdff2ff, transparent:true, opacity:.28, roughness:.03, clearcoat:1, side:THREE.DoubleSide, depthWrite:false}));
+  g.add(m); const e=new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({color:0xe8f6ff, transparent:true, opacity:.9})); g.add(e);
+  g.rotation.x=-Math.PI/2; return g; }       // 꼭짓점이 위(+y), 축은 z
+function triPts(r){ return [0,1,2].map(k=>{ const a=k*2*Math.PI/3; return new THREE.Vector2(Math.sin(a)*r, Math.cos(a)*r); }); }
+function refr2(d,nrm,eta){ const c=-d.dot(nrm); const k=1-eta*eta*(1-c*c); if(k<0) return null; return d.clone().multiplyScalar(eta).add(nrm.clone().multiplyScalar(eta*c-Math.sqrt(k))).normalize(); }
+function hitSeg(p,d,a,b){ const e=b.clone().sub(a); const den=d.x*e.y-d.y*e.x; if(Math.abs(den)<1e-9) return null;
+  const w=a.clone().sub(p); const t=(w.x*e.y-w.y*e.x)/den, u=(w.x*d.y-w.y*d.x)/den; return (t>1e-6&&u>=0&&u<=1)?t:null; }
+function tracePrism(P,p,d,n,far){   // 2D 삼각형 프리즘 통과 광선 (입사 굴절 → 출사 굴절)
+  const cen=P[0].clone().add(P[1]).add(P[2]).multiplyScalar(1/3); const out=[p.clone()];
+  const edge=(p,d)=>{ let best=null; for(let i=0;i<3;i++){ const a=P[i], b=P[(i+1)%3]; const t=hitSeg(p,d,a,b); if(t!==null&&(!best||t<best.t)){ const e=b.clone().sub(a); let nn=new THREE.Vector2(e.y,-e.x).normalize(); if(nn.dot(a.clone().sub(cen))<0) nn.negate(); best={t,nn}; } } return best; };
+  let h=edge(p,d); if(!h) { out.push(p.clone().add(d.clone().multiplyScalar(far))); return out; }
+  let q=p.clone().add(d.clone().multiplyScalar(h.t)); out.push(q); let d2=refr2(d,h.nn,1/n);
+  const h2=edge(q.clone().add(d2.clone().multiplyScalar(1e-4)),d2); const q2=q.clone().add(d2.clone().multiplyScalar(h2.t)); out.push(q2);
+  const d3=refr2(d2,h2.nn.clone().negate(),n)||d2; out.push(q2.clone().add(d3.clone().multiplyScalar(far))); return out; }
+function partial(pts,f){ let L=0; const seg=[]; for(let i=1;i<pts.length;i++){ const l=pts[i].distanceTo(pts[i-1]); seg.push(l); L+=l; }
+  let want=L*Math.max(0,Math.min(1,f)); const out=[pts[0]]; for(let i=1;i<pts.length;i++){ if(want>=seg[i-1]){ out.push(pts[i]); want-=seg[i-1]; } else { out.push(pts[i-1].clone().lerp(pts[i],want/seg[i-1])); break; } } return out; }
+function beam(color,w){ const m=new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({color:new THREE.Color(color).multiplyScalar(1.25), toneMapped:false, transparent:true, opacity:.95}));
+  m.w=w||.03; m.set=(pts2,z)=>{ m.geometry.dispose(); const v=pts2.map(p=>new THREE.Vector3(p.x,p.y,z||0)); if(v.length<2||v[0].distanceTo(v[v.length-1])<1e-4){ m.visible=false; return; } m.visible=true;
+    const segs=[]; for(let i=1;i<v.length;i++) segs.push(new THREE.LineCurve3(v[i-1],v[i])); const cp=new THREE.CurvePath(); segs.forEach(s=>cp.add(s));
+    m.geometry=new THREE.TubeGeometry(cp, 24*segs.length, m.w, 8, false); }; scene.add(m); return m; }
+function rainbowArc(R,w,op){ const g=new THREE.Group(); SPEC.forEach((c,i)=>{ const r=R-i*w; const m=new THREE.Mesh(new THREE.TorusGeometry(r,w*.55,8,160,Math.PI),
+    new THREE.MeshBasicMaterial({color:new THREE.Color(c), transparent:true, opacity:op||.6, toneMapped:false, depthWrite:false})); g.add(m); }); return g; }
+function hills(c){ const G=new THREE.PlaneGeometry(120,120,120,120); const P=G.attributes.position;
+  for(let i=0;i<P.count;i++){ const x=P.getX(i), y=P.getY(i); P.setZ(i, 1.2*Math.sin(x*.08)+.9*Math.sin(y*.11+1)+.5*Math.sin((x+y)*.2)); }
+  G.computeVertexNormals(); const m=new THREE.Mesh(G,new THREE.MeshStandardMaterial({color:c||0x5f9a45, roughness:.95})); m.rotation.x=-Math.PI/2; m.receiveShadow=true; scene.add(m); return m; }
+
+if (CFG.type==='rainbow_hook') {
+  scene.background=grad('#4a86c9','#cfe4f5'); scene.add(new THREE.HemisphereLight(0xffffff,0x5a7a3a,.8)); const sun=sunLight(4,8,10,2.0,30);
+  hills(); const rb=rainbowArc(16,.55,.0); rb.position.set(0,-2,-40); scene.add(rb);
+  const clouds=[]; for(let i=0;i<7;i++){ const c=new THREE.Group(); for(let k=0;k<5;k++) c.add(sph(1.2+rnd(),new THREE.MeshStandardMaterial({color:0xffffff, roughness:1}),[k*1.4-2.8,rnd()*.6,rnd()],[1.3,.8,1],16));
+    c.position.set(-30+i*10, 14+rnd()*5, -55-rnd()*10); scene.add(c); clouds.push(c); }
+  const q=label('?','#ffe066',220); q.scale.set(34,6.4,1); q.position.set(0,8,-40); scene.add(q);
+  if (CFG.label) hudLabel(CFG.label,'#ffffff',.33);
+  draw=t=>{ const s=t*SEC; const k=Math.min(1,Math.max(0,(t-.08)*2.2)); rb.children.forEach((m,i)=>m.material.opacity=.62*Math.min(1,Math.max(0,k*1.6-i*.08)));
+    clouds.forEach((c,i)=>c.position.x+=.004*(i%3+1)); q.material.opacity=Math.min(1,Math.max(0,(t-.45)*4)); q.position.y=8+.3*Math.sin(s*3);
+    camera.position.set(-2+3*t, 3.2+.6*t, 22-3*t); camera.lookAt(0,7.5,-40); gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+if (CFG.type==='prism_old') {
+  scene.background=grad('#3a2a1e','#0a0705'); const key=keyLight(-1,6,4,3.0); key.target.position.set(0,.8,0); scene.add(new THREE.AmbientLight(0x9a8a7a,.6)); table(0x4a3020);
+  const pr=prismMesh(.75,1.4); pr.position.set(0,1.0,0); scene.add(pr);
+  const tint=new THREE.Mesh(new THREE.CylinderGeometry(.66,.66,1.3,3), new THREE.MeshBasicMaterial({color:0xff0000, transparent:true, opacity:.0, toneMapped:false, depthWrite:false})); tint.rotation.x=-Math.PI/2; tint.position.copy(pr.position); scene.add(tint);
+  const P=triPts(.75).map(v=>v.add(new THREE.Vector2(0,1.0)));
+  const win=beam('#ffffff',.04), wout=beam('#ff0000',.05);
+  const brush=new THREE.Group(); const hd=new THREE.Mesh(new THREE.CylinderGeometry(.025,.035,.7,12), new THREE.MeshStandardMaterial({color:0x8a5a30, roughness:.6})); hd.position.y=.35; brush.add(hd);
+  const tip=new THREE.Mesh(new THREE.ConeGeometry(.06,.2,16), new THREE.MeshStandardMaterial({color:0xff3030, roughness:.8})); tip.rotation.x=Math.PI; tip.position.y=-.1; brush.add(tip); brush.rotation.z=-.6; scene.add(brush);
+  if (CFG.tag){ const tg=tag(CFG.tag,'#ffe9c0',3.0); tg.position.set(0,2.35,0); }
+  if (CFG.label) hudLabel(CFG.label,'#ffe9c0',.33);
+  draw=t=>{ const s=t*SEC; const c=new THREE.Color().setHSL(((s*.22)%1),.95,.55);
+    win.set(partial([new THREE.Vector2(-4,.85),new THREE.Vector2(-.3,.85)],t*3),.0);
+    const on=t>.3; wout.material.color.copy(c).multiplyScalar(1.3); wout.set(on?partial([new THREE.Vector2(.3,.85),new THREE.Vector2(4,.6)],(t-.3)*3):[],0);
+    tint.material.color.copy(c); tint.material.opacity=on?.35:0; tip.material.color.copy(c);
+    brush.position.set(.55+.12*Math.sin(s*6),1.35+.06*Math.cos(s*6),.7);
+    camera.position.set(.3,1.9-.1*t,5.6-.6*t); camera.lookAt(0,1.0,0); gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+if (CFG.type==='newton') {
+  scene.background = grad(CFG.mode==='flip'?'#5a2a4a':'#1d3a66', '#05070f'); stage(0x1c2135);
+  const key=keyLight(2.5,6,4,2.8); key.target.position.set(0,1.3,0); scene.add(new THREE.AmbientLight(0x6070a0,.42));
+  const rim=new THREE.DirectionalLight(0xffc98a,1.0); rim.position.set(-3,3,-4); scene.add(rim);
+  const G=galileo(NEWTON); scene.add(G.g);
+  const qs=[]; let pr=null, fan=[];
+  if (CFG.mode==='think'){ for(let i=0;i<5;i++){ const q=label('?','#ffd23f',220); q.scale.set(1.5,.28,1); scene.add(q); qs.push([q,i/5*Math.PI*2]); }
+    pr=prismMesh(.22,.4); scene.add(pr); fan=SPEC.map(c=>beam(c,.012)); }
+  const wb=pr?beam('#ffffff',.014):null;
+  if (CFG.label) hudLabel(CFG.label,'#ffd23f',.33);
+  draw=t=>{ const s=t*SEC;
+    if (CFG.mode==='flip'){ const ph=(s*.42)%1; const up=ph<.75?Math.sin(Math.PI*ph/.75):0; G.g.position.y=up*1.7; G.g.rotation.x = ph<.75 ? -2*Math.PI*ease(ph/.75) : 0;
+      G.arms[0].rotation.z=-.22-1.9*up; G.arms[1].rotation.z=.22+1.9*up; G.face(.9,0,1); camera.position.set(1.5,2.6,7.6); camera.lookAt(0,1.9,0); }
+    else { const blink=(s%2.3)<.12?1:0; G.face(.15, blink?1:.25, .6+.4*Math.sin(s*3)); G.H.rotation.z=.18*Math.sin(s*1.4); G.H.rotation.x=-.06;
+      G.arms[1].rotation.set(-2.15,0,-.62); G.arms[0].rotation.set(-1.2,0,.2);
+      const px=-1.35, py=2.25; pr.position.set(px,py,.55); const P=triPts(.22).map(v=>v.add(new THREE.Vector2(px,py)));
+      wb.set([new THREE.Vector2(px-1.6,py+.02),new THREE.Vector2(px-.12,py+.02)],.55);
+      fan.forEach((b,i)=>{ const pts=tracePrism(P,new THREE.Vector2(px-1.6,py+.02),new THREE.Vector2(1,0),1.5+.02*i,.42); b.set(partial(pts.slice(1),Math.min(1,s/1.2)),.55); });
+      qs.forEach(([q,a],i)=>{ const b=a+s*1.2; q.position.set(Math.cos(b)*1.3, 2.6+.25*Math.sin(s*2.5+i), Math.sin(b)*.7); q.material.opacity=.6+.4*Math.sin(s*3+i); });
+      camera.position.set(.3,2.0,5.4-.5*t); camera.lookAt(-.2,1.8,0); }
+    gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+if (CFG.type==='dark_room') {
+  scene.background=new THREE.Color(0x050505); scene.add(new THREE.AmbientLight(0x8a7a6a,.9)); const lamp=new THREE.PointLight(0xffd9a0,.8,12); lamp.position.set(0,4.5,3); scene.add(lamp);
+  const wallM=new THREE.MeshStandardMaterial({color:0x8a7a68, roughness:.95});
+  const fl=new THREE.Mesh(new THREE.PlaneGeometry(14,10), new THREE.MeshStandardMaterial({color:0x4a3424, roughness:.9})); fl.rotation.x=-Math.PI/2; fl.receiveShadow=true; scene.add(fl);
+  const lw=new THREE.Mesh(new THREE.PlaneGeometry(10,6), wallM); lw.rotation.y=Math.PI/2; lw.position.set(-4.2,3,0); scene.add(lw);
+  const rw=new THREE.Mesh(new THREE.PlaneGeometry(10,6), wallM); rw.rotation.y=-Math.PI/2; rw.position.set(2.2,3,0); scene.add(rw);
+  const bw=new THREE.Mesh(new THREE.PlaneGeometry(9,6), wallM); bw.position.set(0,3,-3.5); scene.add(bw);
+  const shut=new THREE.Mesh(new THREE.BoxGeometry(.08,1.6,1.4), new THREE.MeshStandardMaterial({color:0x3a2616, roughness:.8})); shut.position.set(-4.15,1.95,0); scene.add(shut);
+  const hole=glowBall(.06,'#fff6d8',3); hole.position.set(-4.1,1.95,0); scene.add(hole);
+  const tb=new THREE.Mesh(new THREE.BoxGeometry(1.6,.08,1.0), new THREE.MeshStandardMaterial({color:0x6a4426, roughness:.7})); tb.position.set(0,1.0,0); tb.castShadow=true; tb.receiveShadow=true; scene.add(tb);
+  for(const [x,z] of [[-.7,-.4],[.7,-.4],[-.7,.4],[.7,.4]]){ const l=new THREE.Mesh(new THREE.BoxGeometry(.07,1.0,.07), tb.material); l.position.set(x,.5,z); scene.add(l); }
+  const py=1.75, pr=prismMesh(.42,.7); pr.rotation.x=Math.PI/2; pr.position.set(0,py,0); scene.add(pr); const P=triPts(.42).map(v=>new THREE.Vector2(v.x,-v.y+py));
+  const src=new THREE.Vector2(-4.1,1.95), dir=new THREE.Vector2(4.1,py+.05-1.95).normalize(); const wb=beam('#fff6d8',.035); const ent=tracePrism(P,src,dir,1.5,1)[1];
+  const fan=SPEC.map(c=>beam(c,.03)), spots=SPEC.map(c=>{ const m=new THREE.Mesh(new THREE.PlaneGeometry(.06,.5), new THREE.MeshBasicMaterial({color:new THREE.Color(c).multiplyScalar(1.3), toneMapped:false, transparent:true, opacity:0})); m.rotation.y=-Math.PI/2; scene.add(m); return m; });
+  const dust=[]; for(let i=0;i<70;i++){ const d=sph(.008+rnd()*.01,new THREE.MeshBasicMaterial({color:0xfff2c8, transparent:true, opacity:.7}),[0,0,0],null,6); d.castShadow=false; scene.add(d); dust.push([d,rnd(),(rnd()-.5)*.25,(rnd()-.5)*.25]); }
+  if (CFG.tag){ const tg=tag(CFG.tag,'#ffffff',2.0); tg.position.set(2.2,3.9,.2); }
+  if (CFG.label) hudLabel(CFG.label,'#ffe066',.33);
+  draw=t=>{ const s=t*SEC; const f1=Math.min(1,t*2.6), f2=Math.max(0,(t-.38)*2.2);
+    const L=src.distanceTo(ent); wb.set(partial([src,ent],f1),0);
+    fan.forEach((b,i)=>{ const pts=tracePrism(P,src,dir,1.44+.01*i,12); const q2=pts[2], d3=pts[3].clone().sub(q2).normalize(); const tw=(2.18-q2.x)/d3.x; const end=q2.clone().add(d3.clone().multiplyScalar(tw));
+      b.set(partial([pts[1],q2,end],f2),0); spots[i].position.set(2.17,end.y,0); spots[i].material.opacity=f2>=1?Math.min(1,(t-.38-1/2.2)*6+1):0; spots[i].scale.y=1; });
+    dust.forEach(([d,u,ox,oz])=>{ const v=(u+s*.03)%1; const p=src.clone().add(dir.clone().multiplyScalar(v*L)); d.position.set(p.x+ox*.4,p.y+oz*.4+.02*Math.sin(s+u*9),oz); d.visible=v<f1; });
+    camera.position.set(-.1+.3*t,2.4,9.8-.6*t); camera.lookAt(-.2,2.1,0); gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+if (CFG.type==='refract') {
+  scene.background=grad('#141a33','#03040a'); scene.add(new THREE.AmbientLight(0x8090b0,.5)); const key=keyLight(2,5,6,2.2); key.target.position.set(0,0,0);
+  const pr=prismMesh(1.1,1.6); scene.add(pr); const P=triPts(1.1);
+  const src=new THREE.Vector2(-4.2,-.55), dir=new THREE.Vector2(1,.2).normalize(); const wb=beam('#ffffff',.035);
+  const fan=SPEC.map(c=>beam(c,.026)); const traces=SPEC.map((c,i)=>tracePrism(P,src,dir,1.5+.016*i,4.2));
+  const tR=tag(CFG.tag||'빨강: 덜 꺾임','#ff6b6b',2.4), tV=tag(CFG.tag2||'보라: 많이 꺾임','#c08aff',2.6);
+  if (CFG.label) hudLabel(CFG.label,'#7dfcff',.33);
+  draw=t=>{ const s=t*SEC; const f1=Math.min(1,t*3), f2=Math.max(0,(t-.3)*2.2);
+    wb.set(partial([src,traces[0][1]],f1),.0);
+    fan.forEach((b,i)=>b.set(partial(traces[i].slice(1),f2),.0));
+    const mid=(tr,k)=>tr[2].clone().lerp(tr[3],k); const eR=mid(traces[0],.45), eV=mid(traces[6],.45); tR.position.set(eR.x-1.1,eR.y+.85,.1); tV.position.set(eV.x-1.1,eV.y-.5,.1); tR.material.opacity=tV.material.opacity=Math.min(1,Math.max(0,(t-.62)*5));
+    camera.position.set(.6+.3*t,.25,8.6-.5*t); camera.lookAt(.6,-.1,0); gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+if (CFG.type==='drop_proof') {
+  scene.background=grad('#3b72b8','#d8e8f4'); scene.add(new THREE.HemisphereLight(0xffffff,0x5a7a3a,.8)); sunLight(4,8,10,1.6,30); hills();
+  const rb=rainbowArc(16,.55,0); rb.position.set(0,-2,-40); scene.add(rb);
+  const D=new THREE.Group(); D.position.set(0,14,-40); scene.add(D);    // 빗방울(무지개 꼭대기 근처)
+  const R=1.0; const drop=new THREE.Mesh(new THREE.SphereGeometry(R,64,48), new THREE.MeshPhysicalMaterial({color:0xcfe9ff, transparent:true, opacity:.3, roughness:.02, clearcoat:1, depthWrite:false})); D.add(drop);
+  const rimL=new THREE.Mesh(new THREE.TorusGeometry(R,.012,8,128), new THREE.MeshBasicMaterial({color:0xeaf6ff, transparent:true, opacity:.8})); D.add(rimL);
+  const bk=new THREE.Mesh(new THREE.CircleGeometry(R*3.2,64), new THREE.MeshBasicMaterial({color:0x0a1830, transparent:true, opacity:.8, depthWrite:false})); bk.position.z=-.6; D.add(bk);
+  // 2D 광선 추적: 수평 입사 → 굴절 → 안쪽 반사 1번 → 굴절해 나감 (색 차이는 보기 쉽게 과장)
+  function traceDrop(n){ let best=null; for(let b=.6;b<.98;b+=.002){ const i=Math.asin(b), r=Math.asin(b/n), ang=4*r-2*i; if(!best||ang>best.ang) best={b,ang}; }
+    const b=best.b, p0=new THREE.Vector2(-3.4,b*R), d0=new THREE.Vector2(1,0); const hitC=(p,d)=>{ const B=p.dot(d), C=p.lengthSq()-R*R; const disc=B*B-C; if(disc<0) return null; const t1=-B-Math.sqrt(disc), t2=-B+Math.sqrt(disc); return t1>1e-6?t1:(t2>1e-6?t2:null); };
+    const p1=p0.clone().add(d0.clone().multiplyScalar(hitC(p0,d0))); const d1=refr2(d0,p1.clone().normalize(),1/n);
+    const p2=p1.clone().add(d1.clone().multiplyScalar(hitC(p1.clone().add(d1.clone().multiplyScalar(1e-4)),d1)+1e-4)); const nn=p2.clone().normalize(); const d2=d1.clone().sub(nn.clone().multiplyScalar(2*d1.dot(nn)));
+    const p3=p2.clone().add(d2.clone().multiplyScalar(hitC(p2.clone().add(d2.clone().multiplyScalar(1e-4)),d2)+1e-4)); const d3=refr2(d2,p3.clone().normalize().negate(),n)||d2;
+    return {pts:[p0,p1,p2,p3,p3.clone().add(d3.clone().multiplyScalar(3.0))], ang:best.ang}; }
+  const T=SPEC.map((c,i)=>traceDrop(1.313+.008*i)); const wb=new THREE.Group(); D.add(wb);
+  const mk=(c,w)=>{ const m=beam(c,w); scene.remove(m); D.add(m); return m; };
+  const white=mk('#ffffff',.03), cols=SPEC.map(c=>mk(c,.022));
+  const tR=tag('빨강 42°','#ff6b6b',2.6), tV=tag('보라 40°','#c08aff',2.6); scene.remove(tR); scene.remove(tV); D.add(tR); D.add(tV);
+  const hudA=hudLabel(CFG.label||'빗방울 = 작은 프리즘','#ffe066',.33), hudB=hudLabel(CFG.label2||'바깥 빨강 · 안쪽 보라','#ffffff',.33); hudB.visible=false;
+  const T0=CFG.drop||6.4, T1=T0+3.2;
+  draw=t=>{ const s=t*SEC; const f0=Math.min(1,s/1.0);
+    white.set(partial(T[3].pts.slice(0,2),f0),.02);
+    cols.forEach((b,i)=>{ const f=Math.max(0,(s-1.0)/2.2); b.set(partial(T[i].pts.slice(1),f),.02); });
+    const showT=s>3.3; const eR=T[0].pts[3].clone().lerp(T[0].pts[4],.45), eV=T[6].pts[3].clone().lerp(T[6].pts[4],.45); tR.position.set(eR.x-.75,eR.y+.1,.1); tV.position.set(eV.x+.85,eV.y+.1,.1); tR.visible=tV.visible=showT&&s<T0-.3;
+    const k=ease(Math.min(1,Math.max(0,(s-T0)/(T1-T0))));
+    const fk=1-Math.min(1,Math.max(0,(s-(T0-.6))/.9)); bk.material.opacity=.8*fk; rimL.material.opacity=.8*fk; drop.material.opacity=.3*fk; cols.forEach(b=>b.material.opacity=.95*Math.max(fk,.0)); white.material.opacity=.95*fk;
+    rb.children.forEach((m,i)=>m.material.opacity=.62*Math.min(1,Math.max(0,(s-T0-1.0)/1.6-i*.05)));
+    hudA.visible=s<T1; hudB.visible=s>=T1;
+    const near=new THREE.Vector3(0,14,-33.6), farP=new THREE.Vector3(0,3.6,20); camera.position.copy(near.clone().lerp(farP,k)); camera.lookAt(new THREE.Vector3(0,14,-40).lerp(new THREE.Vector3(0,7.5,-40),k));
+    gradePass.uniforms.uT.value=s; composer.render(); };
 }
 
 // ── 자막 자리 비우기: 장면 속 글씨(스프라이트)가 정사각 아래 ~21%(대본 자막 상자) 안으로 들어가면 렌더 순간 위로 올림 ──

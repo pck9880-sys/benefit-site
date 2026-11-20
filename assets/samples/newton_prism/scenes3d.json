@@ -1,0 +1,9 @@
+{
+ "clip_hook.mp4": {"type": "rainbow_hook", "seconds": 4, "label": "무지개는 왜 일곱 색?"},
+ "clip_old.mp4": {"type": "prism_old", "seconds": 4, "label": "옛 생각: 유리가 색칠?"},
+ "clip_think.mp4": {"type": "newton", "mode": "think", "seconds": 4, "label": "색은 어디서 왔지?"},
+ "clip_flip.mp4": {"type": "newton", "mode": "flip", "seconds": 4},
+ "clip_exp.mp4": {"type": "dark_room", "seconds": 4, "label": "1666년 · 어두운 방"},
+ "clip_why.mp4": {"type": "refract", "seconds": 4, "label": "굴절: 색마다 다르게"},
+ "clip_proof.mp4": {"type": "drop_proof", "seconds": 13, "label": "빗방울 = 작은 프리즘", "label2": "바깥 빨강 · 안쪽 보라", "drop": 6.4}
+}

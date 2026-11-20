@@ -1,0 +1,174 @@
+{
+ "topic": "뉴턴: 무지개는 왜 일곱 빛깔일까? 프리즘으로 햇빛을 나눈 실험 (1666년)",
+ "title_top": "햇빛 속에",
+ "title_bottom": "색이 숨어 있음",
+ "mood": "기본",
+ "kind": "과학",
+ "caption_style": "box",
+ "music_concept": "잔잔한 과학",
+ "question": "",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "intro_post": false,
+ "beats": [
+  {
+   "narration": "무지개는 왜 일곱 색일까요?",
+   "card": "무지개는 왜 일곱 색일까요?",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "옛날엔 유리가 색을 입힌다고 봤죠",
+   "card": "옛날엔 유리가 색을 입힌다고 봤죠",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "뉴턴은 이 말이 이상했습니다",
+   "card": "뉴턴은 이 말이 이상했습니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "이것 때문에 미쳐서 공중제비를 돌아버립니다",
+   "card": "이것 때문에 미쳐서 공중제비를 돌아버립니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "어두운 방, 햇빛을 프리즘에 쐈죠",
+   "card": "어두운 방, 햇빛을 프리즘에 쐈죠",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "색마다 꺾이는 정도, 굴절이 달랐죠",
+   "card": "색마다 꺾이는 정도, 굴절이 달랐죠",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "빗방울도 프리즘처럼 나누죠",
+   "card": "빗방울도 프리즘처럼 나누죠",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "빨강은 42도, 보라는 40도로 나오죠",
+   "card": "빨강은 42도, 보라는 40도로 나오죠",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "outro": "햇빛 속 색이 저마다 다르게 꺾여서, 그 덕분에 무지개가 생긴 겁니다. 정말 신기하죠?",
+ "media": [
+  {
+   "video": "clip_hook.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_old.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_think.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_flip.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_exp.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_why.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_proof.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_proof.mp4",
+   "start": 0
+  }
+ ],
+ "gpt_images": [],
+ "thumb_caption": "하얀 빛의 정체?",
+ "end_comments": false,
+ "yt_title": "햇빛은 왜 무지개가 될까? 뉴턴의 프리즘 #shorts",
+ "description": "1666년 무렵, 아이작 뉴턴은 창에 작은 구멍을 낸 어두운 방에서 햇빛 한 줄기를 유리 프리즘에 통과시켰습니다.\n그 전까지는 프리즘(유리)이 하얀 빛을 바꿔 색을 '입힌다'는 생각이 널리 퍼져 있었습니다. 뉴턴은 벽에 길게 펼쳐진 색 띠를 보고, 색은 원래 햇빛 안에 섞여 있고 색마다 꺾이는 정도(굴절)가 달라서 갈라질 뿐이라는 결론을 냈습니다. 두 번째 프리즘으로 한 가지 색만 보내면 더 이상 다른 색으로 나뉘지 않았고(결정적 실험), 갈라진 색을 렌즈로 모으면 다시 하얀 빛이 됐습니다. 이 내용은 1672년 왕립학회에 논문으로 발표됐습니다.\n\n빗방울도 같은 원리입니다. 햇빛이 물방울에 들어갔다 나올 때 보라는 많이, 빨강은 덜 꺾여서 해 반대쪽 방향을 기준으로 빨강은 약 42도, 보라는 약 40도로 나옵니다. 그래서 무지개 바깥쪽이 빨강, 안쪽이 보라입니다.\n※ 무지개를 '일곱 색'으로 나눈 것은 뉴턴이 정한 구분이며, 실제 색은 끊김 없이 이어집니다. 각도는 자료마다 40.6~42.4도 정도로 조금씩 다릅니다.\n참고: Oxford History of Science Museum 'Newton's prism experiment' / Princeton 'Experimentum Crucis' / UNSW Physics 'Newton's prisms' / WMO 국제구름도감 'Primary rainbow' / The Physics Classroom 'Rainbow Formation'\n※ 캐릭터는 뉴턴을 본뜬 만화풍 3D 캐릭터, 장면은 모두 직접 만든 3D입니다(빛이 꺾이는 각도는 보기 쉽게 과장).\n\n※ 숫자는 공식 자료·공식 계산으로 확인한 값입니다.",
+ "tags": [
+  "뉴턴",
+  "프리즘",
+  "무지개",
+  "빛",
+  "굴절",
+  "과학",
+  "물리",
+  "쇼츠",
+  "상식",
+  "원리"
+ ],
+ "sources": [
+  "https://www.cabinet.ox.ac.uk/node/4307",
+  "https://www.princeton.edu/~his291/Experimentum_Crucis.html",
+  "https://animations.physics.unsw.edu.au/jw/light/Newtons-prisms.htm",
+  "https://cloudatlas.wmo.int/en/primary-rainbow.html",
+  "https://www.physicsclassroom.com/class/refrn/lesson-4/rainbow-formation"
+ ],
+ "pin_comment": "해를 등지고 분무기로 물을 뿌리면 집 앞에서도 무지개를 만들 수 있어요 🌈 해 보신 분?",
+ "voices": [
+  "필재",
+  "필재"
+ ],
+ "outro_custom": true,
+ "outro_spoken": "햇빛 속 색이 저마다 다르게 꺾여서, 그 덕분에 무지개가 생긴 겁니다. 정말 신기하죠?",
+ "credits": [
+  "3D: three.js (MIT) — 직접 만든 장면·캐릭터",
+  "기법 참고: claude-animation-skills (MIT)"
+ ]
+}

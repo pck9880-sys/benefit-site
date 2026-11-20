@@ -257,3 +257,21 @@ PSG에서 트로피만 12개 들었다고 함
 그림자 각도 차이를 재서, 그 덕분에 지구 둘레를 처음 알아낸 겁니다. 정말 신기하죠?
 ```
 - 참고: APS News(2006-06) 'Eratosthenes Measures the Earth', Britannica, Linda Hall Library, NASA Earth Fact Sheet. 스타디온 길이 불확실 → km 환산은 '약'으로만, 설명란에 범위 표기.
+
+
+## 14. newton_prism — [과학] 햇빛 속에 / 색이 숨어 있음
+- 만든 시각: 2026-11-21 03:20 (KST) · 종류: 과학 · 핵심: 1666년 뉴턴이 어두운 방에서 햇빛을 프리즘에 통과시켜, 색은 유리가 입히는 게 아니라 원래 햇빛에 섞여 있고 색마다 굴절 정도가 달라 갈라진다는 걸 보임 → 빗방울도 같은 원리(빨강 약 42°·보라 약 40°)로 무지개
+- 화면: 3D 7종(scene3d_pro 새 type: rainbow_hook·prism_old·newton think/flip·dark_room·refract·drop_proof 13초) · 썸네일 원본 thumb_src.jpg(증명 클립 프레임) · 더빙 필재
+- 녹음 대본:
+```
+무지개는 왜 일곱 색일까요?
+옛날엔 유리가 색을 입힌다고 봤죠
+뉴턴은 이 말이 이상했습니다
+이것 때문에 미쳐서 공중제비를 돌아버립니다
+어두운 방, 햇빛을 프리즘에 쐈죠
+색마다 꺾이는 정도, 굴절이 달랐죠
+빗방울도 프리즘처럼 나누죠
+빨강은 42도, 보라는 40도로 나오죠
+햇빛 속 색이 저마다 다르게 꺾여서, 그 덕분에 무지개가 생긴 겁니다. 정말 신기하죠?
+```
+- 참고: Oxford History of Science Museum 'Newton's prism experiment', Princeton 'Experimentum Crucis', UNSW Physics, WMO 국제구름도감 'Primary rainbow', The Physics Classroom. 일곱 색 구분은 뉴턴이 정한 것(설명란 표기), 각도는 자료마다 40.6~42.4°.
