@@ -14,6 +14,8 @@
   · 같은 클립을 두 문장에 이어 쓰면 자동으로 끊김 없이 이어짐(start 는 0 으로 둬도 됨).
     같은 클립을 이어 쓸 땐 {"video": "clip.mp4", "start": 초}, 클립보다 긴 장면은 마지막 프레임 이미지(`ffmpeg -sseof -0.1 -i clip.mp4 -frames:v 1 x.jpg`).
   · 3D 로 표현하기 어려운 장면은 gpt_images(극사실, 글자 없음) 1~2장.
-  · 공중제비: {"flip": "<いらすとや 주인공>.png", "bg": "<배경 jpg>"} — 주제에 맞는 いらすとや 인물(`python -m bot.irasutoya <일본어>`).
-- 더빙은 **필재 고정**(도구가 자동). 반응 댓글 카드 없음.
+  · **고품질 3D(기본)**: `python -m bot.scene3d_pro <장면.json> <출력.mp4>` — 빛 번짐·그림자·금속 질감. type: medal, photo(color blue/red), photon_hit, solar,
+    scientist(mode flip=공중제비 / think / medal: 아인슈타인풍 만화 과학자). 새 주제면 장면을 scene3d_pro.py 에 추가해서 만든다.
+  · **과학엔 일본짤(いらすとや) 안 씀** (2026-11-20). 공중제비는 3D 캐릭터(scientist flip 등)로.
+- 더빙은 **필재 고정**(도구가 자동). 반응 댓글 카드 없음. 웍스엔 제목만 보낸다.
 - yt_title, description(출처·계산 방법·이미지 출처), tags, sources, pin_comment, credits.

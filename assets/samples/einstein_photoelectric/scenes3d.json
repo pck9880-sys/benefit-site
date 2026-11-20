@@ -1,0 +1,47 @@
+{
+ "clip_medal.mp4": {
+  "type": "medal",
+  "seconds": 4,
+  "label": "1921 노벨 물리학상"
+ },
+ "clip_sci_medal.mp4": {
+  "type": "scientist",
+  "mode": "medal",
+  "seconds": 4,
+  "label": "광전 효과"
+ },
+ "clip_blue.mp4": {
+  "type": "photo",
+  "color": "blue",
+  "seconds": 4,
+  "label": "빛을 쬐면 전자가 튀어나옴"
+ },
+ "clip_red.mp4": {
+  "type": "photo",
+  "color": "red",
+  "seconds": 4,
+  "label": "센 빨간 빛: 안 나옴"
+ },
+ "clip_flip.mp4": {
+  "type": "scientist",
+  "mode": "flip",
+  "seconds": 4
+ },
+ "clip_think.mp4": {
+  "type": "scientist",
+  "mode": "think",
+  "seconds": 4,
+  "label": "빛은 알갱이!"
+ },
+ "clip_hit.mp4": {
+  "type": "photon_hit",
+  "color": "blue",
+  "seconds": 4,
+  "label": "알갱이 하나 → 전자 하나"
+ },
+ "clip_solar.mp4": {
+  "type": "solar",
+  "seconds": 8,
+  "label": "태양전지"
+ }
+}

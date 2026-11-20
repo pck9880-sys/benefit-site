@@ -153,7 +153,7 @@ if [ -f "$SRC/voice.mp3" ] && SHORTS_SONG_PREMIX=$PREMIX SHORTS_SONG_FILE="$SONG
     if [ "${SHORTS_WORKS:-1}" = "1" ]; then
       PKG=$(ls -dt "$HOME/Library/Mobile Documents/com~apple~CloudDocs/쇼츠업로드/"*/ 2>/dev/null | head -1)
       [ -n "$PKG" ] && "$REPO/scripts/mac/shorts_send_works.sh" "${PKG}영상.mp4" \
-        "$(cat "${PKG}제목.txt") / 곡: $(python3 -c "import json;print(json.load(open('$DIR/업로드정보.json'))['song'])")" >> "$DIR/결과.txt" 2>&1
+        "$(cat "${PKG}제목.txt")" >> "$DIR/결과.txt" 2>&1  # 2026-11-20: 웍스엔 제목만
     fi
   fi
 else

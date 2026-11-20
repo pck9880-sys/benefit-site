@@ -1,0 +1,172 @@
+{
+ "topic": "아인슈타인이 노벨상 받은 진짜 이유: 광전 효과",
+ "mood": "기본",
+ "kind": "과학",
+ "title_top": "아인슈타인 노벨상",
+ "title_bottom": "상대성이론 아님",
+ "intro_post": false,
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "caption_style": "box",
+ "beats": [
+  {
+   "narration": "아인슈타인 노벨상은 상대성이론이 아닙니다",
+   "card": "아인슈타인 노벨상은 상대성이론이 아닙니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "'광전 효과' 발견 덕분이었죠",
+   "card": "'광전 효과' 발견 덕분이었죠",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "금속에 빛을 쬐면 전자가 튀어나오는데",
+   "card": "금속에 빛을 쬐면 전자가 튀어나오는데",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "아무리 센 빛도 안 될 때가 있었습니다",
+   "card": "아무리 센 빛도 안 될 때가 있었습니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "이것 때문에 미쳐서 공중제비를 돌아버립니다",
+   "card": "이것 때문에 미쳐서 공중제비를 돌아버립니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "아인슈타인은 빛을 알갱이로 봤습니다",
+   "card": "아인슈타인은 빛을 알갱이로 봤습니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "알갱이 하나가 세야 전자가 튕겨 나가죠",
+   "card": "알갱이 하나가 세야 전자가 튕겨 나가죠",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "이 생각이 태양전지의 바탕이 됐습니다",
+   "card": "이 생각이 태양전지의 바탕이 됐습니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "question": "",
+ "outro": "빛을 알갱이로 봐서, 그 덕분에 노벨상을 받게 된 겁니다. 정말 신기하죠?",
+ "outro_custom": true,
+ "media": [
+  {
+   "video": "clip_medal.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_sci_medal.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_blue.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_red.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_flip.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_think.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_hit.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_solar.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_solar.mp4",
+   "start": 0
+  }
+ ],
+ "gpt_images": [],
+ "end_comments": false,
+ "yt_title": "아인슈타인이 노벨상 받은 진짜 이유 #shorts",
+ "description": "아인슈타인의 1921년 노벨 물리학상(1922년 수여) 수상 이유는 상대성이론이 아니라 '광전 효과의 법칙 발견'입니다. 빛을 에너지 알갱이(광자)로 보면, 알갱이 하나의 에너지가 충분해야 전자가 튀어나온다는 걸 설명할 수 있습니다.\n\n참고: NobelPrize.org 'The Nobel Prize in Physics 1921'\n※ 캐릭터는 아인슈타인을 본뜬 만화풍 3D 캐릭터입니다.\n\n※ 숫자는 공식 자료·공식 계산으로 확인한 값입니다.",
+ "tags": [
+  "아인슈타인",
+  "노벨상",
+  "광전효과",
+  "빛",
+  "과학",
+  "물리",
+  "쇼츠",
+  "상식",
+  "원리"
+ ],
+ "sources": [
+  "https://www.nobelprize.org/prizes/physics/1921/summary/"
+ ],
+ "pin_comment": "노벨상이 상대성이론 때문이 아니었다니… 알고 계셨나요? 💡",
+ "thumb_caption": "상대성이론 아님",
+ "credits": [
+  "3D: three.js (MIT) — 직접 만든 장면·캐릭터"
+ ],
+ "music_concept": "잔잔한 과학",
+ "voices": [
+  "필재",
+  "필재"
+ ],
+ "outro_spoken": "빛을 알갱이로 봐서, 그 덕분에 노벨상을 받게 된 겁니다. 정말 신기하죠?"
+}
