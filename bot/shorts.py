@@ -261,7 +261,7 @@ def mix_caption_html(text, idx=0, impact=False):
     body = e(balance_lines(plain, 15))
     grad = st["fill"].startswith("linear")
     fill = (f"background:{st['fill']};-webkit-background-clip:text;color:transparent;" if grad else f"color:{st['fill']};")
-    size = 60 if impact else 52  # 2026-11-20: 47px 에서 약간 키움 (사용자 요청)
+    size = 60  # 2026-11-20 사용자: 자막 60px 고정 (52 → 60)
     return f"""<style>{css_font}{BASE_CSS}
 .c{{position:absolute;top:{MEDIA_Y + MEDIA - 180}px;left:70px;right:70px;height:150px;display:flex;align-items:flex-end;
  justify-content:center;text-align:center}}
@@ -318,7 +318,7 @@ def caption_html(text, style="box", impact=False, idx=0, sticker=""):
 .b{{display:inline-block;margin-bottom:14px;background:#e11d48;color:#fff;font-size:34px;font-weight:900;padding:6px 18px;
  border-radius:8px;-webkit-text-stroke:0;text-shadow:none;letter-spacing:0}}</style><div class="c">{badge}<div>{body}</div></div>"""
     body = re.sub(r"\*\*(.+?)\*\*", r'<b class="k">\1</b>', e(text))  # 문장 통째로, 단어 단위 줄바꿈 + **강조** 노란색
-    size = 60 if len(text) <= 22 else 54
+    size = 60  # 2026-11-20 사용자: 자막 60px 고정
     return f"""<style>{BASE_CSS}
 .c{{position:absolute;top:{CAP_Y}px;left:40px;right:40px;text-align:center}}
 .c span{{display:inline-block;max-width:980px;background:rgba(0,0,0,.84);color:#fff;font-size:{size}px;font-weight:800;
