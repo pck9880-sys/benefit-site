@@ -19,7 +19,7 @@ trap 'kill $SV 2>/dev/null; rm -rf "$W"' EXIT
 sleep 1
 NAME=$(python3 -c "import sys,os;print(os.path.basename(os.path.dirname(sys.argv[1]))[:30])" "$V").mp4  # 글자 단위로 자르기 (바이트로 자르면 한글 깨짐)
 caffeinate -u claude -p --chrome --model sonnet "크롬 작업 (확인창 금지, 다른 사람에게 보내지 말 것, 연 탭은 끝나면 닫기, 보고 2줄):
-네이버웍스 메신저에서 **본인 '박치경' 나와의 대화**에만 영상 1개를 보낸다. 로그인 안 돼 있으면 '실패: 웍스 로그인 필요'만 보고.
+크롬이 여러 대면 macOS(iMac) 크롬을 쓴다. 네이버웍스 메신저에서 **본인 '박치경' 나와의 대화**에만 영상 1개를 보낸다. 로그인 안 돼 있으면 '실패: 웍스 로그인 필요'만 보고.
 파일 선택 창 금지: 대화창에서 window.open('http://127.0.0.1:$PORT/_send.html') (막히면 임시 버튼 클릭) → ready 후
 w.postMessage({get:'v.mp4'}, '*') → 받은 blob 으로 new File([blob], '$NAME', {type:'video/mp4'}) → 대화창 input[type=file] 에 DataTransfer 로 넣고 change (또는 drop 이벤트).
 함께 보낼 글: '$MSG'. 전송 후 올라간 것 확인." --permission-mode acceptEdits --allowedTools "Read,mcp__claude-in-chrome" < /dev/null 2>&1 | tail -3

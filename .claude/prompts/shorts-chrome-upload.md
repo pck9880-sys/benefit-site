@@ -1,5 +1,6 @@
 [숏츠 자동 업로드 – 크롬 Claude / 사용자에게 묻거나 중간 보고하지 않음]
 
+0) 크롬이 여러 대 연결돼 있으면 **macOS(iMac) 크롬**을 쓴다 (Windows 등 다른 기기 크롬 금지). 선택이 필요하면 macOS 쪽을 고른다.
 작업 폴더: {{DIR}}  (로컬 서버 http://127.0.0.1:{{PORT}}/)
 업로드 정보: {{DIR}}/업로드정보.json (title, description, tags, pin_comment, thumb, music_concept)
 올릴 영상: 더빙용/영상.mp4

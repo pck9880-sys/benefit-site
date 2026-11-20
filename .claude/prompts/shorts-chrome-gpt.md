@@ -1,5 +1,6 @@
 [숏츠 이미지 – 크롬 Claude 가 ChatGPT(chatgpt.com)로 생성 / 사용자에게 묻지 않음 / 결제·업그레이드 금지]
 
+0) 크롬이 여러 대 연결돼 있으면 **macOS(iMac) 크롬**을 쓴다 (Windows 등 다른 기기 크롬 금지). 선택이 필요하면 macOS 쪽을 고른다.
 이미지 목록: {{DIR}}/plan.json 의 "gpt_images" (각 항목 file, prompt)
 저장: 로컬 서버 http://127.0.0.1:{{PORT}}/ = {{DIR}} 폴더
 
