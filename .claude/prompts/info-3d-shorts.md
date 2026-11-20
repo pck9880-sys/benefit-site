@@ -23,7 +23,7 @@
    - plan.json: caption_style "box", outro_custom true + outro = 결론 문장, 제목 2줄(핵심 단어 강조), yt_title, description(출처 포함), pin_comment, tags, sources, credits.
    - 화면: 3D 장면 3~4개 + 공중제비 1개 + 필요하면 AI 이미지 1~2개(Figma generate_image, 얼굴·글자·로고 없음).
    - 렌더: `python3 -c "from bot import shorts; shorts.render_sample('assets/samples/<slug>')"` (임시 음성) → 미리보기 확인.
-3. 나에게 줄 것: 미리보기 mp4 경로, **용식 녹음 대본**(1.0배속, 코드블록), 제목·설명·고정 댓글. 업로드·텔레그램 전송은 하지 않는다.
+3. 나에게 줄 것: 미리보기 mp4 경로, **필재 녹음 대본**(1.0배속, 코드블록), 제목·설명·고정 댓글. 업로드·텔레그램 전송은 하지 않는다.
 4. 잘 되면 SKILL.md 의 정보형 템플릿에 '3D 장면 만드는 법'을 추가하고, 지정한 경로만 git add 해서 커밋 (`git commit -a` 금지).
 
 ## 지켜야 할 것

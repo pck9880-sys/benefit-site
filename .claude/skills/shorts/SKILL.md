@@ -15,7 +15,7 @@ description: 유튜브 숏츠 1편을 빠르게 만드는 작업 순서 (뉴스 
 - **음악(필수)**: 업로드 때 PC 스튜디오에서 저장한 사운드 곡을 넣음. 유머·핫이슈 = 영원은 그렇듯 → Machi No Dorufin → Helios, 감동 = 은방울 → 꿈꾸던 어른이 되었나요? 돌아가며 (`shorts_chrome_prep.sh` SONGS). 못 넣으면 공개 안 함.
 - **끝 장면**: `shorts.comments_card` — 실제 댓글 캡처 카드(`end_comments`), 2.5초 더 길게. **더빙 1.2배 고정**.
 - **업로드 계정**: `~/쇼츠작업/upload_account.txt` 의 구글 계정 채널로만 (저장소엔 안 올림).
-- **더빙(고정)**: 본문 = **제롬**(모든 종류), 마무리 = **구리**가 끝 장면 댓글 반응 2~3개 + "님들 생각은 어떰?" 읽기 (편마다 돌아가며, `~/쇼츠작업/voice_rotation.txt`).
+- **더빙(고정)**: 본문 = **필재**(모든 종류, 2026-11-20 제롬→필재), 마무리 = **구리**가 끝 장면 댓글 반응 2~3개 + "님들 생각은 어떰?" 읽기 (편마다 돌아가며, `~/쇼츠작업/voice_rotation.txt`).
 - **첫 장면**: `shorts.intro_card` — 커뮤니티 글 첫 화면 카드(이모지·게시판 이름 초록 + 글 제목). 기본 켜짐, `"intro_post": false` 로 끔.
 - **자막**: `caption_style: "mix"` — 4종(흰/검정테두리, 빨강/흰테두리, 검정/흰테두리 Jua, 주황빨강 그라데이션/검정테두리 도현)을 장면마다 돌아가며. 폰트는 assets/fonts(OFL).
 - **AI 이미지**: Figma 대신 **ChatGPT 웹**(크롬 Claude) — plan `gpt_images` → `scripts/mac/shorts_gpt_images.sh <slug>`. 실패 장면은 폴더의 다른 이미지로 채움.
@@ -228,7 +228,7 @@ gh workflow run shorts-upload.yml --ref main -f folder=assets/samples/<slug> \
   ③ 해결: 전문 용어 등장 (1~2개, 처음엔 쉬운 말로 풀이) ④ 원리 1~2문장 (숫자·용어 정확히, 공식 자료로 확인)
   ⑤ 결론(마지막 문장, 고정 형태): "**~해서 ~덕분에 ~된 겁니다**"
 - 마무리는 '님들은 어떻게 생각해요잉?' 쓰지 않음 → plan 에 `"outro_custom": true` + outro = 결론 문장 (또는 결론을 마지막 beat 로 두고 outro 비우지 않기).
-- 제목 2줄, 강조 단어 빨간색. 자막 box, 한 문장 = 한 자막. 더빙 용식.
+- 제목 2줄, 강조 단어 빨간색. 자막 box, 한 문장 = 한 자막. 더빙 **필재**(타입캐스트, 기본값).
 - **공중제비 장면**: media 에 `{"flip": "char.png", "bg": "img2.jpg"}` → 주인공(투명 PNG, 주제에 맞는 いらすとや 인물: 예 パイロット → kid_job_boy_pilot.png)이 배경 위에서 점프하며 360도 회전 (shorts.make_flip).
 - 화면: 지도·도식(점선·화살표·숫자 라벨) + AI 이미지(위기 장면).
 - **3D 장면 만드는 법 (2026-11-20)**: `python -m bot.scene3d <장면.json> <출력.mp4>` — three.js(WebGL) 장면을 Playwright 로 프레임마다 찍어 1080x1080 30fps mp4.

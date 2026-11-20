@@ -153,7 +153,7 @@
   }
  ],
  "end_comments": false,
- "voice": "용식",
+ "voice": "필재",
  "yt_title": "비행기가 휘어서 나는 진짜 이유 #shorts",
  "description": "지도에서는 인천→뉴욕이 직선인데, 비행기는 왜 북쪽으로 휘어서 갈까요? 답은 '대권항로'. 둥근 지구 위 두 점을 잇는 가장 짧은 길입니다.\n\n거리: 하버사인 공식으로 계산한 값(대권 약 11,090km, 같은 방위로 가는 항정선 약 13,800km). 실제 항로는 바람·항공로 사정에 따라 조금씩 달라집니다.\n\n참고: Flightradar24 'Flight paths and great circles', OAG 'Great Circle Routes', 위키 '항로'\n지구 이미지: NASA Visible Earth (퍼블릭 도메인) · 일러스트: いらすとや",
  "tags": [
@@ -175,5 +175,9 @@
   "지구 텍스처: NASA Visible Earth Land Ocean Ice 2048 (Public domain)",
   "3D 렌더: three.js (MIT)",
   "파일럿 일러스트: いらすとや"
+ ],
+ "voices": [
+  "필재",
+  "필재"
  ]
 }
