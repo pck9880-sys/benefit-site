@@ -551,6 +551,7 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
     events, t_beat = [], 0.0  # 효과음 (시각, 종류)
     with Renderer() as r:
         title = r.png(title_html(p), work / "title.png")
+        run_frames = 0  # 같은 사진이 이어지는 동안 확대를 끊김 없이 이어 가기 (화면 전환 줄이기)
         for i, b in enumerate(p.beats):
             audio = audios[i]
             dur = durations[i] if durations else (duration(audio) + 0.05) if audio else max(2.2, len(b.narration) * 0.11)
@@ -606,12 +607,16 @@ def make_video(p, media, work, audios=None, voice_track=None, durations=None, ke
                 zz = int(MEDIA * 0.78)
                 media_f = (f"[1:v]scale={zz}:{zz}:force_original_aspect_ratio=decrease,"
                            f"pad={MEDIA}:{MEDIA}:(ow-iw)/2:(oh-ih)/2:color=white,setsar=1,"
-                           f"zoompan=z='1+0.04*abs(sin(on/9))':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'"
+                           f"zoompan=z='1+0.015*abs(sin(on/9))':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'"
                            f":d={frames}:s={MEDIA}x{MEDIA}:fps=30[m]")
             elif kind in ("image", "card"):  # 사진: 정사각으로 자르고 천천히 확대/축소 (카드는 글자가 안 잘리게 살짝만)
                 cmd += ["-loop", "1", "-i", src]
-                zmax, step = (1.04, 0.0006) if kind == "card" else (1.15, 0.0015)
-                z = f"min(1.0+on*{step},{zmax})" if i % 2 == 0 else f"max({zmax}-on*{step},1.0)"
+                # 2026-11-20: 확대는 조금만 (기존 1.15 → 1.05), 같은 사진이 이어지면 이어서 확대
+                zmax, step = (1.03, 0.0004) if kind == "card" else (float(os.environ.get("SHORTS_ZOOM_MAX", "1.05")), 0.0005)
+                same = i > 0 and media[i] == media[i - 1]
+                run_frames = run_frames if same else 0
+                z = f"min(1.0+(on+{run_frames})*{step},{zmax})"
+                run_frames += frames
                 media_f = (f"[1:v]scale={MEDIA * 2}:{MEDIA * 2}:force_original_aspect_ratio=increase,"
                            f"crop={MEDIA * 2}:{MEDIA * 2},setsar=1,zoompan=z='{z}':x='iw/2-(iw/zoom/2)'"
                            f":y='ih/2-(ih/zoom/2)':d={frames}:s={MEDIA}x{MEDIA}:fps=30[m]")
@@ -776,31 +781,40 @@ body{{width:1080px;height:1080px;background:#fff}}
 
 
 def comments_card(raw, out):
-    """마지막 장면: 커뮤니티 댓글창 캡처처럼 (실제 댓글만). plan "end_comments": [{"text": "...", "likes": 123}, ...]
-    없으면 beats 의 comment 카드 문구를 모아 씀. 닉네임·프로필은 회색 처리(개인정보)."""
+    """마지막 장면: 디시인사이드 갤러리 목록·댓글 느낌의 반응 캡처 (실제 반응만). 닉네임·IP 는 가림.
+    plan "end_comments": [{"text": "...", "likes": 12}, ...], "end_label": 갤러리 이름(기본 '실시간 베스트')."""
+    import random
     items = raw.get("end_comments") or [{"text": b.get("overlay_text", "")} for b in raw.get("beats", [])
                                         if b.get("overlay") == "comment" and b.get("overlay_text")]
     items = [x if isinstance(x, dict) else {"text": str(x)} for x in items][:5]
     if not items:
         return None
-    rows = "".join(
-        f'<div class="r"><div class="av"></div><div class="bd"><div class="nm"></div>'
-        f'<div class="tx">{e(re.sub(r"[*][*]", "", it["text"]))}</div>'
-        f'<div class="mt">{"👍 " + str(it["likes"]) if it.get("likes") else "👍"}&nbsp;&nbsp;·&nbsp;&nbsp;답글</div></div>'
-        + (f'<div class="best">BEST</div>' if i < 2 else "") + "</div>" for i, it in enumerate(items))
+    rnd = random.Random(raw.get("topic", ""))
+    rows = ""
+    for i, it in enumerate(items):
+        txt = e(re.sub(r"[*][*]", "", it["text"]))
+        rec = f'<span class="up">추천 {it["likes"]}</span>' if it.get("likes") else ""  # 추천 수는 실제 값만 (지어내지 않음)
+        rows += (f'<div class="r"><div class="nick"><span class="nm">ㅇㅇ</span><span class="ip">(***.***)</span></div>'
+                 f'<div class="tx">{txt}</div>'
+                 f'<div class="mt">{rec}<span>답글</span></div></div>')
+    gall = e(raw.get("end_label") or "실시간 베스트")
     html = f"""<style>{BASE_CSS}
-body{{width:1080px;height:1080px;background:#f2f3f5}}
-.w{{position:absolute;left:40px;right:40px;top:30px;bottom:290px;background:#fff;border-radius:28px;padding:30px 40px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.08)}}
-.h{{font-size:40px;font-weight:800;color:#111;margin-bottom:20px}}.h span{{color:#2e8b57}}
-.r{{position:relative;display:flex;gap:22px;padding:22px 0;border-top:1px solid #eee}}
-.av{{flex:none;width:64px;height:64px;border-radius:50%;background:#d9dce1}}
-.bd{{flex:1;min-width:0}}.nm{{width:170px;height:24px;border-radius:12px;background:#e3e5e8;margin:6px 0 14px;filter:blur(1px)}}
-.tx{{font-size:40px;line-height:1.38;color:#222;font-weight:500;word-break:keep-all;letter-spacing:-.02em}}
-.mt{{margin-top:10px;font-size:28px;color:#9ca3af}}
-.best{{position:absolute;right:0;top:24px;background:#ff4d4f;color:#fff;font-size:24px;font-weight:800;padding:4px 12px;border-radius:8px}}</style>
-<div class="w"><div class="h">{e(raw.get("end_label") or "댓글 반응")} <span>{len(items)}</span></div>{rows}</div>
-<script>window.fit=function(){{const w=document.querySelector('.w');let s=40;
- while(w.scrollHeight>w.clientHeight&&s>26){{s-=2;document.querySelectorAll('.tx').forEach(t=>t.style.fontSize=s+'px');}}}};</script>"""
+body{{width:1080px;height:1080px;background:#fff}}
+.w{{position:absolute;left:0;right:0;top:0;bottom:280px;background:#fff;overflow:hidden;font-family:'Malgun Gothic','Apple SD Gothic Neo',Pretendard,sans-serif}}
+.hd{{background:#3b4890;color:#fff;padding:26px 36px;font-size:40px;font-weight:800;display:flex;align-items:center;gap:16px}}
+.hd .g{{background:#fff;color:#3b4890;font-size:26px;font-weight:800;padding:4px 12px;border-radius:6px}}
+.sub{{padding:16px 36px;font-size:28px;color:#3b4890;font-weight:700;border-bottom:2px solid #3b4890}}
+.sub b{{color:#d31900}}
+.r{{padding:22px 36px;border-bottom:1px solid #e1e1e1}}
+.nick{{display:flex;align-items:center;gap:10px;font-size:26px;color:#333}}
+.nm{{font-weight:700}}.ip{{color:#999;filter:blur(2px)}}
+.dt{{margin-left:auto;color:#999;font-size:24px}}
+.tx{{margin-top:10px;font-size:38px;line-height:1.4;color:#111;word-break:keep-all}}
+.mt{{margin-top:8px;display:flex;gap:22px;font-size:24px;color:#888}}.up{{color:#d31900;font-weight:700}}</style>
+<div class="w"><div class="hd"><span class="g">갤</span>{gall}</div>
+<div class="sub">전체 댓글 <b>{len(items)}</b>개</div>{rows}</div>
+<script>window.fit=function(){{const w=document.querySelector('.w');let s=38;
+ while(w.scrollHeight>w.clientHeight&&s>24){{s-=2;document.querySelectorAll('.tx').forEach(t=>t.style.fontSize=s+'px');}}}};</script>"""
     png = Path(out).with_suffix(".png")
     with Renderer() as r:
         r.png(html, png, 1080, 1080, transparent=False)
