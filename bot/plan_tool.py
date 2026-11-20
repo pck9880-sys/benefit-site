@@ -45,6 +45,15 @@ def new(slug, kind):
          "gpt_images": [{"file": f"img{i}.jpg", "prompt": ""} for i in range(n_ai)],
          "thumb_caption": "", "end_comments": [], "yt_title": "", "description": "", "tags": list(t["tags"]),
          "sources": [], "pin_comment": ""}
+    if t.get("story"):   # 과학(위인 3D): 8단계 흐름 + 3D 장면 뼈대
+        for b, st in zip(p["beats"], t["story"]):
+            b["visual"] = "video"; b["card"] = f"[{st['step']}] {st['guide']}"
+        sc = {st["scene"]["file"]: {k: v for k, v in st["scene"].items() if k != "file"}
+              for st in t["story"] if not st["scene"].get("same_as_prev")}
+        p["media"] = [{"video": st["scene"]["file"], "start": 0} for st in t["story"]]
+        p["gpt_images"] = []; p["end_comments"] = False; p["outro"] = t.get("outro_pattern", "")
+        (d / "scenes3d.json").write_text(json.dumps(sc, ensure_ascii=False, indent=1), "utf-8")
+        print("\n".join(["[과학 템플릿] 기준 예시: " + t.get("example", "")] + [f"  {st['step']}: {st['guide']}" for st in t["story"]] + t.get("steps", [])))
     (d / "plan.json").write_text(json.dumps(p, ensure_ascii=False, indent=1), "utf-8")
     print(f"[plan] {d / 'plan.json'} 만듦 ({t['label']}: 문장 {t['beats'][0]}~{t['beats'][1]}개, AI 이미지 {n_ai}장, "
           f"짤 {t['zzal']['min']}~{t['zzal']['max']}장({t['zzal']['source'] or '없음'}), 실제 사진 {t['real_photos']['min']}~{t['real_photos']['max']}장)")

@@ -1,5 +1,5 @@
 {
- "label": "과학",
+ "label": "과학 (위인 3D — 기준: galileo_falling)",
  "plan": {
   "mood": "기본",
   "kind": "과학",
@@ -16,18 +16,18 @@
  },
  "beats": [
   8,
-  9
+  8
  ],
- "ai_images": 2,
+ "ai_images": 0,
  "thumb_ai": false,
  "zzal": {
   "min": 0,
-  "max": 1,
-  "source": "pepe"
+  "max": 0,
+  "source": ""
  },
  "ira": {
-  "min": 1,
-  "max": 2
+  "min": 0,
+  "max": 0
  },
  "real_photos": {
   "min": 0,
@@ -55,5 +55,102 @@
   "필재",
   "필재"
  ],
- "ending": "정말 신기하죠?"
+ "ending": "정말 신기하죠?",
+ "example": "assets/samples/galileo_falling",
+ "char_target": [
+  105,
+  115
+ ],
+ "story": [
+  {
+   "step": "① 질문 훅",
+   "guide": "뻔해 보이는 질문 한 줄 (예: 무거운 공이 먼저 떨어질까요?)",
+   "scene": {
+    "file": "clip_hook.mp4",
+    "type": "tower",
+    "seconds": 4,
+    "label": "질문 핵심 대비 (A vs B)"
+   }
+  },
+  {
+   "step": "② 옛 상식",
+   "guide": "오랫동안 다들 믿은 것 (숫자는 '약'으로, 확인한 것만)",
+   "scene": {
+    "file": "clip_old.mp4",
+    "type": "ancient",
+    "seconds": 4,
+    "label": "옛 상식: ~"
+   }
+  },
+  {
+   "step": "③ 인물의 의문",
+   "guide": "<인물>은 이 말이 이상했습니다 — 주인공 3D 캐릭터 고민",
+   "scene": {
+    "file": "clip_think.mp4",
+    "type": "galileo",
+    "mode": "think",
+    "seconds": 4,
+    "label": "정말 그럴까?"
+   }
+  },
+  {
+   "step": "④ 공중제비",
+   "guide": "이것 때문에 미쳐서 공중제비를 돌아버립니다 (고정 문장)",
+   "scene": {
+    "file": "clip_flip.mp4",
+    "type": "galileo",
+    "mode": "flip",
+    "seconds": 4
+   }
+  },
+  {
+   "step": "⑤ 실험/방법",
+   "guide": "인물이 실제로 한 실험·관찰 (출처 있는 것만, 전설은 빼거나 설명란에 '전해짐')",
+   "scene": {
+    "file": "clip_exp.mp4",
+    "type": "incline",
+    "seconds": 4,
+    "label": "~ 실험"
+   }
+  },
+  {
+   "step": "⑥ 원리",
+   "guide": "핵심 원리 한 줄을 쉬운 말로",
+   "scene": {
+    "file": "clip_why.mp4",
+    "type": "vacuum",
+    "seconds": 4,
+    "label": "원리 한 줄"
+   }
+  },
+  {
+   "step": "⑦ 현대의 증명",
+   "guide": "연도 + 실제 증명 장면 (이 클립은 ⑧·마무리까지 끊김 없이 이어짐)",
+   "scene": {
+    "file": "clip_proof.mp4",
+    "type": "moon_drop",
+    "seconds": 13,
+    "label": "연도 · 사건",
+    "label2": "결과 한마디!",
+    "drop": 3.1
+   }
+  },
+  {
+   "step": "⑧ 결과",
+   "guide": "증명 결과 한 줄 (⑦과 같은 클립)",
+   "scene": {
+    "file": "clip_proof.mp4",
+    "same_as_prev": true
+   }
+  }
+ ],
+ "outro_pattern": "~해서, 그 덕분에 ~된 겁니다. 정말 신기하죠?",
+ "steps": [
+  "1. python -m bot.plan_tool new <slug> 과학  → plan.json + scenes3d.json 뼈대",
+  "2. 사실 확인 2곳 이상(공식 기관 원문). 원문에 '오타/불확실' 표시가 있으면 그 숫자는 화면에 안 씀",
+  "3. 대본 8문장(존댓말, 문장 30자 이내, 공백 빼고 105~115자 → 1.2배속 그대로 28초 안)",
+  "4. 새 주제 장면은 bot/scene3d_pro.py 에 type 추가 (캐릭터는 galileo()/scientist() 본떠서: 눈꺼풀·입·눈썹 표정)",
+  "5. 스틸 확인: python -m bot.scene3d_pro <장면.json> <접두어> --snap 0.2,0.9 → 잘림·글씨 겹침·자막 상자(아래 20%) 피하기",
+  "6. 렌더 → 썸네일(증명 장면 프레임) thumb_src.jpg → plan_tool check → scripts/mac/shorts_chrome_prep.sh <slug>"
+ ]
 }
