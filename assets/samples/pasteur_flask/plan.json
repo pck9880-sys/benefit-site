@@ -1,0 +1,171 @@
+{
+ "topic": "파스퇴르: 국물은 왜 썩을까? 백조목 플라스크로 자연발생설을 깸 (1859~1862)",
+ "title_top": "국물은 왜 썩지?",
+ "title_bottom": "파스퇴르의 답",
+ "mood": "기본",
+ "kind": "과학",
+ "caption_style": "box",
+ "music_concept": "잔잔한 과학",
+ "question": "",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "intro_post": false,
+ "beats": [
+  {
+   "narration": "국물은 왜 썩을까요?",
+   "card": "국물은 왜 썩을까요?",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "생명은 저절로 생긴다고 믿었죠",
+   "card": "생명은 저절로 생긴다고 믿었죠",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "파스퇴르는 이 말이 이상했습니다",
+   "card": "파스퇴르는 이 말이 이상했습니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "이것 때문에 미쳐서 공중제비를 돌아버립니다",
+   "card": "이것 때문에 미쳐서 공중제비를 돌아버립니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "백조목 플라스크에 국물을 끓였죠",
+   "card": "백조목 플라스크에 국물을 끓였죠",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "공기는 통해도 먼지는 목에 걸립니다",
+   "card": "공기는 통해도 먼지는 목에 걸립니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "국물은 맑았는데 목을 부러뜨리자",
+   "card": "국물은 맑았는데 목을 부러뜨리자",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "금방 썩었습니다. 범인은 미생물이죠",
+   "card": "금방 썩었습니다. 범인은 미생물이죠",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "outro": "공기 속 미생물이 썩게 해서, 그 덕분에 저온살균법이 생긴 겁니다. 정말 신기하죠?",
+ "media": [
+  {
+   "video": "clip_hook.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_old.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_think.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_flip.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_exp.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_why.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_proof.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_proof.mp4",
+   "start": 0
+  }
+ ],
+ "gpt_images": [],
+ "thumb_caption": "썩는 진짜 범인",
+ "end_comments": false,
+ "yt_title": "국물은 왜 썩을까? 파스퇴르의 답 #shorts",
+ "description": "옛날엔 썩은 고기에서 구더기나 미생물이 '저절로' 생긴다고 믿었습니다(자연발생설, 아리스토텔레스 이후 오래 이어진 생각).\n파스퇴르는 1859~1862년 무렵, 목을 S자로 길게 휜 '백조목 플라스크'에 고기 국물을 넣고 끓였습니다. 공기는 드나들지만 먼지와 미생물은 휜 목에 걸려서, 국물은 오랫동안 맑게 남았습니다. 목을 부러뜨리거나 국물을 휜 부분까지 기울이자 곧 미생물이 자라 뿌옇게 썩었습니다. 썩게 만드는 건 '저절로'가 아니라 공기 속 미생물이었던 거죠.\n이 연구는 열로 미생물을 줄이는 저온살균법(파스퇴르화)으로 이어졌습니다.\n\n참고: Britannica 'Louis Pasteur — Spontaneous generation' / OpenStax Microbiology 3.1 'Spontaneous Generation'\n※ 캐릭터는 파스퇴르를 본뜬 만화풍 3D 캐릭터입니다. 실험 연도는 자료마다 1859~1862년으로 조금씩 다릅니다.\n\n※ 숫자는 공식 자료·공식 계산으로 확인한 값입니다.",
+ "tags": [
+  "파스퇴르",
+  "백조목플라스크",
+  "자연발생설",
+  "미생물",
+  "저온살균",
+  "과학",
+  "생물",
+  "쇼츠",
+  "상식",
+  "원리"
+ ],
+ "sources": [
+  "https://www.britannica.com/biography/Louis-Pasteur/Spontaneous-generation",
+  "https://openstax.org/books/microbiology/pages/3-1-spontaneous-generation",
+  "https://mun.ca/biology/scarr/4270_Pasteur_experiment.html"
+ ],
+ "pin_comment": "목 하나 휘었을 뿐인데 국물이 안 썩는다니… 여러분 집 국은 며칠 버티나요? 🍲",
+ "outro_custom": true,
+ "credits": [
+  "3D: three.js (MIT) — 직접 만든 장면·캐릭터",
+  "기법 참고: claude-animation-skills (MIT)"
+ ],
+ "voices": [
+  "필재",
+  "필재"
+ ]
+}

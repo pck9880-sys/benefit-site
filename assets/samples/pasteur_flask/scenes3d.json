@@ -1,0 +1,9 @@
+{
+ "clip_hook.mp4": {"type": "broth_jar", "seconds": 4, "label": "국물은 왜 썩을까?"},
+ "clip_old.mp4": {"type": "spont_old", "seconds": 4, "label": "옛 상식: 생명은 저절로 생긴다"},
+ "clip_think.mp4": {"type": "pasteur", "mode": "think", "seconds": 4, "label": "정말 그럴까?"},
+ "clip_flip.mp4": {"type": "pasteur", "mode": "flip", "seconds": 4},
+ "clip_exp.mp4": {"type": "swan_flask", "mode": "boil", "seconds": 4, "label": "백조목 플라스크"},
+ "clip_why.mp4": {"type": "swan_flask", "mode": "dust", "seconds": 4, "label": "먼지는 휜 목에 걸림"},
+ "clip_proof.mp4": {"type": "swan_break", "seconds": 13, "label": "목을 부러뜨리면?", "label2": "범인은 공기 속 미생물!", "drop": 2.6}
+}

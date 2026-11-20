@@ -203,3 +203,21 @@ PSG에서 트로피만 12개 들었다고 함
 바람이 동쪽으로 불어서, 제트기류 덕분에 갈 때 더 빨리 가게 된 겁니다. 정말 신기하죠?
 ```
 - 참고: NOAA SciJinks(https://scijinks.gov/jet-stream/), NOAA JetStream, 직항 시간표(FlightConnections 등). 비행시간은 대략값.
+
+
+## 11. pasteur_flask — [과학] 국물은 왜 썩지? / 파스퇴르의 답
+- 만든 시각: 2026-11-20 (KST) · 종류: 과학 · 핵심: 생명이 저절로 생긴다는 자연발생설을 파스퇴르가 백조목 플라스크(공기는 통과, 먼지·미생물은 휜 목에 걸림)로 깸 → 목을 부러뜨리자 썩음 → 범인은 공기 속 미생물, 저온살균법으로 이어짐
+- 화면: 3D 7종(scene3d_pro 새 type: broth_jar·spont_old·pasteur think/flip·swan_flask boil/dust·swan_break 13초) · 썸네일 원본 thumb_src.jpg(증명 클립 프레임) · 더빙 필재
+- 녹음 대본:
+```
+국물은 왜 썩을까요?
+생명은 저절로 생긴다고 믿었죠
+파스퇴르는 이 말이 이상했습니다
+이것 때문에 미쳐서 공중제비를 돌아버립니다
+백조목 플라스크에 국물을 끓였죠
+공기는 통해도 먼지는 목에 걸립니다
+국물은 맑았는데 목을 부러뜨리자
+금방 썩었습니다. 범인은 미생물이죠
+공기 속 미생물이 썩게 해서, 그 덕분에 저온살균법이 생긴 겁니다. 정말 신기하죠?
+```
+- 참고: Britannica 'Louis Pasteur — Spontaneous generation', OpenStax Microbiology 3.1, Memorial Univ. 백조목 실험 해설. 실험 연도는 자료마다 1859~1862.
