@@ -17,7 +17,7 @@
      **실제 글자가 적힌 이미지(커뮤니티 캡처·기사 화면·글자 카드)는 쓰지 않는다.** 필요 수(문장 10개 기준): AI 4장, 일본짤 i1~i5.png 5장, 페페 z1~z2.png 2장.
      · 일본짤: `python -m bot.irasutoya <일본어 검색어>` → `python -c "from bot import irasutoya; irasutoya.save('<URL>', 'assets/samples/<slug>/i1.png')"` (i1.png, i2.png …)
        문장 상황에 맞는 것 (예: 驚く, 怒る母, キムチ, 冷蔵庫). 한 작품 20장 이하 규약. 장면마다 다른 그림으로.
-     · 페페짤: ~/쇼츠작업/짤/페페/ (파일 이름 = 감정: classy_wine·happy_propeller·confused_question·thinking_hmm·silence_dots·laughing·angry·crying·surprised·clapping·sweating·love_heart·sad·smug·teary·shocked) 에서 **그 문장 감정에 딱 맞는 것** → z1.png, z2.png (부족하면 WebSearch 로 찾아 curl 로 보관함에 추가, 혐오·정치 상징 금지).
+     · 페페짤: ~/쇼츠작업/짤/페페/ 에 있는 것만 (사용자가 직접 준 검증된 짤). 파일 이름이 감정. **새로 검색해서 받지 않는다**(엉뚱한 사진이 받아진 적 있음). 같은 편에 같은 짤 반복 가능 → z1.png, z2.png
      · AI 이미지는 **진짜 사진처럼** (스마트폰 실사 느낌, 과장된 상황). 짤과 번갈아 배치(도구가 자동).
    - **화면 전환은 적게**: 같은 사진·장면이 2문장 이어지는 구간을 2~3번 둔다(media 에 같은 파일 연속). 확대 효과는 약하게(자동).
    - **짤은 중간중간 필수**: 3~4문장마다 일본짤 또는 페페짤이 한 번은 나오게.
