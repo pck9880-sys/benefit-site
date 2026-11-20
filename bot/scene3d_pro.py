@@ -24,6 +24,12 @@ type:
   swan_flask   백조목(S자 목) 플라스크. mode "boil" 알코올램프로 국물 끓임·김 / "dust" 공기는 통과, 먼지는 휜 목에 걸림
   swan_break   긴 클립: 목이 부러져 떨어짐 → 먼지가 바로 들어가 국물이 뿌옇게, 미생물 증식 (label/label2, drop 초)
   moon_drop    달 표면·착륙선, 망치와 깃털이 동시에 떨어짐(슬로모션·먼지) — 긴 클립(라벨 label/label2, drop 초)
+  earth_tape   우주 속 회전 지구본에 금색 줄자가 한 바퀴 감기며 물음표 (label)
+  syene_well   하짓날 정오, 해가 머리 위에서 우물 바닥까지 비침(그림자 없는 막대) (label, tag)
+  eratos       에라토스테네스풍 만화 학자(갈색 머리·수염·파란 토가·두루마리) mode: "think"(작은 지구본+물음표) / "flip"
+  shadow_stick 알렉산드리아 막대(오벨리스크)에 7.2° 기운 햇빛과 짧은 그림자, 각도 호 (label, tag)
+  earth_angle  지구 단면: 평행한 햇빛 + 두 막대 → 중심각 7.2° = 원의 1/50 (그림은 과장 각도) (label)
+  earth_proof  긴 클립: 두 도시 사이 호가 ×1→×50 으로 지구를 한 바퀴 채움 → 인공위성·오늘날 값 (label/label2, drop 초)
   ※ 모든 장면에 비네트+필름 그레인(애니메이션 키트 기법). 장면 속 글씨는 자막 자리(아래 ~21%)에 들어가면 자동으로 위로 올림. --snap 스틸엔 자막 자리 빨간 띠 표시
 실존 인물 사진·초상은 쓰지 않는다 (캐릭터는 흰 머리·콧수염의 만화풍 과학자).
 """
@@ -598,6 +604,134 @@ if (CFG.type==='moon_drop') {
       const d=2.9-1.2*lk, h=.95-.55*lk, lkY=.75-.65*lk; const P1=new THREE.Vector3(d*Math.sin(.3+o), h, d*Math.cos(.3+o));
       camera.position.copy(new THREE.Vector3(3.4,1.7,5.2).lerp(P1,k)); camera.lookAt(new THREE.Vector3(-1.2,1,-2).lerp(new THREE.Vector3(0,lkY,0),k)); }
     gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+// ── 에라토스테네스 편: 지구본·우물·막대 그림자·단면 각도 ──
+function earthTex(){ const c=document.createElement('canvas'); c.width=1024; c.height=512; const g=c.getContext('2d');
+  const gr=g.createLinearGradient(0,0,0,512); gr.addColorStop(0,'#1d4f86'); gr.addColorStop(.5,'#1f6fb0'); gr.addColorStop(1,'#1d4f86'); g.fillStyle=gr; g.fillRect(0,0,1024,512);
+  const blob=(x,y,r,col)=>{ g.fillStyle=col; for(let i=0;i<26;i++){ g.beginPath(); g.arc(x+(rnd()-.5)*r*1.6,y+(rnd()-.5)*r,r*(.35+rnd()*.45),0,7); g.fill(); } };
+  [[180,170,70],[260,330,55],[520,150,60],[560,300,70],[760,170,95],[860,340,45],[300,90,40]].forEach(([x,y,r])=>blob(x,y,r,rnd()>.4?'#4f8a3a':'#9c8a55'));
+  g.fillStyle='rgba(255,255,255,.92)'; g.fillRect(0,0,1024,26); g.fillRect(0,488,1024,24);
+  const t=new THREE.CanvasTexture(c); t.encoding=THREE.sRGBEncoding; return t; }
+function globe(r){ const m=new THREE.Mesh(new THREE.SphereGeometry(r,96,64), new THREE.MeshStandardMaterial({map:earthTex(), roughness:.62, metalness:.05})); m.castShadow=true;
+  const atm=new THREE.Mesh(new THREE.SphereGeometry(r*1.04,64,48), new THREE.MeshBasicMaterial({color:0x6fb6ff, transparent:true, opacity:.13, side:THREE.BackSide})); m.add(atm); return m; }
+function stars(n,R){ const v=[]; for(let i=0;i<n;i++){ const a=rnd()*Math.PI*2, b=(rnd()-.5)*Math.PI; v.push(Math.cos(a)*Math.cos(b)*R, Math.sin(b)*R, Math.sin(a)*Math.cos(b)*R); }
+  const g=new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(v,3)); scene.add(new THREE.Points(g, new THREE.PointsMaterial({color:0xffffff, size:.12}))); }
+function glowLine(pts,color,w){ return new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),Math.max(2,pts.length*8),w||.02,8,false), new THREE.MeshBasicMaterial({color:new THREE.Color(color).multiplyScalar(1.3), toneMapped:false})); }
+function sunRay(x0,y0,z0,x1,y1,z1,color){ const m=glowLine([new THREE.Vector3(x0,y0,z0),new THREE.Vector3(x1,y1,z1)],color||'#ffd86b',.025); scene.add(m); return m; }
+function arcTube(R,a0,a1,color,w){ const pts=[]; for(let i=0;i<=24;i++){ const a=a0+(a1-a0)*i/24; pts.push(new THREE.Vector3(Math.cos(a)*R,Math.sin(a)*R,0)); } return glowLine(pts,color,w); }
+const ERA={hair:0x4a3526, robe:0x2f5a96, top:true, beard:[1.05,1.15,.84], sash:true};
+
+if (CFG.type==='earth_tape') {
+  scene.background=new THREE.Color(0x02040a); stars(1400,60); const sun=sunLight(-6,3,6,2.8,4); scene.add(new THREE.AmbientLight(0x30406a,.55));
+  const E=globe(1.5); E.rotation.z=.41; scene.add(E);
+  const tape=new THREE.Mesh(new THREE.TorusGeometry(1.56,.035,12,160,0.001), new THREE.MeshStandardMaterial({color:0xffd23f, emissive:0xb07a10, emissiveIntensity:.8, metalness:.3, roughness:.4})); scene.add(tape);
+  const q=label('?','#ffe066',220); q.scale.set(2.6,.48,1); scene.add(q);
+  if (CFG.label) hudLabel(CFG.label,'#ffe066',.33);
+  draw=t=>{ const s=t*SEC; E.rotation.y=s*.35; const k=ease(Math.min(1,Math.max(0,(t-.1)/.6)));
+    tape.geometry.dispose(); tape.geometry=new THREE.TorusGeometry(1.56,.035,12,160,Math.max(.001,k*Math.PI*2)); tape.rotation.set(Math.PI/2-.25,0,0);
+    q.position.set(1.55,1.55+.06*Math.sin(s*4),0); q.material.opacity=Math.min(1,Math.max(0,(t-.35)*4));
+    camera.position.set(.4,1.0,6.6-.7*t); camera.lookAt(0,.15,0); gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+if (CFG.type==='syene_well') {
+  scene.background=grad('#d9843f','#2f4f86'); scene.add(new THREE.HemisphereLight(0xffe6c0,0x7a5a3a,.35));
+  const sun=sunLight(0,10,.0001,1.5,5); sun.target.position.set(0,0,0);
+  const sand=new THREE.Mesh(new THREE.CircleGeometry(16,64), new THREE.MeshStandardMaterial({color:0xd9b77a, roughness:.95})); sand.rotation.x=-Math.PI/2; sand.receiveShadow=true; scene.add(sand);
+  const stone=new THREE.MeshStandardMaterial({color:0xb79a6e, roughness:.85, side:THREE.DoubleSide});
+  const wall=new THREE.Mesh(new THREE.CylinderGeometry(.85,.9,.75,48,1,true), stone); wall.position.y=.375; wall.castShadow=wall.receiveShadow=true; scene.add(wall);
+  const lip=new THREE.Mesh(new THREE.TorusGeometry(.87,.08,12,48), stone); lip.rotation.x=Math.PI/2; lip.position.y=.75; lip.castShadow=true; scene.add(lip);
+  const shaft=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,2.4,48,1,true), new THREE.MeshStandardMaterial({color:0x6b5640, roughness:.9, side:THREE.BackSide})); shaft.position.y=-1.2+.02; scene.add(shaft);
+  const hole=new THREE.Mesh(new THREE.CircleGeometry(.8,48), new THREE.MeshBasicMaterial({color:0x000000})); hole.rotation.x=-Math.PI/2; hole.position.y=.01; scene.add(hole);
+  const wt=new THREE.Mesh(new THREE.CircleGeometry(.79,48), new THREE.MeshBasicMaterial({color:new THREE.Color(0xfff2b0), toneMapped:false, transparent:true, opacity:0})); wt.rotation.x=-Math.PI/2; wt.position.y=.03; scene.add(wt);
+  const sunB=glowBall(.55,'#fff1a8',2.4); scene.add(sunB);
+  const beams=[]; for(let i=0;i<9;i++){ const x=(i%3-1)*.4, z=(Math.floor(i/3)-1)*.4; const b=sunRay(x,6,z,x,.05,z,'#ffe27a'); b.material.transparent=true; beams.push(b); }
+  const stick=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,1.2,12), new THREE.MeshStandardMaterial({color:0x7a5230, roughness:.7})); stick.position.set(1.8,.6,.3); stick.castShadow=true; scene.add(stick);
+  const tg=tag(CFG.tag||'그림자 없음','#ffffff',2.4);
+  if (CFG.label) hudLabel(CFG.label,'#ffe066',.33);
+  draw=t=>{ const s=t*SEC; const k=ease(Math.min(1,t*1.4)); sunB.position.set(0,6.2,-1.2+1.2*k);
+    beams.forEach((b,i)=>{ b.material.opacity=Math.min(.75,Math.max(0,(t-.25)*3)); }); wt.material.opacity=Math.min(1,Math.max(0,(t-.3)*3));
+    tg.position.set(1.25,1.6,.3); tg.material.opacity=Math.min(1,Math.max(0,(t-.5)*4));
+    camera.position.set(2.6-.8*t, 3.4+.6*t, 5.2-.8*t); camera.lookAt(.4,.3,0); gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+if (CFG.type==='eratos') {
+  scene.background = grad(CFG.mode==='flip'?'#4a2f1e':'#1d4a66', '#05070f'); stage(0x1c2135);
+  const key=keyLight(2.5,6,4,2.8); key.target.position.set(0,1.3,0); scene.add(new THREE.AmbientLight(0x6070a0,.42));
+  const rim=new THREE.DirectionalLight(0xffc98a,1.0); rim.position.set(-3,3,-4); scene.add(rim);
+  const G=galileo(ERA); scene.add(G.g);
+  const sc=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,.7,20), new THREE.MeshStandardMaterial({color:0xe8dcc0, roughness:.8})); sc.rotation.z=Math.PI/2; sc.position.set(0,-.86,.05); G.arms[0].add(sc);  // 두루마리
+  const qs=[]; if (CFG.mode==='think'){ for(let i=0;i<5;i++){ const q=label('?','#ffd23f',220); q.scale.set(1.5,.28,1); scene.add(q); qs.push([q,i/5*Math.PI*2]); } }
+  const mini=CFG.mode==='think'?globe(.32):null; if(mini) scene.add(mini);
+  if (CFG.label) hudLabel(CFG.label,'#ffd23f',.33);
+  draw=t=>{ const s=t*SEC;
+    if (CFG.mode==='flip'){ const ph=(s*.42)%1; const up=ph<.75?Math.sin(Math.PI*ph/.75):0; G.g.position.y=up*1.7; G.g.rotation.x = ph<.75 ? -2*Math.PI*ease(ph/.75) : 0;
+      G.arms[0].rotation.z=-.22-1.9*up; G.arms[1].rotation.z=.22+1.9*up; G.face(.9,0,1); camera.position.set(1.5,2.6,7.6); camera.lookAt(0,1.9,0); }
+    else { const blink=(s%2.3)<.12?1:0; G.face(.15, blink?1:.25, .6+.4*Math.sin(s*3)); G.H.rotation.z=.18*Math.sin(s*1.4); G.H.rotation.x=-.06;
+      G.arms[1].rotation.set(-2.15,0,-.62); G.arms[0].rotation.z=-.25;
+      mini.position.set(-1.1,2.3+.08*Math.sin(s*2),.2); mini.rotation.y=s*.8;
+      qs.forEach(([q,a],i)=>{ const b=a+s*1.2; q.position.set(Math.cos(b)*1.3, 2.5+.25*Math.sin(s*2.5+i), Math.sin(b)*.7); q.material.opacity=.6+.4*Math.sin(s*3+i); });
+      camera.position.set(.3,2.0,5.4-.5*t); camera.lookAt(0,1.8,0); }
+    gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+if (CFG.type==='shadow_stick') {
+  scene.background=grad('#e99a55','#4f6fa8'); scene.add(new THREE.HemisphereLight(0xffe6c0,0x7a5a3a,.55));
+  const ang=7.2*Math.PI/180; const sun=sunLight(-Math.sin(ang)*10,Math.cos(ang)*10,0,2.6,4); sun.target.position.set(0,0,0);
+  const sand=new THREE.Mesh(new THREE.CircleGeometry(16,64), new THREE.MeshStandardMaterial({color:0xd9b77a, roughness:.95})); sand.rotation.x=-Math.PI/2; sand.receiveShadow=true; scene.add(sand);
+  const Hs=2.4; const stick=new THREE.Mesh(new THREE.BoxGeometry(.14,Hs,.14), new THREE.MeshStandardMaterial({color:0xe9dcc4, roughness:.55})); stick.position.y=Hs/2; stick.castShadow=true; scene.add(stick);
+  const tip=new THREE.Mesh(new THREE.ConeGeometry(.12,.22,4), new THREE.MeshStandardMaterial({color:0xd9b24a, metalness:.7, roughness:.3})); tip.position.y=Hs+.11; tip.castShadow=true; scene.add(tip);
+  const L=Hs*Math.tan(ang); const ray=sunRay(-L*1.4, Hs*2.4, .3, 0, Hs, .3); ray.material.transparent=true;
+  const R2=sunRay(0,Hs,.3,L,0,.3,'#ffe066'); R2.material.transparent=true;
+  const arc=arcTube(1.2, -Math.PI/2, -Math.PI/2+ang, '#ff6b6b', .02); arc.position.set(0,Hs,.3); scene.add(arc);
+  const vert=glowLine([new THREE.Vector3(0,Hs,.3),new THREE.Vector3(0,Hs-1.2,.3)],'#ffffff',.012); scene.add(vert);
+  const tg=tag(CFG.tag||'7.2°','#ff6b6b',1.8);
+  const sh=tag('그림자','#3a2a1a',1.6);
+  if (CFG.label) hudLabel(CFG.label,'#ffe066',.33);
+  draw=t=>{ const s=t*SEC; const k=Math.min(1,Math.max(0,(t-.35)*3)); [R2,arc,vert].forEach(o=>o.visible=k>0); R2.material.opacity=k; ray.material.opacity=Math.min(1,t*3);
+    tg.position.set(.55,Hs-.95,.3); tg.material.opacity=k; sh.position.set(L+.2,.3,.9); sh.material.opacity=Math.min(1,Math.max(0,(t-.15)*4));
+    camera.position.set(1.4-.6*t, 1.7, 5.4-.6*t); camera.lookAt(0,1.2,0); gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+if (CFG.type==='earth_angle') {
+  scene.background=grad('#0c1a33','#020409'); stars(900,50); scene.add(new THREE.AmbientLight(0x8090b0,.55)); const key=keyLight(4,5,6,2.6); key.target.position.set(0,0,0);
+  const R=1.6; const disc=new THREE.Mesh(new THREE.CircleGeometry(R,96), new THREE.MeshStandardMaterial({color:0x1f6fb0, roughness:.6})); scene.add(disc);
+  const crust=new THREE.Mesh(new THREE.RingGeometry(R-.12,R,96), new THREE.MeshStandardMaterial({color:0x5f8a3a, roughness:.8})); crust.position.z=.002; scene.add(crust);
+  const core=new THREE.Mesh(new THREE.CircleGeometry(.22,64), new THREE.MeshBasicMaterial({color:new THREE.Color(0xff8a3a), toneMapped:false})); core.position.z=.003; scene.add(core);
+  const D=12*Math.PI/180;  // 보기 좋게 과장한 각도(화면 표시는 7.2°)
+  const aS=Math.PI/2, aA=Math.PI/2+D;
+  const stickAt=(a,c)=>{ const m=new THREE.Mesh(new THREE.BoxGeometry(.05,.34,.05), new THREE.MeshStandardMaterial({color:c})); m.position.set(Math.cos(a)*(R+.17),Math.sin(a)*(R+.17),.05); m.rotation.z=a-Math.PI/2; scene.add(m); return m; };
+  stickAt(aS,0xffffff); stickAt(aA,0xffffff);
+  const rays=[]; for(const x of [-1.1,Math.cos(aA)*R, 0, 1.1]){ const r=sunRay(x,4.2,.06,x,Math.sqrt(Math.max(0,R*R-x*x))+.34,.06); r.material.transparent=true; rays.push(r); }
+  const lS=glowLine([new THREE.Vector3(0,0,.07),new THREE.Vector3(Math.cos(aS)*R,Math.sin(aS)*R,.07)],'#7dfcff',.018), lA=glowLine([new THREE.Vector3(0,0,.07),new THREE.Vector3(Math.cos(aA)*R,Math.sin(aA)*R,.07)],'#7dfcff',.018); scene.add(lS); scene.add(lA);
+  const arcC=arcTube(.6,aS,aA,'#ff6b6b',.022); arcC.position.z=.08; scene.add(arcC);
+  const arcE=arcTube(R+.02,aS,aA,'#ffe066',.04); arcE.position.z=.08; scene.add(arcE);
+  const tA=tag('7.2°','#ff6b6b',1.4), tF=tag('= 원의 1/50','#ffe066',2.4), tS=tag('시에네','#ffffff',1.3), tAl=tag('알렉산드리아','#ffffff',1.9);
+  if (CFG.label) hudLabel(CFG.label,'#7dfcff',.33);
+  draw=t=>{ const s=t*SEC; const k1=Math.min(1,t*3), k2=Math.min(1,Math.max(0,(t-.3)*3)), k3=Math.min(1,Math.max(0,(t-.55)*3));
+    rays.forEach(r=>r.material.opacity=k1); [lS,lA,arcC].forEach(o=>o.visible=k2>0); arcE.visible=k3>0;
+    tA.position.set(-.35,.95,.1); tA.material.opacity=k2; tF.visible=false;
+    tS.position.set(.55,R+.35,.1); tAl.position.set(-1.25,R+.15,.1);
+    camera.position.set(.15, .9, 7.6-.5*t); camera.lookAt(0,.9,0); gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+if (CFG.type==='earth_proof') {
+  scene.background=new THREE.Color(0x02040a); stars(1600,60); const sun=sunLight(-6,4,6,2.6,4); scene.add(new THREE.AmbientLight(0x30406a,.6));
+  const R=1.6; const E=globe(R); scene.add(E);
+  const segN=50, segs=[]; for(let i=0;i<segN;i++){ const a0=Math.PI/2+i*2*Math.PI/segN; const m=arcTube(R+.06,a0,a0+2*Math.PI/segN*.88,i===0?'#ff6b6b':'#ffd23f',.035); m.visible=false; scene.add(m); segs.push(m); }
+  const cnt=tag('×1','#ffffff',3.2);
+  const sat=new THREE.Group(); const body=new THREE.Mesh(new THREE.BoxGeometry(.16,.16,.22), new THREE.MeshStandardMaterial({color:0xd8a93a, metalness:.9, roughness:.35})); sat.add(body);
+  for(const x of [-1,1]){ const p=new THREE.Mesh(new THREE.BoxGeometry(.4,.01,.14), new THREE.MeshStandardMaterial({color:0x1b3a7a, metalness:.6, roughness:.3, emissive:0x0a1a40})); p.position.x=x*.3; sat.add(p); }
+  sat.visible=false; scene.add(sat);
+  const hudA=hudLabel(CFG.label||'거리 × 50','#ffe066',.33), hudB=hudLabel(CFG.label2||'약 4만 km','#7dfcff',.33); hudB.visible=false;
+  const T0=CFG.drop||2.2, T1=T0+5.0;
+  draw=t=>{ const s=t*SEC; E.rotation.y=.4+s*.05;
+    const n = s<T0 ? (s>.5?1:0) : Math.min(segN, 1+Math.floor((segN-1)*ease(Math.min(1,(s-T0)/(T1-T0-.5)))));
+    segs.forEach((m,i)=>m.visible=i<n); cnt.position.set(0,.2,R+.4); cnt.visible=n>0 && s<T1+.3;
+    if(cnt.visible && cnt._n!==n){ cnt.material.map.dispose(); const L2=label('×'+n,'#ffffff',110); cnt.material.map=L2.material.map; cnt._n=n; }
+    sat.visible=s>T1; if(sat.visible){ const a=(s-T1)*.9; sat.position.set(Math.cos(a)*(R+.55), Math.sin(a)*.4*(R+.55), Math.sin(a)*(R+.55)); sat.lookAt(0,0,0); }
+    hudA.visible=s<T1; hudB.visible=s>=T1;
+    const c=ease(Math.min(1,s/SEC*1.5)); camera.position.set(.2, .3, 7.4-1.0*c); camera.lookAt(0,.1,0); gradePass.uniforms.uT.value=s; composer.render(); };
 }
 
 // ── 자막 자리 비우기: 장면 속 글씨(스프라이트)가 정사각 아래 ~21%(대본 자막 상자) 안으로 들어가면 렌더 순간 위로 올림 ──

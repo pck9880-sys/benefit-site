@@ -1,0 +1,9 @@
+{
+ "clip_hook.mp4": {"type": "earth_tape", "seconds": 4, "label": "지구 둘레, 어떻게 잴까?"},
+ "clip_old.mp4": {"type": "syene_well", "seconds": 4, "label": "하짓날 정오 · 시에네 우물"},
+ "clip_think.mp4": {"type": "eratos", "mode": "think", "seconds": 4, "label": "왜 여기만 그림자가 없지?"},
+ "clip_flip.mp4": {"type": "eratos", "mode": "flip", "seconds": 4},
+ "clip_exp.mp4": {"type": "shadow_stick", "seconds": 4, "label": "같은 시각 · 알렉산드리아"},
+ "clip_why.mp4": {"type": "earth_angle", "seconds": 4, "label": "7.2° = 원의 1/50"},
+ "clip_proof.mp4": {"type": "earth_proof", "seconds": 13, "label": "두 도시 거리 × 50", "label2": "오늘날 값 약 4만 km", "drop": 2.0}
+}

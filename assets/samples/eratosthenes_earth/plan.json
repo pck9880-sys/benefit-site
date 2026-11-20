@@ -1,0 +1,173 @@
+{
+ "topic": "에라토스테네스: 막대 그림자로 지구 둘레를 잰 방법 (기원전 약 240년)",
+ "title_top": "막대기 하나로",
+ "title_bottom": "지구 둘레를 잼",
+ "mood": "기본",
+ "kind": "과학",
+ "caption_style": "box",
+ "music_concept": "잔잔한 과학",
+ "question": "",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "intro_post": false,
+ "beats": [
+  {
+   "narration": "지구 둘레는 처음에 어떻게 쟀을까요?",
+   "card": "지구 둘레는 처음에 어떻게 쟀을까요?",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "하짓날 시에네 우물엔 해가 꽂혔죠",
+   "card": "하짓날 시에네 우물엔 해가 꽂혔죠",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "에라토스테네스는 궁금했습니다",
+   "card": "에라토스테네스는 궁금했습니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "이것 때문에 미쳐서 공중제비를 돌아버립니다",
+   "card": "이것 때문에 미쳐서 공중제비를 돌아버립니다",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "같은 날 북쪽 막대엔 그림자가",
+   "card": "같은 날 북쪽 막대엔 그림자가",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "그 각도 7.2도는 원의 50분의 1",
+   "card": "그 각도 7.2도는 원의 50분의 1",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "두 도시 거리에 50을 곱하면",
+   "card": "두 도시 거리에 50을 곱하면",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  },
+  {
+   "narration": "지금 값 약 4만km에 가깝죠",
+   "card": "지금 값 약 4만km에 가깝죠",
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": ""
+  }
+ ],
+ "outro": "그림자 각도 차이를 재서, 그 덕분에 지구 둘레를 처음 알아낸 겁니다. 정말 신기하죠?",
+ "media": [
+  {
+   "video": "clip_hook.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_old.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_think.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_flip.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_exp.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_why.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_proof.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_proof.mp4",
+   "start": 0
+  }
+ ],
+ "gpt_images": [],
+ "thumb_caption": "자도 없이 지구를?",
+ "end_comments": false,
+ "yt_title": "막대기 하나로 지구 둘레를 잰 방법 #shorts",
+ "description": "기원전 약 240년, 알렉산드리아 도서관장 에라토스테네스는 하짓날 정오 시에네(지금의 아스완)에서는 우물 바닥까지 햇빛이 비친다(해가 머리 바로 위)는 이야기를 들었습니다.\n같은 날 같은 시각 북쪽 알렉산드리아에서는 세운 막대에 그림자가 생겼고, 햇빛과 막대가 이루는 각도는 약 7.2도였습니다.\n햇빛은 평행하게 들어오므로 이 7.2도는 지구 중심에서 두 도시가 벌어진 각도와 같고, 7.2 ÷ 360 = 1/50 입니다. 그래서 두 도시 거리(약 5,000스타디온)에 50을 곱해 지구 둘레 약 25만 스타디온을 얻었습니다.\n\n계산: 360° ÷ 7.2° = 50 / 5,000스타디온 × 50 = 250,000스타디온\n※ 1스타디온의 길이는 자료마다 약 157~185m로 달라 km 환산값은 약 3만9천~4만6천km로 갈립니다. 오늘날 측정한 지구 둘레는 약 4만km(적도 약 40,075km)입니다.\n참고: APS News 'This Month in Physics History — June, ca. 240 B.C.: Eratosthenes Measures the Earth' / Britannica 'Eratosthenes' / Linda Hall Library 'Scientist of the Day: Eratosthenes of Cyrene' / NASA Earth Fact Sheet\n※ 캐릭터는 에라토스테네스를 본뜬 만화풍 3D 캐릭터, 장면은 모두 직접 만든 3D입니다(각도 그림은 보기 쉽게 과장).\n\n※ 숫자는 공식 자료·공식 계산으로 확인한 값입니다.",
+ "tags": [
+  "에라토스테네스",
+  "지구둘레",
+  "그림자",
+  "과학",
+  "지구과학",
+  "수학",
+  "쇼츠",
+  "상식",
+  "원리",
+  "고대과학"
+ ],
+ "sources": [
+  "https://www.aps.org/apsnews/2006/06/eratosthenes-measures-earth",
+  "https://www.britannica.com/question/What-is-Eratosthenes-famous-for",
+  "https://www.lindahall.org/about/news/scientist-of-the-day/eratosthenes-of-cyrene",
+  "https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html"
+ ],
+ "pin_comment": "하짓날 정오에 막대 그림자 재 보면 우리 동네 위도도 알 수 있어요 ☀️ 해 보실 분?",
+ "outro_spoken": "그림자 각도 차이를 재서, 그 덕분에 지구 둘레를 처음 알아낸 겁니다. 정말 신기하죠?",
+ "outro_custom": true,
+ "credits": [
+  "3D: three.js (MIT) — 직접 만든 장면·캐릭터",
+  "기법 참고: claude-animation-skills (MIT)"
+ ],
+ "voices": [
+  "필재",
+  "필재"
+ ]
+}

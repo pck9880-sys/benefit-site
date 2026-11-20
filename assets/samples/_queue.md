@@ -239,3 +239,21 @@ PSG에서 트로피만 12개 들었다고 함
 속을 비워 물을 많이 밀어내서, 부력 덕분에 쇠배가 뜨게 된 겁니다. 정말 신기하죠?
 ```
 - 참고: Britannica 'Archimedes' principle', OpenStax University Physics 14.4. 욕조·유레카는 비트루비우스가 전한 일화(설명란에 표기).
+
+
+## 13. eratosthenes_earth — [과학] 막대기 하나로 / 지구 둘레를 잼
+- 만든 시각: 2026-11-21 (KST) · 종류: 과학 · 핵심: 하짓날 정오 시에네는 그림자 0, 알렉산드리아 막대는 7.2°(원의 1/50) → 햇빛이 평행하니 두 도시 거리(약 5,000스타디온)×50 = 지구 둘레 약 25만 스타디온(오늘날 약 4만km와 근접)
+- 화면: 3D 7종(scene3d_pro 새 type: earth_tape·syene_well·eratos think/flip·shadow_stick·earth_angle·earth_proof 13초) · 썸네일 원본 thumb_src.jpg(증명 클립 프레임) · 더빙 필재
+- 녹음 대본:
+```
+지구 둘레는 처음에 어떻게 쟀을까요?
+하짓날 시에네 우물엔 해가 꽂혔죠
+에라토스테네스는 궁금했습니다
+이것 때문에 미쳐서 공중제비를 돌아버립니다
+같은 날 북쪽 막대엔 그림자가
+그 각도 7.2도는 원의 50분의 1
+두 도시 거리에 50을 곱하면
+지금 값 약 4만km에 가깝죠
+그림자 각도 차이를 재서, 그 덕분에 지구 둘레를 처음 알아낸 겁니다. 정말 신기하죠?
+```
+- 참고: APS News(2006-06) 'Eratosthenes Measures the Earth', Britannica, Linda Hall Library, NASA Earth Fact Sheet. 스타디온 길이 불확실 → km 환산은 '약'으로만, 설명란에 범위 표기.
