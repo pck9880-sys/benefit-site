@@ -48,6 +48,7 @@ ADSENSE_CLIENT = _env("ADSENSE_CLIENT")  # 예: ca-pub-1234567890123456
 GOOGLE_SITE_VERIFICATION = _env("GOOGLE_SITE_VERIFICATION")
 NAVER_SITE_VERIFICATION = _env("NAVER_SITE_VERIFICATION")
 BLOG_PER_DAY = int(_env("BLOG_PER_DAY", "2"))  # 하루에 보낼 네이버 블로그용 글 수 (0이면 끔)
+CONTESTS_ON = _env("CONTESTS_ON", "0") == "1"  # 공모전 자동 출품안 (사용자 요청으로 중단, 다시 켜려면 1)
 CONTESTS_PER_DAY = int(_env("CONTESTS_PER_DAY", "3"))  # 하루에 출품안 만들 공모전 수
 CONTEST_HOUR_KST = int(_env("CONTEST_HOUR_KST", "8"))
 SHORTS_PER_DAY = int(_env("SHORTS_PER_DAY", "1"))  # 하루 숏츠 수 (0이면 끔)

@@ -464,7 +464,8 @@ def tick():
             blog.run(st, notify)
         else:
             print("지원금 사이트: API 키가 없어 글 생성은 건너뜁니다.")
-        contest.run(st, notify)
+        if config.CONTESTS_ON:  # 공모전 중단 중
+            contest.run(st, notify)
         from . import kpi
         kpi.run(st, notify)
     except Exception:
