@@ -79,6 +79,31 @@ def prep_post_images(d):
     return sorted((x.name for x in d.glob("s[0-9]*.jpg")), key=lambda n: int(re.sub(r"\D", "", n)))
 
 
+def proof_photo(src, out):
+    """감동 마지막 장면용 '인증 사진': 원문(기사·커뮤니티 글)에 실린 실제 사진을 받아 사람은 모자이크하고
+    왼쪽 위에 '실제 사진' 표시. 지어낸 사진(AI)을 실제처럼 쓰지 않는다."""
+    from PIL import Image, ImageDraw, ImageFont
+    from . import realimg
+    realimg.process(src, out, "auto")
+    im = Image.open(out).convert("RGB")
+    S = 1080
+    bg = im.resize((S, S)).filter(__import__("PIL.ImageFilter", fromlist=["x"]).GaussianBlur(40))
+    sc = min(S / im.size[0], S / im.size[1])
+    fg = im.resize((max(1, int(im.size[0] * sc)), max(1, int(im.size[1] * sc))))
+    bg.paste(fg, ((S - fg.size[0]) // 2, (S - fg.size[1]) // 2))
+    dr = ImageDraw.Draw(bg)
+    try:
+        font = ImageFont.truetype("/System/Library/Fonts/AppleSDGothicNeo.ttc", 40, index=6)
+    except Exception:
+        font = ImageFont.load_default()
+    label = "실제 사진"
+    w = dr.textlength(label, font=font)
+    dr.rounded_rectangle((36, 36, 36 + w + 40, 36 + 64), radius=14, fill=(20, 20, 20))
+    dr.text((56, 44), label, font=font, fill=(255, 255, 255))
+    bg.save(out, quality=92)
+    return out
+
+
 def _layout(p, d, t):
     """템플릿 순서대로 AI·짤·실제 사진을 장면에 배치 (같은 종류가 모자라면 다른 종류로)."""
     pools = {
@@ -205,6 +230,19 @@ def check(slug):
     if not ok:
         p["media"] = _layout(p, d, t)
         notes.append("장면 배치를 템플릿 순서로 채움")
+    # 감동: 마지막 장면(댓글 직전)은 원문에 실린 실제 사진 = 인증 (2026-11-20 사용자 요청)
+    if kind == "감동":
+        url = (p.get("proof_photo") or "").strip()
+        pf = d / "proof.jpg"
+        if url and not pf.exists():
+            try:
+                proof_photo(url, pf)
+            except Exception as ex:
+                errs.append(f"proof_photo 받기 실패({type(ex).__name__}) → 원문의 다른 실제 사진 URL 로")
+        if pf.exists() and p["media"]:
+            p["media"][-1] = {"image": pf.name}
+        elif not url:
+            errs.append("감동 proof_photo 비어 있음 → 원문(기사·커뮤니티 글)에 실린 실제 사진 URL (사람은 자동 모자이크)")
     # 문장에 딱 맞는 '과장된 실사' — beat 에 real_query 가 있으면 그 문장 장면에 실사를 자동으로 받아 넣음
     from . import photos
     for i, b in enumerate(beats):
