@@ -28,12 +28,12 @@
  ],
  "ending": "정말 신기하죠?",
  "image_style": "Photorealistic cinematic science photo, natural light, high detail, no text, no letters, no numbers, no logos, no watermark, no real person's face",
- "label": "과학실사 (실제 사진 + AI 이미지 + 3D 공중제비)",
+ "label": "과학실사 (3D 위주 + 사이사이 실제 사진·AI 이미지)",
  "beats": [
   8,
   8
  ],
- "ai_images": 3,
+ "ai_images": 1,
  "thumb_ai": false,
  "zzal": {
   "min": 0,
@@ -45,18 +45,18 @@
   "max": 0
  },
  "real_photos": {
-  "min": 3,
-  "max": 5
+  "min": 2,
+  "max": 3
  },
  "media_pattern": [
+  "3d",
   "real",
-  "ai",
-  "real",
+  "3d",
   "flip",
   "ai",
+  "3d",
   "real",
-  "real",
-  "ai"
+  "3d"
  ],
  "intro_card": false,
  "text_cards": false,
@@ -66,19 +66,31 @@
  ],
  "story": [
   {
-   "step": "① 훅 (실제 사진)",
-   "guide": "눈을 의심할 실제 현상 한 줄 — 공식 기관 사진",
+   "step": "① 훅 (3D)",
+   "guide": "눈을 의심할 현상을 3D로 바로 보여 주기",
+   "media": "3d",
+   "scene": {
+    "file": "clip_hook.mp4",
+    "type": "",
+    "seconds": 4,
+    "label": "핵심 한마디"
+   }
+  },
+  {
+   "step": "② 실제 사진",
+   "guide": "이게 진짜라는 증거 — 공식 기관 사진",
    "media": "real"
   },
   {
-   "step": "② 오해 (AI)",
-   "guide": "다들 이렇게 생각하죠 — 상식/오해를 장면으로",
-   "media": "ai"
-  },
-  {
-   "step": "③ 진짜 문제 (실제 사진)",
+   "step": "③ 진짜 문제 (3D)",
    "guide": "그런데 실제로는… 이상한 점",
-   "media": "real"
+   "media": "3d",
+   "scene": {
+    "file": "clip_problem.mp4",
+    "type": "",
+    "seconds": 4,
+    "label": ""
+   }
   },
   {
    "step": "④ 공중제비 (3D)",
@@ -86,29 +98,41 @@
    "media": "flip"
   },
   {
-   "step": "⑤ 해결 (AI)",
-   "guide": "전문 용어 1개를 쉬운 말로",
+   "step": "⑤ AI 이미지",
+   "guide": "전문 용어 1개를 쉬운 말로 — 실사풍 장면",
    "media": "ai"
   },
   {
-   "step": "⑥ 원리 (실제 사진)",
-   "guide": "원리 한 줄 + 확인한 숫자",
-   "media": "real"
+   "step": "⑥ 원리 (3D)",
+   "guide": "원리 한 줄 + 확인한 숫자 — 3D 설명 애니메이션",
+   "media": "3d",
+   "scene": {
+    "file": "clip_why.mp4",
+    "type": "",
+    "seconds": 4,
+    "label": ""
+   }
   },
   {
-   "step": "⑦ 증거 (실제 사진)",
+   "step": "⑦ 실제 사진",
    "guide": "실제 관측·실험·기록 (연도·기관)",
    "media": "real"
   },
   {
-   "step": "⑧ 결과 (AI, 마무리까지 이어짐)",
+   "step": "⑧ 결과 (3D, 마무리까지 이어짐)",
    "guide": "그래서 지금 이렇게 된 것",
-   "media": "ai"
+   "media": "3d",
+   "scene": {
+    "file": "clip_end.mp4",
+    "type": "",
+    "seconds": 10,
+    "label": ""
+   }
   }
  ],
  "outro_pattern": "~해서, 그 덕분에 ~된 겁니다. 정말 신기하죠?",
  "steps": [
-  "1. python -m bot.plan_tool new <slug> 과학실사 → plan.json(장면 종류 지정) + scenes3d.json(공중제비)",
+  "1. python -m bot.plan_tool new <slug> 과학실사 → plan.json(장면 종류 지정) + scenes3d.json(3D 4개+공중제비, type 은 주제에 맞게 scene3d_pro 에 새로 추가)",
   "2. 실제 사진: beat 에 real_url(공식 기관 원본 이미지 주소: NASA·NOAA·USGS 등 퍼블릭 도메인 우선)+real_credit, 또는 real_query(영어 검색어). SA 라이선스 제외, 사람 얼굴 자동 모자이크, 왼쪽 위 '실제 사진' 표시 자동",
   "3. AI 이미지: gpt_images 프롬프트(영어, 글자·실존 인물 얼굴 없음) → scripts/mac/shorts_gpt_images.sh <slug>",
   "4. 공중제비 3D: scenes3d.json 의 clip_flip.mp4 (주제에 맞는 캐릭터·배경색으로 새로 렌더)",

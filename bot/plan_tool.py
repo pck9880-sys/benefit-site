@@ -60,7 +60,7 @@ def new(slug, kind):
             elif kind_m == "flip":
                 b["visual"] = "video"; sc["clip_flip.mp4"] = {"type": "scientist", "mode": "flip", "seconds": 4}
                 p["media"].append({"video": "clip_flip.mp4", "start": 0})
-            else:
+            else:   # 3D 장면 (type 은 주제에 맞게)
                 b["visual"] = "video"
                 if not st["scene"].get("same_as_prev"):
                     sc[st["scene"]["file"]] = {k: v for k, v in st["scene"].items() if k != "file"}
@@ -345,10 +345,11 @@ def check(slug):
     if kind == "과학실사":  # 실제 사진 3장+ · AI 2장+ · 3D 공중제비
         if n_real < t["real_photos"]["min"]:
             errs.append(f"과학실사: 실제 사진 {n_real}장 (최소 {t['real_photos']['min']})")
-        if n_ai < 2:
-            errs.append(f"과학실사: AI 이미지 {n_ai}장 (최소 2)")
-        if not any("video" in m for m in p["media"]):
-            errs.append("과학실사: 3D 공중제비 클립(clip_flip.mp4) 없음")
+        if n_ai < t.get("ai_images", 1):
+            errs.append(f"과학실사: AI 이미지 {n_ai}장 (최소 {t.get('ai_images', 1)})")
+        n3d = sum(1 for m in p["media"] if "video" in m)
+        if n3d < len(p["media"]) // 2:
+            errs.append(f"과학실사: 3D 장면 {n3d}개 — 3D 가 절반 이상이어야 함 (사진은 사이사이에만)")
     elif kind == "과학":  # 과학(정보형 3D): 장면은 직접 지정, 3D 장면·공중제비가 있어야 함
         if not any("video" in m or "flip" in m for m in p["media"]):
             errs.append("과학: 3D 장면(bot.scene3d) 또는 공중제비(flip) 장면이 없음")
