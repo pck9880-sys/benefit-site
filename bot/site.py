@@ -12,7 +12,12 @@ from jinja2 import Environment, FileSystemLoader
 from . import config, taxonomy
 
 PER_PAGE = 12
-HOME_LATEST = 6  # 홈에는 최신 6개만, 나머지는 /latest/
+HOME_LATEST = 6
+GUIDES = [  # 생애주기 모음: (주소, 대상 태그, 제목, 한 줄 설명)
+    ("youth", ["youth"], "청년이 받을 수 있는 지원금", "만 19~39세 청년 대상 지원제도만 모았어요."),
+    ("baby", ["pregnancy", "child"], "임신·출산·육아 지원금", "임신부터 아이 키우는 가정까지 받을 수 있는 혜택이에요."),
+    ("senior", ["senior"], "어르신이 받을 수 있는 혜택", "65세 이상 어르신 대상 지원제도를 모았어요."),
+]  # 홈에는 최신 6개만, 나머지는 /latest/
 
 
 def slugify(s):
@@ -144,6 +149,15 @@ def build():
         "amin": (d["source"].get("cond") or {}).get("age_min"), "amax": (d["source"].get("cond") or {}).get("age_max"),
         "d": d["article"]["description"]} for d in posts], ensure_ascii=False))
 
+    # 도구 · 생애주기 모음
+    write("calc/median/index.html", env.get_template("calc_median.html").render(canonical=f"{config.SITE_URL}/calc/median/"))
+    for slug, aud, title, desc in GUIDES:
+        items = [d for d in posts if set(aud) & set(d["audiences"]) and d["dl_state"] != "closed"]
+        items.sort(key=lambda d: (not d["key"]["amount"], d["dl_state"] != "upcoming"))
+        top = next((d for d in items if d["key"]["amount"] and "원" in d["key"]["amount"]), None)
+        write(f"guide/{slug}/index.html", env.get_template("guide.html").render(
+            g={"title": title, "desc": desc}, items=items, top=top, canonical=f"{config.SITE_URL}/guide/{slug}/"))
+
     for name in ("about", "privacy", "contact"):
         write(f"{name}.html", env.get_template(f"{name}.html").render(canonical=f"{config.SITE_URL}/{name}"))
     write("404.html", env.get_template("404.html").render(canonical=config.SITE_URL))
@@ -154,7 +168,8 @@ def build():
         ensure_ascii=False))
 
     # SEO 파일
-    urls = [f"{config.SITE_URL}/", f"{config.SITE_URL}/latest/", f"{config.SITE_URL}/check/", f"{config.SITE_URL}/deadline/"]
+    urls = [f"{config.SITE_URL}/calc/median/"] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
+    urls += [f"{config.SITE_URL}/", f"{config.SITE_URL}/latest/", f"{config.SITE_URL}/check/", f"{config.SITE_URL}/deadline/"]
     urls += [f"{config.SITE_URL}/c/{s}/" for s, _ in cats]
     urls += [f"{config.SITE_URL}/target/{s}/" for s, _, _ in targets] + [f"{config.SITE_URL}/region/{s}/" for s, _, _ in regions]
     urls += [f"{config.SITE_URL}/{d['url']}" for d in posts]

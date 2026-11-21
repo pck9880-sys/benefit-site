@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}기준 중위소득 계산기 (2026·2027) | {{ site_name }}{% endblock %}
+{% block desc %}가구원 수와 월 소득을 넣으면 기준 중위소득 몇 %인지, 생계·의료·주거·교육급여 기준에 해당하는지 바로 보여드립니다.{% endblock %}
+{% block main %}
+<div class="tool">
+  <h1 class="tool-h">기준 중위소득 계산기</h1>
+  <p class="tool-sub">가구원 수와 월 소득만 넣으면 돼요. 입력값은 저장되지 않아요.</p>
+  <form class="tool-form" onsubmit="return false">
+    <div class="seg" id="yr"><button type="button" data-y="2026" class="on">2026년</button><button type="button" data-y="2027">2027년</button></div>
+    <label>가구원 수<select id="hh">{% for n in range(1, 7) %}<option value="{{ n }}"{% if n == 1 %} selected{% endif %}>{{ n }}인 가구</option>{% endfor %}</select></label>
+    <label>월 소득 (세전, 가구 합산)<span class="won"><input id="inc" type="number" inputmode="numeric" placeholder="예: 250"><em>만 원</em></span></label>
+  </form>
+  <div class="tool-res" id="res" hidden>
+    <small>우리 집 소득은</small>
+    <strong><span id="pct">0</span>%</strong>
+    <span id="std"></span>
+  </div>
+  <ul class="tool-list" id="lv"></ul>
+  <p class="disc">보건복지부 고시 기준 중위소득(2026년, 2027년). 급여별 선정 비율(생계 32%·의료 40%·주거 48%·교육 50%)은 2026년 기준입니다. 실제 심사는 재산을 소득으로 환산한 '소득인정액'으로 하므로 결과는 참고용이에요.</p>
+</div>
+<script>
+(function(){
+  var M={2026:[2564238,4199292,5359036,6494738,7556719,8555952],2027:[2736042,4480645,5718091,6929885,8063019,9129201]};
+  var L=[["생계급여",32],["의료급여",40],["주거급여",48],["교육급여",50],["기준 중위소득",100]];
+  var y=2026,hh=document.getElementById('hh'),inc=document.getElementById('inc');
+  function won(v){return Math.round(v/1e4).toLocaleString()+'만 원'}
+  function run(){var m=M[y][hh.value-1],v=parseFloat(inc.value)*1e4;
+    document.getElementById('std').textContent=y+'년 '+hh.value+'인 가구 기준 중위소득 '+won(m);
+    var ok=!isNaN(v)&&v>=0;document.getElementById('res').hidden=!ok;
+    if(ok)document.getElementById('pct').textContent=Math.round(v/m*1000)/10;
+    document.getElementById('lv').innerHTML=L.map(function(l){var t=m*l[1]/100,hit=ok&&v<=t;
+      return '<li class="'+(ok?(hit?'y':'n'):'')+'"><b>'+l[0]+'</b><span>'+l[1]+'% · '+won(t)+' 이하</span><i>'+(ok?(hit?'해당':'초과'):'')+'</i></li>'}).join('')}
+  document.querySelectorAll('#yr button').forEach(function(b){b.onclick=function(){document.querySelectorAll('#yr button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');y=+b.dataset.y;run()}});
+  hh.onchange=run;inc.oninput=run;run();
+})();
+</script>
+{% endblock %}

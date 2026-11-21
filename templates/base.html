@@ -24,7 +24,7 @@
 {% if naver_verify %}<meta name="naver-site-verification" content="{{ naver_verify }}">{% endif %}
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="{{ base }}/static/style.css?v=16">
+<link rel="stylesheet" href="{{ base }}/static/style.css?v=17">
 {% if adsense %}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ adsense }}" crossorigin="anonymous"></script>{% endif %}
 {% block head %}{% endblock %}
 </head>
@@ -36,8 +36,9 @@
     <nav class="gnb" id="gnb">
       <a href="{{ base }}/">홈</a>
       <a href="{{ base }}/check/" class="gnb-hl">자격 진단</a>
+      <a href="{{ base }}/calc/median/">중위소득 계산기</a>
+      <a href="{{ base }}/guide/youth/">청년</a><a href="{{ base }}/guide/baby/">출산·육아</a><a href="{{ base }}/guide/senior/">어르신</a>
       <a href="{{ base }}/deadline/">마감 임박</a>
-      {% for slug, name, n in categories[:3] %}<a href="{{ base }}/c/{{ slug }}/">{{ name }}</a>{% endfor %}
       <a href="{{ base }}/about">소개</a>
     </nav>
     <div class="srch"><input id="q" type="search" placeholder="지원금 검색 (예: 청년 월세)" aria-label="지원금 검색" autocomplete="off">

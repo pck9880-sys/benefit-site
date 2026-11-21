@@ -441,3 +441,32 @@ html,body{overflow-x:hidden}
 .more-all b{color:var(--accent);margin-left:4px}.more-all:hover{border-color:var(--accent);color:var(--accent)}
 
 .ha,.ha-all{will-change:transform}  /* GPU 합성으로 60fps 이상 부드럽게 */
+
+/* v17 도구 · 모음 페이지 */
+.tool{max-width:760px;margin:24px auto 40px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:30px}
+.tool-h{margin:0;font-size:26px}.tool-sub{margin:4px 0 20px;color:var(--sub);font-size:15px}
+.tool-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.tool-form label{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px}
+.tool-form select,.tool-form input{height:48px;border:1px solid var(--line);border-radius:10px;padding:0 14px;font:inherit;font-size:16px;background:#fff;width:100%}
+.won{position:relative;display:block}.won em{position:absolute;right:14px;top:13px;font-style:normal;color:var(--sub);font-weight:500}
+.seg{grid-column:1/-1;display:inline-flex;background:#f1f0f8;border-radius:10px;padding:4px;justify-self:start}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:7px 16px;border-radius:8px;color:var(--sub);cursor:pointer}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.tool-res{position:relative;overflow:hidden;background:var(--dark);color:#fff;border-radius:16px;padding:22px 24px;margin-bottom:14px}
+.tool-res::after{content:"";position:absolute;right:-50px;top:-50px;width:200px;height:200px;background:#5b4cf0;filter:blur(60px);opacity:.35}
+.tool-res>*{position:relative;z-index:1}
+.tool-res small{display:block;color:#a9abc8;font-size:13.5px;font-weight:600}
+.tool-res strong{display:block;font-size:44px;font-weight:850;letter-spacing:-.03em;line-height:1.2}
+.tool-res span{color:#d6d4ee;font-size:14.5px}
+.tool-list{list-style:none;margin:0 0 12px;padding:0}
+.tool-list li{display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid var(--line)}
+.tool-list b{min-width:96px}.tool-list span{color:var(--sub);font-size:14px}
+.tool-list i{margin-left:auto;font-style:normal;font-weight:800;font-size:13px;border-radius:6px;padding:3px 10px}
+.tool-list li.y i{background:#ece9ff;color:#4f3fd9}.tool-list li.n i{background:#f1f0f5;color:#8a8cab}
+.guide-cards{margin-bottom:10px}
+.tools-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.tl{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:2px}
+.tl b{font-size:15.5px}.tl span{font-size:13px;color:var(--sub)}.tl:hover{border-color:var(--accent)}.tl:hover b{color:var(--accent)}
+@media(max-width:960px){.tools-row{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.tool{padding:20px 16px;margin-top:14px}.tool-form{grid-template-columns:1fr}.tool-res strong{font-size:36px}.gnb{font-size:15px}}
+.tool-res strong span{font-size:inherit;color:#fff}
