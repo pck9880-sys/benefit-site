@@ -486,3 +486,11 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 .home-hero::before{border-radius:20px}
 .sr-form input{min-width:0}
 @media(max-width:640px){.hero-art{right:0;top:10px;width:150px;height:150px}}
+
+/* v19 조건 검색 */
+.flt{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 6px}
+.flt label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:700;color:var(--sub)}
+.flt select,.flt input[type=number]{height:42px;border:1px solid var(--line);border-radius:10px;padding:0 10px;font:inherit;font-size:15px;color:var(--ink);background:#fff;width:100%}
+.flt .flt-chk{grid-column:1/-1;flex-direction:row;align-items:center;gap:6px;font-weight:600}
+.flt-chk input{width:18px;height:18px;accent-color:#4f3fd9}
+@media(max-width:640px){.flt{grid-template-columns:1fr 1fr}}

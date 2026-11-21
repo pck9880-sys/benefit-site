@@ -160,13 +160,16 @@ def build():
 
     for name in ("about", "privacy", "contact"):
         write(f"{name}.html", env.get_template(f"{name}.html").render(canonical=f"{config.SITE_URL}/{name}"))
-    write("search/index.html", env.get_template("search.html").render(canonical=f"{config.SITE_URL}/search/"))
+    write("search/index.html", env.get_template("search.html").render(canonical=f"{config.SITE_URL}/search/",
+          audience_list=[(s_, n_) for s_, n_, _, _ in taxonomy.AUDIENCES], region_list=list(taxonomy.REGION_NAMES.items())))
     write("404.html", env.get_template("404.html").render(canonical=config.SITE_URL))
 
     # 검색용 인덱스
     write("search.json", json.dumps(
         [{"t": d["article"]["title"], "u": d["url"], "n": d["source"].get("name", ""), "f": d["source"].get("field", ""),
-          "m": d["key"]["amount"] or "", "k": " ".join(d["article"]["tags"] + [d["article"].get("description", "")])} for d in posts],
+          "m": d["key"]["amount"] or "", "k": " ".join(d["article"]["tags"] + [d["article"].get("description", "")]),
+          "r": d["region"], "a": d["audiences"], "x": d["dl_state"],
+          "amin": (d["source"].get("cond") or {}).get("age_min"), "amax": (d["source"].get("cond") or {}).get("age_max")} for d in posts],
         ensure_ascii=False))
 
     # SEO 파일

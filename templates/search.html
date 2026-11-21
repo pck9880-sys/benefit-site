@@ -1,10 +1,20 @@
 {% extends "base.html" %}
-{% block title %}지원금 검색 | {{ site_name }}{% endblock %}
+{% block title %}지원금 검색 · 조건으로 찾기 | {{ site_name }}{% endblock %}
 {% block head %}<meta name="robots" content="noindex">{% endblock %}
 {% block main %}
 <div class="tool">
-  <h1 class="tool-h">지원금 검색</h1>
-  <form class="sr-form" action="" role="search"><input id="sq" name="q" type="search" enterkeyhint="search" placeholder="예) 청년 월세, 근로장려금" autocomplete="off"><button type="submit" class="btn">검색</button></form>
+  <h1 class="tool-h">지원금 찾기</h1>
+  <form class="sr-form" id="sf" role="search" onsubmit="return false">
+    <input id="sq" name="q" type="search" enterkeyhint="search" placeholder="검색어 (선택) 예: 월세, 장려금" autocomplete="off">
+    <button type="submit" class="btn">검색</button>
+  </form>
+  <div class="flt">
+    <label>사는 지역<select id="fr"><option value="">전체</option>{% for s, n in region_list if s != "national" %}<option value="{{ s }}">{{ n }}</option>{% endfor %}</select></label>
+    <label>나이<input id="fa" type="number" min="0" max="110" inputmode="numeric" placeholder="예: 29"></label>
+    <label>분야<select id="ff"><option value="">전체</option>{% for slug, name, n in categories %}<option>{{ name }}</option>{% endfor %}</select></label>
+    <label>대상<select id="ft"><option value="">전체</option>{% for s, n in audience_list %}<option value="{{ s }}">{{ n }}</option>{% endfor %}</select></label>
+    <label class="flt-chk"><input id="fo" type="checkbox" checked> 신청 가능한 것만</label>
+  </div>
   <p class="tool-sub" id="sn"></p>
   <ul class="cards" id="sr"></ul>
 </div>
