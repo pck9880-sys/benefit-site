@@ -56,6 +56,7 @@
       <li class="empty">아직 게시된 안내가 없습니다. 곧 업데이트됩니다.</li>
     {% endfor %}
     </ul>
+    {% if more %}<a class="more-all" href="{{ base }}/latest/">전체 지원제도 보기 <b>{{ total }}건</b> →</a>{% endif %}
     {% if pages > 1 %}<nav class="pager">{% for n in range(1, pages + 1) %}{% if n == page %}<b>{{ n }}</b>{% else %}<a href="{{ base }}/{{ prefix }}{% if n > 1 %}page/{{ n }}{% endif %}">{{ n }}</a>{% endif %}{% endfor %}</nav>{% endif %}
   </section>
   {% include "sidebar.html" %}

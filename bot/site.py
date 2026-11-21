@@ -11,7 +11,8 @@ from jinja2 import Environment, FileSystemLoader
 
 from . import config, taxonomy
 
-PER_PAGE = 30
+PER_PAGE = 12
+HOME_LATEST = 6  # 홈에는 최신 6개만, 나머지는 /latest/
 
 
 def slugify(s):
@@ -119,7 +120,10 @@ def build():
                 posts=items[i * PER_PAGE:(i + 1) * PER_PAGE], title=title, page=i + 1, pages=pages, total=len(items),
                 prefix=prefix, canonical=url))
 
-    paginate(posts, "", None)
+    write("index.html", env.get_template("list.html").render(  # 홈: 최신 6개만
+        posts=posts[:HOME_LATEST], title=None, page=1, pages=1, total=len(posts), prefix="", canonical=f"{config.SITE_URL}/",
+        more=len(posts) > HOME_LATEST))
+    paginate(posts, "latest/", "전체 지원제도")
     for slug, v in cats:
         paginate(v["posts"], f"c/{slug}/", v["name"])
     for slug, name, _ in targets:
@@ -150,7 +154,7 @@ def build():
         ensure_ascii=False))
 
     # SEO 파일
-    urls = [f"{config.SITE_URL}/", f"{config.SITE_URL}/check/", f"{config.SITE_URL}/deadline/"]
+    urls = [f"{config.SITE_URL}/", f"{config.SITE_URL}/latest/", f"{config.SITE_URL}/check/", f"{config.SITE_URL}/deadline/"]
     urls += [f"{config.SITE_URL}/c/{s}/" for s, _ in cats]
     urls += [f"{config.SITE_URL}/target/{s}/" for s, _, _ in targets] + [f"{config.SITE_URL}/region/{s}/" for s, _, _ in regions]
     urls += [f"{config.SITE_URL}/{d['url']}" for d in posts]
