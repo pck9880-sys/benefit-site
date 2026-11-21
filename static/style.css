@@ -295,3 +295,54 @@ body{background:var(--bg)}
 .logo-img{height:50px;width:auto;display:block}
 .ftr .logo-img{height:38px}
 @media(max-width:640px){.logo-img{height:42px}}
+
+/* ===== v9 Benefy 브랜드 톤: 다크 글로우 + 블루·바이올렛·핑크 그라데이션 ===== */
+:root{--accent:#5b4cf0;--accent-d:#4433d6;--accent-soft:#f1efff;--ink:#17183a;--sub:#5b5f80;--line:#e6e5f0;--bg:#f6f5fb;
+ --grad:linear-gradient(90deg,#3b5bff,#8b5cf6 50%,#ec4899);--dark:#06070b}
+body{background:var(--bg);color:var(--ink)}
+.topbar{background:var(--dark);color:#a9abc8;border:0}.topbar b{color:#fff}
+.hdr{border-bottom:1px solid var(--line)}
+.gnb a:hover,.gnb-hl{color:var(--accent)!important}
+.btn{background:var(--grad);border:0}.btn:hover{filter:brightness(1.08);background:var(--grad)}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+/* 홈 히어로 배너 (다크) */
+.home-hero{position:relative;overflow:hidden;background:var(--dark) var(--glow) no-repeat right -60px center/auto 128%;border:0;border-radius:20px;color:#fff;text-align:left;padding:56px 56px 44px}
+.home-hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--dark) 38%,rgba(6,7,11,.55) 65%,rgba(6,7,11,0));pointer-events:none}
+.home-hero>*{position:relative}
+.hh-kick{color:#b9b3ff}
+.home-hero h1{color:#fff;font-size:38px;margin-bottom:26px}
+.home-hero h1 b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.home-hero br.m{display:none}
+.big-srch{margin:0;max-width:640px}
+#q2{border:0;border-radius:14px;height:62px;box-shadow:0 10px 30px rgba(91,76,240,.35)}
+#q2:focus{outline:3px solid rgba(139,92,246,.55)}
+.big-ico{background:var(--grad);border-radius:10px}
+.quick{justify-content:flex-start;margin-top:18px}
+.quick>span{color:#a9abc8}
+.qk{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#e9e7ff;border-radius:999px}
+.qk:hover{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.35)}
+/* 카드·박스 */
+.hbox,.hubs,.content,.box{border-color:var(--line);border-radius:16px}
+.ico{color:var(--accent)}
+.cat:hover{background:var(--accent-soft);color:var(--accent)}
+.tag{color:var(--accent);background:var(--accent-soft)}
+.check-cta{border-left:0;background:var(--dark);color:#fff;border:0;border-radius:14px;position:relative;overflow:hidden}
+.check-cta::after{content:"";position:absolute;right:-30px;top:-30px;width:140px;height:140px;background:var(--grad);filter:blur(40px);opacity:.55}
+.check-cta small{color:#a9abc8}.check-cta b{color:#fff;position:relative;z-index:1}
+.hub-chips a:hover{border-color:var(--accent);color:var(--accent)}
+.sec-h{border-bottom:2px solid var(--ink)}
+.pager b{background:var(--accent);border-color:var(--accent)}
+.summary{background:var(--accent-soft);border-color:#dcd7ff}.sum-h{color:var(--accent)}
+.house{background:var(--dark);color:#fff;border:0;position:relative;overflow:hidden}
+.house::after{content:"";position:absolute;right:-40px;bottom:-40px;width:180px;height:180px;background:var(--grad);filter:blur(50px);opacity:.5}
+.house-d{color:#a9abc8!important}.house-b{color:#c9c2ff!important;position:relative;z-index:1}
+.ad-side .house{background:var(--dark);color:#fff;border:0}
+.logo-txt small,.logo-txt em,.more{color:var(--accent)}
+.chip input:checked+span{background:var(--accent);border-color:var(--accent)}
+.ftr{background:var(--dark);color:#a9abc8;border:0}.ftr-links strong{color:#fff}.ftr a:hover{color:#fff}.copy{border-top:1px solid #1c1e2c}
+.ftr .logo-img{filter:none;background:#fff;border-radius:10px;padding:6px 10px;height:46px}
+@media(max-width:640px){
+  .home-hero{padding:34px 20px 26px;background-position:right -150px top -40px;background-size:auto 80%}
+  .home-hero::before{background:linear-gradient(180deg,rgba(6,7,11,.2),var(--dark) 45%)}
+  .home-hero h1{font-size:25px}.quick{gap:6px}.qk{font-size:13px;padding:4px 10px}
+}
