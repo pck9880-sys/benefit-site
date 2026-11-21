@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}지원금 계산기 모음 | {{ site_name }}{% endblock %}
+{% block desc %}중위소득, 실업급여 등 정부 지원금 계산기를 한곳에 모았습니다.{% endblock %}
+{% block main %}
+<div class="tool">
+  <h1 class="tool-h">계산기</h1>
+  <p class="tool-sub">숫자 몇 개만 넣으면 바로 계산돼요.</p>
+  <div class="tools-row calc-grid">
+    <a class="tl" href="{{ base }}/calc/median/"><b>기준 중위소득 계산기</b><span>우리 집이 몇 %인지, 급여 기준 해당 여부</span></a>
+    <a class="tl" href="{{ base }}/calc/unemployment/"><b>실업급여 계산기</b><span>하루 금액 · 받는 기간 · 총액</span></a>
+  </div>
+</div>
+{% endblock %}

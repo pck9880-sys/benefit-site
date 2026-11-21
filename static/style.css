@@ -494,3 +494,8 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 .flt .flt-chk{grid-column:1/-1;flex-direction:row;align-items:center;gap:6px;font-weight:600}
 .flt-chk input{width:18px;height:18px;accent-color:#4f3fd9}
 @media(max-width:640px){.flt{grid-template-columns:1fr 1fr}}
+
+.calc-grid{grid-template-columns:1fr 1fr}
+@media(max-width:640px){.calc-grid{grid-template-columns:1fr}}
+.won input{padding-right:64px;-moz-appearance:textfield}
+.won input::-webkit-outer-spin-button,.won input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}

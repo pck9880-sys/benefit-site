@@ -13,6 +13,7 @@ from . import config, taxonomy
 
 PER_PAGE = 12
 HOME_LATEST = 6
+CALCS = [("calc/", "calc_index.html"), ("calc/median/", "calc_median.html"), ("calc/unemployment/", "calc_unemp.html")]
 GUIDES = [  # 생애주기 모음: (주소, 대상 태그, 제목, 한 줄 설명)
     ("youth", ["youth"], "청년이 받을 수 있는 지원금", "만 19~39세 청년 대상 지원제도만 모았어요."),
     ("baby", ["pregnancy", "child"], "임신·출산·육아 지원금", "임신부터 아이 키우는 가정까지 받을 수 있는 혜택이에요."),
@@ -150,7 +151,8 @@ def build():
         "d": d["article"]["description"]} for d in posts], ensure_ascii=False))
 
     # 도구 · 생애주기 모음
-    write("calc/median/index.html", env.get_template("calc_median.html").render(canonical=f"{config.SITE_URL}/calc/median/"))
+    for rel, tmpl in CALCS:
+        write(f"{rel}index.html", env.get_template(tmpl).render(canonical=f"{config.SITE_URL}/{rel}"))
     for slug, aud, title, desc in GUIDES:
         items = [d for d in posts if set(aud) & set(d["audiences"]) and d["dl_state"] != "closed"]
         items.sort(key=lambda d: (not d["key"]["amount"], d["dl_state"] != "upcoming"))
@@ -173,7 +175,7 @@ def build():
         ensure_ascii=False))
 
     # SEO 파일
-    urls = [f"{config.SITE_URL}/calc/median/"] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
+    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
     urls += [f"{config.SITE_URL}/", f"{config.SITE_URL}/latest/", f"{config.SITE_URL}/check/", f"{config.SITE_URL}/deadline/"]
     urls += [f"{config.SITE_URL}/c/{s}/" for s, _ in cats]
     urls += [f"{config.SITE_URL}/target/{s}/" for s, _, _ in targets] + [f"{config.SITE_URL}/region/{s}/" for s, _, _ in regions]
