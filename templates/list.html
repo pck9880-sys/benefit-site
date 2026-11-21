@@ -17,7 +17,7 @@
     </g></svg></div>
   <p class="hh-kick">공공데이터 기반 · 매일 업데이트 · 총 {{ total }}건</p>
   <h1>내가 받을 수 있는 지원금,<br><b>검색 한 번으로</b> 찾으세요</h1>
-  <div class="big-srch"><input id="q2" type="search" placeholder="예) 청년 월세, 근로장려금, 에너지바우처" aria-label="지원금 검색" autocomplete="off"><span class="big-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span><div id="results2"></div></div>
+  <form class="big-srch" id="f2" action="{{ base }}/search/" role="search"><input id="q2" name="q" type="search" enterkeyhint="search" placeholder="예) 청년 월세, 근로장려금, 에너지바우처" aria-label="지원금 검색" autocomplete="off"><button type="submit" class="big-ico" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button><div id="results2"></div></form>
   <div class="quick"><span>많이 찾는</span>{% for k in ["청년 월세", "근로장려금", "에너지바우처", "내일배움카드", "육아휴직", "주거급여"] %}<button type="button" class="qk">{{ k }}</button>{% endfor %}</div>
 </section>
 <div class="home-row">

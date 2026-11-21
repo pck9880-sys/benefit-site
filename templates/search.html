@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}지원금 검색 | {{ site_name }}{% endblock %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+{% block main %}
+<div class="tool">
+  <h1 class="tool-h">지원금 검색</h1>
+  <form class="sr-form" action="" role="search"><input id="sq" name="q" type="search" enterkeyhint="search" placeholder="예) 청년 월세, 근로장려금" autocomplete="off"><button type="submit" class="btn">검색</button></form>
+  <p class="tool-sub" id="sn"></p>
+  <ul class="cards" id="sr"></ul>
+</div>
+{% endblock %}

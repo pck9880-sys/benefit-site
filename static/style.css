@@ -470,3 +470,19 @@ html,body{overflow-x:hidden}
 @media(max-width:960px){.tools-row{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){.tool{padding:20px 16px;margin-top:14px}.tool-form{grid-template-columns:1fr}.tool-res strong{font-size:36px}.gnb{font-size:15px}}
 .tool-res strong span{font-size:inherit;color:#fff}
+
+/* v18 검색: 결과 선명하게 · 칩 위로 · 돋보기 버튼 */
+.home-hero .big-srch{z-index:6}
+.home-hero .quick{z-index:2}
+button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
+#results2,#results{background:#fff;border:1px solid var(--line);box-shadow:0 16px 40px rgba(0,0,0,.25);z-index:20}
+#results2 a,#results a{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--ink)!important;font-weight:600;font-size:15px;padding:13px 16px;border-bottom:1px solid var(--line);opacity:1}
+#results2 a b,#results a b{color:#4f3fd9;font-weight:800;font-size:14px;white-space:nowrap}
+#results2 a:hover,#results a:hover{background:var(--accent-soft)}
+#results2 a.none,#results a.none{color:var(--sub)!important;font-weight:500}
+.sr-form{display:flex;gap:8px;margin:14px 0 6px}.sr-form input{flex:1;height:50px;border:1px solid var(--line);border-radius:12px;padding:0 16px;font:inherit;font-size:16px}
+.sr-form .btn{border-radius:12px;padding:0 22px}
+.home-hero{overflow:visible}
+.home-hero::before{border-radius:20px}
+.sr-form input{min-width:0}
+@media(max-width:640px){.hero-art{right:0;top:10px;width:150px;height:150px}}

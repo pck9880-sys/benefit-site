@@ -160,11 +160,13 @@ def build():
 
     for name in ("about", "privacy", "contact"):
         write(f"{name}.html", env.get_template(f"{name}.html").render(canonical=f"{config.SITE_URL}/{name}"))
+    write("search/index.html", env.get_template("search.html").render(canonical=f"{config.SITE_URL}/search/"))
     write("404.html", env.get_template("404.html").render(canonical=config.SITE_URL))
 
     # 검색용 인덱스
     write("search.json", json.dumps(
-        [{"t": d["article"]["title"], "u": d["url"], "k": " ".join(d["article"]["tags"])} for d in posts],
+        [{"t": d["article"]["title"], "u": d["url"], "n": d["source"].get("name", ""), "f": d["source"].get("field", ""),
+          "m": d["key"]["amount"] or "", "k": " ".join(d["article"]["tags"] + [d["article"].get("description", "")])} for d in posts],
         ensure_ascii=False))
 
     # SEO 파일

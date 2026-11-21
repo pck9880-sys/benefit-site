@@ -24,7 +24,7 @@
 {% if naver_verify %}<meta name="naver-site-verification" content="{{ naver_verify }}">{% endif %}
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="{{ base }}/static/style.css?v=17">
+<link rel="stylesheet" href="{{ base }}/static/style.css?v=18">
 {% if adsense %}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ adsense }}" crossorigin="anonymous"></script>{% endif %}
 {% block head %}{% endblock %}
 </head>
@@ -41,8 +41,8 @@
       <a href="{{ base }}/deadline/">마감 임박</a>
       <a href="{{ base }}/about">소개</a>
     </nav>
-    <div class="srch"><input id="q" type="search" placeholder="지원금 검색 (예: 청년 월세)" aria-label="지원금 검색" autocomplete="off">
-      <div id="results"></div></div>
+    <form class="srch" action="{{ base }}/search/" role="search"><input id="q" name="q" type="search" enterkeyhint="search" placeholder="지원금 검색 (예: 청년 월세)" aria-label="지원금 검색" autocomplete="off">
+      <div id="results"></div></form>
     <button class="menu-btn" id="menuBtn" aria-label="메뉴">☰</button>
   </div>
 </header>
@@ -66,6 +66,6 @@
   <div class="wrap copy">© {{ year }} {{ site_name }} · 공공데이터포털 개방 데이터 활용 · 본 사이트는 정부·공공기관이 운영하는 사이트가 아닙니다</div>
 </footer>
 <script>window.BASE="{{ base }}";</script>
-<script src="{{ base }}/static/site.js?v=5" defer></script>
+<script src="{{ base }}/static/site.js?v=6" defer></script>
 </body>
 </html>
