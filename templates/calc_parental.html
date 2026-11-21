@@ -10,28 +10,42 @@
     <label>휴직 기간<select id="pm">{% for n in range(1, 13) %}<option value="{{ n }}"{% if n == 12 %} selected{% endif %}>{{ n }}개월</option>{% endfor %}</select></label>
     <label class="flt-chk" style="grid-column:1/-1;flex-direction:row;align-items:center;gap:8px"><input id="p6" type="checkbox" style="width:18px;height:18px;accent-color:#4f3fd9"> 6+6 부모육아휴직 (생후 18개월 안에 부모 모두 휴직)</label>
   </form>
+  <details class="more-d adv">
+    <summary>한부모 · 휴직 시작 시기 · 배우자 합산</summary>
+    <div class="tool-form adv-in">
+      <label>휴직 시작 때 아이 나이<select id="pk">{% for n in range(0, 97, 3) %}<option value="{{ n }}">생후 {{ n }}개월</option>{% endfor %}</select></label>
+      <label>한부모 가정<select id="ps"><option value="0">아니요</option><option value="1">예 (1~3개월 상한 300만 원)</option></select></label>
+      <label>배우자 월 통상임금 (6+6 합산용)<span class="won"><input id="pw2" type="number" inputmode="numeric" placeholder="비우면 나만 계산"><em>만 원</em></span></label>
+      <label>배우자 휴직 기간<select id="pm2">{% for n in range(1, 13) %}<option value="{{ n }}"{% if n == 6 %} selected{% endif %}>{{ n }}개월</option>{% endfor %}</select></label>
+    </div>
+  </details>
   <div class="tool-res" id="pr" hidden>
     <small>예상 육아휴직급여 총액 (1인)</small>
     <strong id="pt">0</strong>
     <span id="pd"></span>
   </div>
   <ul class="tool-list" id="pl"></ul>
-  <p class="disc">고용노동부 기준(2026): 1~3개월 통상임금 100%(월 상한 250만 원) · 4~6개월 100%(200만 원) · 7개월부터 80%(160만 원), 하한 월 70만 원. 6+6은 첫 6개월 월 상한 250·250·300·350·400·450만 원(1개월 차 상한을 200만 원으로 안내하는 자료도 있어요). 세금은 없고, 정확한 금액은 고용24에서 확인하세요.</p>
+  <p class="disc">고용노동부 기준(2026): 1~3개월 통상임금 100%(월 상한 250만 원) · 4~6개월 100%(200만 원) · 7개월부터 80%(160만 원), 하한 월 70만 원. 6+6은 첫 6개월 월 상한 250·250·300·350·400·450만 원(1개월 차 상한을 200만 원으로 안내하는 자료도 있어요). 6+6은 생후 18개월 안에 쓴 달에만, 한부모는 1~3개월 상한 300만 원으로 계산했어요. 세금은 없고, 정확한 금액은 고용24에서 확인하세요.</p>
   <a class="more-all" href="{{ base }}/search/?q=육아휴직">육아휴직 관련 지원제도 보기 →</a>
 </div>
 <script>
 (function(){
-  var C66=[250,250,300,350,400,450],w=document.getElementById('pw'),m=document.getElementById('pm'),s6=document.getElementById('p6');
-  function cap(i,six){if(six&&i<6)return [1,C66[i]];if(i<3)return [1,250];if(i<6)return [1,200];return [.8,160]}
+  var C66=[250,250,300,350,400,450],$=function(i){return document.getElementById(i)};
   function won(v){return Math.round(v).toLocaleString()+'만 원'}
-  function run(){var pay=parseFloat(w.value),n=+m.value,six=s6.checked,ok=!isNaN(pay)&&pay>0;document.getElementById('pr').hidden=!ok;
-    if(!ok){document.getElementById('pl').innerHTML='';return}
-    var rows=[],tot=0;for(var i=0;i<n;i++){var c=cap(i,six),v=Math.max(70,Math.min(c[1],pay*c[0]));tot+=v;rows.push(v)}
-    document.getElementById('pt').textContent=won(tot);
-    document.getElementById('pd').textContent=n+'개월 · 월 평균 '+won(tot/n)+(six?' · 6+6 적용':'');
-    var g=[];rows.forEach(function(v,i){var last=g[g.length-1];if(last&&last.v===v)last.e=i+1;else g.push({s:i+1,e:i+1,v:v})});
-    document.getElementById('pl').innerHTML=g.map(function(x){return '<li><b>'+(x.s===x.e?x.s+'개월':x.s+'~'+x.e+'개월')+'</b><span>월 '+won(x.v)+'</span></li>'}).join('')}
-  w.oninput=run;m.onchange=run;s6.onchange=run;run();
+  function calc(pay,n,six,start,single){var rows=[],tot=0;
+    for(var i=0;i<n;i++){var age=start+i,six_i=six&&i<6&&age<18,c;  // 6+6은 생후 18개월 안의 첫 6개월
+      if(six_i)c=[1,C66[i]];else if(i<3)c=[1,single?300:250];else if(i<6)c=[1,200];else c=[.8,160];
+      var v=Math.max(70,Math.min(c[1],pay*c[0]));tot+=v;rows.push(v)}return {rows:rows,tot:tot}}
+  function run(){var pay=parseFloat($('pw').value),n=+$('pm').value,six=$('p6').checked,start=+$('pk').value,single=$('ps').value==='1',ok=!isNaN(pay)&&pay>0;
+    $('pr').hidden=!ok;if(!ok){$('pl').innerHTML='';return}
+    var me=calc(pay,n,six,start,single),pay2=parseFloat($('pw2').value),sp=null;
+    if(!isNaN(pay2)&&pay2>0&&!single)sp=calc(pay2,+$('pm2').value,six,start,false);
+    var total=me.tot+(sp?sp.tot:0);
+    $('pt').textContent=won(total);
+    $('pd').textContent=(sp?'부부 합산 · 나 '+won(me.tot)+' + 배우자 '+won(sp.tot):n+'개월 · 월 평균 '+won(me.tot/n))+(six?' · 6+6 적용':'')+(six&&start>=18?' (생후 18개월 이후라 미적용)':'');
+    var g=[];me.rows.forEach(function(v,i){var l=g[g.length-1];if(l&&l.v===v)l.e=i+1;else g.push({s:i+1,e:i+1,v:v})});
+    $('pl').innerHTML=g.map(function(x){return '<li><b>'+(x.s===x.e?x.s+'개월':x.s+'~'+x.e+'개월')+'</b><span>월 '+won(x.v)+'</span></li>'}).join('')+(sp?'<li><b>배우자</b><span>'+won(sp.tot)+' ('+$('pm2').value+'개월)</span></li>':'')}
+  ['pw','pw2'].forEach(function(i){$(i).oninput=run});['pm','p6','pk','ps','pm2'].forEach(function(i){$(i).onchange=run});run();
 })();
 </script>
 {% endblock %}

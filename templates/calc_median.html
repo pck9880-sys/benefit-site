@@ -10,13 +10,26 @@
     <label>가구원 수<select id="hh">{% for n in range(1, 7) %}<option value="{{ n }}"{% if n == 1 %} selected{% endif %}>{{ n }}인 가구</option>{% endfor %}</select></label>
     <label>월 소득 (세전, 가구 합산)<span class="won"><input id="inc" type="number" inputmode="numeric" placeholder="예: 250"><em>만 원</em></span></label>
   </form>
+  <details class="more-d adv">
+    <summary>재산까지 넣어 '소득인정액'으로 계산 (수급 심사 방식)</summary>
+    <div class="tool-form adv-in">
+      <label>사는 지역<select id="rg"><option value="seoul">서울</option><option value="gg">경기</option><option value="metro">광역시·세종·창원</option><option value="etc" selected>그 외 지역</option></select></label>
+      <label>월 소득 중 근로·사업소득<span class="won"><input id="earn" type="number" inputmode="numeric" placeholder="모르면 비워두세요"><em>만 원</em></span></label>
+      <label>집 (자가 공시가격·전세금)<span class="won"><input id="home" type="number" inputmode="numeric" placeholder="0"><em>만 원</em></span></label>
+      <label>예금·적금·주식 등<span class="won"><input id="fin" type="number" inputmode="numeric" placeholder="0"><em>만 원</em></span></label>
+      <label>그 외 재산 (토지·상가 등)<span class="won"><input id="etc" type="number" inputmode="numeric" placeholder="0"><em>만 원</em></span></label>
+      <label>부채 (대출)<span class="won"><input id="debt" type="number" inputmode="numeric" placeholder="0"><em>만 원</em></span></label>
+      <label>자동차<select id="car"><option value="0">없음</option><option value="s">2,000cc 미만 · 500만 원 미만</option><option value="b">그 외 자동차</option></select></label>
+      <label>자동차 가액<span class="won"><input id="carv" type="number" inputmode="numeric" placeholder="0"><em>만 원</em></span></label>
+    </div>
+  </details>
   <div class="tool-res" id="res" hidden>
-    <small>우리 집 소득은</small>
+    <small id="lb">우리 집 소득은</small>
     <strong><span id="pct">0</span>%</strong>
     <span id="std"></span>
   </div>
   <ul class="tool-list" id="lv"></ul>
-  <p class="disc">보건복지부 고시 기준 중위소득(2026년, 2027년). 급여별 선정 비율(생계 32%·의료 40%·주거 48%·교육 50%)은 2026년 기준입니다. 실제 심사는 재산을 소득으로 환산한 '소득인정액'으로 하므로 결과는 참고용이에요.</p>
+  <p class="disc">보건복지부 고시 기준 중위소득(2026·2027년), 급여별 선정 비율(생계 32%·의료 40%·주거 48%·교육 50%)은 2026년 기준. 소득인정액 = 소득평가액(근로·사업소득 30% 공제) + 재산 환산액. 재산은 기본재산액(서울 9,900만·경기 8,000만·광역 7,700만·그 외 5,300만 원)과 부채를 빼고 주거용 월 1.04%(지역별 한도 초과분은 일반재산)·일반 4.17%·금융 6.26%(생활준비금 500만 원 공제)·자동차 100%(소형 저가 차량 4.17%)로 환산했어요. 가구 특성별 추가 공제는 반영하지 않은 참고값이에요.</p>
 </div>
 <script>
 (function(){
@@ -24,14 +37,24 @@
   var L=[["생계급여",32],["의료급여",40],["주거급여",48],["교육급여",50],["기준 중위소득",100]];
   var y=2026,hh=document.getElementById('hh'),inc=document.getElementById('inc');
   function won(v){return Math.round(v/1e4).toLocaleString()+'만 원'}
-  function run(){var m=M[y][hh.value-1],v=parseFloat(inc.value)*1e4;
+  var LIM={seoul:[9900,17200],gg:[8000,15100],metro:[7700,14600],etc:[5300,11700]};  // 기본재산액, 주거용재산 한도(만 원)
+  function g(i){return (parseFloat(document.getElementById(i).value)||0)*1e4}
+  function income(){var raw=parseFloat(inc.value)*1e4;if(isNaN(raw))return NaN;
+    var earn=Math.min(raw,g('earn')),evalInc=raw-earn*0.3;
+    var r=LIM[document.getElementById('rg').value],base=r[0]*1e4,cap=r[1]*1e4,home=g('home'),fin=Math.max(0,g('fin')-500e4),etc=g('etc'),debt=g('debt');
+    var hHome=Math.min(home,cap),gen=etc+Math.max(0,home-cap),ded=base+debt;  // 기본재산액·부채는 일반→주거 순으로 차감
+    var d1=Math.min(gen,ded);gen-=d1;ded-=d1;var d2=Math.min(hHome,ded);hHome-=d2;ded-=d2;fin=Math.max(0,fin-ded);
+    var car=document.getElementById('car').value,cv=g('carv'),carInc=car==='s'?cv*0.0417:car==='b'?cv:0;
+    return evalInc+hHome*0.0104+gen*0.0417+fin*0.0626+carInc}
+  function run(){var m=M[y][hh.value-1],v=income();
     document.getElementById('std').textContent=y+'년 '+hh.value+'인 가구 기준 중위소득 '+won(m);
     var ok=!isNaN(v)&&v>=0;document.getElementById('res').hidden=!ok;
     if(ok)document.getElementById('pct').textContent=Math.round(v/m*1000)/10;
+    document.getElementById('lb').textContent=document.querySelector('.adv').open?'우리 집 소득인정액은 (월 '+Math.round(v/1e4).toLocaleString()+'만 원)':'우리 집 소득은';
     document.getElementById('lv').innerHTML=L.map(function(l){var t=m*l[1]/100,hit=ok&&v<=t;
       return '<li class="'+(ok?(hit?'y':'n'):'')+'"><b>'+l[0]+'</b><span>'+l[1]+'% · '+won(t)+' 이하</span><i>'+(ok?(hit?'해당':'초과'):'')+'</i></li>'}).join('')}
   document.querySelectorAll('#yr button').forEach(function(b){b.onclick=function(){document.querySelectorAll('#yr button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');y=+b.dataset.y;run()}});
-  hh.onchange=run;inc.oninput=run;run();
+  hh.onchange=run;inc.oninput=run;document.querySelectorAll('.adv input,.adv select').forEach(function(e){e.oninput=run;e.onchange=run});run();
 })();
 </script>
 {% endblock %}
