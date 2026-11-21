@@ -3,7 +3,18 @@
 {% block main %}
 {% if not title and page == 1 %}
 <div class="home-dark">
-<section class="home-hero" style="--glow:url({{ base }}/static/img/brand/hero-glow.webp)">
+<section class="home-hero">
+  <div class="hero-art" aria-hidden="true"><svg viewBox="-170 -170 340 340">
+    <defs>
+      <linearGradient id="hg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8fd3ff"/><stop offset=".45" stop-color="#6b4cf5"/><stop offset="1" stop-color="#2a0e6e"/></linearGradient>
+      <linearGradient id="hg2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd6a0"/><stop offset=".4" stop-color="#ff5fae"/><stop offset="1" stop-color="#5b1fd0"/></linearGradient>
+      <linearGradient id="hg3" x1=".5" y1="1" x2=".5" y2="0"><stop offset="0" stop-color="#3b5bff"/><stop offset=".55" stop-color="#c25cf0"/><stop offset="1" stop-color="#ffb3d1"/></linearGradient>
+    </defs>
+    <g class="ha-all">
+      <g transform="translate(-14,-8)"><g class="ha t1"><polygon points="0,-100 87,50 -87,50" fill="url(#hg1)" stroke="url(#hg1)" stroke-width="70" stroke-linejoin="round"/></g></g>
+      <g transform="translate(16,-4) rotate(40)"><g class="ha t2"><polygon points="0,-100 87,50 -87,50" fill="url(#hg2)" stroke="url(#hg2)" stroke-width="70" stroke-linejoin="round"/></g></g>
+      <g transform="translate(0,14) rotate(80)"><g class="ha t3"><polygon points="0,-100 87,50 -87,50" fill="url(#hg3)" stroke="url(#hg3)" stroke-width="70" stroke-linejoin="round"/></g></g>
+    </g></svg></div>
   <p class="hh-kick">공공데이터 기반 · 매일 업데이트 · 총 {{ total }}건</p>
   <h1>내가 받을 수 있는 지원금,<br><b>검색 한 번으로</b> 찾으세요</h1>
   <div class="big-srch"><input id="q2" type="search" placeholder="예) 청년 월세, 근로장려금, 에너지바우처" aria-label="지원금 검색" autocomplete="off"><span class="big-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span><div id="results2"></div></div>
