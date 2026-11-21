@@ -2,6 +2,7 @@
 {% block title %}{% if title %}{{ title }} 지원제도 모음 | {% endif %}{{ site_name }}{% if page > 1 %} ({{ page }}페이지){% endif %}{% endblock %}
 {% block main %}
 {% if not title and page == 1 %}
+<div class="home-dark">
 <section class="home-hero" style="--glow:url({{ base }}/static/img/brand/hero-glow.webp)">
   <p class="hh-kick">공공데이터 기반 · 매일 업데이트 · 총 {{ total }}건</p>
   <h1>내가 받을 수 있는 지원금,<br><b>검색 한 번으로</b> 찾으세요</h1>
@@ -19,6 +20,7 @@
     {% else %}<p class="empty sm">30일 안에 마감되는 지원제도가 없어요. <a href="{{ base }}/deadline/">상시 신청 제도 보기 →</a></p>{% endif %}
     <a class="check-cta" href="{{ base }}/check/"><span><strong>나도 받을 수 있을까?</strong><small>나이·지역·상황으로 해당 지원금 찾기</small></span><b>자격 진단 →</b></a>
   </section>
+</div>
 </div>
 {% if targets %}<section class="hubs"><h3>대상별로 찾기</h3><div class="hub-chips">{% for s, n, c in targets %}<a href="{{ base }}/target/{{ s }}/">{{ n }} <em>{{ c }}</em></a>{% endfor %}</div></section>{% endif %}
 {% set local_regions = regions | rejectattr(0, "equalto", "national") | list %}

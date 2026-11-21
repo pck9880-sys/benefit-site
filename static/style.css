@@ -399,3 +399,23 @@ body{background:var(--bg);color:var(--ink)}
   a,button,summary,label,.qk,.cat,[role=button]{cursor:url(img/cursor/hover.png) 6 5,pointer;cursor:-webkit-image-set(url(img/cursor/hover.png) 1x,url(img/cursor/hover@2x.png) 2x) 6 5,pointer}
   input,textarea,select{cursor:text}
 }
+
+/* v13 절충안: 홈 상단(배너+분야+마감)만 다크, 정보 영역은 밝게 */
+html,body{overflow-x:hidden}
+.home-dark{position:relative;padding:24px 0 28px;margin-bottom:20px}
+.home-dark::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:var(--dark);z-index:-1}
+.home-dark .home-hero{margin:0 0 16px;border:1px solid #1b1d2b}
+.home-dark .home-row{margin:0}
+.home-dark .hbox{background:#0e0f17;border:1px solid #1b1d2b;color:#e9e8f5}
+.home-dark .hbox-h h2{color:#fff}.home-dark .hbox-h a{color:#8a8cab}.home-dark .hbox-h a:hover{color:#c9c2ff}
+.home-dark .catgrid{border-color:#1b1d2b}
+.home-dark .cat{background:#0e0f17;border-color:#1b1d2b;color:#e9e8f5}
+.home-dark .cat small{color:#8a8cab}
+.home-dark .cat .ico{color:#a99dff}
+.home-dark .cat:hover{background:#161827;color:#fff}
+.home-dark .soon li a{border-color:#1b1d2b;color:#e9e8f5}
+.home-dark .soon li a:hover span:last-child{color:#c9c2ff}
+.home-dark .dday{background:#1b1d2b;color:#e9e8f5}.home-dark .dday.hot{background:#3a1626;color:#ff9db8}
+.home-dark .empty.sm{color:#a9abc8}.home-dark .empty.sm a{color:#c9c2ff}
+.home-dark .check-cta{background:#17182a;border:1px solid #26283d}
+@media(max-width:640px){.home-dark{padding:14px 0 18px}.home-dark .home-hero{margin-top:0}}
