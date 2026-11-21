@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}청년미래적금 계산기 · 만기 수령액·정부기여금 | {{ site_name }}{% endblock %}
+{% block desc %}월 납입액과 유형(일반형·우대형)을 넣으면 청년미래적금 3년 만기 수령액과 정부기여금을 계산해 드립니다.{% endblock %}
+{% block main %}
+<div class="tool">
+  <h1 class="tool-h">청년미래적금 계산기</h1>
+  <p class="tool-sub">3년 만기 · 월 최대 50만 원 · 입력값은 저장되지 않아요.</p>
+  <form class="tool-form" onsubmit="return false">
+    <div class="seg" id="yt"><button type="button" data-r="6" class="on">일반형 (기여금 6%)</button><button type="button" data-r="12">우대형 (12%)</button></div>
+    <label>월 납입액 (최대 50만 원)<span class="won"><input id="ym" type="number" inputmode="numeric" value="50" max="50"><em>만 원</em></span></label>
+    <label>은행 적금 금리 (연, 은행별 상이)<span class="won"><input id="yr" type="number" inputmode="decimal" step="0.1" value="5"><em>%</em></span></label>
+  </form>
+  <div class="tool-res"><small>3년 만기 예상 수령액</small><strong id="ytot">0</strong><span id="yd"></span></div>
+  <ul class="tool-list" id="yl"></ul>
+  <p class="disc">금융위원회 안내 기준: 만 19~34세, 3년 만기, 월 50만 원 한도, 정부기여금 일반형 납입액의 6%·우대형 12%(소득 심사로 자동 분류), 이자 비과세. 이자는 입력한 금리로 단리 계산한 예상값이며, 실제 금리·우대조건은 은행마다 달라요.</p>
+  <a class="more-all" href="{{ base }}/guide/youth/">청년 지원금 모음 →</a>
+</div>
+<script>
+(function(){
+  var r=6,$=function(i){return document.getElementById(i)};
+  function won(v){return Math.round(v).toLocaleString()+'만 원'}
+  function run(){var m=Math.min(50,Math.max(0,parseFloat($('ym').value)||0)),rate=(parseFloat($('yr').value)||0)/100,n=36;
+    var prin=m*n,gov=prin*r/100,int=0;for(var k=1;k<=n;k++)int+=m*rate*(n-k+1)/12;var t=prin+gov+int;
+    $('ytot').textContent=won(t);$('yd').textContent='월 '+m+'만 원 × 36개월 · '+(r==6?'일반형':'우대형');
+    $('yl').innerHTML=[['내가 낸 돈',won(prin)],['정부기여금',won(gov)+' ('+r+'%)'],['이자 (비과세)',won(int)+' (연 '+(rate*100).toFixed(1)+'%)']].map(function(x){return '<li><b>'+x[0]+'</b><span>'+x[1]+'</span></li>'}).join('')}
+  document.querySelectorAll('#yt button').forEach(function(b){b.onclick=function(){document.querySelectorAll('#yt button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');r=+b.dataset.r;run()}});
+  $('ym').oninput=run;$('yr').oninput=run;run();
+})();
+</script>
+{% endblock %}

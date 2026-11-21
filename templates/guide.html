@@ -15,6 +15,7 @@
     </span></a></li>
   {% endfor %}
   </ul>
+  {% if "청년" in g.title %}<a class="more-all" href="{{ base }}/calc/youth-savings/">청년미래적금 만기 수령액 계산하기 →</a>{% endif %}
   {% if "육아" in g.title %}<a class="more-all" href="{{ base }}/calc/baby/">우리 아이가 받는 돈 총액 계산하기 →</a>{% endif %}
   <p class="disc">공공데이터 기준 자동 정리 · 금액과 조건은 각 안내 페이지와 공식 기관에서 확인하세요.</p>
 </div>
