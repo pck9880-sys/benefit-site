@@ -11,35 +11,30 @@
 <div class="layout">
 <article class="post content">
   <nav class="crumb"><a href="{{ base }}/">홈</a><span>›</span><a href="{{ base }}/c/{{ post.field_slug }}/">{{ post.source.field }}</a></nav>
-  <div class="post-head"><span class="tag">{{ post.source.field }}</span>{% if post.dl_state == "closed" %}<span class="st closed">이번 신청 마감</span>{% elif post.dl_state == "always" %}<span class="st always">상시 신청</span>{% endif %}
-  <h1>{{ a.title }}</h1></div>
-  <div class="meta">
-    <span>소관 {{ post.source.org }}</span><span>게시 {{ post.date }}</span><span>읽는 데 약 {{ read_min }}분</span>
-    {% if post.source.deadline %}<span class="dl">신청기한 {{ post.source.deadline | dl(60) }}</span>{% endif %}
-  </div>
-  {% if post.audiences or post.region != "national" %}<div class="aud">{% if post.region != "national" %}<a href="{{ base }}/region/{{ post.region }}/">{{ region_names[post.region] }}</a>{% endif %}{% for a_ in post.audiences %}<a href="{{ base }}/target/{{ a_ }}/">{{ aud_names[a_] }}</a>{% endfor %}</div>{% endif %}
-  <div class="summary">
-    <h2 class="sum-h">핵심 요약</h2>
-    <ul>{% for p in a.summary_points %}<li>{{ p }}</li>{% endfor %}</ul>
-  </div>
-  {% if toc %}<nav class="toc"><strong>목차</strong><ol>{% for t in toc %}<li><a href="#{{ t.id }}">{{ t.name }}</a></li>{% endfor %}</ol></nav>{% endif %}
-  {{ ad("inline", 0) }}
-  <div class="body">{{ body_top | safe }}</div>
-  {% if body_bottom %}{{ ad("inline", 1) }}<div class="body">{{ body_bottom | safe }}</div>{% endif %}
-  {% if a.faq %}<h2 id="faq">자주 묻는 질문</h2>
-  <div class="faq">{% for f in a.faq %}<details><summary>{{ f.q }}</summary><p>{{ f.a }}</p></details>{% endfor %}</div>{% endif %}
-  <div class="source">
-    <h2 class="src-h">공식 안내 · 신청</h2>
-    <div class="src-btns">
-      {% if post.source.url %}<a class="btn" href="{{ post.source.url }}" target="_blank" rel="noopener">정부24 상세 안내</a>{% endif %}
-      {% if post.source.apply_url %}<a class="btn ghost" href="{{ post.source.apply_url }}" target="_blank" rel="noopener nofollow">온라인 신청 사이트</a>{% endif %}
+  <div class="post-head"><span class="tag">{{ post.source.field }}</span>{% if post.dl_state == "closed" %}<span class="st closed">이번 신청 마감</span>{% elif post.dl_state == "always" %}<span class="st always">상시 신청</span>{% elif post.dl_state == "upcoming" %}<span class="st up">D-{{ post.d_day }}</span>{% endif %}
+  <h1>{{ a.title }}</h1><p class="org">{{ post.source.org }}</p></div>
+  {% set k = post.key %}
+  <section class="kv">
+    {% if k.amount %}<div class="kv-amt"><small>받을 수 있는 금액·혜택</small><strong>{{ k.amount }}</strong>{% if k.amount_note %}<span>{{ k.amount_note }}</span>{% endif %}</div>{% endif %}
+    <div class="kv-cards">
+      <div class="kc kc1"><em>01</em><b>누가 받나요</b><p>{{ k.target or "공식 안내에서 확인" }}</p></div>
+      <div class="kc kc2"><em>02</em><b>무엇을 받나요</b><p>{{ k.amount_note or (a.summary_points[1] if a.summary_points|length > 1 else a.description) }}</p></div>
+      <div class="kc kc3"><em>03</em><b>어떻게 신청하나요</b><p>{{ k.how or "공식 안내에서 확인" }}</p>{% if post.source.deadline and post.dl_state != "closed" %}<span class="kc-dl">신청기한 {{ post.source.deadline | dl(34) }}</span>{% endif %}</div>
     </div>
-    {% if post.source.contact %}<p class="contact">문의 {{ post.source.contact }}</p>{% endif %}
-    <p class="disc">이 글은 행정안전부 공공서비스 정보(최종 확인 {{ post.date }})를 바탕으로 정리했습니다. 실제 지원 여부는 담당 기관에 확인하세요.</p>
-  </div>
-  <div class="share"><button class="btn ghost" id="copyLink">링크 복사</button><span class="tags">{% for t in a.tags %}<span>#{{ t }}</span>{% endfor %}</span></div>
-  {{ ad("wide", 2) }}
-  {% if related %}<section class="related"><h2>함께 보면 좋은 지원제도</h2><ul class="mini-cards">{% for r in related %}<li><a href="{{ base }}/{{ r.url }}"><span class="tag">{{ r.source.field }}</span><strong>{{ r.article.title }}</strong></a></li>{% endfor %}</ul></section>{% endif %}
+    <div class="kv-btns">
+      {% if post.source.apply_url %}<a class="btn" href="{{ post.source.apply_url }}" target="_blank" rel="noopener nofollow">온라인 신청하기</a>{% endif %}
+      {% if post.source.url %}<a class="btn ghost" href="{{ post.source.url }}" target="_blank" rel="noopener">정부24 공식 안내</a>{% endif %}
+    </div>
+  </section>
+  {{ ad("inline", 0) }}
+  <details class="more-d">
+    <summary>자세한 조건·서류·자주 묻는 질문 보기</summary>
+    <div class="body">{{ body_top | safe }}{% if body_bottom %}{{ body_bottom | safe }}{% endif %}</div>
+    {% if a.faq %}<h2 id="faq">자주 묻는 질문</h2>
+    <div class="faq">{% for f in a.faq %}<details><summary>{{ f.q }}</summary><p>{{ f.a }}</p></details>{% endfor %}</div>{% endif %}
+  </details>
+  <p class="disc">{% if post.source.contact %}문의 {{ post.source.contact }} · {% endif %}행정안전부 공공서비스 정보 기준({{ post.date }}). 실제 지원 여부는 담당 기관에 확인하세요.</p>
+  {% if related %}<section class="related"><h2>함께 보면 좋은 지원제도</h2><ul class="mini-cards">{% for r in related %}<li><a href="{{ base }}/{{ r.url }}">{% if r.key.amount %}<b class="mc-amt">{{ r.key.amount }}</b>{% endif %}<strong>{{ r.article.title }}</strong></a></li>{% endfor %}</ul></section>{% endif %}
 </article>
 {% include "sidebar.html" %}
 </div>

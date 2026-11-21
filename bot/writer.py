@@ -20,6 +20,11 @@ class Article(BaseModel):
     body_markdown: str = Field(description="본문 마크다운. ## 소제목 사용, 표/목록 활용")
     faq: List[FAQ] = Field(description="실제로 궁금해할 질문 3~5개와 답")
     tags: List[str] = Field(description="관련 키워드 3~6개")
+    key_amount: str = Field(default="", description="받는 돈·혜택을 가장 크게 보여줄 숫자 한 개 (예: '최대 330만 원', '월 20만 원', '무료', '연 1.5%'). "
+                                                  "소득 기준·보증금 한도 같은 '조건' 숫자는 넣지 않음. 데이터에 없으면 빈 문자열")
+    key_amount_note: str = Field(default="", description="그 숫자가 무엇인지 25자 이내 (예: '맞벌이 가구 근로장려금')")
+    key_target: str = Field(default="", description="누가 받나 30자 이내 한 줄")
+    key_how: str = Field(default="", description="어떻게 신청하나 30자 이내 한 줄 (예: '복지로 온라인 또는 주민센터')")
 
 
 SYSTEM = """당신은 정부 지원제도를 일반인이 이해하기 쉽게 풀어 쓰는 한국어 정보 작가입니다.

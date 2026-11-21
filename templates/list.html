@@ -34,7 +34,7 @@
         <span class="card-b">
           <span class="card-tags"><span class="tag">{{ p.source.field }}</span>{% if p.dl_state == "closed" %}<span class="st closed">마감</span>{% elif p.dl_state == "always" %}<span class="st always">상시 신청</span>{% elif p.dl_state == "upcoming" %}<span class="st up">D-{{ p.d_day }}</span>{% endif %}</span>
           <strong>{{ p.article.title }}</strong>
-          <span class="card-d">{{ p.article.description }}</span>
+          {% if p.key.amount %}<span class="card-amt">{{ p.key.amount }}</span>{% endif %}
           <span class="card-m">{{ p.source.org }} · {{ p.date }}{% if p.source.deadline and p.dl_state != "closed" %} · 신청기한 {{ p.source.deadline | dl(26) }}{% endif %}</span>
         </span>
       </a></li>

@@ -34,6 +34,7 @@ def load_posts():
         d["region"] = taxonomy.region_of(d["source"].get("org"))
         d["audiences"] = taxonomy.audiences_of(d)
         d["dl_state"], d["dl_date"] = taxonomy.deadline_info(d["source"].get("deadline"))
+        d["key"] = taxonomy.key_facts(d)
         posts.append(d)
     posts.sort(key=lambda d: d["published_at"], reverse=True)
     return posts

@@ -84,3 +84,62 @@ def deadline_info(text, today=None):
         return "unknown", None
     end = max(dates)
     return ("upcoming" if end >= today else "closed"), end
+
+
+# ---------- 글 상단 '한눈에' 정보 (금액 크게 · 대상 · 신청) ----------
+_MONEY = re.compile(r"(월|연|1인당|가구당|1회|1명당)?\s*(최대\s*)?([\d][\d,]*(?:\.\d+)?)\s*(억|천만|백만|만|천)?\s*원")
+_UNIT = {"억": 1e8, "천만": 1e7, "백만": 1e6, "만": 1e4, "천": 1e3, None: 1, "": 1}
+
+
+def _won(m):
+    try:
+        return float(m.group(3).replace(",", "")) * _UNIT[m.group(4)]
+    except ValueError:
+        return 0
+
+
+def _pretty(v):
+    if v >= 1e8:
+        return f"{v / 1e8:g}억 원"
+    if v >= 1e4:
+        return f"{v / 1e4:,.0f}만 원" if v % 1e4 == 0 else f"{v / 1e4:,.1f}만 원"
+    return f"{v:,.0f}원"
+
+
+def _strip_label(p):
+    return re.sub(r"^\s*(대상|누가|지원 ?내용|내용|지원|금액|한도|무엇을|신청 ?방법|신청 ?기간|신청 ?기한|신청|언제까지|방법)\s*[:：]\s*", "", p).strip()
+
+
+def key_facts(post):
+    """{'amount': '최대 330만 원' 또는 None, 'amount_note': 그 문장, 'target': 대상 한 줄, 'how': 신청 한 줄}
+    글에 key_* 필드가 있으면(새 글) 그대로, 없으면 요약 문장에서 뽑는다."""
+    a = post.get("article", {})
+    if a.get("key_amount") or a.get("key_target"):
+        return {"amount": a.get("key_amount") or None, "amount_note": a.get("key_amount_note", ""),
+                "target": a.get("key_target", ""), "how": a.get("key_how", "")}
+    pts = a.get("summary_points", [])
+    best, note = None, ""
+    for p in pts:
+        if re.search(r"^\s*(대상|누가)", p) or re.search(r"소득\s*기준|^\s*소득", p):
+            continue  # 대상·소득 기준 문장의 금액은 '받는 돈'이 아님
+        for m in _MONEY.finditer(p):
+            if re.search(r"소득|저축액|원금|보증금\s*$", p[max(0, m.start() - 14):m.start()]):
+                continue
+            v = _won(m)
+            if v >= 1000 and (best is None or v > best[0]):
+                pre = (m.group(1) or "").strip()
+                best = (v, ("최대 " if m.group(2) or "최대" in p[:m.start()] else "") + (pre + " " if pre else "") + _pretty(v))
+                note = _strip_label(p)
+    amount = best[1].strip() if best else None
+    if not amount:
+        pct = next((re.search(r"(\d+(?:\.\d+)?)\s*%", p) for p in pts if "%" in p and not re.match(r"^\s*대상", p)), None)
+        free = next((p for p in pts if "무료" in p), None)
+        if pct:
+            amount, note = f"{pct.group(1)}%", _strip_label(next(p for p in pts if pct.group(0) in p))
+        elif free:
+            amount, note = "무료", _strip_label(free)
+    target = next((_strip_label(p) for p in pts if re.match(r"^\s*(대상|누가)", p)), "")
+    how = next((_strip_label(p) for p in pts if re.match(r"^\s*(신청 ?방법|방법)", p)), "") or \
+        next((_strip_label(p) for p in pts if re.search(r"신청|홈페이지|방문|온라인|홈택스|복지로|정부24", p) and p is not None
+              and not re.match(r"^\s*(대상|누가)", p)), "")
+    return {"amount": amount, "amount_note": note, "target": target, "how": how}

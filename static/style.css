@@ -346,3 +346,38 @@ body{background:var(--bg);color:var(--ink)}
   .home-hero::before{background:linear-gradient(180deg,rgba(6,7,11,.2),var(--dark) 45%)}
   .home-hero h1{font-size:25px}.quick{gap:6px}.qk{font-size:13px;padding:4px 10px}
 }
+
+/* v10 글 페이지: 금액 먼저 · 카드 3장 · 상세는 접기 */
+.post h1{font-size:26px;margin:10px 0 2px}
+.org{margin:0 0 18px;color:var(--sub);font-size:14px}
+.kv{margin:0 0 8px}
+.kv-amt{position:relative;overflow:hidden;background:var(--dark);border-radius:18px;padding:26px 28px;color:#fff;margin-bottom:12px}
+.kv-amt::after{content:"";position:absolute;right:-50px;top:-50px;width:220px;height:220px;background:var(--grad);filter:blur(60px);opacity:.6}
+.kv-amt>*{position:relative;z-index:1}
+.kv-amt small{display:block;font-size:13.5px;color:#a9abc8;font-weight:600}
+.kv-amt strong{display:block;font-size:46px;line-height:1.15;font-weight:850;letter-spacing:-.03em;margin:6px 0 6px;background:linear-gradient(90deg,#fff,#d9d2ff 40%,#ffb3d9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.kv-amt span{font-size:15px;color:#d6d4ee}
+.kv-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kc{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:6px;min-height:170px}
+.kc em{font-style:normal;font-size:12px;font-weight:800;color:#fff;background:var(--grad);border-radius:999px;padding:2px 9px;align-self:flex-start}
+.kc b{font-size:16px}
+.kc p{margin:0;font-size:14.5px;line-height:1.55;color:#3d4060;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.kc-dl{margin-top:auto;font-size:12.5px;font-weight:700;color:var(--warn)}
+.kv-btns{display:flex;gap:8px;margin:14px 0 6px;flex-wrap:wrap}
+.kv-btns .btn{flex:1;text-align:center;padding:13px 16px;font-size:15px;border-radius:12px}
+.more-d{border:1px solid var(--line);border-radius:14px;margin:18px 0 10px;background:#fff}
+.more-d>summary{cursor:pointer;list-style:none;padding:16px 20px;font-weight:700;font-size:15px;display:flex;justify-content:space-between}
+.more-d>summary::after{content:"펼치기 ▾";color:var(--accent);font-size:13.5px}
+.more-d[open]>summary::after{content:"접기 ▴"}
+.more-d>summary::-webkit-details-marker{display:none}
+.more-d .body,.more-d .faq,.more-d h2{margin-left:20px;margin-right:20px}
+.more-d .faq{margin-bottom:20px}
+.disc{font-size:12.5px;color:#8a8cab}
+.card-amt{font-size:19px;font-weight:850;letter-spacing:-.02em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;align-self:flex-start}
+.mini-cards a{gap:4px}.mc-amt{font-size:17px;font-weight:850;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;align-self:flex-start}
+@media(max-width:640px){
+  .kv-amt{padding:22px 20px}.kv-amt strong{font-size:36px}
+  .kv-cards{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px;margin:0 -16px;padding:0 16px 6px}
+  .kc{flex:0 0 78%;scroll-snap-align:start;min-height:0}
+  .kv-btns .btn{flex:1 1 100%}
+}
