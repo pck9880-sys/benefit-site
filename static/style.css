@@ -431,7 +431,7 @@ html,body{overflow-x:hidden}
 .t3{animation:haSpin 30s linear infinite}
 .ha-all{transform-box:fill-box;transform-origin:center;animation:haBreath 6s ease-in-out infinite}
 @keyframes haSpin{to{transform:rotate(360deg)}}
-@keyframes haBreath{0%,100%{transform:scale(1) translateY(0);filter:brightness(1)}50%{transform:scale(1.05) translateY(-6px);filter:brightness(1.15)}}
+@keyframes haBreath{0%,100%{transform:scale(1) translateY(0);opacity:.92}50%{transform:scale(1.05) translateY(-6px);opacity:1}}
 .home-hero::before{z-index:1}
 .home-hero>*:not(.hero-art){z-index:2}
 @media(max-width:640px){.hero-art{width:170px;height:170px;right:-30px;top:20px;margin-top:0;opacity:.8}}
@@ -439,3 +439,5 @@ html,body{overflow-x:hidden}
 
 .more-all{display:block;margin:18px 0 4px;text-align:center;border:1px solid var(--line);border-radius:12px;padding:14px;font-weight:700;font-size:15px;color:var(--ink);background:#fff}
 .more-all b{color:var(--accent);margin-left:4px}.more-all:hover{border-color:var(--accent);color:var(--accent)}
+
+.ha,.ha-all{will-change:transform}  /* GPU 합성으로 60fps 이상 부드럽게 */
