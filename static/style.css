@@ -381,3 +381,14 @@ body{background:var(--bg);color:var(--ink)}
   .kc{flex:0 0 78%;scroll-snap-align:start;min-height:0}
   .kv-btns .btn{flex:1 1 100%}
 }
+
+/* v11 밝은 그라데이션 제거 → 단색 (진한 바이올렛 / 흰색) */
+:root{--grad:#4f3fd9}
+.btn{background:#17183a}.btn:hover{background:#2a2c55;filter:none}
+.big-ico{background:var(--accent)}
+.home-hero h1 b{background:none;-webkit-background-clip:initial;background-clip:initial;color:#b8b0ff}
+.kv-amt strong{background:none;-webkit-background-clip:initial;background-clip:initial;color:#fff}
+.kv-amt::after,.check-cta::after,.house::after{background:#5b4cf0;opacity:.35}
+.card-amt,.mc-amt{background:none;-webkit-background-clip:initial;background-clip:initial;color:#4f3fd9}
+.kc em{background:#17183a}
+#q2{box-shadow:0 10px 30px rgba(0,0,0,.35)}
