@@ -11,11 +11,11 @@
 <div class="layout">
 <article class="post content">
   <nav class="crumb"><a href="{{ base }}/">홈</a><span>›</span><a href="{{ base }}/c/{{ post.field_slug }}/">{{ post.source.field }}</a></nav>
-  <div class="post-head"><div><span class="tag">{{ post.source.field }}</span>
-  <h1>{{ a.title }}</h1></div>{{ thumb(post.source.field, "post-thumb") }}</div>
+  <div class="post-head"><span class="tag">{{ post.source.field }}</span>{% if post.dl_state == "closed" %}<span class="st closed">이번 신청 마감</span>{% elif post.dl_state == "always" %}<span class="st always">상시 신청</span>{% endif %}
+  <h1>{{ a.title }}</h1></div>
   <div class="meta">
     <span>소관 {{ post.source.org }}</span><span>게시 {{ post.date }}</span><span>읽는 데 약 {{ read_min }}분</span>
-    {% if post.source.deadline %}<span class="dl">신청기한 {{ post.source.deadline[:40] }}</span>{% endif %}
+    {% if post.source.deadline %}<span class="dl">신청기한 {{ post.source.deadline | dl(60) }}</span>{% endif %}
   </div>
   {% if post.audiences or post.region != "national" %}<div class="aud">{% if post.region != "national" %}<a href="{{ base }}/region/{{ post.region }}/">{{ region_names[post.region] }}</a>{% endif %}{% for a_ in post.audiences %}<a href="{{ base }}/target/{{ a_ }}/">{{ aud_names[a_] }}</a>{% endfor %}</div>{% endif %}
   <div class="summary">
@@ -39,7 +39,7 @@
   </div>
   <div class="share"><button class="btn ghost" id="copyLink">링크 복사</button><span class="tags">{% for t in a.tags %}<span>#{{ t }}</span>{% endfor %}</span></div>
   {{ ad("wide", 2) }}
-  {% if related %}<section class="related"><h2>함께 보면 좋은 지원제도</h2><ul class="mini-cards">{% for r in related %}<li><a href="{{ base }}/{{ r.url }}">{{ thumb(r.source.field, "mini-thumb") }}<span class="tag">{{ r.source.field }}</span><strong>{{ r.article.title }}</strong></a></li>{% endfor %}</ul></section>{% endif %}
+  {% if related %}<section class="related"><h2>함께 보면 좋은 지원제도</h2><ul class="mini-cards">{% for r in related %}<li><a href="{{ base }}/{{ r.url }}"><span class="tag">{{ r.source.field }}</span><strong>{{ r.article.title }}</strong></a></li>{% endfor %}</ul></section>{% endif %}
 </article>
 {% include "sidebar.html" %}
 </div>

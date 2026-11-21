@@ -21,7 +21,7 @@
   {% if others %}
   <div class="sec-h" style="margin-top:28px"><h2>신청 기간 확인 필요</h2><span>{{ others|length }}건</span></div>
   <p class="disc">매년 정해진 기간에 신청하거나 기관별로 기간이 다른 제도입니다. 글에서 신청 기간을 확인하세요.</p>
-  <ul class="mini-list">{% for p in others %}<li><a href="{{ base }}/{{ p.url }}">{{ p.article.title }}</a><small>{{ p.source.deadline[:40] }}</small></li>{% endfor %}</ul>
+  <ul class="mini-list">{% for p in others %}<li><a href="{{ base }}/{{ p.url }}">{{ p.article.title }}</a><small>{{ p.source.deadline | dl(40) }}</small></li>{% endfor %}</ul>
   {% endif %}
 </section>
 {% include "sidebar.html" %}

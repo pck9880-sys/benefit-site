@@ -2,20 +2,24 @@
 {% block title %}{% if title %}{{ title }} 지원제도 모음 | {% endif %}{{ site_name }}{% if page > 1 %} ({{ page }}페이지){% endif %}{% endblock %}
 {% block main %}
 {% if not title and page == 1 %}
-<section class="hero" id="hero">
-  <div class="slides">
-    <div class="slide on s1" style="background-image:url({{ base }}/static/img/banner/b1.webp)"><div class="slide-in"><span class="kick">이번 달 업데이트</span><h1>받을 수 있는 지원금,<br>놓치지 말고 확인하세요</h1><p>정부·지자체 지원제도의 대상, 금액, 신청 방법을 한 페이지로 정리했습니다.</p><a class="btn" href="#latest">최신 안내 보기</a></div></div>
-    <div class="slide s2" style="background-image:url({{ base }}/static/img/banner/b2.webp)"><div class="slide-in"><span class="kick">주거 · 자립</span><h1>월세·전세·내 집 마련<br>지원 제도 모아보기</h1><p>청년 월세, 전세보증금 반환보증, 디딤돌 대출까지 조건을 비교해 보세요.</p><a class="btn" href="#cats">분야별 보기</a></div></div>
-    <div class="slide s3" style="background-image:url({{ base }}/static/img/banner/b3.webp)"><div class="slide-in"><span class="kick">일자리 · 교육</span><h1>취업 준비와 직업훈련,<br>국가 지원으로 시작하기</h1><p>국민취업지원제도, 국민내일배움카드 등 신청 절차를 쉽게 안내합니다.</p><a class="btn" href="#latest">안내 읽기</a></div></div>
-  </div>
-  <div class="dots"><button class="on" aria-label="1"></button><button aria-label="2"></button><button aria-label="3"></button></div>
+<section class="home-hero">
+  <p class="hh-kick">공공데이터 기반 · 매일 업데이트 · 총 {{ total }}건</p>
+  <h1>내가 받을 수 있는 지원금,<br class="m"> 검색 한 번으로 찾으세요</h1>
+  <div class="big-srch"><input id="q2" type="search" placeholder="예) 청년 월세, 근로장려금, 에너지바우처" aria-label="지원금 검색" autocomplete="off"><span class="big-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span><div id="results2"></div></div>
+  <div class="quick"><span>많이 찾는</span>{% for k in ["청년 월세", "근로장려금", "에너지바우처", "내일배움카드", "육아휴직", "주거급여"] %}<button type="button" class="qk">{{ k }}</button>{% endfor %}</div>
 </section>
-<section class="catgrid" id="cats">
-  {% for slug, name, n in categories %}
-  <a class="cat" href="{{ base }}/c/{{ slug }}/">{{ thumb(name, "cat-img") }}<span>{{ name }}</span><small>{{ n }}건</small></a>
-  {% endfor %}
-</section>
-<a class="check-cta" href="{{ base }}/check/"><span><strong>나도 받을 수 있을까?</strong><small>나이·지역·상황을 고르면 해당될 수 있는 지원금을 찾아드려요</small></span><b>자격 진단 →</b></a>
+<div class="home-row">
+  <section class="hbox" id="cats">
+    <div class="hbox-h"><h2>분야별 지원제도</h2></div>
+    <div class="catgrid">{% for slug, name, n in categories %}<a class="cat" href="{{ base }}/c/{{ slug }}/">{{ icon(name) }}<span>{{ name }}</span><small>{{ n }}건</small></a>{% endfor %}</div>
+  </section>
+  <section class="hbox">
+    <div class="hbox-h"><h2>신청 마감 임박</h2><a href="{{ base }}/deadline/">전체 보기</a></div>
+    {% if soon %}<ul class="soon">{% for p in soon %}<li><a href="{{ base }}/{{ p.url }}"><span class="dday {% if p.d_day <= 7 %}hot{% endif %}">{% if p.d_day == 0 %}오늘{% else %}D-{{ p.d_day }}{% endif %}</span><span>{{ p.article.title }}</span></a></li>{% endfor %}</ul>
+    {% else %}<p class="empty sm">30일 안에 마감되는 지원제도가 없어요. <a href="{{ base }}/deadline/">상시 신청 제도 보기 →</a></p>{% endif %}
+    <a class="check-cta" href="{{ base }}/check/"><span><strong>나도 받을 수 있을까?</strong><small>나이·지역·상황으로 해당 지원금 찾기</small></span><b>자격 진단 →</b></a>
+  </section>
+</div>
 {% if targets %}<section class="hubs"><h3>대상별로 찾기</h3><div class="hub-chips">{% for s, n, c in targets %}<a href="{{ base }}/target/{{ s }}/">{{ n }} <em>{{ c }}</em></a>{% endfor %}</div></section>{% endif %}
 {% set local_regions = regions | rejectattr(0, "equalto", "national") | list %}
 {% if local_regions %}<section class="hubs"><h3>지역별로 찾기</h3><div class="hub-chips">{% for s, n, c in local_regions %}<a href="{{ base }}/region/{{ s }}/">{{ n }} <em>{{ c }}</em></a>{% endfor %}</div></section>{% endif %}
@@ -27,12 +31,11 @@
     <ul class="cards">
     {% for p in posts %}
       <li><a href="{{ base }}/{{ p.url }}">
-        <span class="card-ico">{{ thumb(p.source.field) }}</span>
         <span class="card-b">
-          <span class="tag">{{ p.source.field }}</span>
+          <span class="card-tags"><span class="tag">{{ p.source.field }}</span>{% if p.dl_state == "closed" %}<span class="st closed">마감</span>{% elif p.dl_state == "always" %}<span class="st always">상시 신청</span>{% elif p.dl_state == "upcoming" %}<span class="st up">D-{{ p.d_day }}</span>{% endif %}</span>
           <strong>{{ p.article.title }}</strong>
           <span class="card-d">{{ p.article.description }}</span>
-          <span class="card-m">{{ p.source.org }} · {{ p.date }}{% if p.source.deadline %} · 신청기한 {{ p.source.deadline[:24] }}{% endif %}</span>
+          <span class="card-m">{{ p.source.org }} · {{ p.date }}{% if p.source.deadline and p.dl_state != "closed" %} · 신청기한 {{ p.source.deadline | dl(26) }}{% endif %}</span>
         </span>
       </a></li>
       {% if loop.index == 6 %}<li class="ad-li">{{ ad("inline", 1) }}</li>{% endif %}

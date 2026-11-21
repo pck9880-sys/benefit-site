@@ -48,9 +48,12 @@ def audiences_of(post):
     cond = src.get("cond") or {}
     codes = set(cond.get("codes") or [])
     text = " ".join([a.get("title", ""), src.get("name") or "", " ".join(a.get("summary_points", []))])
+    code_hits = [slug for slug, _, cs, _ in AUDIENCES if codes & set(cs)]
+    if len(code_hits) > 4:  # 대상 코드가 거의 다 찍힌 제도 = '대상 제한 없음' → 코드 무시하고 본문 키워드로만
+        code_hits = []
     out = []
     for slug, _, cs, kw in AUDIENCES:
-        if codes & set(cs) or re.search(kw, text):
+        if slug in code_hits or re.search(kw, text):
             out.append(slug)
     amin, amax = cond.get("age_min"), cond.get("age_max")
     if amax and amax <= 39 and (amin or 0) >= 15 and "youth" not in out:

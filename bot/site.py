@@ -18,11 +18,17 @@ def slugify(s):
     return re.sub(r"[^\w가-힣]+", "-", s).strip("-") or "etc"
 
 
+FIELD_FIX = [(r"장려금", "생활안정")]
+
+
 def load_posts():
     posts = []
     for p in config.POSTS_DIR.glob("*.json"):
         d = json.loads(p.read_text("utf-8"))
         d["url"] = f"posts/{d['id']}"  # 확장자 없는 깔끔한 주소 (파일은 .html 로 저장)
+        for pat, fld in FIELD_FIX:  # 공공데이터 분류가 어색한 제도 바로잡기 (예: 근로장려금이 '주거·자립')
+            if re.search(pat, d["article"].get("title", "")):
+                d["source"]["field"] = fld
         d["field_slug"] = slugify(d["source"].get("field") or "기타")
         d["date"] = d["published_at"][:10]
         d["region"] = taxonomy.region_of(d["source"].get("org"))
@@ -36,6 +42,12 @@ def load_posts():
 def build():
     base_path = urlparse(config.SITE_URL).path.rstrip("/")  # GitHub Pages 하위경로 대응
     env = Environment(loader=FileSystemLoader(config.ROOT / "templates"), autoescape=True)
+
+    def dl_clean(t, n=40):  # 신청기한 문구 정리: '○ 정기신청 : 5.1.~5.31.○ 반기…' → '정기신청 5.1.~5.31. · 반기…'
+        t = re.sub(r"\s*[○●◦▪■□·]\s*", " · ", t or "").strip(" ·")
+        t = re.sub(r"\s*:\s*", " ", re.sub(r"\s+", " ", t))
+        return t if len(t) <= n else t[:n].rsplit(" ", 1)[0] + "…"
+    env.filters["dl"] = dl_clean
     env.globals.update(
         site_name=config.SITE_NAME, site_url=config.SITE_URL, site_desc=config.SITE_DESCRIPTION,
         base=base_path, adsense=config.ADSENSE_CLIENT, year=datetime.now().year,
