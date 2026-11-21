@@ -1,0 +1,174 @@
+{
+ "topic": "토리첼리: 빨대로 물이 올라오는 이유, 공기의 무게(기압)를 처음 잰 수은 기둥 (1643~1644년)",
+ "title_top": "빨대 속 물을",
+ "title_bottom": "공기가 밀어 올림",
+ "mood": "기본",
+ "kind": "과학",
+ "caption_style": "box",
+ "music_concept": "잔잔한 과학",
+ "question": "",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "intro_post": false,
+ "beats": [
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "빨대로 물이 왜 올라올까요?",
+   "card": "빨대로 물이 왜 올라올까요?"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "옛날엔 진공을 자연이 싫어한다 봤죠",
+   "card": "옛날엔 진공을 자연이 싫어한다 봤죠"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "토리첼리는 펌프의 10m 한계가 궁금했죠",
+   "card": "토리첼리는 펌프의 10m 한계가 궁금했죠"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "이것 때문에 미쳐서 공중제비를 돌아버립니다",
+   "card": "이것 때문에 미쳐서 공중제비를 돌아버립니다"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "유리관에 수은을 채워 뒤집었죠",
+   "card": "유리관에 수은을 채워 뒤집었죠"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "공기가 누르는 힘, 기압이죠",
+   "card": "공기가 누르는 힘, 기압이죠"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "수은은 76cm에서 멈췄습니다",
+   "card": "수은은 76cm에서 멈췄습니다"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "narration": "물이라면 약 10m에서 멈추죠",
+   "card": "물이라면 약 10m에서 멈추죠"
+  }
+ ],
+ "outro": "공기가 위에서 눌러 줘서, 그 덕분에 빨대로 물을 마실 수 있는 겁니다. 정말 신기하죠?",
+ "media": [
+  {
+   "video": "clip_hook.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_old.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_think.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_flip.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_exp.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_why.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_proof.mp4",
+   "start": 0
+  },
+  {
+   "video": "clip_proof.mp4",
+   "start": 0
+  }
+ ],
+ "gpt_images": [],
+ "thumb_caption": "빨대의 진짜 비밀",
+ "end_comments": false,
+ "yt_title": "빨대로 물이 올라오는 진짜 이유, 토리첼리 #shorts",
+ "description": "1643~1644년, 갈릴레이의 제자 에반젤리스타 토리첼리는 약 1m 길이의 한쪽이 막힌 유리관에 수은을 가득 채운 뒤, 수은 접시에 거꾸로 세웠습니다.\n수은은 관 끝까지 차 있지 않고 접시 수면에서 약 76cm 높이에서 멈췄고, 그 위에는 빈 공간(토리첼리의 진공)이 생겼습니다. 그는 '자연이 빈 곳을 싫어해서' 액체가 올라가는 게 아니라, 접시 위를 누르는 공기의 무게(대기압)가 기둥을 받치고 있다고 설명했습니다. 이것이 최초의 수은 기압계입니다.\n당시 피렌체의 흡입 펌프는 물을 약 10m 넘게 끌어올리지 못했는데, 같은 이유입니다. 빨대도 마찬가지로, 입으로 빨대 속 공기를 빼면 컵 수면을 누르는 바깥 공기가 물을 밀어 올립니다.\n\n계산 방법: 수은은 물보다 약 13.6배 무겁습니다(밀도 13.6 g/cm³). 같은 공기 압력이 받치는 물기둥 = 76cm × 13.6 ≈ 1,034cm ≈ 약 10.3m.\n※ 펌프 한계 높이는 자료마다 '약 10m', '18브라치아(약 10~11m)', '32~34피트' 등으로 조금씩 다르게 적혀 있습니다. 실험 연도도 1643년 또는 1644년으로 자료마다 다릅니다.\n참고: Britannica 'Mercury barometer' / APS News 'October 1643: Torricelli demonstrates the existence of a vacuum' / Museo Galileo 'Torricelli's barometric experiment'\n※ 캐릭터는 토리첼리를 본뜬 만화풍 3D 캐릭터, 장면은 모두 직접 만든 3D입니다.\n\n※ 숫자는 공식 자료·공식 계산으로 확인한 값입니다.",
+ "tags": [
+  "토리첼리",
+  "기압",
+  "대기압",
+  "수은기압계",
+  "진공",
+  "빨대",
+  "과학",
+  "물리",
+  "쇼츠",
+  "원리",
+  "상식"
+ ],
+ "sources": [
+  "https://www.britannica.com/technology/mercury-barometer",
+  "https://www.aps.org/apsnews/2012/10/torricelli-demonstrates-existence-vacuum",
+  "https://catalogue.museogalileo.it/multimedia/TorricellisBarometricExperimentBis.html",
+  "https://imss.fi.it/vuoto/eesper1.html"
+ ],
+ "pin_comment": "높은 산에 올라가면 과자 봉지가 빵빵해지는 것도 기압 때문이에요. 여러분은 어디서 기압을 느껴 보셨나요? 🥤",
+ "outro_spoken": "공기가 위에서 눌러 줘서, 그 덕분에 빨대로 물을 마실 수 있는 겁니다. 정말 신기하죠?",
+ "outro_custom": true,
+ "voices": [
+  "필재",
+  "필재"
+ ],
+ "credits": [
+  "3D: three.js (MIT) — 직접 만든 장면·캐릭터",
+  "기법 참고: claude-animation-skills (MIT)"
+ ]
+}

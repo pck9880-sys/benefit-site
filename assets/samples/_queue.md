@@ -293,3 +293,21 @@ PSG에서 트로피만 12개 들었다고 함
 진자는 그대로인데 땅이 돌아서, 그 덕분에 지구 자전을 눈으로 본 겁니다. 정말 신기하죠?
 ```
 - 참고: Britannica 'Foucault pendulum', APS News(2007-02) 'Foucault Demonstrates That Earth Rotates', UNSW Physics. 영상 속 시간은 빨리 감기(설명란 표기), 추 재질 표현은 자료마다 다름.
+
+
+## 16. torricelli_air — [과학] 빨대 속 물을 / 공기가 밀어 올림
+- 만든 시각: 2026-11-21 (KST) · 종류: 과학 · 핵심: 1643~1644년 토리첼리가 수은 채운 유리관(약 1m)을 접시에 뒤집어 세움 → 수은이 약 76cm에서 멈추고 위는 진공 = '자연이 진공을 싫어해서'가 아니라 공기 무게(대기압)가 받침. 물로 치면 76cm × 13.6 ≈ 약 10.3m → 펌프 10m 한계·빨대 원리
+- 화면: 3D 7종(scene3d_pro 새 type: straw_hook·pump_old·torricelli think/flip·tube_flip·air_press·baro_proof 13초) · 썸네일 원본 thumb_src.jpg(증명 클립 프레임) · 더빙 필재
+- 녹음 대본:
+```
+빨대로 물이 왜 올라올까요?
+옛날엔 진공을 자연이 싫어한다 봤죠
+토리첼리는 펌프의 10m 한계가 궁금했죠
+이것 때문에 미쳐서 공중제비를 돌아버립니다
+유리관에 수은을 채워 뒤집었죠
+공기가 누르는 힘, 기압이죠
+수은은 76cm에서 멈췄습니다
+물이라면 약 10m에서 멈추죠
+공기가 위에서 눌러 줘서, 그 덕분에 빨대로 물을 마실 수 있는 겁니다. 정말 신기하죠?
+```
+- 참고: Britannica 'Mercury barometer', APS News(2012-10) 'Torricelli demonstrates the existence of a vacuum', Museo Galileo·IMSS 피렌체. 펌프 한계는 자료마다 약 10m/18브라치아/32~34피트, 연도 1643 또는 1644(설명란 표기).

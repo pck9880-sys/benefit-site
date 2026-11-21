@@ -42,6 +42,12 @@ type:
   pantheon     1851년 판테온 돔 아래 긴 줄 진자, 카메라가 돔에서 바닥으로 (label, tag/tag2)
   swing_plane  회전판 원리: 받침대가 돌아도 진자 흔들림 방향은 그대로 (label, tag)
   fou_proof    긴 클립: 바닥(빨간 표시·핀)이 돌고 진자 길은 그대로, 핀이 차례로 쓰러짐 + 시간·각도 카운트 (label/label2, drop 초)
+  straw_hook   유리컵 빨대로 물이 올라옴 + 위 화살표 + 물음표 (label)
+  pump_old     우물 흡입 펌프: 피스톤을 올리면 물이 따라 올라옴 — '빈 곳이 물을 당긴다' 옛 상식 (label, tag)
+  torricelli   토리첼리풍 만화 학자(어깨 긴 짙은 머리·짧은 수염·크라바트) mode: "think"(10m에서 멈춘 물관+물음표, tag) / "flip"
+  tube_flip    수은 채운 유리관을 뒤집어 접시에 세움 → 수은이 내려와 위에 빈 공간 (label, tag/tag2)
+  air_press    접시 위 공기 알갱이·아래로 누르는 화살표가 수은 기둥을 받침 (label, tag)
+  baro_proof   긴 클립: 실제 비율 수은관 76cm 카운트 → 뒤로 빠지며 옆 물관이 약 10.3m까지 (label/label2, drop 초)
   ※ 모든 장면에 비네트+필름 그레인(애니메이션 키트 기법). 장면 속 글씨는 자막 자리(아래 ~21%)에 들어가면 자동으로 위로 올림. --snap 스틸엔 자막 자리 빨간 띠 표시
 실존 인물 사진·초상은 쓰지 않는다 (캐릭터는 흰 머리·콧수염의 만화풍 과학자).
 """
@@ -1035,6 +1041,138 @@ if (CFG.type==='fou_proof') {
     setLabel(cnt, h>=HOURS-.01 ? '약 32시간 · 한 바퀴' : `${Math.floor(h)}시간 · ${Math.round(Math.floor(h)*360/HOURS)}°`, '#ffffff');
     hudA.visible=s<T0; hudB.visible=s>=T0;
     const k=ease(Math.min(1,s/SEC*1.3)); camera.position.set(0,3.0+3.2*k,4.4-3.4*k); camera.lookAt(0,.2,0); gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+// ── 토리첼리 편: 빨대 훅·펌프 옛 상식·토리첼리 캐릭터·수은관 뒤집기·기압 화살표·76cm/10m 증명 ──
+const TOR={hair:0x231812, robe:0x1c1f2a, top:true, wig:true, beard:[.78,.62,.7], cravat:true};
+const mercMat=()=>new THREE.MeshStandardMaterial({color:0xeef1f5, metalness:.7, roughness:.15, emissive:0x4a505a});
+function tubeGlass(r,h){ const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,32,1,true), glassMat()); m.position.y=h/2; return m; }
+function column(r,mat){ const geo=new THREE.CylinderGeometry(r,r,1,32); geo.translate(0,.5,0); const m=new THREE.Mesh(geo,mat); m.renderOrder=3; m.set=L=>{ m.scale.y=Math.max(.001,L); }; return m; }
+function dish(R,mat){ const g=new THREE.Group(); const gl=new THREE.Mesh(new THREE.CylinderGeometry(R,R*.85,.22,48,1,true), glassMat()); gl.position.y=.11; g.add(gl);
+  const bt=new THREE.Mesh(new THREE.CircleGeometry(R*.85,48), glassMat()); bt.rotation.x=-Math.PI/2; bt.position.y=.005; g.add(bt);
+  const liq=new THREE.Mesh(new THREE.CylinderGeometry(R*.96,R*.85,.14,48), mat); liq.position.y=.075; liq.receiveShadow=true; g.add(liq); return g; }
+function downArrow(color){ const a=upArrow(color); a.rotation.z=Math.PI; return a; }
+function ruler(H,step,big,unit,x,w){ const g=new THREE.Group(); const m=new THREE.MeshStandardMaterial({color:0xe9dcc0, roughness:.7});
+  const b=new THREE.Mesh(new THREE.BoxGeometry(w||.12,H,.02), m); b.position.y=H/2; g.add(b);
+  for(let v=0; v<=H+1e-6; v+=step){ const k=Math.round(v/step)%big===0; const t=new THREE.Mesh(new THREE.BoxGeometry(k?(w||.12)*.8:(w||.12)*.45,H*.004,.025), new THREE.MeshBasicMaterial({color:0x3a2a1a}));
+    t.position.set(-(w||.12)*(k?.1:.27),v,.012); g.add(t); }
+  g.position.x=x||0; return g; }
+
+if (CFG.type==='straw_hook') {
+  scene.background=grad('#1a3a5e','#05070f'); const key=keyLight(2,5,4,2.8); key.target.position.set(0,.8,0); scene.add(new THREE.AmbientLight(0x7080a0,.55)); table(0x4a3020);
+  const rim=new THREE.DirectionalLight(0xffc98a,1.0); rim.position.set(-3,3,-4); scene.add(rim);
+  const cup=new THREE.Mesh(new THREE.CylinderGeometry(.62,.52,1.5,48,1,true), glassMat()); cup.position.y=.75; scene.add(cup);
+  const bot=new THREE.Mesh(new THREE.CircleGeometry(.52,48), glassMat()); bot.rotation.x=-Math.PI/2; bot.position.y=.01; scene.add(bot);
+  const wt=new THREE.Mesh(new THREE.CylinderGeometry(.585,.52,1.1,48), waterMat()); wt.position.y=.56; wt.renderOrder=2; scene.add(wt);
+  const S=new THREE.Group(); S.position.set(.12,0,0); S.rotation.z=-.12; scene.add(S);
+  const st=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,2.6,24,1,true), new THREE.MeshPhysicalMaterial({color:0xff6b8a, transparent:true, opacity:.35, roughness:.1, side:THREE.DoubleSide, depthWrite:false})); st.position.y=1.35; S.add(st);
+  const wc=column(.06,new THREE.MeshStandardMaterial({color:0x3aa0ff, roughness:.1, emissive:0x0a2a50})); wc.position.y=.1; S.add(wc);
+  const ar=upArrow('#7dfcff'); ar.scale.setScalar(.7); ar.position.set(-.55,1.3,.4); scene.add(ar);
+  const q=label('?','#ffe066',220); q.scale.set(2.2,.41,1); scene.add(q);
+  if (CFG.label) hudLabel(CFG.label,'#ffe066',.33);
+  draw=t=>{ const s=t*SEC; const u=ease(Math.min(1,Math.max(0,(t-.1)/.6))); wc.set(1.0+1.55*u); ar.setLen(.2+.6*u);
+    q.position.set(-1.0,1.9+.07*Math.sin(s*4),.2); q.material.opacity=Math.min(1,Math.max(0,(t-.45)*4));
+    camera.position.set(.8,1.9,5.0-.6*t); camera.lookAt(0,1.35,0); gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+if (CFG.type==='pump_old') {
+  scene.background=grad('#3a2a1a','#0a0806'); scene.add(new THREE.HemisphereLight(0xffe8c8,0x2a2018,.7)); const key=keyLight(3,7,5,2.6); key.target.position.set(0,2,0);
+  const gr=new THREE.Mesh(new THREE.CircleGeometry(8,64), new THREE.MeshStandardMaterial({color:0x4a3a28, roughness:.95})); gr.rotation.x=-Math.PI/2; gr.receiveShadow=true; scene.add(gr);
+  const well=new THREE.Mesh(new THREE.CylinderGeometry(.9,.9,.7,32,1,true), new THREE.MeshStandardMaterial({color:0x7a6a58, roughness:.9, side:THREE.DoubleSide})); well.position.y=.35; well.castShadow=true; scene.add(well);
+  const wsf=new THREE.Mesh(new THREE.CircleGeometry(.88,32), waterMat()); wsf.rotation.x=-Math.PI/2; wsf.position.y=.25; scene.add(wsf);
+  const P=tubeGlass(.16,3.6); P.position.y=.2; scene.add(P);
+  const wc=column(.14,new THREE.MeshStandardMaterial({color:0x3a9cf0, roughness:.1, emissive:0x0a2a50})); wc.position.y=.25; scene.add(wc);
+  const pis=new THREE.Mesh(new THREE.CylinderGeometry(.15,.15,.12,32), steelMat()); scene.add(pis);
+  const rod=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,1.6,12), steelMat()); scene.add(rod);
+  const gap=new THREE.Mesh(new THREE.CylinderGeometry(.13,.13,1,24), new THREE.MeshBasicMaterial({color:0x1a0a2a, transparent:true, opacity:.0})); scene.add(gap);
+  const tg=tag(CFG.tag||'빈 곳이 물을 당긴다?','#ffb86b',3.4);
+  if (CFG.label) hudLabel(CFG.label,'#ffe066',.33);
+  draw=t=>{ const s=t*SEC; const u=ease(Math.min(1,t*1.15)); const py=.6+2.9*u; pis.position.y=py; rod.position.y=py+.8; wc.set(py-.25-.06);
+    tg.position.set(-.2,3.3,.6); tg.material.opacity=Math.min(1,Math.max(0,(t-.25)*4));
+    camera.position.set(1.0,2.4,8.4-.6*t); camera.lookAt(0,2.1,0); gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+if (CFG.type==='torricelli') {
+  scene.background = grad(CFG.mode==='flip'?'#4a2a5c':'#1d3a5e', '#05070f'); stage(0x1c2135);
+  const key=keyLight(2.5,6,4,2.8); key.target.position.set(0,1.3,0); scene.add(new THREE.AmbientLight(0x6070a0,.42));
+  const rim=new THREE.DirectionalLight(0xffc98a,1.0); rim.position.set(-3,3,-4); scene.add(rim);
+  const G=galileo(TOR); scene.add(G.g);
+  const qs=[]; let pipe=null, wc=null;
+  if (CFG.mode==='think'){ for(let i=0;i<5;i++){ const q=label('?','#ffd23f',220); q.scale.set(1.5,.28,1); scene.add(q); qs.push([q,i/5*Math.PI*2]); }
+    pipe=tubeGlass(.09,2.7); pipe.position.set(-1.35,0,.3); scene.add(pipe);
+    wc=column(.075,new THREE.MeshStandardMaterial({color:0x3a9cf0, roughness:.1, emissive:0x0a2a50})); wc.position.set(-1.35,0,.3); scene.add(wc);
+    const lim=glowLine([new THREE.Vector3(-1.6,1.95,.3),new THREE.Vector3(-1.1,1.95,.3)],'#ff5a5a',.012); scene.add(lim);
+    const tl=tag(CFG.tag||'약 10m','#ff7a7a',1.6); tl.position.set(-1.35,2.18,.3); }
+  if (CFG.label) hudLabel(CFG.label,'#ffd23f',.33);
+  draw=t=>{ const s=t*SEC;
+    if (CFG.mode==='flip'){ const ph=(s*.42)%1; const up=ph<.75?Math.sin(Math.PI*ph/.75):0; G.g.position.y=up*1.7; G.g.rotation.x = ph<.75 ? -2*Math.PI*ease(ph/.75) : 0;
+      G.arms[0].rotation.z=-.22-1.9*up; G.arms[1].rotation.z=.22+1.9*up; G.face(.9,0,1); camera.position.set(1.5,2.6,7.6); camera.lookAt(0,1.9,0); }
+    else { const blink=(s%2.3)<.12?1:0; G.face(.15, blink?1:.25, .6+.4*Math.sin(s*3)); G.H.rotation.z=.18*Math.sin(s*1.4); G.H.rotation.x=-.06;
+      G.arms[1].rotation.set(-2.15,0,-.62); G.arms[0].rotation.z=-.25; G.H.rotation.y=-.3;
+      wc.set(Math.min(1.95, .3+1.65*ease(Math.min(1,t*1.6))) + (t>.6?.02*Math.sin(s*9):0));
+      qs.forEach(([q,a],i)=>{ const b=a+s*1.2; q.position.set(Math.cos(b)*1.3+.2, 2.6+.25*Math.sin(s*2.5+i), Math.sin(b)*.7); q.material.opacity=.6+.4*Math.sin(s*3+i); });
+      camera.position.set(.1,2.0,5.6-.5*t); camera.lookAt(-.45,1.75,0); }
+    gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+if (CFG.type==='tube_flip') {
+  scene.background=grad('#1d2f48','#04060c'); const key=keyLight(2.5,7,5,2.8); key.target.position.set(0,.8,0); scene.add(new THREE.AmbientLight(0x8090b0,.6)); table(0x3a2a20);
+  const rim=new THREE.DirectionalLight(0xffd8a8,1.1); rim.position.set(-3,3,-3); scene.add(rim);
+  const D=dish(.55,mercMat()); scene.add(D);
+  const T=new THREE.Group(); scene.add(T); const L=2.0;   // 화면 비율: 2.0 = 약 1m 유리관
+  const gl=tubeGlass(.09,L); T.add(gl); const cap=new THREE.Mesh(new THREE.SphereGeometry(.09,24,12,0,Math.PI*2,0,Math.PI/2), glassMat()); cap.position.y=L; T.add(cap);
+  const hg=column(.08,mercMat()); T.add(hg);
+  const tA=tag(CFG.tag||'유리관 약 1m','#ffffff',2.4), tB=tag(CFG.tag2||'수은','#ffe066',2.0), tV=tag('빈 공간','#7dfcff',2.2);
+  if (CFG.label) hudLabel(CFG.label,'#ffe066',.33);
+  draw=t=>{ const s=t*SEC; const f=ease(Math.min(1,Math.max(0,(t-.12)/.38)));   // 뒤집기
+    const p0=new THREE.Vector3(1.5,.25,0), p1=new THREE.Vector3(0,L+.06,0); T.position.lerpVectors(p0,p1,f); T.rotation.z=Math.PI*f;
+    const d=ease(Math.min(1,Math.max(0,(t-.55)/.35)));   // 떨어지는 수은: 막힌 쪽(위)에서 빈 공간이 생김
+    const H=L*(1-.24*d); if(f<1){ hg.position.y=0; hg.set(L); } else { hg.position.y=L-H; hg.set(H); }
+    tA.position.set(-1.0,2.0,0); tA.material.opacity=Math.min(1,Math.max(0,(t-.05)*5),Math.max(0,(.55-t)*6));
+    tB.position.set(.75,.55,0); tB.material.opacity=Math.min(1,Math.max(0,(t-.15)*4));
+    tV.position.set(-.95,1.9,0); tV.material.opacity=Math.max(0,Math.min(1,(t-.8)*6));
+    camera.position.set(.6,1.55,5.6-.4*t); camera.lookAt(0,1.15,0); gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+if (CFG.type==='air_press') {
+  scene.background=grad('#16283f','#04060c'); const key=keyLight(2.5,7,5,2.8); key.target.position.set(0,.8,0); scene.add(new THREE.AmbientLight(0x8090b0,.6)); table(0x3a2a20);
+  const D=dish(1.0,mercMat()); D.scale.set(1,1,1); scene.add(D);
+  const gl=tubeGlass(.09,2.06); gl.position.y=.06; scene.add(gl); const hg=column(.08,mercMat()); hg.position.y=.06; hg.set(1.55); scene.add(hg);
+  const arrows=[]; for(let i=0;i<6;i++){ const a=downArrow('#7dfcff'); const x=[-.95,-.7,-.45,-.22,.22,.5][i]; a.position.set(x,2.0,(i%2?.25:-.15)); scene.add(a); arrows.push([a,i]); }
+  const upA=upArrow('#ffd23f'); upA.scale.setScalar(.6); upA.position.set(.32,.4,0); scene.add(upA);
+  const air=[]; for(let i=0;i<70;i++){ const b=sph(.035,new THREE.MeshStandardMaterial({color:0xbfe8ff, emissive:0x204060, transparent:true, opacity:.7}),[0,0,0],null,8); b.castShadow=false; scene.add(b); air.push([b,(rnd()-.5)*3.6,1+rnd()*2.6,(rnd()-.5)*1.6,rnd()*9]); }
+  const tg=tag(CFG.tag||'공기 무게가 누름','#7dfcff',1.7);
+  if (CFG.label) hudLabel(CFG.label,'#ffe066',.33);
+  draw=t=>{ const s=t*SEC; arrows.forEach(([a,i])=>{ const u=((s*.7+i*.17)%1); a.position.y=2.1-.8*u; a.setLen(.5); a.children.forEach(c=>{ c.material.transparent=true; c.material.opacity=Math.sin(Math.PI*u); }); });
+    upA.setLen(.35+.15*Math.sin(s*4)); air.forEach(([b,x,y,z,o])=>b.position.set(x+.06*Math.sin(s*3+o),y+.06*Math.cos(s*2.6+o),z));
+    tg.position.set(-.6,.55,1.1); tg.material.opacity=Math.min(1,Math.max(0,(t-.2)*4));
+    camera.position.set(.9,2.0,5.6-.4*t); camera.lookAt(0,1.2,0); gradePass.uniforms.uT.value=s; composer.render(); };
+}
+
+if (CFG.type==='baro_proof') {
+  scene.background=grad('#14243a','#030509'); scene.add(new THREE.HemisphereLight(0xdde8ff,0x202030,.7)); const key=sunLight(4,14,8,2.2,8); scene.add(new THREE.AmbientLight(0x8090b0,.35));
+  const fl=new THREE.Mesh(new THREE.CircleGeometry(20,64), new THREE.MeshStandardMaterial({color:0x2a2220, roughness:.8})); fl.rotation.x=-Math.PI/2; fl.receiveShadow=true; scene.add(fl);
+  // 실제 비율(1단위 = 1m): 수은관 1m(76cm에서 멈춤), 물관 11m(약 10.3m에서 멈춤) — 수은 밀도 13.6배
+  const R=.06; const D1=dish(.28,mercMat()); D1.scale.y=.6; scene.add(D1);
+  const g1=tubeGlass(R,1.0); g1.position.y=.04; scene.add(g1); const hg=column(R*.88,mercMat()); hg.position.y=.04; scene.add(hg);
+  const r1=ruler(1.0,.02,5,'cm',-.16,.07); scene.add(r1);
+  const WX=1.6, D2=dish(.55,new THREE.MeshStandardMaterial({color:0x3a9cf0, roughness:.1})); D2.position.x=WX; D2.scale.y=.6; scene.add(D2);
+  const g2=tubeGlass(.2,11); g2.position.set(WX,.04,0); scene.add(g2); const wc=column(.18,new THREE.MeshStandardMaterial({color:0x3a9cf0, roughness:.1, emissive:0x0a2a50})); wc.position.set(WX,.04,0); scene.add(wc);
+  const r2=ruler(11,.5,2,'m',WX-.36,.16); scene.add(r2);
+  const lim=glowLine([new THREE.Vector3(-.3,.8,0),new THREE.Vector3(.2,.8,0)],'#ffd23f',.006); scene.add(lim);
+  const cnt=tag('0cm','#ffffff',.55), cnt2=tag('0m','#7dfcff',10), cnt3=tag('수은 76cm','#ffffff',9);
+  const hudA=hudLabel(CFG.label||'수은은 76cm에서 멈춤','#ffe066',.33), hudB=hudLabel(CFG.label2||'물이라면 약 10m','#7dfcff',.33); hudB.visible=false;
+  const T0=CFG.drop||3.0;
+  draw=t=>{ const s=t*SEC;
+    const u=ease(Math.min(1,Math.max(0,(s-.3)/1.8))); const hm=1.0-.24*u + (s>2.1?.006*Math.sin(s*7)*Math.exp(-(s-2.1)):0); hg.set(hm-.04);   // 관 꼭대기에서 수은이 내려와 76cm
+    lim.visible=s>2.0; setLabel(cnt, s>2.1?'76cm':`${Math.round(hm*100)}cm`, '#ffffff'); cnt.position.set(.38,hm+.06,0);
+    const w=ease(Math.min(1,Math.max(0,(s-T0-.6)/3.2))); const hw=10.3*w; wc.set(Math.max(.001,hw));
+    setLabel(cnt2, w>=1?'약 10.3m':`${hw.toFixed(1)}m`, '#7dfcff'); cnt2.position.set(WX+4.3,Math.min(9.4,Math.max(.6,hw-.6)),0); cnt2.visible=s>T0+.4;
+    cnt3.position.set(-2.9,1.5,0); cnt3.material.opacity=Math.min(1,Math.max(0,(s-T0-2.2)*1.5)); cnt.visible=s<T0+2.0;
+    hudA.visible=s<T0; hudB.visible=s>=T0;
+    const k=ease(Math.min(1,Math.max(0,(s-T0)/3.6)));
+    const c0=new THREE.Vector3(.25,.85,2.7), c1=new THREE.Vector3(1.6,5.2,27.5), l0=new THREE.Vector3(0,.62,0), l1=new THREE.Vector3(.9,5.0,0);
+    camera.position.lerpVectors(c0,c1,k); camera.lookAt(l0.clone().lerp(l1,k)); gradePass.uniforms.uT.value=s; composer.render(); };
 }
 
 // ── 자막 자리 비우기: 장면 속 글씨(스프라이트)가 정사각 아래 ~21%(대본 자막 상자) 안으로 들어가면 렌더 순간 위로 올림 ──

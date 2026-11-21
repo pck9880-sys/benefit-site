@@ -1,0 +1,9 @@
+{
+ "clip_hook.mp4": {"type": "straw_hook", "seconds": 4, "label": "빨대로 물이 왜 올라와?"},
+ "clip_old.mp4": {"type": "pump_old", "seconds": 4, "label": "옛 상식: 자연은 진공이 싫다", "tag": "빈 곳이 물을 당긴다?"},
+ "clip_think.mp4": {"type": "torricelli", "mode": "think", "seconds": 4, "label": "왜 10m에서 멈출까?", "tag": "약 10m"},
+ "clip_flip.mp4": {"type": "torricelli", "mode": "flip", "seconds": 4},
+ "clip_exp.mp4": {"type": "tube_flip", "seconds": 4, "label": "수은 유리관 뒤집기", "tag": "유리관 약 1m", "tag2": "수은"},
+ "clip_why.mp4": {"type": "air_press", "seconds": 4, "label": "공기가 누르는 힘 = 기압", "tag": "공기 무게가 누름"},
+ "clip_proof.mp4": {"type": "baro_proof", "seconds": 13, "label": "수은은 76cm에서 멈춤", "label2": "물이라면 약 10m", "drop": 3.0}
+}
