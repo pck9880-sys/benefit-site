@@ -392,3 +392,10 @@ body{background:var(--bg);color:var(--ink)}
 .card-amt,.mc-amt{background:none;-webkit-background-clip:initial;background-clip:initial;color:#4f3fd9}
 .kc em{background:#17183a}
 #q2{box-shadow:0 10px 30px rgba(0,0,0,.35)}
+
+/* v12 커서: 블랙→퍼플 그라데이션 둥근 화살표 (마우스 있는 기기만) */
+@media (hover:hover) and (pointer:fine){
+  html,body{cursor:url(img/cursor/arrow.png) 4 4,auto;cursor:-webkit-image-set(url(img/cursor/arrow.png) 1x,url(img/cursor/arrow@2x.png) 2x) 4 4,auto}
+  a,button,summary,label,.qk,.cat,[role=button]{cursor:url(img/cursor/hover.png) 6 5,pointer;cursor:-webkit-image-set(url(img/cursor/hover.png) 1x,url(img/cursor/hover@2x.png) 2x) 6 5,pointer}
+  input,textarea,select{cursor:text}
+}
