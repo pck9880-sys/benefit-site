@@ -4,35 +4,47 @@
 {% block main %}
 <div class="tool">
   <h1 class="tool-h">실업급여 계산기</h1>
-  <p class="tool-sub">2026년 이직자 기준 · 입력값은 저장되지 않아요.</p>
+  <p class="tool-sub">2025·2026년 퇴사자 기준 · 입력값은 저장되지 않아요.</p>
   <form class="tool-form" onsubmit="return false">
     <label>퇴직일 기준 나이<select id="ua"><option value="0">50세 미만</option><option value="1">50세 이상 또는 장애인</option></select></label>
-    <label>고용보험 가입 기간<select id="up"><option value="0">1년 미만</option><option value="1" selected>1년 ~ 3년 미만</option><option value="2">3년 ~ 5년 미만</option><option value="3">5년 ~ 10년 미만</option><option value="4">10년 이상</option></select></label>
-    <label style="grid-column:1/-1">퇴직 전 3개월 평균 월급 (세전)<span class="won"><input id="uw" type="number" inputmode="numeric" placeholder="예: 300"><em>만 원</em></span></label>
+    <label>마지막 근무일<input id="ul2" type="date"></label>
+    <label>고용보험 가입 기간 (년)<input id="uy" type="number" inputmode="numeric" min="0" max="50" placeholder="예: 2"></label>
+    <label>+ 개월<input id="um" type="number" inputmode="numeric" min="0" max="11" placeholder="예: 6"></label>
+    <label style="grid-column:1/-1">퇴직 전 3개월 임금 총액 (세전, 상여·수당 포함)<span class="won"><input id="uw" type="number" inputmode="numeric" placeholder="예: 900"><em>만 원</em></span></label>
   </form>
+  <details class="more-d adv">
+    <summary>단시간 근무 (하루 8시간 미만이면)</summary>
+    <div class="tool-form adv-in">
+      <label style="grid-column:1/-1">하루 소정 근로시간<select id="uh">{% for h in range(8, 0, -1) %}<option value="{{ h }}">{{ h }}시간{% if h == 8 %} (일반){% endif %}</option>{% endfor %}</select></label>
+    </div>
+  </details>
   <div class="tool-res" id="ur" hidden>
     <small>예상 실업급여 총액</small>
     <strong id="ut">0</strong>
     <span id="ud"></span>
   </div>
   <ul class="tool-list" id="ul"></ul>
-  <p class="disc">고용노동부 기준: 하루 금액 = 퇴직 전 평균임금의 60%(상한 68,100원 · 하한 66,048원), 받는 기간 120~270일. 하한은 하루 8시간 근무 기준이며, 고용보험 가입 180일 이상과 비자발적 퇴사 등 수급 요건을 충족해야 해요. 정확한 금액은 고용24 모의계산으로 확인하세요.</p>
-  <a class="more-all" href="{{ base }}/search/?q=실업">실업급여 관련 지원제도 보기 →</a>
+  <p class="disc">고용노동부 기준: 하루 금액 = 평균임금(퇴직 전 3개월 임금 ÷ 그 기간 일수)의 60%. 상한 2026년 68,100원·2025년 66,000원, 하한 = 그해 최저임금 × 80% × 하루 소정 근로시간(2026년 8시간 기준 66,048원). 받는 기간은 나이·가입 기간에 따라 120~270일. 고용보험 가입 180일 이상, 비자발적 퇴사 등 요건을 충족해야 하고 정확한 금액은 고용24 모의계산으로 확인하세요.</p>
+  <a class="more-all" href="{{ base }}/calc/severance/">퇴직금도 계산해 보기 →</a>
 </div>
 <script>
 (function(){
-  var DAYS=[[120,150,180,210,240],[120,180,210,240,270]],MAX=68100,MIN=66048;
-  var a=document.getElementById('ua'),p=document.getElementById('up'),w=document.getElementById('uw');
+  var DAYS=[[120,150,180,210,240],[120,180,210,240,270]],Y={2025:{max:66000,mw:10030},2026:{max:68100,mw:10320}};
+  var $=function(i){return document.getElementById(i)},D=864e5;
   function won(v){return v>=1e4?Math.round(v/1e4).toLocaleString()+'만 원':Math.round(v).toLocaleString()+'원'}
-  function run(){var m=parseFloat(w.value)*1e4,ok=!isNaN(m)&&m>0;document.getElementById('ur').hidden=!ok;
-    var days=DAYS[a.value][p.value];
-    if(!ok){document.getElementById('ul').innerHTML='<li><b>받는 기간</b><span>'+days+'일</span></li>';return}
-    var avg=m*3/91,raw=avg*0.6,day=Math.min(MAX,Math.max(MIN,raw)),tag=raw>MAX?' (상한 적용)':raw<MIN?' (하한 적용)':'';
-    document.getElementById('ut').textContent=won(day*days);
-    document.getElementById('ud').textContent='하루 '+Math.round(day).toLocaleString()+'원 × '+days+'일';
-    document.getElementById('ul').innerHTML=[['하루 금액',Math.round(day).toLocaleString()+'원'+tag],['한 달 (30일)',won(day*30)],['받는 기간',days+'일 (약 '+Math.round(days/30)+'개월)']]
+  function run(){var tot=parseFloat($('uw').value)*1e4,ok=!isNaN(tot)&&tot>0;
+    var yrs=(parseFloat($('uy').value)||0)+(parseFloat($('um').value)||0)/12,br=yrs<1?0:yrs<3?1:yrs<5?2:yrs<10?3:4,days=DAYS[$('ua').value][br];
+    var l=new Date($('ul2').value),yr=isNaN(l)?2026:Math.min(2026,Math.max(2025,l.getFullYear())),pd=91;
+    if(!isNaN(l)){var e=new Date(l.getTime()+D),s=new Date(e);s.setMonth(s.getMonth()-3);pd=Math.round((e-s)/D)}
+    var h=+$('uh').value,MAX=Y[yr].max,MIN=Math.round(Y[yr].mw*0.8*h);
+    $('ur').hidden=!ok;
+    if(!ok){$('ul').innerHTML='<li><b>받는 기간</b><span>'+days+'일</span></li>';return}
+    var avg=tot/pd,raw=avg*0.6,day=Math.min(MAX,Math.max(MIN,raw)),tag=raw>MAX?' (상한 적용)':raw<MIN?' (하한 적용)':'';
+    $('ut').textContent=won(day*days);
+    $('ud').textContent='하루 '+Math.round(day).toLocaleString()+'원 × '+days+'일 · '+yr+'년 퇴사 기준';
+    $('ul').innerHTML=[['1일 평균임금',Math.round(avg).toLocaleString()+'원 ('+pd+'일 기준)'],['하루 금액',Math.round(day).toLocaleString()+'원'+tag],['한 달 (30일)',won(day*30)],['받는 기간',days+'일 (약 '+Math.round(days/30)+'개월)'],['상한 · 하한',MAX.toLocaleString()+'원 · '+MIN.toLocaleString()+'원'+(h<8?' ('+h+'시간 근무)':'')]]
       .map(function(r){return '<li><b>'+r[0]+'</b><span>'+r[1]+'</span></li>'}).join('')}
-  [a,p].forEach(function(e){e.onchange=run});w.oninput=run;run();
+  ['ua','ul2','uh'].forEach(function(i){$(i).onchange=run});['uy','um','uw'].forEach(function(i){$(i).oninput=run});run();
 })();
 </script>
 {% endblock %}
