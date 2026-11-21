@@ -1,33 +1,65 @@
 {% extends "base.html" %}
-{% block title %}퇴직금 계산기 · 입사일·퇴사일로 바로 계산 | {{ site_name }}{% endblock %}
-{% block desc %}입사일, 퇴사일, 최근 3개월 월급만 넣으면 근로기준법 계산식으로 퇴직금 예상액을 바로 계산해 드립니다.{% endblock %}
+{% block title %}퇴직금 계산기 · 날짜별 상세 계산 + 세후 실수령액 | {{ site_name }}{% endblock %}
+{% block desc %}입사일·퇴사일과 퇴직 전 3개월 급여를 기간별로 넣으면 평균임금, 퇴직금, 퇴직소득세, 세후 실수령액까지 계산해 드립니다.{% endblock %}
 {% block main %}
 <div class="tool">
   <h1 class="tool-h">퇴직금 계산기</h1>
-  <p class="tool-sub">근로기준법 계산식 · 입력값은 저장되지 않아요.</p>
+  <p class="tool-sub">근로기준법 평균임금 방식 · 입력값은 저장되지 않아요.</p>
   <form class="tool-form" onsubmit="return false">
     <label>입사일<input id="sj" type="date"></label>
-    <label>퇴사일 (마지막 근무 다음 날)<input id="sq" type="date"></label>
-    <label>최근 3개월 평균 월급 (세전)<span class="won"><input id="sw" type="number" inputmode="numeric" placeholder="예: 300"><em>만 원</em></span></label>
-    <label>연간 상여금 (없으면 0)<span class="won"><input id="sb" type="number" inputmode="numeric" placeholder="0"><em>만 원</em></span></label>
+    <label>마지막 근무일<input id="sl" type="date"></label>
   </form>
-  <div class="tool-res" id="sr" hidden><small>예상 퇴직금 (세전)</small><strong id="st">0</strong><span id="sd"></span></div>
-  <ul class="tool-list" id="sl"></ul>
-  <p class="disc">계산식: 1일 평균임금(최근 3개월 임금 ÷ 그 기간 일수) × 30일 × (재직일수 ÷ 365). 상여금은 3개월분(연간의 3/12)을 포함해요. 1년 이상, 주 15시간 이상 근무해야 받을 수 있어요. 퇴직소득세가 빠지기 전 금액이에요.</p>
+  <div id="segs" class="segs" hidden>
+    <p class="seg-h">퇴직 전 3개월 급여 <small>(기간별 세전 금액)</small></p>
+    <div id="segrows"></div>
+  </div>
+  <details class="more-d adv">
+    <summary>상여금 · 연차수당 · 통상임금 (선택)</summary>
+    <div class="tool-form adv-in">
+      <label>최근 1년 상여금 총액<span class="won"><input id="sb" type="number" inputmode="numeric" placeholder="0"><em>만 원</em></span></label>
+      <label>최근 1년 연차수당 총액<span class="won"><input id="sa" type="number" inputmode="numeric" placeholder="0"><em>만 원</em></span></label>
+      <label style="grid-column:1/-1">월 통상임금 (평균임금보다 높으면 이 금액으로 계산)<span class="won"><input id="sc" type="number" inputmode="numeric" placeholder="모르면 비워두세요"><em>만 원</em></span></label>
+    </div>
+  </details>
+  <div class="tool-res" id="sr" hidden><small>세후 예상 퇴직금</small><strong id="st">0</strong><span id="sd"></span></div>
+  <ul class="tool-list" id="sli"></ul>
+  <p class="disc">평균임금 = (퇴직 전 3개월 임금 + 상여금·연차수당의 3/12) ÷ 3개월 총일수. 퇴직금 = 1일 평균임금 × 30 × 재직일수 ÷ 365. 1년 이상·주 15시간 이상 근무 시 지급. 퇴직소득세는 2023년 이후 세법(근속연수공제·환산급여공제)으로 계산한 참고값이며 지방소득세 10% 포함이에요. IRP로 받으면 세금이 이연돼요.</p>
   <a class="more-all" href="{{ base }}/calc/unemployment/">퇴사 후 실업급여도 계산해 보기 →</a>
 </div>
 <script>
 (function(){
-  var $=function(i){return document.getElementById(i)};
-  function won(v){return v>=1e4?Math.round(v/1e4).toLocaleString()+'만 원':Math.round(v).toLocaleString()+'원'}
-  function run(){var j=new Date($('sj').value),q=new Date($('sq').value),w=parseFloat($('sw').value)*1e4,bo=(parseFloat($('sb').value)||0)*1e4;
-    var ok=!isNaN(j)&&!isNaN(q)&&q>j&&w>0;$('sr').hidden=!ok;if(!ok){$('sl').innerHTML='';return}
-    var days=Math.round((q-j)/864e5),p=new Date(q);p.setMonth(p.getMonth()-3);var pd=Math.round((q-p)/864e5);
-    var daily=(w*3+bo*3/12)/pd,sev=daily*30*days/365;
-    if(days<365){$('st').textContent='대상 아님';$('sd').textContent='재직 '+days+'일 · 1년 이상 근무해야 받을 수 있어요';$('sl').innerHTML='';return}
-    $('st').textContent=won(sev);$('sd').textContent='재직 '+(days/365).toFixed(1)+'년 ('+days.toLocaleString()+'일)';
-    $('sl').innerHTML=[['1일 평균임금',Math.round(daily).toLocaleString()+'원'],['30일분 평균임금',won(daily*30)],['재직 기간',days.toLocaleString()+'일']].map(function(r){return '<li><b>'+r[0]+'</b><span>'+r[1]+'</span></li>'}).join('')}
-  ['sj','sq','sw','sb'].forEach(function(i){$(i).oninput=run;$(i).onchange=run});run();
+  var $=function(i){return document.getElementById(i)},D=864e5;
+  function fmt(d){return (d.getMonth()+1)+'.'+d.getDate()}
+  function won(v){return Math.round(v).toLocaleString()+'원'}
+  function man(v){return v>=1e4?Math.round(v/1e4).toLocaleString()+'만 원':won(v)}
+  var segs=[];
+  function build(){var l=new Date($('sl').value);if(isNaN(l)){$('segs').hidden=true;return}
+    var end=new Date(l.getTime()+D),start=new Date(end);start.setMonth(start.getMonth()-3);segs=[];
+    for(var s=new Date(start);s<end;){var e=new Date(s);e.setMonth(e.getMonth()+1);if(e>end)e=end;segs.push([new Date(s),e]);s=e}
+    var old=[].map.call(document.querySelectorAll('.segw'),function(i){return i.value});
+    $('segrows').innerHTML=segs.map(function(g,i){var days=Math.round((g[1]-g[0])/D),last=new Date(g[1]-D);
+      return '<div class="segrow"><span>'+fmt(g[0])+' ~ '+fmt(last)+' <em>('+days+'일)</em></span><span class="won"><input class="segw" type="number" inputmode="numeric" placeholder="기본급+수당" value="'+(old[i]||'')+'"><em>만 원</em></span></div>'}).join('');
+    $('segs').hidden=false;[].forEach.call(document.querySelectorAll('.segw'),function(i){i.oninput=run});run()}
+  function svcYears(j,l){var e=new Date(l.getTime()+D),y=e.getFullYear()-j.getFullYear(),t=new Date(j);t.setFullYear(j.getFullYear()+y);if(t>e){y--;t.setFullYear(j.getFullYear()+y)}return y+(e>t?1:0)}  // 근속연수: 1년 미만 끝수는 1년
+  function tax(sev,n){n=Math.max(1,n);var c;
+    if(n<=5)c=100e4*n;else if(n<=10)c=500e4+200e4*(n-5);else if(n<=20)c=1500e4+250e4*(n-10);else c=4000e4+300e4*(n-20);
+    var conv=Math.max(0,sev-c)*12/n,d;
+    if(conv<=800e4)d=conv;else if(conv<=7000e4)d=800e4+(conv-800e4)*.6;else if(conv<=1e8)d=4520e4+(conv-7000e4)*.55;else if(conv<=3e8)d=6170e4+(conv-1e8)*.45;else d=15170e4+(conv-3e8)*.35;
+    var b=Math.max(0,conv-d),T=[[1400e4,.06,0],[5000e4,.15,126e4],[8800e4,.24,576e4],[15000e4,.35,1544e4],[3e8,.38,1994e4],[5e8,.40,2594e4],[1e9,.42,3594e4],[1/0,.45,6594e4]],t=0;
+    for(var k=0;k<T.length;k++)if(b<=T[k][0]){t=b*T[k][1]-T[k][2];break}
+    return Math.max(0,t*n/12)*1.1}
+  function run(){var j=new Date($('sj').value),l=new Date($('sl').value);
+    var ws=[].map.call(document.querySelectorAll('.segw'),function(i){return (parseFloat(i.value)||0)*1e4}),pay=ws.reduce(function(a,b){return a+b},0);
+    var ok=!isNaN(j)&&!isNaN(l)&&l>=j&&pay>0;$('sr').hidden=!ok;if(!ok){$('sli').innerHTML='';return}
+    var days=Math.round((l-j)/D)+1,pdays=segs.reduce(function(a,g){return a+Math.round((g[1]-g[0])/D)},0);
+    var bonus=(parseFloat($('sb').value)||0)*1e4*3/12,ann=(parseFloat($('sa').value)||0)*1e4*3/12;
+    var avg=(pay+bonus+ann)/pdays,ord=(parseFloat($('sc').value)||0)*1e4/209*8,daily=Math.max(avg,ord);
+    if(days<365){$('st').textContent='대상 아님';$('sd').textContent='재직 '+days+'일 · 1년 이상 근무해야 받을 수 있어요';$('sli').innerHTML='';return}
+    var sev=daily*30*days/365,tx=tax(sev,svcYears(j,l));
+    $('st').textContent=man(sev-tx);$('sd').textContent='세전 '+man(sev)+' · 재직 '+(days/365).toFixed(1)+'년 ('+days.toLocaleString()+'일)';
+    $('sli').innerHTML=[['3개월 임금 총액',man(pay+bonus+ann)+' / '+pdays+'일'],['1일 평균임금',won(avg)+(ord>avg?' → 통상임금 '+won(ord)+' 적용':'')],['세전 퇴직금',won(sev)],['퇴직소득세 (지방세 포함)',won(tx)],['세후 실수령',won(sev-tx)]]
+      .map(function(r){return '<li><b>'+r[0]+'</b><span>'+r[1]+'</span></li>'}).join('')}
+  $('sl').onchange=build;$('sj').onchange=run;['sb','sa','sc'].forEach(function(i){$(i).oninput=run});
 })();
 </script>
 {% endblock %}
