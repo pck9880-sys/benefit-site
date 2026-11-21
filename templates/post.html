@@ -22,8 +22,9 @@
       <div class="kc kc3"><em>03</em><b>어떻게 신청하나요</b><p>{{ k.how or "공식 안내에서 확인" }}</p>{% if post.source.deadline and post.dl_state != "closed" %}<span class="kc-dl">신청기한 {{ post.source.deadline | dl(34) }}</span>{% endif %}</div>
     </div>
     <div class="kv-btns">
-      {% if post.source.apply_url %}<a class="btn" href="{{ post.source.apply_url }}" target="_blank" rel="noopener nofollow">온라인 신청하기</a>{% endif %}
+      {% if post.source.apply_url %}<a class="btn" href="{{ post.source.apply_url }}" target="_blank" rel="noopener nofollow">온라인 신청하기</a>
       {% if post.source.url %}<a class="btn ghost" href="{{ post.source.url }}" target="_blank" rel="noopener">정부24 공식 안내</a>{% endif %}
+      {% elif post.source.url %}<a class="btn" href="{{ post.source.url }}" target="_blank" rel="noopener">정부24에서 신청 방법 보기</a>{% endif %}
     </div>
   </section>
   {{ ad("inline", 0) }}
