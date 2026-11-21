@@ -13,7 +13,7 @@ from . import config, taxonomy
 
 PER_PAGE = 12
 HOME_LATEST = 6
-CALCS = [("calc/", "calc_index.html"), ("calc/median/", "calc_median.html"), ("calc/unemployment/", "calc_unemp.html"), ("calc/parental-leave/", "calc_parental.html")]
+CALCS = [("calc/", "calc_index.html"), ("calc/median/", "calc_median.html"), ("calc/unemployment/", "calc_unemp.html"), ("calc/parental-leave/", "calc_parental.html"), ("calc/baby/", "calc_baby.html")]
 GUIDES = [  # 생애주기 모음: (주소, 대상 태그, 제목, 한 줄 설명)
     ("youth", ["youth"], "청년이 받을 수 있는 지원금", "만 19~39세 청년 대상 지원제도만 모았어요."),
     ("baby", ["pregnancy", "child"], "임신·출산·육아 지원금", "임신부터 아이 키우는 가정까지 받을 수 있는 혜택이에요."),
