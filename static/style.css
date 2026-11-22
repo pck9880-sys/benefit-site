@@ -614,7 +614,7 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 /* slot reel */
 .dg-hero strong{line-height:1.15}
 .rl{display:inline-block;height:1em;line-height:1em;overflow:hidden;vertical-align:-.08em}
-.rl i{display:block;font-style:normal}.rl b{display:block;height:1em;line-height:1em;font-weight:inherit}
+.rl i{display:block;font-style:normal;will-change:transform;transform:translateZ(0);backface-visibility:hidden}.rl b{display:block;height:1em;line-height:1em;font-weight:inherit}
 .rl.spin i{filter:blur(1.2px)}.rl.hit{animation:rlHit .35s ease}
 @keyframes rlHit{0%{transform:scale(1.18);color:#c9b8ff}100%{transform:none}}
 .rl-sep,.rl-unit{display:inline-block}.rl-unit{margin-left:.12em;font-size:.6em}
