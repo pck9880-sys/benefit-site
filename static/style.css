@@ -597,7 +597,7 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 .dg-hero{position:relative;overflow:hidden;background:var(--dark);color:#fff;border-radius:20px;padding:26px 24px;text-align:center}
 .dg-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;background:#5b4cf0;filter:blur(70px);opacity:.45}
 .dg-hero>*{position:relative;z-index:1}.dg-hero small{color:#a9abc8;font-weight:700;font-size:14px}
-.dg-hero strong{display:block;font-size:52px;font-weight:850;letter-spacing:-.03em;line-height:1.2;margin:4px 0 6px}.dg-hero span{color:#d6d4ee;font-size:14px}
+.dg-hero strong{display:block;font-size:52px;font-weight:850;letter-spacing:-.03em;line-height:1.2;margin:4px 0 6px}.dg-hero>span{color:#d6d4ee;font-size:14px}
 .dg-list{list-style:none;margin:14px 0 0;padding:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
 .dg-list li+li{border-top:1px solid var(--line)}
 .dg-list a{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;color:inherit;text-decoration:none}
@@ -611,3 +611,10 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 .dg-cta .btn:hover{background:#5a3de6}.dg-cta small{color:#a9abc8;font-size:13.5px}
 .post-dg{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#f4f2ff;border:1px solid #e2ddff;border-radius:14px;padding:14px 16px;margin:16px 0;color:var(--ink);text-decoration:none;font-weight:700}
 .post-dg span{color:#4f3fd9;flex:none}
+/* slot reel */
+.dg-hero strong{line-height:1.15}
+.rl{display:inline-block;height:1em;line-height:1em;overflow:hidden;vertical-align:-.08em}
+.rl i{display:block;font-style:normal}.rl b{display:block;height:1em;line-height:1em;font-weight:inherit}
+.rl.spin i{filter:blur(1.2px)}.rl.hit{animation:rlHit .35s ease}
+@keyframes rlHit{0%{transform:scale(1.18);color:#c9b8ff}100%{transform:none}}
+.rl-sep,.rl-unit{display:inline-block}.rl-unit{margin-left:.12em;font-size:.6em}

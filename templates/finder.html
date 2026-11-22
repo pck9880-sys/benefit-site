@@ -70,12 +70,26 @@
   }
   function won(v){return v>=10000?(Math.floor(v/1000)/10)+'억 원':Math.round(v).toLocaleString()+'만 원'}
   var IT=[],TOT=0;
+  function slot(el,v){
+    var txt=won(v),m=txt.match(/^([\d.,]+)(.*)$/),num=m?m[1]:txt,unit=m?m[2]:'';
+    if(matchMedia('(prefers-reduced-motion:reduce)').matches){el.textContent=txt;return}
+    el.setAttribute('aria-label',txt);el.innerHTML='';var reels=[],di=0;
+    num.split('').forEach(function(ch){
+      if(!/\d/.test(ch)){var s=document.createElement('span');s.className='rl-sep';s.textContent=ch;el.appendChild(s);return}
+      var r=document.createElement('span'),col=document.createElement('i'),loops=2+di,h='';r.className='rl';
+      for(var L=0;L<loops;L++)for(var d=0;d<10;d++)h+='<b>'+d+'</b>';
+      h+='<b>'+ch+'</b>';col.innerHTML=h;r.appendChild(col);el.appendChild(r);reels.push({col:col,n:loops*10,i:di++})});
+    var u=document.createElement('span');u.className='rl-unit';u.setAttribute('aria-hidden','true');u.textContent=unit;el.appendChild(u);
+    requestAnimationFrame(function(){requestAnimationFrame(function(){reels.forEach(function(r){
+      r.col.style.transition='transform '+(1.1+r.i*0.35)+'s cubic-bezier(.15,.75,.25,1.08)';
+      r.col.style.transform='translateY(-'+r.n+'em)';r.col.parentNode.classList.add('spin');
+      setTimeout(function(){r.col.parentNode.classList.remove('spin');r.col.parentNode.classList.add('hit')},(1.1+r.i*0.35)*1000-120)})})});
+  }
   function result(){
     IT=calc();TOT=IT.reduce(function(a,x){return a+x.v},0);
     qs.forEach(function(q){q.classList.remove('on')});document.querySelector('.fd-top').hidden=true;document.querySelector('.fd-bar').hidden=true;$('fr').hidden=false;window.scrollTo(0,0);
     $('dgc').textContent=IT.length?'대표 지원금 '+IT.length+'가지 합계 · 아래에서 하나씩 확인하세요':'고르신 조건에 맞는 대표 금액형 지원금이 없어요. 아래 제도를 확인해 보세요';
-    var t0=null,el=$('dgn');function step(ts){t0=t0||ts;var p=Math.min(1,(ts-t0)/1100),e=1-Math.pow(1-p,3);el.textContent=won(TOT*e);if(p<1)requestAnimationFrame(step)}
-    if(matchMedia('(prefers-reduced-motion:reduce)').matches)el.textContent=won(TOT);else requestAnimationFrame(step);
+    slot($('dgn'),TOT);
     $('dgl').innerHTML=IT.map(function(x){return '<li><a href="'+BASE+'/'+x.l+'"><span><b>'+x.n+'</b><small>'+x.note+(x.c?' · <em>조건부</em>':'')+'</small></span><strong>+'+x.v.toLocaleString()+'만</strong></a></li>'}).join('');
     more();
   }
