@@ -16,16 +16,14 @@
  "outro_custom": true,
  "outro": "햄버거 됨 ㅋㅋㅋ",
  "durations": [
-  2.25,
-  2.5,
+  2.85,
   1.6,
   1.4,
-  1.1,
-  1.3,
-  2.4,
-  4.8,
+  3.5,
+  1.4,
   1.8,
-  2.2
+  3.6,
+  3.75
  ],
  "voices": [
   "제롬",
@@ -42,8 +40,8 @@
    "overlay_source": "",
    "voice": "",
    "caption": "",
-   "narration": "섬 맵 실화냐 ㄷㄷ",
-   "card": "섬 맵 실화냐 ㄷㄷ"
+   "narration": "플라밍고 떼 실화냐 ㄷㄷ",
+   "card": "플라밍고 떼 실화냐 ㄷㄷ"
   },
   {
    "twist": false,
@@ -55,21 +53,8 @@
    "overlay_source": "",
    "voice": "",
    "caption": "",
-   "narration": "플라밍고 떼 ㄷㄷㄷ",
-   "card": "플라밍고 떼 ㄷㄷㄷ"
-  },
-  {
-   "twist": false,
-   "visual": "video",
-   "query": "",
-   "ai_prompt": "",
-   "overlay": "none",
-   "overlay_text": "",
-   "overlay_source": "",
-   "voice": "",
-   "caption": "",
-   "narration": "늪엔 에어보트",
-   "card": "늪엔 에어보트"
+   "narration": "늪 지나서",
+   "card": "늪 지나서"
   },
   {
    "twist": false,
@@ -94,8 +79,8 @@
    "overlay_source": "",
    "voice": "",
    "caption": "",
-   "narration": "이구아나 디테일 보소",
-   "card": "이구아나 디테일 보소"
+   "narration": "멧돼지 털 디테일 보소",
+   "card": "멧돼지 털 디테일 보소"
   },
   {
    "twist": false,
@@ -107,8 +92,8 @@
    "overlay_source": "",
    "voice": "",
    "caption": "",
-   "narration": "갈매기까지 ㅋㅋ",
-   "card": "갈매기까지 ㅋㅋ"
+   "narration": "사슴 뿔까지 ㄷㄷ",
+   "card": "사슴 뿔까지 ㄷㄷ"
   },
   {
    "twist": false,
@@ -120,21 +105,8 @@
    "overlay_source": "",
    "voice": "",
    "caption": "",
-   "narration": "노을 맛집 인정",
-   "card": "노을 맛집 인정"
-  },
-  {
-   "twist": false,
-   "visual": "video",
-   "query": "",
-   "ai_prompt": "",
-   "overlay": "none",
-   "overlay_text": "",
-   "overlay_source": "",
-   "voice": "",
-   "caption": "",
-   "narration": "숲엔 멧돼지랑 사슴",
-   "card": "숲엔 멧돼지랑 사슴"
+   "narration": "토끼까지 나오더니",
+   "card": "토끼까지 나오더니"
   },
   {
    "twist": false,
@@ -157,27 +129,23 @@
   },
   {
    "video": "montage.mp4",
-   "start": 2.25
+   "start": 2.85
   },
   {
    "video": "montage.mp4",
-   "start": 4.75
+   "start": 4.45
   },
   {
    "video": "montage.mp4",
-   "start": 6.35
+   "start": 5.85
   },
   {
    "video": "montage.mp4",
-   "start": 7.75
+   "start": 9.35
   },
   {
    "video": "montage.mp4",
-   "start": 8.85
-  },
-  {
-   "video": "montage.mp4",
-   "start": 10.15
+   "start": 10.75
   },
   {
    "video": "montage.mp4",
@@ -185,11 +153,7 @@
   },
   {
    "video": "montage.mp4",
-   "start": 17.35
-  },
-  {
-   "video": "montage.mp4",
-   "start": 19.15
+   "start": 16.15
   }
  ],
  "gpt_images": [],
