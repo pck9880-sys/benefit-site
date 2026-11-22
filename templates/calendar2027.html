@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}2027 지원금 달력 무료 배포 · 폰 배경화면 + 인쇄용 PDF | {{ site_name }}{% endblock %}
+{% block desc %}매달 놓치면 안 되는 정부 지원금 신청 일정을 담은 2027 달력. 폰 잠금화면 배경 12장과 A4 인쇄용 PDF를 무료로 받으세요.{% endblock %}
+{% block main %}
+<div class="cal27">
+  <section class="c27-hero">
+    <span class="c27-chip">무료 배포 · 회원가입 없음</span>
+    <h1>2027 <em>지원금</em> 달력</h1>
+    <p>매달 신청할 지원금을 잠금화면에 띄워두세요.<br>근로장려금·국가장학금·에너지바우처 일정까지 한눈에.</p>
+    <div class="c27-btns">
+      <a class="btn" href="{{ base }}/static/calendar2027/benefy-2027-calendar.zip" download>12개월 전체 받기 (ZIP)</a>
+      <a class="btn ghost" href="{{ base }}/static/calendar2027/2027-benefy-calendar-a4.pdf" download>A4 인쇄용 PDF</a>
+    </div>
+  </section>
+
+  <div class="sec-h"><h2>월별로 받기</h2><span>눌러서 저장</span></div>
+  <div class="c27-grid">
+    {% for m in range(1, 13) %}
+    <a href="{{ base }}/static/calendar2027/2027-{{ '%02d' % m }}.png" download="benefy-2027-{{ '%02d' % m }}.png" class="c27-item">
+      <img src="{{ base }}/static/calendar2027/thumb/{{ '%02d' % m }}.webp" alt="2027년 {{ m }}월 지원금 달력 배경화면" width="360" height="780" loading="lazy">
+      <span>{{ m }}월 저장</span>
+    </a>
+    {% endfor %}
+  </div>
+
+  <div class="sec-h" style="margin-top:28px"><h2>인쇄용 (A4 한 장)</h2><span>냉장고에 붙여두세요</span></div>
+  <a class="c27-a4" href="{{ base }}/static/calendar2027/2027-benefy-calendar-a4.pdf" download><img src="{{ base }}/static/calendar2027/thumb/a4.webp" alt="2027 지원금 달력 A4 인쇄용 미리보기" width="620" height="877" loading="lazy"><span>PDF 받기</span></a>
+
+  <section class="c27-how">
+    <h2>잠금화면 배경으로 설정하기</h2>
+    <ol>
+      <li><b>아이폰</b> 이미지를 길게 눌러 '사진 앱에 저장' → 사진 앱에서 공유 → '배경화면으로 지정'</li>
+      <li><b>갤럭시</b> 이미지 저장 → 갤러리에서 ⋮ → '배경화면으로 설정' → 잠금화면</li>
+    </ol>
+  </section>
+
+  <a class="post-dg" href="{{ base }}/finder/">이 중에 나도 받을 수 있는 게 있을까?<span>30초 진단 →</span></a>
+  <div class="fd-acts"><button class="btn ghost" id="c27share">친구에게 공유하기</button></div>
+  <p class="disc">2026년 실제 신청 일정을 기준으로 만든 예상 일정이에요. 정확한 날짜는 국세청·한국장학재단·복지로 등 각 기관 공고를 꼭 확인하세요. 개인적인 용도로 자유롭게 쓰실 수 있어요.</p>
+</div>
+<script>
+document.getElementById('c27share').onclick=function(){var t='2027 지원금 달력 무료로 받았어! 매달 신청할 지원금이 잠금화면에 떠 👉';
+  if(navigator.share)navigator.share({title:'2027 지원금 달력',text:t,url:location.href}).catch(function(){});else{navigator.clipboard.writeText(t+' '+location.href);this.textContent='링크 복사됨'}};
+</script>
+{% endblock %}
