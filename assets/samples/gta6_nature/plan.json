@@ -16,9 +16,8 @@
  "outro_custom": true,
  "outro": "햄버거 됨 ㅋㅋㅋ",
  "durations": [
-  2.85,
-  1.6,
-  1.4,
+  3.96,
+  2.33,
   3.5,
   1.4,
   1.8,
@@ -42,19 +41,6 @@
    "caption": "",
    "narration": "플라밍고 떼 실화냐 ㄷㄷ",
    "card": "플라밍고 떼 실화냐 ㄷㄷ"
-  },
-  {
-   "twist": false,
-   "visual": "video",
-   "query": "",
-   "ai_prompt": "",
-   "overlay": "none",
-   "overlay_text": "",
-   "overlay_source": "",
-   "voice": "",
-   "caption": "",
-   "narration": "늪 지나서",
-   "card": "늪 지나서"
   },
   {
    "twist": false,
@@ -129,31 +115,27 @@
   },
   {
    "video": "montage.mp4",
-   "start": 2.85
+   "start": 3.964
   },
   {
    "video": "montage.mp4",
-   "start": 4.45
+   "start": 6.298
   },
   {
    "video": "montage.mp4",
-   "start": 5.85
+   "start": 9.798
   },
   {
    "video": "montage.mp4",
-   "start": 9.35
+   "start": 11.198
   },
   {
    "video": "montage.mp4",
-   "start": 10.75
+   "start": 12.998
   },
   {
    "video": "montage.mp4",
-   "start": 12.55
-  },
-  {
-   "video": "montage.mp4",
-   "start": 16.15
+   "start": 16.598
   }
  ],
  "gpt_images": [],

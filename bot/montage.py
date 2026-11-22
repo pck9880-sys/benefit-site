@@ -16,12 +16,15 @@ VF = "crop=ih:ih,scale=1080:1080,fps=30,setsar=1,format=yuv420p,settb=AVTB"
 def build(src, cuts, out, fade=0.6):
     tmp = Path(tempfile.mkdtemp(prefix="mont-"))
     parts = []
-    for i, c in enumerate(cuts):  # 앞뒤 디졸브 여유만큼 길게 자름. c = (시작, 길이) 또는 (원본, 시작, 길이)
-        csrc, s, d = c if len(c) == 3 else (src, *c)
-        L = d + fade
+    for i, c in enumerate(cuts):  # 앞뒤 디졸브 여유만큼 길게 자름. c = (시작, 길이) / (원본, 시작, 길이) / (원본, 시작, 원본길이, 속도)
+        sp = c[3] if len(c) == 4 else 1.0  # 속도 0.6 = 슬로모션 (보이는 길이 = 원본길이/속도, 소리도 같은 비율로 늘림·음높이 유지)
+        csrc, s, d = (c[:3] if len(c) >= 3 else (src, *c))
+        L = d / sp + fade
         f = tmp / f"p{i}.mp4"
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{max(0, s - fade / 2):.3f}", "-t", f"{L:.3f}", "-i", str(csrc),
-                        "-vf", VF, "-af", "aresample=44100,aformat=channel_layouts=stereo", "-c:v", "libx264", "-preset", "veryfast",
+        vf = VF if sp == 1.0 else f"setpts=PTS/{sp},{VF}"
+        af = "aresample=44100,aformat=channel_layouts=stereo" + ("" if sp == 1.0 else f",atempo={sp}")
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{max(0, s - fade / 2 * sp):.3f}", "-t", f"{L * sp:.3f}", "-i", str(csrc),
+                        "-vf", vf, "-af", af, "-t", f"{L:.3f}", "-c:v", "libx264", "-preset", "veryfast",
                         "-crf", "18", "-c:a", "aac", "-b:a", "192k", str(f)], check=True)
         parts.append((f, L))
     inputs, fc = [], []
@@ -42,7 +45,7 @@ def build(src, cuts, out, fade=0.6):
     # 장면 i 의 시작 = 앞 디졸브의 한가운데 (첫 장면은 0)
     offs, t = [], 0.0
     for i, c in enumerate(cuts):
-        d = c[-1]
+        d = c[2] / c[3] if len(c) == 4 else c[-1]
         offs.append(round(0.0 if i == 0 else t + fade / 2, 3))
         t += d
     return offs
@@ -50,4 +53,4 @@ def build(src, cuts, out, fade=0.6):
 
 def durations(cuts, fade=0.6):
     """장면별 보일 길이 (첫 장면은 첫 디졸브 한가운데까지라 fade/2 더 김) — offs 와 짝지어 쓰면 빈틈·겹침 없음."""
-    return [round(c[-1] + (fade / 2 if i == 0 else 0), 3) for i, c in enumerate(cuts)]
+    return [round((c[2] / c[3] if len(c) == 4 else c[-1]) + (fade / 2 if i == 0 else 0), 3) for i, c in enumerate(cuts)]
