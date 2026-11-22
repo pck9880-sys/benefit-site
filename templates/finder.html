@@ -82,7 +82,7 @@
   if(VS>0&&VS<100000){$('vsb').hidden=false;$('vsn').textContent=won(VS)}else VS=0;
   function slot(el,v){
     var txt=won(v),m=txt.match(/^([\d.,]+)(.*)$/),num=m?m[1]:txt,unit=m?m[2]:'';
-    if(matchMedia('(prefers-reduced-motion:reduce)').matches){el.setAttribute('aria-label',txt);el.innerHTML='<span class="rl-fade">'+num+'</span><span class="rl-unit">'+unit+'</span>';return}
+    var calm=matchMedia('(prefers-reduced-motion:reduce)').matches;  // 동작 줄이기: 짧고 부드럽게만
     el.setAttribute('aria-label',txt);el.innerHTML='';var reels=[],di=0;
     num.split('').forEach(function(ch){
       if(!/\d/.test(ch)){var s=document.createElement('span');s.className='rl-sep';s.textContent=ch;el.appendChild(s);return}
@@ -91,9 +91,9 @@
       h+='<b>'+ch+'</b>';col.innerHTML=h;r.appendChild(col);el.appendChild(r);reels.push({col:col,n:loops*10,i:di++})});
     var u=document.createElement('span');u.className='rl-unit';u.setAttribute('aria-hidden','true');u.textContent=unit;el.appendChild(u);
     requestAnimationFrame(function(){requestAnimationFrame(function(){reels.forEach(function(r){
-      r.col.style.transition='transform '+(1.1+r.i*0.35)+'s cubic-bezier(.15,.75,.25,1.08)';
+      var dur=calm?(0.7+r.i*0.15):(1.1+r.i*0.35);r.col.style.transition='transform '+dur+'s cubic-bezier(.15,.75,.25,'+(calm?'1':'1.08')+')';
       r.col.style.transform='translateY(-'+r.n+'em)';r.col.parentNode.classList.add('spin');
-      setTimeout(function(){r.col.parentNode.classList.remove('spin');r.col.parentNode.classList.add('hit')},(1.1+r.i*0.35)*1000-120)})})});
+      setTimeout(function(){r.col.parentNode.classList.remove('spin');r.col.parentNode.classList.add('hit')},dur*1000-120)})})});
   }
   function result(){
     IT=calc();TOT=IT.reduce(function(a,x){return a+x.v},0);

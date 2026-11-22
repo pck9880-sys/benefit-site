@@ -435,7 +435,7 @@ html,body{overflow-x:hidden}
 .home-hero::before{z-index:1}
 .home-hero>*:not(.hero-art){z-index:2}
 @media(max-width:640px){.hero-art{width:170px;height:170px;right:-30px;top:20px;margin-top:0;opacity:.8}}
-@media (prefers-reduced-motion:reduce){.ha,.ha-all{animation:none}}
+@media (prefers-reduced-motion:reduce){.t1{animation-duration:40s}.t2{animation-duration:52s}.t3{animation-duration:64s}.ha-all{animation:none}}  /* 동작 줄이기: 멈추지 않고 아주 천천히 */
 
 .more-all{display:block;margin:18px 0 4px;text-align:center;border:1px solid var(--line);border-radius:12px;padding:14px;font-weight:700;font-size:15px;color:var(--ink);background:#fff}
 .more-all b{color:var(--accent);margin-left:4px}.more-all:hover{border-color:var(--accent);color:var(--accent)}
@@ -673,7 +673,8 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
   /* 홈: 카드형 · 가로 스와이프 */
   .is-home .home-hero{padding:22px 18px 18px;border-radius:22px}
   .is-home .home-hero h1{font-size:25px;line-height:1.35;margin:6px 0 14px}
-  .is-home .hero-art{width:120px;height:120px;right:-14px;top:-10px;opacity:.75}
+  .is-home .hero-art{width:104px;height:104px;right:14px;top:16px;opacity:.8}
+  .is-home .hh-kick{padding-right:96px}
   .is-home .hh-kick{font-size:11.5px}
   .dg-cta{flex-direction:column;align-items:stretch;gap:6px;text-align:center}.dg-cta .btn{padding:16px;font-size:16.5px}
   .is-home .big-srch input{font-size:15px}
@@ -697,3 +698,5 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 .list-srch input::-webkit-search-cancel-button{display:none}
 .list-hubs .hubs{margin:10px 0 0}
 @media(max-width:640px){.list-hubs .hub-chips{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;margin-right:-14px}.list-hubs .hub-chips::-webkit-scrollbar{display:none}.list-hubs .hub-chips a{flex:none}.list-hubs .hubs{padding:12px 14px}.list-hubs h3{font-size:14px;margin:0 0 8px}}
+
+@media (prefers-reduced-motion:reduce){.rl.spin i{filter:none}.rl.hit{animation:none}}
