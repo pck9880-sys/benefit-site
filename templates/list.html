@@ -16,11 +16,10 @@
   var ua=navigator.userAgent;if(navigator.webdriver||/bot\b|bot\/|crawler|spider|slurp|lighthouse|Yeti|Daumoa|Googlebot|bingbot|Mediapartners/i.test(ua))return;
   var wk=/iP(hone|ad|od)/.test(ua)||(/Safari/.test(ua)&&!/Chrome|Chromium|CriOS|Edg|Android/.test(ua));  // 사파리 계열: 물결 필터 대신 크기 변화만
   s.hidden=false;document.documentElement.classList.add('sp-on');
-  var calm=matchMedia('(prefers-reduced-motion:reduce)').matches,gone=false,auto=setTimeout(go,2600);
+  var gone=false,auto=setTimeout(go,2600);
   function fin(){s.remove();document.documentElement.classList.remove('sp-on')}
   function ease(q){return q<.5?2*q*q:1-Math.pow(-2*q+2,2)/2}
   function go(){if(gone)return;gone=true;clearTimeout(auto);s.classList.add('out');
-    if(calm){s.animate([{opacity:1},{opacity:0}],{duration:350,fill:'forwards'}).onfinish=fin;return}
     var m=s.querySelector('.sp-mark'),st=s.querySelector('.sp-stage'),wd=document.getElementById('spWd'),W=innerWidth,H=innerHeight,r=m.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
     m.animate([{transform:'scale(1)',opacity:1},{transform:'scale(.55)',opacity:0}],{duration:620,easing:'cubic-bezier(.4,0,.7,.4)',fill:'forwards'});
     s.querySelector('.sp-txt').animate([{opacity:1},{opacity:0}],{duration:300,fill:'forwards'});
