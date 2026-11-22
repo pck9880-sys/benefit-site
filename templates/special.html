@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ sp.title }} | {{ site_name }}{% endblock %}
+{% block desc %}{{ sp.desc }}{% endblock %}
+{% block head %}<meta property="og:image" content="{{ site_url }}/static/cardnews/{{ sp.slug }}/1.webp">{% endblock %}
+{% block main %}
+<div class="tool sp">
+  <h1 class="tool-h">{{ sp.title }}</h1>
+  <p class="tool-sub">{{ sp.desc }}</p>
+  <div class="cn" id="cn">
+    {% for c in sp.cards %}<img src="{{ base }}/static/cardnews/{{ sp.slug }}/{{ loop.index }}.webp" alt="{{ sp.title }} 카드 {{ loop.index }}" width="1080" height="1350" {% if not loop.first %}loading="lazy"{% endif %} decoding="async">{% endfor %}
+  </div>
+  <div class="cn-dots" id="cnd">{% for c in sp.cards %}<i{% if loop.first %} class="on"{% endif %}></i>{% endfor %}</div>
+  {% if sp.check %}
+  <section class="ck">
+    <div class="ck-h"><h2>신청 전 체크리스트</h2><span id="ckp">0 / {{ sp.check|length }}</span></div>
+    <div class="ck-bar"><i id="ckb"></i></div>
+    {% for q in sp.check %}<label class="ck-i"><input type="checkbox" data-k="{{ sp.slug }}-{{ loop.index }}"><span>{{ q }}</span></label>{% endfor %}
+    <p class="disc">체크한 내용은 이 휴대폰에만 저장돼요.</p>
+  </section>
+  {% endif %}
+  <section class="sp-links"><h2>자세히 보기</h2>
+    {% for name, url in sp.links %}<a href="{{ base }}/{{ url }}">{{ name }} <span>→</span></a>{% endfor %}
+  </section>
+  <section class="sp-text">
+    {% for c in sp.cards if c.kind == "item" %}<h3>{{ c.chip }}: {{ c.title }}</h3><p>{% if c.amt %}{{ c.amt_label }} {{ c.amt }}{{ c.unit }}. {% endif %}{% for k, v in c.rows %}{{ k }}: {{ v }}. {% endfor %}</p>{% endfor %}
+  </section>
+</div>
+<script>
+(function(){
+  var cn=document.getElementById('cn'),d=document.querySelectorAll('#cnd i');
+  cn.addEventListener('scroll',function(){var i=Math.round(cn.scrollLeft/cn.clientWidth);d.forEach(function(x,k){x.classList.toggle('on',k===i)})},{passive:true});
+  var cs=document.querySelectorAll('.ck-i input'),p=document.getElementById('ckp'),b=document.getElementById('ckb');
+  function upd(){var n=[].filter.call(cs,function(c){return c.checked}).length;if(p){p.textContent=n+' / '+cs.length;b.style.width=(n/cs.length*100)+'%'}}
+  cs.forEach(function(c){try{c.checked=localStorage.getItem(c.dataset.k)==='1'}catch(e){}c.onchange=function(){try{localStorage.setItem(c.dataset.k,c.checked?'1':'0')}catch(e){}upd()}});upd();
+})();
+</script>
+{% endblock %}

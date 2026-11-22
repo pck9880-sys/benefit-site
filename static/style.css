@@ -506,3 +506,21 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 .segrow>span:first-child{font-weight:700;font-size:14px}.segrow em{font-style:normal;color:var(--sub);font-weight:500}
 .segrow input{height:44px;border:1px solid var(--line);border-radius:10px;padding:0 60px 0 12px;font:inherit;font-size:15px;width:100%;background:#fff}
 .adv{margin:0 0 14px}.adv-in{padding:4px 20px 16px;margin:0}
+
+/* 특집: 카드뉴스 캐러셀 · 체크리스트 */
+.cn{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;border-radius:18px;scrollbar-width:none}
+.cn::-webkit-scrollbar{display:none}
+.cn img{flex:0 0 100%;width:100%;height:auto;aspect-ratio:4/5;scroll-snap-align:center;border-radius:18px;background:#06070b}
+.cn-dots{display:flex;justify-content:center;gap:6px;margin:12px 0 22px}.cn-dots i{width:7px;height:7px;border-radius:4px;background:#d8d6e6}.cn-dots i.on{width:22px;background:#4f3fd9}
+.ck{background:#f6f5fb;border-radius:16px;padding:18px 18px 10px;margin-bottom:18px}
+.ck-h{display:flex;justify-content:space-between;align-items:baseline}.ck-h h2{margin:0;font-size:18px}.ck-h span{font-weight:800;color:#4f3fd9}
+.ck-bar{height:8px;border-radius:4px;background:#e6e4f2;margin:10px 0 8px;overflow:hidden}.ck-bar i{display:block;height:100%;width:0;background:#4f3fd9;transition:width .3s}
+.ck-i{display:flex;gap:10px;align-items:flex-start;padding:11px 2px;border-bottom:1px solid #e6e4f2;font-size:15px;cursor:pointer}
+.ck-i input{width:20px;height:20px;margin-top:2px;accent-color:#4f3fd9;flex:none}
+.ck-i input:checked+span{color:var(--sub);text-decoration:line-through}
+.sp-links h2,.sp-text h3{font-size:17px}.sp-links a{display:flex;justify-content:space-between;padding:13px 2px;border-bottom:1px solid var(--line);font-weight:700}
+.sp-links a span{color:#4f3fd9}.sp-text{margin-top:20px;color:var(--sub);font-size:14px}.sp-text h3{color:var(--ink);font-size:15px;margin:14px 0 2px}.sp-text p{margin:0}
+.sp-banner{display:flex;align-items:center;gap:18px;background:var(--dark);border-radius:16px;padding:14px;margin-bottom:12px;color:#fff;overflow:hidden}
+.sp-banner img{width:84px;height:105px;border-radius:10px;object-fit:cover;flex:none}
+.sp-banner span{display:flex;flex-direction:column;gap:4px}.sp-banner small{color:#b8b0ff;font-weight:700;font-size:12.5px}.sp-banner b{font-size:17px;line-height:1.35}.sp-banner em{font-style:normal;color:#a9abc8;font-size:13.5px}
+@media(min-width:900px){.sp .cn img{flex:0 0 calc(50% - 6px)}}

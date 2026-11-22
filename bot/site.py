@@ -161,6 +161,10 @@ def build():
         write(f"guide/{slug}/index.html", env.get_template("guide.html").render(
             g={"title": title, "desc": desc}, items=items, top=top, canonical=f"{config.SITE_URL}/guide/{slug}/"))
 
+    from . import specials
+    for sp in specials.SPECIALS:  # 특집 (카드뉴스 + 체크리스트)
+        write(f"special/{sp['slug']}/index.html", env.get_template("special.html").render(sp=sp, canonical=f"{config.SITE_URL}/special/{sp['slug']}/"))
+
     for name in ("about", "privacy", "contact"):
         write(f"{name}.html", env.get_template(f"{name}.html").render(canonical=f"{config.SITE_URL}/{name}"))
     write("search/index.html", env.get_template("search.html").render(canonical=f"{config.SITE_URL}/search/",
@@ -176,7 +180,8 @@ def build():
         ensure_ascii=False))
 
     # SEO 파일
-    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
+    from . import specials
+    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
     urls += [f"{config.SITE_URL}/", f"{config.SITE_URL}/latest/", f"{config.SITE_URL}/check/", f"{config.SITE_URL}/deadline/"]
     urls += [f"{config.SITE_URL}/c/{s}/" for s, _ in cats]
     urls += [f"{config.SITE_URL}/target/{s}/" for s, _, _ in targets] + [f"{config.SITE_URL}/region/{s}/" for s, _, _ in regions]
