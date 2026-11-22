@@ -751,3 +751,16 @@ html.sp-on,html.sp-on body{overflow:hidden}
 @media(max-width:640px){.c27-grid{grid-template-columns:repeat(3,1fr)}.c27-hero h1{font-size:32px}}
 
 .c27-banner img{object-fit:cover;object-position:top;aspect-ratio:auto}
+/* ===== PC 세로형 떠 있는 메뉴 (모바일 하단 탭바와 같은 메뉴) ===== */
+@media (min-width:1180px){
+  .tabbar{display:flex;flex-direction:column;gap:4px;position:fixed;left:24px;top:50%;transform:translateY(-50%);z-index:30;
+    width:76px;padding:10px 6px;border-radius:22px;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.6) blur(14px);-webkit-backdrop-filter:saturate(1.6) blur(14px);
+    border:1px solid var(--line);box-shadow:0 10px 30px rgba(20,20,50,.12)}
+  .tabbar a{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0;border-radius:14px;color:#8a8cab;text-decoration:none;font-size:11.5px;font-weight:700;transition:background .15s,color .15s}
+  .tabbar a:hover{background:#f4f2ff;color:#4f3fd9}
+  .tabbar svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .tabbar a.on{color:#4f3fd9;background:#f1efff}
+  .tabbar .tb-main{color:#4f3fd9}
+  .tabbar .tb-main svg{color:#fff;background:#6b4cf5;border-radius:50%;padding:5px;width:32px;height:32px;box-shadow:0 4px 12px rgba(107,76,245,.35)}
+  .tabbar .tb-main:hover svg{background:#5a3de6}
+}
