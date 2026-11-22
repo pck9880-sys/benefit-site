@@ -50,7 +50,10 @@
 {% set local_regions = regions | rejectattr(0, "equalto", "national") | list %}
 {% if local_regions %}<section class="hubs"><h3>지역별로 찾기</h3><div class="hub-chips">{% for s, n, c in local_regions %}<a href="{{ base }}/region/{{ s }}/">{{ n }} <em>{{ c }}</em></a>{% endfor %}</div></section>{% endif %}
 {{ ad("wide", 0) }}
+{% else %}
+<form class="list-srch" action="{{ base }}/search/" role="search"><input name="q" type="search" enterkeyhint="search" placeholder="지원금 이름이나 키워드로 검색" aria-label="지원금 검색" autocomplete="off"><button type="submit" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button><a href="{{ base }}/search/">⚙ 조건</a></form>
 {% endif %}
+{% if title or page > 1 %}
 <div class="layout">
   <section class="content" id="latest">
     <div class="sec-h"><h2>{% if title %}{{ title }}{% else %}최신 지원제도 안내{% endif %}</h2><span>총 {{ total }}건</span></div>
@@ -74,4 +77,5 @@
   </section>
   {% include "sidebar.html" %}
 </div>
+{% endif %}
 {% endblock %}

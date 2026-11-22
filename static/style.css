@@ -688,3 +688,10 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
   .cards li a{border-radius:16px}
   .ftr{padding-bottom:12px}.ftr-in{gap:14px}.ftr-links{display:none}.ftr p{font-size:12.5px}
 }
+/* 목록 페이지 상단 검색 */
+.list-srch{display:flex;align-items:center;gap:8px;margin:16px 0 4px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px 6px 6px 14px}
+.list-srch input{flex:1;border:0;outline:0;font:inherit;font-size:15.5px;background:none;min-width:0}
+.list-srch button{flex:none;width:40px;height:40px;border:0;border-radius:10px;background:#6b4cf5;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.list-srch button svg{width:20px;height:20px}
+.list-srch a{flex:none;font-size:13.5px;font-weight:700;color:#4f3fd9;padding:0 6px;text-decoration:none}
+.list-srch input::-webkit-search-cancel-button{display:none}
