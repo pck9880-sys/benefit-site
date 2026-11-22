@@ -40,7 +40,7 @@ def mark_svg(size):
     defs = "".join(f'<linearGradient id="c{i}" x1="{v[3].split()[0]}" y1="{v[3].split()[1]}" x2="{v[3].split()[2]}" y2="{v[3].split()[3]}"><stop offset="0" stop-color="{v[0]}"/><stop offset=".5" stop-color="{v[1]}"/><stop offset="1" stop-color="{v[2]}"/></linearGradient>' for i, v in g.items())
     tf = {1: "translate(-14,-8)", 2: "translate(16,-4) rotate(40)", 3: "translate(0,14) rotate(80)"}
     polys = "".join(f'<g transform="{tf[i]}"><polygon points="0,-100 87,50 -87,50" fill="url(#c{i})" stroke="url(#c{i})" stroke-width="70" stroke-linejoin="round" style="mix-blend-mode:screen" opacity=".92"/></g>' for i in (1, 2, 3))
-    return f'<svg width="{size}" height="{size}" viewBox="-170 -170 340 340" style="overflow:visible;filter:drop-shadow(0 0 {size//14}px rgba(160,130,255,.75))"><defs>{defs}</defs>{polys}</svg>'
+    return f'<svg width="{size}" height="{size}" viewBox="-170 -170 340 340" style="overflow:visible;filter:drop-shadow(0 0 3px rgba(160,130,255,.35))"><defs>{defs}</defs>{polys}</svg>'
 
 
 CSS = f"""
@@ -52,7 +52,7 @@ CSS = f"""
 """
 
 
-def wallpaper_html(m, style="C"):
+def wallpaper_html(m, style="A"):
     cal = calendar.Calendar(firstweekday=6)  # 일요일 시작
     weeks = cal.monthdayscalendar(YEAR, m)
     items = MONTHS[m]
@@ -74,7 +74,7 @@ body{{width:1179px;height:2556px;background:#000;color:#fff;position:relative;ov
 .grid .h{{font-size:30px;font-weight:600;color:#5d5a78;height:56px;line-height:56px}}
 .grid i{{font-style:normal;font-size:40px;font-weight:600;color:#cfcde6;height:74px;line-height:74px;position:relative;z-index:0}}
 .grid i.sun{{color:#ff8fb0}}.grid i.sat{{color:#9db4ff}}
-.grid i.hi{{color:#fff}}.grid i.hi::before{{content:"";position:absolute;left:50%;top:50%;width:72px;height:72px;margin:-36px;border-radius:50%;background:radial-gradient(circle,#7a5cff,#5b3fe0);box-shadow:0 0 26px rgba(130,100,255,.75);z-index:-1}}
+.grid i.hi{{color:#fff}}.grid i.hi::before{{content:"";position:absolute;left:50%;top:50%;width:72px;height:72px;margin:-36px;border-radius:50%;background:#5b3fe0;z-index:-1}}
 .list{{margin-top:44px;list-style:none}}
 .list li{{display:grid;grid-template-columns:1fr auto;column-gap:20px;padding:24px 0;border-top:1px solid #1d1b2e}}
 .list b{{font-size:38px;font-weight:700;line-height:1.3}}.list span{{grid-column:1;font-size:31px;color:#8c89a8;margin-top:6px}}
@@ -94,8 +94,8 @@ TYPE_CSS = """
 .wl{font-size:64px;font-weight:800;margin-left:10px;color:#e9e6ff}
 .sub{display:block;margin-top:22px;font-family:Q;font-size:40px;letter-spacing:.22em;color:#8f86c9}
 /* A 글래스 그라데이션 */
-.A .num{background:linear-gradient(135deg,#8fd3ff 0%,#7a5cff 40%,#ff5fae 75%,#ffd6a0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 26px rgba(130,100,255,.55))}
-.A .num::after{content:attr(data-t);position:absolute;left:0;top:0;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0) 45%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.A .num{background:linear-gradient(135deg,#8fd3ff 0%,#7a5cff 40%,#ff5fae 75%,#ffd6a0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 2px rgba(150,120,255,.35))}
+.A .num::after{content:attr(data-t);position:absolute;left:0;top:0;background:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,0) 40%);-webkit-background-clip:text;background-clip:text;color:transparent}
 /* B 네온 아웃라인 */
 .B .num{color:transparent;-webkit-text-stroke:5px #b9a8ff;filter:drop-shadow(0 0 10px rgba(160,130,255,.9)) drop-shadow(0 0 34px rgba(255,95,174,.45))}
 /* C 세 겹 빛 (로고처럼 세 조각이 겹친 숫자) */
