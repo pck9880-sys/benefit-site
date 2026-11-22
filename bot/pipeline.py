@@ -285,7 +285,7 @@ def generate(st, picks=None, want=None, announce=False):
             mixed += national[:2] + local[:1]
             national, local = national[2:], local[1:]
         queue = [{k: s.get(k) for k in keep if s.get(k)} for s in mixed[:60]]
-    if picks is None and queue and not any("_demand" in q for q in queue):  # 예전 대기열도 검색 수요 순으로 재정렬
+    if picks is None and queue and any("_demand" not in q for q in queue):  # 점수 없는 대기열 항목을 검색 수요 순으로 재정렬
         try:
             from . import demand
             queue = demand.rank(queue)

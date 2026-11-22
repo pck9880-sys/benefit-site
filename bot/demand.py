@@ -80,6 +80,8 @@ def rank(services, limit=150):
         return services
     head, tail = services[:limit], services[limit:]
     for s in head:
+        if "_demand" in s:  # 이미 점수가 있는 항목(뉴스 우선 등)은 그대로
+            continue
         try:
             s["_demand"], s["_q"] = score(s.get("서비스명", ""))
         except Exception:

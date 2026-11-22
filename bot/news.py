@@ -70,7 +70,7 @@ def run(st, notify, gov24, used):
                 s = found[0]
                 if s["서비스ID"] not in {q.get("서비스ID") for q in queue}:
                     queue.insert(0, {k: s.get(k) for k in ("서비스ID", "서비스명", "서비스분야", "소관기관명", "조회수", "지원대상",
-                                                         "지원내용", "신청방법", "신청기한", "상세조회URL", "사용자구분", "전화문의", "수정일시") if s.get(k)})
+                                                         "지원내용", "신청방법", "신청기한", "상세조회URL", "사용자구분", "전화문의", "수정일시") if s.get(k)} | {"_demand": 99, "_news": 1})
                     pushed += 1
                     tag = " → ✅ 다음 글로 자동 작성"
         if h in sent and not tag:
