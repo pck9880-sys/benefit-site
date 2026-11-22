@@ -216,6 +216,17 @@ def build():
     urls += [f"{config.SITE_URL}/{d['url']}" for d in posts]
     write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
           + "\n".join(f"<url><loc>{escape(u)}</loc></url>" for u in urls) + "\n</urlset>\n")
+    from email.utils import format_datetime
+    from datetime import datetime as _dt, timezone as _tz
+    def _rfc(t):
+        try: return format_datetime(_dt.fromisoformat(t.replace("Z", "+00:00")).astimezone(_tz.utc))
+        except Exception: return ""
+    items = "".join(f"<item><title>{escape(d['article']['title'])}</title><link>{escape(config.SITE_URL + '/' + d['url'])}</link>"
+                    f"<guid>{escape(config.SITE_URL + '/' + d['url'])}</guid><description>{escape(d['article'].get('description', ''))}</description>"
+                    f"<pubDate>{_rfc(d['published_at'])}</pubDate></item>" for d in posts[:30])
+    write("feed.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel>'
+          f"<title>{escape(config.SITE_NAME)}</title><link>{config.SITE_URL}/</link><description>{escape(config.SITE_DESCRIPTION)}</description><language>ko</language>"
+          + items + "</channel></rss>\n")
     write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {config.SITE_URL}/sitemap.xml\n")
     if config.ADSENSE_CLIENT:
         pub = config.ADSENSE_CLIENT.replace("ca-", "")
