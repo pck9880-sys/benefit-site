@@ -14,7 +14,7 @@
  "song": false,
  "end_comments": false,
  "outro_custom": true,
- "outro": "밤의 바이스시티",
+ "outro": "현실보다 그래픽 좋음 ㅋㅋ",
  "durations": [
   3.7,
   3.3,
@@ -40,8 +40,8 @@
    "overlay_source": "",
    "voice": "",
    "caption": "",
-   "narration": "낮의 바이스시티",
-   "card": "낮의 바이스시티"
+   "narration": "그래픽 실화냐 ㄷㄷ",
+   "card": "그래픽 실화냐 ㄷㄷ"
   },
   {
    "twist": false,
@@ -53,8 +53,8 @@
    "overlay_source": "",
    "voice": "",
    "caption": "",
-   "narration": "다리 위를 달리고",
-   "card": "다리 위를 달리고"
+   "narration": "오픈카 감성 미쳤다 ㅋㅋ",
+   "card": "오픈카 감성 미쳤다 ㅋㅋ"
   },
   {
    "twist": false,
@@ -66,8 +66,8 @@
    "overlay_source": "",
    "voice": "",
    "caption": "",
-   "narration": "해안 도로를 지나",
-   "card": "해안 도로를 지나"
+   "narration": "이게 게임이라고? ㄷㄷ",
+   "card": "이게 게임이라고? ㄷㄷ"
   },
   {
    "twist": false,
@@ -79,8 +79,8 @@
    "overlay_source": "",
    "voice": "",
    "caption": "",
-   "narration": "위에서 보면",
-   "card": "위에서 보면"
+   "narration": "맵 크기 실화 ㄷㄷㄷ",
+   "card": "맵 크기 실화 ㄷㄷㄷ"
   },
   {
    "twist": false,
@@ -92,8 +92,8 @@
    "overlay_source": "",
    "voice": "",
    "caption": "",
-   "narration": "노을이 지면",
-   "card": "노을이 지면"
+   "narration": "노을 맛집 인정 ㅋㅋ",
+   "card": "노을 맛집 인정 ㅋㅋ"
   },
   {
    "twist": false,
@@ -105,8 +105,8 @@
    "overlay_source": "",
    "voice": "",
    "caption": "",
-   "narration": "빌딩 사이로 해가 지고",
-   "card": "빌딩 사이로 해가 지고"
+   "narration": "햇빛 반사까지 ㄷㄷ",
+   "card": "햇빛 반사까지 ㄷㄷ"
   },
   {
    "twist": false,
@@ -118,8 +118,8 @@
    "overlay_source": "",
    "voice": "",
    "caption": "",
-   "narration": "밤이 되면",
-   "card": "밤이 되면"
+   "narration": "밤 되면 분위기 반전",
+   "card": "밤 되면 분위기 반전"
   }
  ],
  "media": [
@@ -185,5 +185,5 @@
  "character": "",
  "hook_video": "",
  "photo_fallbacks": [],
- "outro_spoken": "밤의 바이스시티"
+ "outro_spoken": "현실보다 그래픽 좋음 ㅋㅋ"
 }
