@@ -171,6 +171,7 @@ def build():
         write(f"guide/{slug}/index.html", env.get_template("guide.html").render(
             g={"title": title, "desc": desc}, items=items, top=top, canonical=f"{config.SITE_URL}/guide/{slug}/"))
 
+    write("finder/index.html", env.get_template("finder.html").render(canonical=f"{config.SITE_URL}/finder/"))
     write("special/2027-changes/index.html", env.get_template("changes.html").render(items=CHANGES_2027, canonical=f"{config.SITE_URL}/special/2027-changes/"))
     from . import specials
     for sp in specials.SPECIALS:  # 특집 (카드뉴스 + 체크리스트)
@@ -192,7 +193,7 @@ def build():
 
     # SEO 파일
     from . import specials
-    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/special/2027-changes/"] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
+    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/special/2027-changes/", f"{config.SITE_URL}/finder/"] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
     urls += [f"{config.SITE_URL}/", f"{config.SITE_URL}/latest/", f"{config.SITE_URL}/check/", f"{config.SITE_URL}/deadline/"]
     urls += [f"{config.SITE_URL}/c/{s}/" for s, _ in cats]
     urls += [f"{config.SITE_URL}/target/{s}/" for s, _, _ in targets] + [f"{config.SITE_URL}/region/{s}/" for s, _, _ in regions]

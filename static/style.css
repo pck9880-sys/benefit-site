@@ -541,3 +541,17 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 .cmp p{margin:8px 0 0;font-size:13.5px;color:var(--sub)}
 .chg-banner .chg-n{flex:none;width:84px;height:84px;border-radius:14px;background:#17182a;display:flex;align-items:center;justify-content:center;font-weight:850;font-size:20px;color:#b8b0ff}
 @media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+
+/* 놓친 지원금 찾기 */
+.fd-top{display:flex;justify-content:space-between;align-items:center}.fd-step{font-family:inherit;font-weight:800;color:var(--sub)}
+.fd-bar{height:6px;background:#efeef6;border-radius:3px;margin:12px 0 22px;overflow:hidden}.fd-bar i{display:block;height:100%;width:25%;background:#4f3fd9;transition:width .35s}
+.fd-q{display:none}.fd-q.on{display:block;animation:fdIn .35s ease}
+@keyframes fdIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.fd-q .tool-h{font-size:24px;margin-bottom:18px}
+.fd-opts{display:flex;flex-direction:column;gap:10px}.fd-opts.grid{display:grid;grid-template-columns:1fr 1fr}
+.fd-opts button{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:18px 16px;font:inherit;font-size:16.5px;font-weight:700;color:var(--ink);text-align:left;cursor:pointer;transition:all .15s}
+.fd-opts button:hover{border-color:#4f3fd9}.fd-opts button.sel{background:#17183a;color:#fff;border-color:#17183a}
+.fd-next{width:100%;margin-top:16px;padding:15px;font-size:16px;border-radius:14px}
+.fd-acts{display:flex;gap:8px;margin:14px 0}.fd-acts .btn{flex:1;padding:14px;border-radius:12px;text-align:center}
+@media (prefers-reduced-motion:reduce){.fd-q.on{animation:none}}
+[hidden]{display:none!important}

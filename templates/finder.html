@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}놓친 지원금 찾기 · 질문 4개로 1분 확인 | {{ site_name }}{% endblock %}
+{% block desc %}나이, 사는 곳, 가구 상황, 일 상태 4가지만 고르면 받을 수 있을지 모르는 정부 지원금을 찾아드려요.{% endblock %}
+{% block main %}
+<div class="tool fd">
+  <div class="fd-top"><span class="chg-chip">1분 테스트</span><span class="fd-step" id="fs">1 / 4</span></div>
+  <div class="fd-bar"><i id="fb"></i></div>
+  <section class="fd-q on" data-q="age"><h1 class="tool-h">나이가 어떻게 되세요?</h1>
+    <div class="fd-opts"><button data-v="youth">19~39세</button><button data-v="mid">40~64세</button><button data-v="senior">65세 이상</button></div></section>
+  <section class="fd-q" data-q="region"><h1 class="tool-h">어디에 사세요?</h1>
+    <div class="fd-opts"><button data-v="seoul">서울</button><button data-v="gyeonggi">경기</button><button data-v="">그 외 지역</button></div></section>
+  <section class="fd-q" data-q="house" data-multi="1"><h1 class="tool-h">해당하는 걸 모두 골라주세요</h1>
+    <div class="fd-opts grid"><button data-v="child">아이 키움</button><button data-v="pregnancy">임신·출산</button><button data-v="oneperson">1인 가구</button><button data-v="homeless">무주택·세입자</button><button data-v="singleparent">한부모</button><button data-v="disabled">장애인 가구</button><button data-v="multichild">다자녀</button><button data-v="veteran">국가유공자</button></div>
+    <button class="btn fd-next">다음 →</button></section>
+  <section class="fd-q" data-q="work" data-multi="1"><h1 class="tool-h">지금 상황은요? (여러 개 가능)</h1>
+    <div class="fd-opts grid"><button data-v="worker">직장 다님</button><button data-v="jobseeker">구직 중</button><button data-v="business">자영업·창업</button><button data-v="lowincome">소득이 적음 (수급·차상위)</button></div>
+    <button class="btn fd-next">결과 보기 →</button></section>
+  <section class="fd-res" id="fr" hidden>
+    <div class="tool-res"><small>받을 수 있을지도 모르는 지원금</small><strong id="frn">0개</strong><span id="frt"></span></div>
+    <ul class="cards" id="frl"></ul>
+    <div class="fd-acts"><button class="btn" id="fshare">결과 공유하기</button><button class="btn ghost" id="fagain">다시 하기</button></div>
+    <p class="disc">공공데이터의 대상 정보로 고른 참고 결과예요. 실제 자격은 소득·재산 등 세부 조건에 따라 달라요.</p>
+  </section>
+</div>
+<script>
+(function(){
+  var A={},qs=document.querySelectorAll('.fd-q'),i=0,$=function(x){return document.getElementById(x)};
+  function show(k){qs.forEach(function(q,n){q.classList.toggle('on',n===k)});$('fs').textContent=(k+1)+' / 4';$('fb').style.width=((k+1)/4*100)+'%'}
+  qs.forEach(function(q,n){var multi=q.dataset.multi;
+    q.querySelectorAll('.fd-opts button').forEach(function(b){b.onclick=function(){
+      if(multi){b.classList.toggle('sel');A[q.dataset.q]=[].map.call(q.querySelectorAll('.sel'),function(x){return x.dataset.v})}
+      else{A[q.dataset.q]=b.dataset.v;next(n)}}});
+    var nx=q.querySelector('.fd-next');if(nx)nx.onclick=function(){A[q.dataset.q]=A[q.dataset.q]||[];next(n)}});
+  function next(n){if(n<3){i=n+1;show(i)}else result()}
+  function result(){fetch(BASE+'/search.json').then(function(r){return r.json()}).then(function(idx){
+    var want=[].concat(A.house||[],A.work||[]);if(A.age==='youth'||A.age==='senior')want.push(A.age);
+    var r=idx.filter(function(d){return d.x!=='closed'&&(!A.region||d.r==='national'||d.r===A.region)&&(A.region||d.r==='national')})
+      .map(function(d){var s=(d.a||[]).filter(function(a){return want.indexOf(a)>=0}).length;return {d:d,s:s+(d.m?.5:0)}})
+      .filter(function(x){return x.s>=1}).sort(function(a,b){return b.s-a.s}).map(function(x){return x.d});
+    qs.forEach(function(q){q.classList.remove('on')});document.querySelector('.fd-top').hidden=true;document.querySelector('.fd-bar').hidden=true;
+    $('fr').hidden=false;$('frn').textContent=r.length+'개';
+    var big=r.filter(function(d){return d.m&&d.m.indexOf('원')>=0}).slice(0,1)[0];
+    $('frt').textContent=big?'그중 대표 혜택 · '+big.n+' '+big.m:'조건을 바꿔 다시 해보세요';
+    $('frl').innerHTML=r.map(function(d){return '<li><a href="'+BASE+'/'+d.u+'"><span class="card-b"><span class="card-tags"><span class="tag">'+d.f+'</span></span><strong>'+(d.n||d.t)+'</strong>'+(d.m?'<span class="card-amt">'+d.m+'</span>':'')+'</span></a></li>'}).join('')||'<li class="empty">맞는 제도를 찾지 못했어요. 조건 검색에서 더 찾아보세요.</li>';
+    window.scrollTo(0,0)})}
+  $('fagain').onclick=function(){location.reload()};
+  $('fshare').onclick=function(){var t='Benefy에서 받을 수 있을지도 모르는 지원금 '+$('frn').textContent+'를 찾았어요!';
+    if(navigator.share)navigator.share({title:'놓친 지원금 찾기',text:t,url:location.href});else{navigator.clipboard.writeText(t+' '+location.href);$('fshare').textContent='링크 복사됨'}};
+  show(0);
+})();
+</script>
+{% endblock %}

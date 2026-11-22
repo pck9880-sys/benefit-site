@@ -29,7 +29,7 @@
     <div class="hbox-h"><h2>신청 마감 임박</h2><a href="{{ base }}/deadline/">전체 보기</a></div>
     {% if soon %}<ul class="soon">{% for p in soon %}<li><a href="{{ base }}/{{ p.url }}"><span class="dday {% if p.d_day <= 7 %}hot{% endif %}">{% if p.d_day == 0 %}오늘{% else %}D-{{ p.d_day }}{% endif %}</span><span>{{ p.article.title }}</span></a></li>{% endfor %}</ul>
     {% else %}<p class="empty sm">30일 안에 마감되는 지원제도가 없어요. <a href="{{ base }}/deadline/">상시 신청 제도 보기 →</a></p>{% endif %}
-    <a class="check-cta" href="{{ base }}/check/"><span><strong>나도 받을 수 있을까?</strong><small>나이·지역·상황으로 해당 지원금 찾기</small></span><b>자격 진단 →</b></a>
+    <a class="check-cta" href="{{ base }}/finder/"><span><strong>놓친 지원금 찾기</strong><small>질문 4개로 1분 만에 확인</small></span><b>시작하기 →</b></a>
   </section>
 </div>
 </div>
