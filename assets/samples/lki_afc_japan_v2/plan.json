@@ -1,0 +1,207 @@
+{
+ "topic": "이강인 AFC 올해의 국제선수상 2년 연속 수상 — 일본 반응",
+ "mood": "기본",
+ "kind": "이슈",
+ "caption_style": "mix",
+ "caption_font": "Jua",
+ "title_top": "일본 공감 1위",
+ "title_bottom": "이강인 2연패ㅋㅋ",
+ "thumb_caption": "야후재팬 공감 1위 댓글",
+ "intro_post": false,
+ "media_locked": true,
+ "thumb_locked": true,
+ "voices": [
+  "제롬",
+  "제롬"
+ ],
+ "outro_read": 1,
+ "beats": [
+  {
+   "twist": false,
+   "visual": "photo",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "jp",
+   "overlay_text": "負け惜しみはみっともないので、ここは素直にイガンインおめでとうでいいんじゃないの？||졌다고 억지 부리는 건 꼴사나우니, 그냥 솔직하게 **이강인 축하**한다고 하면 되는 거 아님?",
+   "overlay_source": "Yahoo!ニュース|共感 375",
+   "voice": "",
+   "caption": "",
+   "narration": "야후재팬 공감 1위 댓글이 이거임",
+   "card": "야후재팬 공감 1위 댓글이 이거임"
+  },
+  {
+   "twist": false,
+   "visual": "photo",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "jp",
+   "overlay_text": "負け惜しみはみっともないので、ここは素直にイガンインおめでとうでいいんじゃないの？||졌다고 억지 부리는 건 꼴사나우니, 그냥 솔직하게 **이강인 축하**한다고 하면 되는 거 아님?",
+   "overlay_source": "Yahoo!ニュース|共感 375",
+   "voice": "구리",
+   "caption": "야후재팬 공감 375",
+   "narration": "솔직하게 이강인 축하하면 되는 거 아님?",
+   "card": "솔직하게 이강인 축하하면 되는 거 아님?"
+  },
+  {
+   "twist": false,
+   "visual": "photo",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "이강인 AFC 국제선수상 2연패",
+   "card": "이강인 AFC 국제선수상 2연패"
+  },
+  {
+   "twist": false,
+   "visual": "photo",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "이 상 생기고 처음 나온 2연패",
+   "card": "이 상 생기고 처음 나온 2연패"
+  },
+  {
+   "twist": false,
+   "visual": "photo",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "유럽파 100명 가까운 일본은 빈손",
+   "card": "유럽파 100명 가까운 일본은 빈손"
+  },
+  {
+   "twist": false,
+   "visual": "photo",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "득점왕 우에다까지 제친 상인데",
+   "card": "득점왕 우에다까지 제친 상인데"
+  },
+  {
+   "twist": false,
+   "visual": "photo",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "jp",
+   "overlay_text": "AFCはクラブの格を見すぎじゃない?||AFC는 클럽 **이름값**만 너무 보는 거 아님?",
+   "overlay_source": "YouTube 댓글|일본 채널 영상",
+   "voice": "구리",
+   "caption": "일본 유튜브 반응",
+   "narration": "AFC는 클럽 이름값만 너무 보는 거 아님?",
+   "card": "AFC는 클럽 이름값만 너무 보는 거 아님?"
+  },
+  {
+   "twist": false,
+   "visual": "photo",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "이제 아틀레티코 주전까지 꿰참",
+   "card": "이제 아틀레티코 주전까지 꿰참"
+  },
+  {
+   "twist": false,
+   "visual": "photo",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "일본도 인정한 아시아 원톱 클래스",
+   "card": "일본도 인정한 아시아 원톱 클래스"
+  }
+ ],
+ "media": [
+  {
+   "image": "s9.jpg"
+  },
+  {
+   "image": "s9.jpg"
+  },
+  {
+   "image": "s1.jpg"
+  },
+  {
+   "image": "s2.jpg"
+  },
+  {
+   "image": "s3.jpg"
+  },
+  {
+   "image": "s4.jpg"
+  },
+  {
+   "image": "s3.jpg"
+  },
+  {
+   "image": "s8.jpg"
+  },
+  {
+   "image": "s9.jpg"
+  }
+ ],
+ "gpt_images": [],
+ "end_label": "이강인 수상 영상 댓글",
+ "end_comments": [
+  {
+   "text": "역쉬 대강인 2년 연속 수상 축하합니다"
+  },
+  {
+   "text": "현 미래 에이스 대강인 축하드립니다!!!"
+  },
+  {
+   "text": "이강인 선수 축하해요"
+  }
+ ],
+ "yt_title": "일본 야후 공감 1위 댓글ㅋㅋ 이강인 2연패 #shorts",
+ "description": "이강인(아틀레티코 마드리드)이 'AFC 어워즈 2026'에서 올해의 국제선수상을 받았음. 2025년에 이어 2년 연속, 이 상에서 처음 나온 2연패임. 최종 후보엔 네덜란드리그 득점왕 우에다 아야세(일본)와 황인범도 있었음. 한국 선수가 이 상을 5회 연속 받는 동안 유럽파가 100명에 가깝다는 일본은 수상자가 없었음.\n\n일본 반응(원문 그대로, 번역): YouTube 일본 채널 영상 댓글 / Yahoo!ニュース(스포팅뉴스 일본판 기사) 댓글 공감 375\n출처: 엑스포츠뉴스(네이버 스포츠), Yahoo!ニュース, 노컷뉴스 일본어판\n사진: 대한축구협회·AFC SNS 등\n\n※ 장면 일부는 AI로 만든 이미지임.",
+ "tags": [
+  "이강인",
+  "AFC",
+  "국제선수상",
+  "일본반응",
+  "아틀레티코",
+  "축구",
+  "핫이슈",
+  "쇼츠",
+  "이슈",
+  "뉴스",
+  "요즘"
+ ],
+ "sources": [
+  "https://m.sports.naver.com/kfootball/article/311/0002082453",
+  "https://news.yahoo.co.jp/articles/395a055afb0af117f405b124be5065e7ea443643",
+  "https://www.youtube.com/watch?v=dbKNERKBfRk",
+  "https://www.youtube.com/watch?v=Krlp1qPtplk"
+ ],
+ "pin_comment": "일본 반응 중에 어떤 게 제일 웃김? 🇰🇷⚽",
+ "music_concept": "긴장감 이슈",
+ "question": "",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "outro_spoken": "이강인 수상 영상 댓글. 역쉬 대강인 2년 연속 수상 축하합니다. 님들 생각은 어떰?"
+}
