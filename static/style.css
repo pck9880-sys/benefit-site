@@ -700,23 +700,3 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 @media(max-width:640px){.list-hubs .hub-chips{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;margin-right:-14px}.list-hubs .hub-chips::-webkit-scrollbar{display:none}.list-hubs .hub-chips a{flex:none}.list-hubs .hubs{padding:12px 14px}.list-hubs h3{font-size:14px;margin:0 0 8px}}
 
 @media (prefers-reduced-motion:reduce){.rl.spin i{filter:none}.rl.hit{animation:none}}
-/* 첫 방문 스플래시 (하루 1번, 홈만) */
-html.sp-on,html.sp-on body{overflow:hidden}
-.splash{position:fixed;inset:0;z-index:100;background:#06070b;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;cursor:pointer;
-  padding:env(safe-area-inset-top) 24px env(safe-area-inset-bottom);text-align:center;will-change:mask-image;animation:spIn .5s ease both}
-.splash[hidden]{display:none!important}
-.sp-glow{position:absolute;left:50%;top:42%;width:min(120vw,900px);height:min(120vw,900px);transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(107,76,245,.55),rgba(255,95,174,.18) 40%,transparent 66%);filter:blur(10px);animation:spGlow 3.2s ease-in-out infinite;pointer-events:none}
-.sp-mark{position:relative;width:min(46vw,240px);height:min(46vw,240px);animation:spRise .9s cubic-bezier(.2,.8,.2,1) both}
-.sp-mark svg{width:100%;height:100%;overflow:visible}.sp-mark polygon{mix-blend-mode:screen;opacity:.92}
-.sp-t{transform-box:fill-box;transform-origin:center;will-change:transform}
-.s1{animation:haSpin 9s linear infinite}.s2{animation:haSpin 12s linear infinite reverse}.s3{animation:haSpin 15s linear infinite}
-.sp-txt{position:relative;animation:spRise .9s .15s cubic-bezier(.2,.8,.2,1) both}
-.sp-txt b{display:block;font-size:clamp(34px,7vw,52px);font-weight:800;letter-spacing:-.02em}
-.sp-txt p{margin:6px 0 0;font-size:clamp(18px,3.6vw,24px);font-weight:700;line-height:1.45;color:#d6d4ee}.sp-txt em{font-style:normal;color:#b9a8ff}
-.sp-tap{position:absolute;bottom:calc(40px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:none;border:1px solid rgba(255,255,255,.25);color:#cfcde6;font:inherit;font-size:14px;font-weight:600;border-radius:999px;padding:9px 18px;animation:spBlink 1.6s ease-in-out infinite;cursor:pointer}
-.splash.out .sp-tap{animation:none;opacity:0}
-@keyframes spIn{from{opacity:0}to{opacity:1}}
-@keyframes spRise{from{opacity:0;transform:translateY(18px) scale(.94)}to{opacity:1;transform:none}}
-@keyframes spGlow{0%,100%{opacity:.85;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
-@keyframes spBlink{0%,100%{opacity:.45}50%{opacity:1}}
-@media (prefers-reduced-motion:reduce){.sp-glow,.sp-tap{animation:none}.s1{animation-duration:30s}.s2{animation-duration:40s}.s3{animation-duration:50s}}
