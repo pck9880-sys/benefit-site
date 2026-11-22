@@ -639,3 +639,4 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 .cal-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 0;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff}
 .cal-row span{flex:1 1 100%;font-weight:700;font-size:14px}.cal-row .btn{padding:8px 12px;font-size:13.5px;border-radius:10px}
 .tool-p{color:var(--sub);margin:0 0 16px}
+.rl-fade{display:inline-block;animation:rlFade .6s ease}@keyframes rlFade{from{opacity:0}to{opacity:1}}

@@ -82,7 +82,7 @@
   if(VS>0&&VS<100000){$('vsb').hidden=false;$('vsn').textContent=won(VS)}else VS=0;
   function slot(el,v){
     var txt=won(v),m=txt.match(/^([\d.,]+)(.*)$/),num=m?m[1]:txt,unit=m?m[2]:'';
-    if(matchMedia('(prefers-reduced-motion:reduce)').matches){el.textContent=txt;return}
+    if(matchMedia('(prefers-reduced-motion:reduce)').matches){el.setAttribute('aria-label',txt);el.innerHTML='<span class="rl-fade">'+num+'</span><span class="rl-unit">'+unit+'</span>';return}
     el.setAttribute('aria-label',txt);el.innerHTML='';var reels=[],di=0;
     num.split('').forEach(function(ch){
       if(!/\d/.test(ch)){var s=document.createElement('span');s.className='rl-sep';s.textContent=ch;el.appendChild(s);return}
