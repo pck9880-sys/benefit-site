@@ -575,10 +575,10 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 .life-sum small{color:var(--sub);font-weight:700;font-size:12.5px}.life-sum strong{display:block;font-size:26px;font-weight:850;letter-spacing:-.02em}
 .life-sum i{display:block;height:6px;background:#efeef6;border-radius:3px;margin-top:6px;overflow:hidden}.life-sum i b{display:block;height:100%;width:0;background:#4f3fd9;border-radius:3px}
 .tl{list-style:none;margin:0;padding:0 0 0 22px;border-left:2px dashed #d8d5ea;margin-left:18px}
-.st{position:relative;padding:0 0 22px 22px;opacity:.35;transform:translateY(16px);transition:opacity .5s,transform .5s}
-.st.in{opacity:1;transform:none}
+.lst{position:relative;padding:0 0 22px 22px;opacity:.35;transform:translateY(16px);transition:opacity .5s,transform .5s}
+.lst.in{opacity:1;transform:none}
 .dot{position:absolute;left:-41px;top:4px;width:38px;height:38px;border-radius:50%;background:#fff;border:2px solid #d8d5ea;display:flex;align-items:center;justify-content:center;font-size:19px}
-.st.in .dot{border-color:#4f3fd9;background:#f1efff}
+.lst.in .dot{border-color:#4f3fd9;background:#f1efff}
 .st-b{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px}
 .st-b small{color:#4f3fd9;font-weight:800;font-size:13px}.st-b h2{font-size:18px;margin:2px 0 8px}
 .st-b p{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin:6px 0;font-size:14.5px}
@@ -588,4 +588,7 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 .life-end{background:var(--dark);color:#fff;border-radius:20px;padding:26px 22px;margin:8px 0 12px;text-align:center}
 .life-end small{color:#a9abc8;font-weight:700}.life-end strong{display:block;font-size:42px;font-weight:850;margin:4px 0}.life-end span{color:#d6d4ee}
 .life-end .btn.ghost{background:transparent;color:#fff;border-color:#3a3c55}
-@media (prefers-reduced-motion:reduce){.st{opacity:1;transform:none;transition:none}}
+@media (prefers-reduced-motion:reduce){.lst{opacity:1;transform:none;transition:none}}
+/* v26 fixes: grid overflow on mobile */
+.layout>*{min-width:0}
+@media (max-width:640px){.mini-list li{flex-direction:column;gap:2px}.mini-list small{white-space:normal;font-size:12.5px}.sec-h{flex-wrap:wrap;gap:4px 10px}}

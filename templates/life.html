@@ -11,7 +11,7 @@
   <div class="life-sum" id="ls"><small>지금까지 쌓인 지원금</small><strong id="lsn">0원</strong><i><b id="lsb"></b></i></div>
   <ol class="tl">
   {% for st in life %}
-    <li class="st" data-v="{{ st['items']|sum(attribute=1) }}">
+    <li class="lst" data-v="{{ st['items']|sum(attribute=1) }}">
       <span class="dot">{{ st.emoji }}</span>
       <div class="st-b">
         <small>{{ st.age }}</small><h2>{{ st.title }}</h2>
@@ -31,7 +31,7 @@
 </div>
 <script>
 (function(){
-  var st=[].slice.call(document.querySelectorAll('.st')),tot=st.reduce(function(a,s){return a+(+s.dataset.v)},0),cur=0,shown=0,n=document.getElementById('lsn'),bar=document.getElementById('lsb');
+  var st=[].slice.call(document.querySelectorAll('.lst')),tot=st.reduce(function(a,s){return a+(+s.dataset.v)},0),cur=0,shown=0,n=document.getElementById('lsn'),bar=document.getElementById('lsb');
   function fmt(v){return v>=10000?(v/10000).toFixed(2).replace(/\.?0+$/,'')+'억 원':Math.round(v).toLocaleString()+'만 원'}
   function tick(){shown+=(cur-shown)*0.12;if(Math.abs(cur-shown)<1)shown=cur;n.textContent=fmt(shown);bar.style.width=(shown/tot*100)+'%';if(shown!==cur)requestAnimationFrame(tick)}
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!e.target.classList.contains('in')){e.target.classList.add('in');cur+=+e.target.dataset.v;requestAnimationFrame(tick)}})},{threshold:.55});
