@@ -574,7 +574,7 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 .life-sum{position:sticky;top:76px;z-index:5;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 16px;margin:14px 0;box-shadow:0 8px 24px rgba(23,24,58,.08)}
 .life-sum small{color:var(--sub);font-weight:700;font-size:12.5px}.life-sum strong{display:block;font-size:26px;font-weight:850;letter-spacing:-.02em}
 .life-sum i{display:block;height:6px;background:#efeef6;border-radius:3px;margin-top:6px;overflow:hidden}.life-sum i b{display:block;height:100%;width:0;background:#4f3fd9;border-radius:3px}
-.tl{list-style:none;margin:0;padding:0 0 0 22px;border-left:2px dashed #d8d5ea;margin-left:18px}
+.ltl{list-style:none;margin:0;padding:0 0 0 22px;border-left:2px dashed #d8d5ea;margin-left:18px}
 .lst{position:relative;padding:0 0 22px 22px;opacity:.35;transform:translateY(16px);transition:opacity .5s,transform .5s}
 .lst.in{opacity:1;transform:none}
 .dot{position:absolute;left:-41px;top:4px;width:38px;height:38px;border-radius:50%;background:#fff;border:2px solid #d8d5ea;display:flex;align-items:center;justify-content:center;font-size:19px}
@@ -640,3 +640,51 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 .cal-row span{flex:1 1 100%;font-weight:700;font-size:14px}.cal-row .btn{padding:8px 12px;font-size:13.5px;border-radius:10px}
 .tool-p{color:var(--sub);margin:0 0 16px}
 .rl-fade{display:inline-block;animation:rlFade .6s ease}@keyframes rlFade{from{opacity:0}to{opacity:1}}
+/* ===== v34 모바일 앱 스타일 (PC는 그대로) ===== */
+.tabbar,.actbar,.tb-short{display:none}
+@view-transition{navigation:auto}
+@media (prefers-reduced-motion:reduce){@view-transition{navigation:none}}
+@media (max-width:640px){
+  html{-webkit-tap-highlight-color:transparent}
+  body{padding-bottom:calc(68px + env(safe-area-inset-bottom))}
+  .tb-long{display:none}.tb-short{display:inline}
+  .topbar{font-size:11px;padding:4px 0;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hdr{position:sticky;top:0;backdrop-filter:saturate(1.6) blur(14px);-webkit-backdrop-filter:saturate(1.6) blur(14px);background:rgba(255,255,255,.88)}
+  .hdr-in{height:54px}.logo-img{height:36px}
+  .hdr .srch{display:none}.menu-btn{margin-left:auto;font-size:20px;color:var(--ink)}
+  .gnb{top:54px}
+  /* 하단 탭바 */
+  .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:saturate(1.6) blur(16px);-webkit-backdrop-filter:saturate(1.6) blur(16px);
+    border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+  .tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:#8a8cab;text-decoration:none;font-size:10.5px;font-weight:700;padding:4px 0;border-radius:12px;transition:transform .12s}
+  .tabbar svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .tabbar a.on{color:#4f3fd9}.tabbar a.on svg{stroke-width:2.3}
+  .tabbar a:active{transform:scale(.9)}
+  .tabbar .tb-main svg{color:#fff;background:#6b4cf5;border-radius:50%;padding:5px;width:30px;height:30px;margin-top:-6px;box-shadow:0 4px 12px rgba(107,76,245,.35)}
+  .tabbar .tb-main{color:#4f3fd9}
+  /* 글 상세: 탭바 대신 하단 행동 버튼 */
+  .is-post .tabbar{display:none}
+  .actbar{display:flex;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line)}
+  .actbar .btn{flex:1;text-align:center;padding:14px 10px;border-radius:14px;font-size:15.5px;font-weight:800}
+  .actbar .btn:not(.ghost){flex:1.6;background:#17183a;border-color:#17183a;color:#fff}
+  .is-post .kv-btns{display:none}
+  /* 터치 반응 */
+  .btn:active,.cards a:active,.sp-banner:active,.cat:active,.tl:active,.fd-opts button:active,.dg-list a:active,.check-cta:active{transform:scale(.97);transition:transform .08s}
+  /* 홈: 카드형 · 가로 스와이프 */
+  .is-home .home-hero{padding:22px 18px 18px;border-radius:22px}
+  .is-home .home-hero h1{font-size:25px;line-height:1.35;margin:6px 0 14px}
+  .is-home .hero-art{width:120px;height:120px;right:-14px;top:-10px;opacity:.75}
+  .is-home .hh-kick{font-size:11.5px}
+  .dg-cta{flex-direction:column;align-items:stretch;gap:6px;text-align:center}.dg-cta .btn{padding:16px;font-size:16.5px}
+  .is-home .big-srch input{font-size:15px}
+  .is-home .quick{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-right:-18px;padding-right:18px}.is-home .quick::-webkit-scrollbar{display:none}
+  .is-home .quick>*{flex:none}
+  .is-home .catgrid{grid-template-columns:repeat(4,1fr)!important}.is-home .cat{padding:12px 4px!important}.is-home .cat small{display:none}.is-home .cat span{font-size:12.5px}
+  .sp-row{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -14px 14px;padding:0 14px 4px;scrollbar-width:none}.sp-row::-webkit-scrollbar{display:none}
+  .sp-row .sp-banner{flex:0 0 84%;scroll-snap-align:start;margin:0!important}
+  .is-home .tools-row{display:flex!important;gap:8px;overflow-x:auto;margin:0 -14px 14px;padding:0 14px 4px;scrollbar-width:none}.is-home .tools-row::-webkit-scrollbar{display:none}
+  .is-home .tools-row .tl{flex:0 0 62%}
+  .hub-chips{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;margin-right:-14px}.hub-chips::-webkit-scrollbar{display:none}.hub-chips a{flex:none}
+  .cards li a{border-radius:16px}
+  .ftr{padding-bottom:12px}.ftr-in{gap:14px}.ftr-links{display:none}.ftr p{font-size:12.5px}
+}

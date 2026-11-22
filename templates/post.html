@@ -7,6 +7,8 @@
 <script type="application/ld+json">{{ {"@context":"https://schema.org","@type":"Article","headline":a.title,"description":a.description,"datePublished":post.published_at,"dateModified":post.modified_at,"mainEntityOfPage":canonical,"publisher":{"@type":"Organization","name":site_name}} | tojson }}</script>
 {% if faq_ld %}<script type="application/ld+json">{{ faq_ld | safe }}</script>{% endif %}
 {% endblock %}
+{% block bodyclass %}is-post{% endblock %}
+{% block actionbar %}<div class="actbar">{% if post.source.apply_url %}<a class="btn ghost" href="{{ base }}/finder/">30초 진단</a><a class="btn" href="{{ post.source.apply_url }}" target="_blank" rel="noopener nofollow">온라인 신청하기 ↗</a>{% elif post.source.url %}<a class="btn ghost" href="{{ base }}/finder/">30초 진단</a><a class="btn" href="{{ post.source.url }}" target="_blank" rel="noopener">정부24에서 신청 방법 ↗</a>{% endif %}</div>{% endblock %}
 {% block main %}
 <div class="layout">
 <article class="post content">

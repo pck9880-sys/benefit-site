@@ -9,7 +9,7 @@
     <p>태어나서 노후까지 대표 지원금을 나이순으로 쌓아봤어요.</p>
   </div>
   <div class="life-sum" id="ls"><small>지금까지 쌓인 지원금</small><strong id="lsn">0원</strong><i><b id="lsb"></b></i></div>
-  <ol class="tl">
+  <ol class="ltl">
   {% for st in life %}
     <li class="lst" data-v="{{ st['items']|sum(attribute=1) }}">
       <span class="dot">{{ st.emoji }}</span>
