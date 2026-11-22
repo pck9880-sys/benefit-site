@@ -43,3 +43,19 @@
       $('sr').innerHTML=r.map(function(d){return '<li><a href="'+BASE+'/'+d.u+'"><span class="card-b"><span class="card-tags"><span class="tag">'+esc(d.f)+'</span>'+(d.x==='always'?'<span class="st always">상시 신청</span>':'')+'</span><strong>'+esc(d.n||d.t)+'</strong>'+(d.m?'<span class="card-amt">'+esc(d.m)+'</span>':'')+'</span></a></li>'}).join('')||'<li class="empty">조건에 맞는 지원제도가 없어요. 조건을 줄여보세요.</li>'})}
     ['input','change'].forEach(function(ev){document.querySelector('.flt').addEventListener(ev,go)});sq.addEventListener('input',go);$('sf').onsubmit=function(){go();sq.blur();return false};go()}
 })();
+/* 캘린더 저장: 마감일 하루짜리 일정 + 3일 전 알림 */
+window.bfCal=function(title,date,url){
+  var d=date.replace(/-/g,''),e=new Date(date+'T00:00:00');e.setDate(e.getDate()+1);
+  var d2=e.getFullYear()+String(e.getMonth()+1).padStart(2,'0')+String(e.getDate()).padStart(2,'0'),
+      desc='Benefy에서 저장한 신청 마감일이에요. 신청 전 공식 안내를 꼭 확인하세요. '+url;
+  return {
+    google:'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('[마감] '+title)+'&dates='+d+'/'+d2+'&details='+encodeURIComponent(desc),
+    ics:function(){var esc=function(s){return s.replace(/([,;\\])/g,'\\$1')},
+      t=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Benefy//KO','BEGIN:VEVENT','UID:'+d+'-'+Math.random().toString(36).slice(2)+'@benefy.kr',
+        'DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z','DTSTART;VALUE=DATE:'+d,'DTEND;VALUE=DATE:'+d2,
+        'SUMMARY:'+esc('[마감] '+title),'DESCRIPTION:'+esc(desc),'URL:'+url,
+        'BEGIN:VALARM','TRIGGER:-P3D','ACTION:DISPLAY','DESCRIPTION:'+esc('3일 뒤 마감: '+title),'END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n');
+      var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/calendar'}));a.download='benefy-deadline.ics';a.click()}
+  }};
+document.addEventListener('click',function(ev){var b=ev.target.closest('[data-cal]');if(!b)return;ev.preventDefault();
+  var c=bfCal(b.dataset.t,b.dataset.cal,b.dataset.u||location.href);if(b.dataset.k==='g')window.open(c.google,'_blank','noopener');else c.ics()});

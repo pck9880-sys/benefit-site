@@ -5,6 +5,7 @@
 <div class="tool fd">
   <div class="fd-top"><span class="chg-chip">30초 진단 · 회원가입 없음</span><span class="fd-step" id="fs">1 / 7</span></div>
   <div class="fd-bar"><i id="fb"></i></div>
+  <div class="vs-ban" id="vsb" hidden>🤝 친구는 1년에 최대 <b id="vsn"></b>이 나왔어요. 나는 얼마일까?</div>
   <section class="fd-q on" data-q="age"><h1 class="tool-h">나이가 어떻게 되세요?</h1>
     <div class="fd-opts"><button data-v="y">19~34세</button><button data-v="y2">35~39세</button><button data-v="m">40~64세</button><button data-v="s">65세 이상</button></div></section>
   <section class="fd-q" data-q="region"><h1 class="tool-h">어디에 사세요?</h1>
@@ -23,8 +24,11 @@
 
   <section class="fd-res" id="fr" hidden>
     <div class="dg-hero"><small>조건이 맞으면, 1년에 최대</small><strong id="dgn">0원</strong><span id="dgc"></span></div>
+    <div class="vs-box" id="vsx" hidden></div>
     <ol class="dg-list" id="dgl"></ol>
-    <div class="fd-acts"><button class="btn" id="dgsave">결과 카드 저장·공유</button><button class="btn ghost" id="fagain">다시 하기</button></div>
+    <a class="wl-go" href="{{ base }}/wallet/">💼 내 지원금 지갑에 저장됐어요 · 신청 체크하러 가기 →</a>
+    <div class="fd-acts"><button class="btn" id="dgvs">친구랑 비교하기</button><button class="btn ghost" id="dgsave">결과 카드 저장</button></div>
+    <div class="fd-acts"><a class="btn ghost" href="https://www.gov.kr/portal/rcvfvrSvc/main" target="_blank" rel="noopener">정부 '보조금24'에서 정확히 조회 ↗</a><button class="btn ghost" id="fagain">다시 하기</button></div>
     <canvas id="dgcv" width="1080" height="1350" hidden></canvas>
     <p class="disc">고르신 조건에 맞는 대표 지원금의 '최대 금액'을 1년 기준으로 더한 예시예요. 여러 해에 걸친 혜택은 1년치로 나눴어요. 실제 자격과 금액은 소득·재산·세부 조건에 따라 달라지니, 각 항목의 안내와 공식 기관에서 꼭 확인하세요. (2026년 기준)</p>
     <div class="sec-h" style="margin-top:22px"><h2>이런 제도도 확인해 보세요</h2><span id="mrn"></span></div>
@@ -66,10 +70,16 @@
     if(inc==='low')add('전기요금 복지할인',19,'월 최대 1.6만 원','search/?q=전기요금 복지할인',1);
     if(inc==='low')add('평생교육이용권',35,'1년 35만 원','search/?q=평생교육이용권',1);
     if(A.region==='gyeonggi'&&has('k9'))add('경기 어린이·청소년 교통비',24,'1년 최대 24만 원','search/?q=경기 교통비');
+    var W={'부모급여':['출생 후 60일 안에 신청'],'첫만남이용권':['출생 신고 때 함께 신청'],'임신·출산':['임신 확인 후 신청'],'아동수당':['출생 후 60일 안에 신청'],
+      '육아휴직급여':['휴직 시작 1개월 뒤부터 신청'],'근로장려금':['정기 신청 5월','2027-05-31'],'자녀장려금':['정기 신청 5월','2027-05-31'],'청년월세':['지자체별 모집 기간 확인'],
+      '청년미래적금':['6월·12월 가입 모집'],'구직촉진수당':['상시 신청'],'국민내일배움카드':['상시 신청'],'기초연금':['65세 생일 1개월 전부터'],'주거급여':['상시 신청'],
+      '에너지바우처':['신청 마감','2026-12-31'],'전기요금':['상시 신청'],'평생교육이용권':['연초 모집'],'경기':['상시 신청']};
+    it.forEach(function(x){var k=Object.keys(W).filter(function(k){return x.n.indexOf(k)===0})[0];if(k){x.w=W[k][0];x.dd=W[k][1]||''}});
     return it.sort(function(a,b){return b.v-a.v});
   }
   function won(v){return v>=10000?(Math.floor(v/1000)/10)+'억 원':Math.round(v).toLocaleString()+'만 원'}
-  var IT=[],TOT=0;
+  var IT=[],TOT=0,VS=parseInt(new URLSearchParams(location.search).get('vs')||'',10)||0;
+  if(VS>0&&VS<100000){$('vsb').hidden=false;$('vsn').textContent=won(VS)}else VS=0;
   function slot(el,v){
     var txt=won(v),m=txt.match(/^([\d.,]+)(.*)$/),num=m?m[1]:txt,unit=m?m[2]:'';
     if(matchMedia('(prefers-reduced-motion:reduce)').matches){el.textContent=txt;return}
@@ -90,6 +100,9 @@
     qs.forEach(function(q){q.classList.remove('on')});document.querySelector('.fd-top').hidden=true;document.querySelector('.fd-bar').hidden=true;$('fr').hidden=false;window.scrollTo(0,0);
     $('dgc').textContent=IT.length?'대표 지원금 '+IT.length+'가지 합계 · 아래에서 하나씩 확인하세요':'고르신 조건에 맞는 대표 금액형 지원금이 없어요. 아래 제도를 확인해 보세요';
     slot($('dgn'),TOT);
+    try{var old=JSON.parse(localStorage.getItem('bf_wallet')||'{}'),done={};IT.forEach(function(x){if(old.done&&old.done[x.n])done[x.n]=1});
+      localStorage.setItem('bf_wallet',JSON.stringify({date:new Date().toISOString().slice(0,10),tot:TOT,it:IT,done:done}))}catch(e){}
+    if(VS){var mx=Math.max(VS,TOT,1);$('vsx').hidden=false;$('vsx').innerHTML='<div><span>나</span><i><b style="width:'+(TOT/mx*100)+'%"></b></i><strong>'+won(TOT)+'</strong></div><div class="fr"><span>친구</span><i><b style="width:'+(VS/mx*100)+'%"></b></i><strong>'+won(VS)+'</strong></div><p>'+(TOT>VS?'내가 '+won(TOT-VS)+' 더 받을 수 있어요 🎉':TOT<VS?'친구가 '+won(VS-TOT)+' 더 많아요. 놓친 게 없는지 아래를 확인해 보세요':'친구랑 똑같아요!')+'</p>'}
     $('dgl').innerHTML=IT.map(function(x){return '<li><a href="'+BASE+'/'+x.l+'"><span><b>'+x.n+'</b><small>'+x.note+(x.c?' · <em>조건부</em>':'')+'</small></span><strong>+'+x.v.toLocaleString()+'만</strong></a></li>'}).join('');
     more();
   }
@@ -122,9 +135,11 @@
   }
   $('dgsave').onclick=function(){var b=this;(document.fonts?document.fonts.ready:Promise.resolve()).then(function(){card().toBlob(function(blob){
     var f=new File([blob],'benefy-result.png',{type:'image/png'}),t='나 1년에 지원금 최대 '+won(TOT)+' 받을 수 있대! 30초 진단 →';
-    if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],text:t+' '+location.origin+BASE+'/finder/'}).catch(function(){});
+    if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],text:t+' '+location.origin+BASE+'/finder/?vs='+TOT}).catch(function(){});
     else{var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='benefy-result.png';a.click();b.textContent='이미지 저장됨'}},'image/png')})};
-  $('fagain').onclick=function(){location.reload()};
+  $('dgvs').onclick=function(){var u=location.origin+BASE+'/finder/?vs='+TOT,t='나는 1년에 지원금 최대 '+won(TOT)+' 나왔어. 너는 얼마야? 30초 진단 👉';
+    if(navigator.share)navigator.share({title:'지원금 비교하기',text:t,url:u}).catch(function(){});else{navigator.clipboard.writeText(t+' '+u);this.textContent='링크 복사됨'}};
+  $('fagain').onclick=function(){location.href=BASE+'/finder/'+(VS?'?vs='+VS:'')};
   show(0);
 })();
 </script>

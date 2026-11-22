@@ -618,3 +618,24 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 .rl.spin i{filter:blur(1.2px)}.rl.hit{animation:rlHit .35s ease}
 @keyframes rlHit{0%{transform:scale(1.18);color:#c9b8ff}100%{transform:none}}
 .rl-sep,.rl-unit{display:inline-block}.rl-unit{margin-left:.12em;font-size:.6em}
+/* v32 지갑 · 캘린더 · 친구 비교 */
+.wl-go{display:block;margin:12px 0 4px;padding:12px 14px;border-radius:12px;background:#f4f2ff;color:#4f3fd9;font-weight:700;font-size:14.5px;text-decoration:none}
+.vs-ban{background:#f4f2ff;border:1px solid #e2ddff;color:var(--ink);border-radius:12px;padding:12px 14px;margin:-6px 0 18px;font-weight:600}.vs-ban b{color:#4f3fd9}
+.vs-box{border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-top:14px;background:#fff}
+.vs-box div{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:10px;margin:6px 0}.vs-box span{font-weight:700;color:var(--sub);font-size:14px}
+.vs-box i{height:12px;background:#efeef6;border-radius:6px;overflow:hidden}.vs-box i b{display:block;height:100%;background:#4f3fd9;border-radius:6px;transition:width 1s ease}
+.vs-box .fr i b{background:#b9b3d9}.vs-box strong{font-size:15px}.vs-box p{margin:8px 0 0;font-weight:700;font-size:14.5px}
+.wl-hero{background:var(--dark);color:#fff;border-radius:20px;padding:22px 22px 18px;position:relative;overflow:hidden;margin-top:6px}
+.wl-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;background:#5b4cf0;filter:blur(70px);opacity:.45}.wl-hero>*{position:relative;z-index:1}
+.wl-hero small{color:#a9abc8;font-weight:700}.wl-hero strong{display:block;font-size:34px;font-weight:850;letter-spacing:-.02em}.wl-hero strong em{font-style:normal;font-size:18px;color:#a9abc8}
+.wl-hero i{display:block;height:8px;background:rgba(255,255,255,.12);border-radius:4px;margin:8px 0 6px;overflow:hidden}.wl-hero i b{display:block;height:100%;width:0;background:#8f7bff;border-radius:4px;transition:width .5s ease}
+.wl-hero p{margin:0;color:#d6d4ee;font-size:14px}
+.wl-list{list-style:none;margin:14px 0 0;padding:0;border:1px solid var(--line);border-radius:16px;background:#fff;overflow:hidden}
+.wl-list li{padding:12px 14px}.wl-list li+li{border-top:1px solid var(--line)}
+.wl-list label{display:flex;align-items:center;gap:12px;cursor:pointer}.wl-list input{width:22px;height:22px;accent-color:#4f3fd9;flex:none}
+.wl-list label span{flex:1}.wl-list b{display:block;font-size:16px}.wl-list small{color:var(--sub);font-size:13px}.wl-list strong{flex:none;font-weight:850;color:#4f3fd9}
+.wl-list li.done b,.wl-list li.done strong{color:#a5a7bd;text-decoration:line-through}
+.wl-acts{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0 34px}.wl-acts a,.wl-acts button{font:inherit;font-size:13px;font-weight:700;color:#4f3fd9;background:#f4f2ff;border:0;border-radius:8px;padding:5px 10px;text-decoration:none;cursor:pointer}
+.cal-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 0;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.cal-row span{flex:1 1 100%;font-weight:700;font-size:14px}.cal-row .btn{padding:8px 12px;font-size:13.5px;border-radius:10px}
+.tool-p{color:var(--sub);margin:0 0 16px}

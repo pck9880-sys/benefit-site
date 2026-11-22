@@ -187,6 +187,7 @@ def build():
 
     write("special/life/index.html", env.get_template("life.html").render(life=LIFE, total=sum(v for st in LIFE for _, v, _ in st["items"]),
           canonical=f"{config.SITE_URL}/special/life/"))
+    write("wallet/index.html", env.get_template("wallet.html").render(canonical=f"{config.SITE_URL}/wallet/"))
     write("finder/index.html", env.get_template("finder.html").render(canonical=f"{config.SITE_URL}/finder/"))
     write("special/2027-changes/index.html", env.get_template("changes.html").render(items=CHANGES_2027, canonical=f"{config.SITE_URL}/special/2027-changes/"))
     from . import specials
@@ -203,7 +204,7 @@ def build():
     write("search.json", json.dumps(
         [{"t": d["article"]["title"], "u": d["url"], "n": d["source"].get("name", ""), "f": d["source"].get("field", ""),
           "m": d["key"]["amount"] or "", "k": " ".join(d["article"]["tags"] + [d["article"].get("description", "")]),
-          "r": d["region"], "a": d["audiences"], "x": d["dl_state"],
+          "r": d["region"], "a": d["audiences"], "x": d["dl_state"], "dd": d["dl_date"].isoformat() if d["dl_state"] == "upcoming" and d.get("dl_date") else "",
           "amin": (d["source"].get("cond") or {}).get("age_min"), "amax": (d["source"].get("cond") or {}).get("age_max")} for d in posts],
         ensure_ascii=False))
 

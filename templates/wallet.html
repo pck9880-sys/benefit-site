@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}내 지원금 지갑 | {{ site_name }}{% endblock %}
+{% block desc %}진단으로 찾은 지원금을 저장하고, 신청한 것을 체크하며 관리해요.{% endblock %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+{% block main %}
+<div class="tool wl">
+  <span class="chg-chip">💼 내 지원금 지갑</span>
+  <div id="wl-empty" hidden>
+    <h1 class="tool-h">아직 지갑이 비어 있어요</h1>
+    <p class="tool-p">30초 진단을 하면 받을 수 있는 지원금이 여기에 저장돼요.</p>
+    <a class="btn" href="{{ base }}/finder/">30초 진단 시작 →</a>
+  </div>
+  <div id="wl-full" hidden>
+    <div class="wl-hero"><small>신청 완료</small><strong><span id="wd">0</span><em> / <span id="wt">0</span></em></strong><i><b id="wb"></b></i><p id="wm"></p></div>
+    <ul class="wl-list" id="wl"></ul>
+    <div class="fd-acts"><a class="btn ghost" href="{{ base }}/finder/">다시 진단하기</a><button class="btn ghost" id="wclr">지갑 비우기</button></div>
+    <p class="disc">지갑 내용은 이 기기의 브라우저에만 저장되고, 어디로도 전송되지 않아요. <span id="wdate"></span></p>
+  </div>
+</div>
+<script>
+(function(){
+  var $=function(x){return document.getElementById(x)},W;
+  try{W=JSON.parse(localStorage.getItem('bf_wallet')||'null')}catch(e){}
+  if(!W||!W.it||!W.it.length){$('wl-empty').hidden=false;return}
+  $('wl-full').hidden=false;W.done=W.done||{};$('wdate').textContent='('+W.date+' 진단 기준)';
+  function won(v){return v>=10000?(Math.floor(v/1000)/10)+'억 원':Math.round(v).toLocaleString()+'만 원'}
+  var today=new Date().toISOString().slice(0,10);
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function draw(){
+    var tot=0,done=0;W.it.forEach(function(x){tot+=x.v;if(W.done[x.n])done+=x.v});
+    $('wd').textContent=won(done);$('wt').textContent=won(tot);$('wb').style.width=(tot?done/tot*100:0)+'%';
+    var left=W.it.filter(function(x){return !W.done[x.n]}).length;
+    $('wm').textContent=left?'남은 지원금 '+left+'가지 · 하나씩 체크해 보세요':'전부 신청 완료! 🎉';
+    $('wl').innerHTML=W.it.map(function(x,i){var d=!!W.done[x.n],cal=x.dd&&x.dd>=today;
+      return '<li class="'+(d?'done':'')+'"><label><input type="checkbox" data-i="'+i+'"'+(d?' checked':'')+'><span><b>'+esc(x.n)+'</b><small>'+esc(x.w||x.note)+(x.c?' · 조건부':'')+'</small></span><strong>'+x.v.toLocaleString()+'만</strong></label>'
+        +'<div class="wl-acts"><a href="'+BASE+'/'+x.l+'">자세히 →</a>'+(cal&&!d?'<button type="button" data-cal="'+x.dd+'" data-t="'+esc(x.n)+'" data-u="'+location.origin+BASE+'/'+x.l+'" data-k="g">📅 구글 캘린더</button><button type="button" data-cal="'+x.dd+'" data-t="'+esc(x.n)+'" data-u="'+location.origin+BASE+'/'+x.l+'">📅 아이폰·기타</button>':'')+'</div></li>'}).join('');
+  }
+  $('wl').addEventListener('change',function(e){var i=e.target.dataset.i;if(i==null)return;var n=W.it[i].n;if(e.target.checked)W.done[n]=1;else delete W.done[n];
+    localStorage.setItem('bf_wallet',JSON.stringify(W));draw()});
+  $('wclr').onclick=function(){if(confirm('지갑을 비울까요?')){localStorage.removeItem('bf_wallet');location.reload()}};
+  draw();
+})();
+</script>
+{% endblock %}
