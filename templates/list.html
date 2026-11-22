@@ -14,6 +14,9 @@
 (function(){
   var s=document.getElementById('splash');
   var ua=navigator.userAgent;if(navigator.webdriver||/bot\b|bot\/|crawler|spider|slurp|lighthouse|Yeti|Daumoa|Googlebot|bingbot|Mediapartners/i.test(ua))return;
+  // 사이트에 처음 접속할 때만: 같은 창에서 사이트 안을 돌아다니다 홈으로 오면 안 띄움
+  var inside=false;try{inside=!!document.referrer&&new URL(document.referrer).host===location.host}catch(e){}
+  try{if(inside||sessionStorage.getItem('bf_sp'))return;sessionStorage.setItem('bf_sp','1')}catch(e){}
   var wk=/iP(hone|ad|od)/.test(ua)||(/Safari/.test(ua)&&!/Chrome|Chromium|CriOS|Edg|Android/.test(ua));  // 사파리 계열: 물결 필터 대신 크기 변화만
   s.hidden=false;document.documentElement.classList.add('sp-on');
   var gone=false,auto=setTimeout(go,2600);
