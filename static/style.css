@@ -687,7 +687,7 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
   .is-home .tools-row .tl{flex:0 0 62%}
   .hub-chips{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;margin-right:-14px}.hub-chips::-webkit-scrollbar{display:none}.hub-chips a{flex:none}
   .cards li a{border-radius:16px}
-  .ftr{padding-bottom:12px}.ftr-in{gap:14px}.ftr-links{display:none}.ftr p{font-size:12.5px}
+  .ftr{padding-bottom:12px;margin-top:28px}.ftr-in{gap:14px;padding-top:30px!important;padding-bottom:18px!important}.ftr-links{display:none}.ftr p{font-size:12.5px}
 }
 /* 목록 페이지 상단 검색 */
 .list-srch{display:flex;align-items:center;gap:8px;margin:16px 0 4px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px 6px 6px 14px}
