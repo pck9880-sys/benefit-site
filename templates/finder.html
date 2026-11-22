@@ -1,51 +1,116 @@
 {% extends "base.html" %}
-{% block title %}놓친 지원금 찾기 · 질문 4개로 1분 확인 | {{ site_name }}{% endblock %}
-{% block desc %}나이, 사는 곳, 가구 상황, 일 상태 4가지만 고르면 받을 수 있을지 모르는 정부 지원금을 찾아드려요.{% endblock %}
+{% block title %}내 숨은 지원금 30초 진단 · 받을 수 있는 돈을 금액으로 | {{ site_name }}{% endblock %}
+{% block desc %}질문 7개에 답하면 내가 받을 수 있는 정부 지원금을 1년 기준 금액으로 보여드려요. 회원가입 없이 30초.{% endblock %}
 {% block main %}
 <div class="tool fd">
-  <div class="fd-top"><span class="chg-chip">1분 테스트</span><span class="fd-step" id="fs">1 / 4</span></div>
+  <div class="fd-top"><span class="chg-chip">30초 진단 · 회원가입 없음</span><span class="fd-step" id="fs">1 / 7</span></div>
   <div class="fd-bar"><i id="fb"></i></div>
   <section class="fd-q on" data-q="age"><h1 class="tool-h">나이가 어떻게 되세요?</h1>
-    <div class="fd-opts"><button data-v="youth">19~39세</button><button data-v="mid">40~64세</button><button data-v="senior">65세 이상</button></div></section>
+    <div class="fd-opts"><button data-v="y">19~34세</button><button data-v="y2">35~39세</button><button data-v="m">40~64세</button><button data-v="s">65세 이상</button></div></section>
   <section class="fd-q" data-q="region"><h1 class="tool-h">어디에 사세요?</h1>
-    <div class="fd-opts"><button data-v="seoul">서울</button><button data-v="gyeonggi">경기</button><button data-v="">그 외 지역</button></div></section>
-  <section class="fd-q" data-q="house" data-multi="1"><h1 class="tool-h">해당하는 걸 모두 골라주세요</h1>
-    <div class="fd-opts grid"><button data-v="child">아이 키움</button><button data-v="pregnancy">임신·출산</button><button data-v="oneperson">1인 가구</button><button data-v="homeless">무주택·세입자</button><button data-v="singleparent">한부모</button><button data-v="disabled">장애인 가구</button><button data-v="multichild">다자녀</button><button data-v="veteran">국가유공자</button></div>
+    <div class="fd-opts grid"><button data-v="seoul">서울</button><button data-v="gyeonggi">경기</button><button data-v="incheon">인천</button><button data-v="">그 외 지역</button></div></section>
+  <section class="fd-q" data-q="hh"><h1 class="tool-h">가구 형태는요?</h1>
+    <div class="fd-opts"><button data-v="one">1인 가구</button><button data-v="couple">부부·가족 (한 명이 벌어요)</button><button data-v="dual">맞벌이</button><button data-v="sp">한부모</button></div></section>
+  <section class="fd-q" data-q="kids" data-multi="1"><h1 class="tool-h">아이가 있다면 모두 골라주세요</h1>
+    <div class="fd-opts grid"><button data-v="preg">임신 중</button><button data-v="k0">0세</button><button data-v="k1">1세</button><button data-v="k2">2~8세</button><button data-v="k9">9~17세</button><button data-v="none" class="fd-none">아이 없음</button></div>
     <button class="btn fd-next">다음 →</button></section>
-  <section class="fd-q" data-q="work" data-multi="1"><h1 class="tool-h">지금 상황은요? (여러 개 가능)</h1>
-    <div class="fd-opts grid"><button data-v="worker">직장 다님</button><button data-v="jobseeker">구직 중</button><button data-v="business">자영업·창업</button><button data-v="lowincome">소득이 적음 (수급·차상위)</button></div>
-    <button class="btn fd-next">결과 보기 →</button></section>
+  <section class="fd-q" data-q="work"><h1 class="tool-h">지금 하는 일은요?</h1>
+    <div class="fd-opts grid"><button data-v="worker">직장인</button><button data-v="biz">자영업·프리랜서</button><button data-v="job">구직 중</button><button data-v="etc">학생·기타</button></div></section>
+  <section class="fd-q" data-q="inc"><h1 class="tool-h">가구 소득은 어느 정도예요?</h1>
+    <div class="fd-opts"><button data-v="low">기초수급·차상위</button><button data-v="mid">넉넉하지 않아요 <small>(1인 연 2,200만 · 4인 연 4,000만 원 정도 이하)</small></button><button data-v="high">보통 이상</button></div></section>
+  <section class="fd-q" data-q="home"><h1 class="tool-h">집은요?</h1>
+    <div class="fd-opts"><button data-v="rent">무주택 · 전월세</button><button data-v="own">자가 · 가족 집</button></div></section>
+
   <section class="fd-res" id="fr" hidden>
-    <div class="tool-res"><small>받을 수 있을지도 모르는 지원금</small><strong id="frn">0개</strong><span id="frt"></span></div>
+    <div class="dg-hero"><small>조건이 맞으면, 1년에 최대</small><strong id="dgn">0원</strong><span id="dgc"></span></div>
+    <ol class="dg-list" id="dgl"></ol>
+    <div class="fd-acts"><button class="btn" id="dgsave">결과 카드 저장·공유</button><button class="btn ghost" id="fagain">다시 하기</button></div>
+    <canvas id="dgcv" width="1080" height="1350" hidden></canvas>
+    <p class="disc">고르신 조건에 맞는 대표 지원금의 '최대 금액'을 1년 기준으로 더한 예시예요. 여러 해에 걸친 혜택은 1년치로 나눴어요. 실제 자격과 금액은 소득·재산·세부 조건에 따라 달라지니, 각 항목의 안내와 공식 기관에서 꼭 확인하세요. (2026년 기준)</p>
+    <div class="sec-h" style="margin-top:22px"><h2>이런 제도도 확인해 보세요</h2><span id="mrn"></span></div>
     <ul class="cards" id="frl"></ul>
-    <div class="fd-acts"><button class="btn" id="fshare">결과 공유하기</button><button class="btn ghost" id="fagain">다시 하기</button></div>
-    <p class="disc">공공데이터의 대상 정보로 고른 참고 결과예요. 실제 자격은 소득·재산 등 세부 조건에 따라 달라요.</p>
   </section>
 </div>
 <script>
 (function(){
-  var A={},qs=document.querySelectorAll('.fd-q'),i=0,$=function(x){return document.getElementById(x)};
-  function show(k){qs.forEach(function(q,n){q.classList.toggle('on',n===k)});$('fs').textContent=(k+1)+' / 4';$('fb').style.width=((k+1)/4*100)+'%'}
+  var A={},qs=[].slice.call(document.querySelectorAll('.fd-q')),N=qs.length,$=function(x){return document.getElementById(x)};
+  function show(k){qs.forEach(function(q,n){q.classList.toggle('on',n===k)});$('fs').textContent=(k+1)+' / '+N;$('fb').style.width=((k+1)/N*100)+'%';window.scrollTo(0,0)}
   qs.forEach(function(q,n){var multi=q.dataset.multi;
     q.querySelectorAll('.fd-opts button').forEach(function(b){b.onclick=function(){
-      if(multi){b.classList.toggle('sel');A[q.dataset.q]=[].map.call(q.querySelectorAll('.sel'),function(x){return x.dataset.v})}
+      if(multi){if(b.classList.contains('fd-none')){q.querySelectorAll('.sel').forEach(function(x){x.classList.remove('sel')});b.classList.add('sel')}
+        else{q.querySelector('.fd-none').classList.remove('sel');b.classList.toggle('sel')}
+        A[q.dataset.q]=[].map.call(q.querySelectorAll('.sel'),function(x){return x.dataset.v})}
       else{A[q.dataset.q]=b.dataset.v;next(n)}}});
     var nx=q.querySelector('.fd-next');if(nx)nx.onclick=function(){A[q.dataset.q]=A[q.dataset.q]||[];next(n)}});
-  function next(n){if(n<3){i=n+1;show(i)}else result()}
-  function result(){fetch(BASE+'/search.json').then(function(r){return r.json()}).then(function(idx){
-    var want=[].concat(A.house||[],A.work||[]);if(A.age==='youth'||A.age==='senior')want.push(A.age);
-    var r=idx.filter(function(d){return d.x!=='closed'&&(!A.region||d.r==='national'||d.r===A.region)&&(A.region||d.r==='national')})
-      .map(function(d){var s=(d.a||[]).filter(function(a){return want.indexOf(a)>=0}).length;return {d:d,s:s+(d.m?.5:0)}})
-      .filter(function(x){return x.s>=1}).sort(function(a,b){return b.s-a.s}).map(function(x){return x.d});
-    qs.forEach(function(q){q.classList.remove('on')});document.querySelector('.fd-top').hidden=true;document.querySelector('.fd-bar').hidden=true;
-    $('fr').hidden=false;$('frn').textContent=r.length+'개';
-    var big=r.filter(function(d){return d.m&&d.m.indexOf('원')>=0}).slice(0,1)[0];
-    $('frt').textContent=big?'그중 대표 혜택 · '+big.n+' '+big.m:'조건을 바꿔 다시 해보세요';
-    $('frl').innerHTML=r.map(function(d){return '<li><a href="'+BASE+'/'+d.u+'"><span class="card-b"><span class="card-tags"><span class="tag">'+d.f+'</span></span><strong>'+(d.n||d.t)+'</strong>'+(d.m?'<span class="card-amt">'+d.m+'</span>':'')+'</span></a></li>'}).join('')||'<li class="empty">맞는 제도를 찾지 못했어요. 조건 검색에서 더 찾아보세요.</li>';
-    window.scrollTo(0,0)})}
+  function next(n){if(n<N-1)show(n+1);else result()}
+
+  function calc(){
+    var it=[],k=A.kids||[],has=function(v){return k.indexOf(v)>=0},work=A.work,inc=A.inc,earn=work==='worker'||work==='biz',lowmid=inc==='low'||inc==='mid',
+        young=A.age==='y',senior=A.age==='s',rent=A.home==='rent',nk=['k0','k1','k2','k9'].filter(has).length,small=['k0','k1','k2'].filter(has).length;
+    function add(n,v,note,link,c){it.push({n:n,v:v,note:note,l:link,c:c})}
+    if(has('k0'))add('부모급여 (0세)',1200,'월 100만 원 × 12개월','calc/baby/');
+    if(has('k1'))add('부모급여 (1세)',600,'월 50만 원 × 12개월','calc/baby/');
+    if(has('k0')||has('preg'))add('첫만남이용권',200,'출생 때 1회 · 첫째 기준','calc/baby/');
+    if(has('preg'))add('임신·출산 진료비 바우처',100,'국민행복카드 · 단태아 기준','search/?q=임신 출산 진료비');
+    if(small)add('아동수당'+(small>1?' ('+small+'명)':''),120*small,'월 10만 원 × 12개월','calc/baby/');
+    if(work==='worker'&&small)add('육아휴직급여',2310,'1년 휴직 시 최대','calc/parental-leave/',1);
+    if(earn&&lowmid){var w={one:165,couple:285,dual:330,sp:285}[A.hh]||165;add('근로장려금',w,{one:'단독',couple:'홑벌이',dual:'맞벌이',sp:'홑벌이'}[A.hh]+' 가구 최대','search/?q=근로장려금',1);
+      if(nk)add('자녀장려금',100*nk,'자녀 1명당 최대 100만 원','search/?q=자녀장려금',1)}
+    if(young&&rent&&lowmid)add('청년월세 지원',240,'월 최대 20만 원 × 12개월','search/?q=청년월세',1);
+    if(young&&earn)add('청년미래적금 정부기여금',72,'3년 최대 216만 원 ÷ 3','calc/youth-savings/',1);
+    if(work==='job'&&lowmid)add('구직촉진수당',360,'월 최대 60만 원 × 6개월','search/?q=국민취업지원제도',1);
+    if(!senior&&(work==='job'||earn))add('국민내일배움카드',100,'5년 500만 원 ÷ 5','search/?q=국민내일배움카드');
+    if(senior&&lowmid)add('기초연금',420,'월 최대 34.97만 원 × 12개월','guide/senior/',1);
+    if(inc==='low'&&rent)add('주거급여',457,'서울 1인 기준 월 최대 38.1만 원','search/?q=주거급여',1);
+    if(inc==='low'&&(senior||nk||has('preg')||A.hh==='sp'))add('에너지바우처',70,'가구원 수에 따라 최대 70.1만 원','search/?q=에너지바우처',1);
+    if(inc==='low')add('전기요금 복지할인',19,'월 최대 1.6만 원','search/?q=전기요금 복지할인',1);
+    if(inc==='low')add('평생교육이용권',35,'1년 35만 원','search/?q=평생교육이용권',1);
+    if(A.region==='gyeonggi'&&has('k9'))add('경기 어린이·청소년 교통비',24,'1년 최대 24만 원','search/?q=경기 교통비');
+    return it.sort(function(a,b){return b.v-a.v});
+  }
+  function won(v){return v>=10000?(Math.floor(v/1000)/10)+'억 원':Math.round(v).toLocaleString()+'만 원'}
+  var IT=[],TOT=0;
+  function result(){
+    IT=calc();TOT=IT.reduce(function(a,x){return a+x.v},0);
+    qs.forEach(function(q){q.classList.remove('on')});document.querySelector('.fd-top').hidden=true;document.querySelector('.fd-bar').hidden=true;$('fr').hidden=false;window.scrollTo(0,0);
+    $('dgc').textContent=IT.length?'대표 지원금 '+IT.length+'가지 합계 · 아래에서 하나씩 확인하세요':'고르신 조건에 맞는 대표 금액형 지원금이 없어요. 아래 제도를 확인해 보세요';
+    var t0=null,el=$('dgn');function step(ts){t0=t0||ts;var p=Math.min(1,(ts-t0)/1100),e=1-Math.pow(1-p,3);el.textContent=won(TOT*e);if(p<1)requestAnimationFrame(step)}
+    if(matchMedia('(prefers-reduced-motion:reduce)').matches)el.textContent=won(TOT);else requestAnimationFrame(step);
+    $('dgl').innerHTML=IT.map(function(x){return '<li><a href="'+BASE+'/'+x.l+'"><span><b>'+x.n+'</b><small>'+x.note+(x.c?' · <em>조건부</em>':'')+'</small></span><strong>+'+x.v.toLocaleString()+'만</strong></a></li>'}).join('');
+    more();
+  }
+  function more(){fetch(BASE+'/search.json').then(function(r){return r.json()}).then(function(idx){
+    var map={y:'youth',s:'senior'},want=[];var k=A.kids||[];
+    if(map[A.age])want.push(map[A.age]);if(k.indexOf('preg')>=0)want.push('pregnancy');if(k.some(function(v){return v[0]==='k'}))want.push('child');
+    if(A.hh==='one')want.push('oneperson');if(A.hh==='sp')want.push('singleparent');if(A.home==='rent')want.push('homeless');
+    if(A.work==='worker')want.push('worker');if(A.work==='job')want.push('jobseeker');if(A.work==='biz')want.push('business');if(A.inc==='low')want.push('lowincome');
+    var shown=IT.map(function(x){return x.n.split(' ')[0]});
+    var r=idx.filter(function(d){return d.x!=='closed'&&(d.r==='national'||d.r===A.region)&&!shown.some(function(s){return (d.n||d.t).indexOf(s)>=0})})
+      .map(function(d){return {d:d,s:(d.a||[]).filter(function(a){return want.indexOf(a)>=0}).length+(d.r===A.region?1:0)}})
+      .filter(function(x){return x.s>=1}).sort(function(a,b){return b.s-a.s}).slice(0,8).map(function(x){return x.d});
+    $('mrn').textContent=r.length+'건';
+    $('frl').innerHTML=r.map(function(d){return '<li><a href="'+BASE+'/'+d.u+'"><span class="card-b"><span class="card-tags"><span class="tag">'+d.f+'</span></span><strong>'+(d.n||d.t)+'</strong>'+(d.m?'<span class="card-amt">'+d.m+'</span>':'')+'</span></a></li>'}).join('')||'<li class="empty">더 맞는 제도를 찾지 못했어요.</li>'})}
+
+  function card(){
+    var c=$('dgcv'),x=c.getContext('2d'),F='"Pretendard Variable",Pretendard,"Apple SD Gothic Neo",sans-serif';
+    x.fillStyle='#0b0c16';x.fillRect(0,0,1080,1350);
+    var g=x.createRadialGradient(900,180,0,900,180,620);g.addColorStop(0,'rgba(108,76,245,.75)');g.addColorStop(1,'rgba(108,76,245,0)');x.fillStyle=g;x.fillRect(0,0,1080,1350);
+    var g2=x.createRadialGradient(120,1250,0,120,1250,520);g2.addColorStop(0,'rgba(255,95,174,.35)');g2.addColorStop(1,'rgba(255,95,174,0)');x.fillStyle=g2;x.fillRect(0,0,1080,1350);
+    x.fillStyle='#fff';x.font='700 44px Quicksand,'+F;x.fillText('Benefy',90,140);
+    x.fillStyle='#a9abc8';x.font='600 40px '+F;x.fillText('내가 1년에 받을 수 있는 지원금',90,300);
+    x.fillStyle='#fff';x.font='850 150px '+F;x.fillText('최대',90,470);var w=won(TOT);x.font='850 '+(w.length>8?130:150)+'px '+F;x.fillText(w,90,630);
+    x.fillStyle='rgba(255,255,255,.08)';x.fillRect(90,700,900,2);
+    IT.slice(0,4).forEach(function(t,i){var y=790+i*95;x.fillStyle='#d6d4ee';x.font='600 40px '+F;x.fillText(t.n,90,y);x.fillStyle='#c9b8ff';x.font='800 42px '+F;var s='+'+t.v.toLocaleString()+'만';x.fillText(s,990-x.measureText(s).width,y)});
+    if(IT.length>4){x.fillStyle='#8a8cab';x.font='600 34px '+F;x.fillText('외 '+(IT.length-4)+'가지',90,790+4*95)}
+    x.fillStyle='#8a8cab';x.font='500 28px '+F;x.fillText('* 조건이 맞을 때의 최대 금액 예시 · 2026년 기준',90,1215);
+    x.fillStyle='#fff';x.font='800 40px '+F;x.fillText('나도 30초 확인 → benefy.kr',90,1280);
+    return c;
+  }
+  $('dgsave').onclick=function(){var b=this;(document.fonts?document.fonts.ready:Promise.resolve()).then(function(){card().toBlob(function(blob){
+    var f=new File([blob],'benefy-result.png',{type:'image/png'}),t='나 1년에 지원금 최대 '+won(TOT)+' 받을 수 있대! 30초 진단 →';
+    if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],text:t+' '+location.origin+BASE+'/finder/'}).catch(function(){});
+    else{var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='benefy-result.png';a.click();b.textContent='이미지 저장됨'}},'image/png')})};
   $('fagain').onclick=function(){location.reload()};
-  $('fshare').onclick=function(){var t='Benefy에서 받을 수 있을지도 모르는 지원금 '+$('frn').textContent+'를 찾았어요!';
-    if(navigator.share)navigator.share({title:'놓친 지원금 찾기',text:t,url:location.href});else{navigator.clipboard.writeText(t+' '+location.href);$('fshare').textContent='링크 복사됨'}};
   show(0);
 })();
 </script>

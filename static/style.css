@@ -592,3 +592,22 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 /* v26 fixes: grid overflow on mobile */
 .layout>*{min-width:0}
 @media (max-width:640px){.mini-list li{flex-direction:column;gap:2px}.mini-list small{white-space:normal;font-size:12.5px}.sec-h{flex-wrap:wrap;gap:4px 10px}}
+/* v27 30초 진단 */
+.fd-opts button small{display:block;font-size:12.5px;font-weight:600;color:var(--sub);margin-top:2px}.fd-opts button.sel small{color:#c9c8e6}
+.dg-hero{position:relative;overflow:hidden;background:var(--dark);color:#fff;border-radius:20px;padding:26px 24px;text-align:center}
+.dg-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;background:#5b4cf0;filter:blur(70px);opacity:.45}
+.dg-hero>*{position:relative;z-index:1}.dg-hero small{color:#a9abc8;font-weight:700;font-size:14px}
+.dg-hero strong{display:block;font-size:52px;font-weight:850;letter-spacing:-.03em;line-height:1.2;margin:4px 0 6px}.dg-hero span{color:#d6d4ee;font-size:14px}
+.dg-list{list-style:none;margin:14px 0 0;padding:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+.dg-list li+li{border-top:1px solid var(--line)}
+.dg-list a{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;color:inherit;text-decoration:none}
+.dg-list a:hover{background:#f7f6fc}.dg-list b{display:block;font-size:16px}.dg-list small{color:var(--sub);font-size:13px}
+.dg-list em{font-style:normal;font-weight:700;color:#8a8cab;background:#f1f0f5;border-radius:4px;padding:0 5px}
+.dg-list strong{flex:none;font-size:18px;font-weight:850;color:#4f3fd9}
+@media(max-width:640px){.dg-hero strong{font-size:42px}}
+/* home 진단 CTA */
+.dg-cta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 18px}
+.dg-cta .btn{background:#6b4cf5;border-color:#6b4cf5;color:#fff;font-size:17px;font-weight:800;padding:15px 26px;border-radius:14px}
+.dg-cta .btn:hover{background:#5a3de6}.dg-cta small{color:#a9abc8;font-size:13.5px}
+.post-dg{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#f4f2ff;border:1px solid #e2ddff;border-radius:14px;padding:14px 16px;margin:16px 0;color:var(--ink);text-decoration:none;font-weight:700}
+.post-dg span{color:#4f3fd9;flex:none}
