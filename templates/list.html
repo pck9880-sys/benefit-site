@@ -3,6 +3,41 @@
 {% block bodyclass %}{% if not title and page == 1 %}is-home{% endif %}{% endblock %}
 {% block main %}
 {% if not title and page == 1 %}
+<div class="splash" id="splash" role="dialog" aria-label="Benefy 시작 화면" hidden>
+  <div class="sp-glow"></div>
+  <div class="sp-mark" aria-hidden="true"><svg viewBox="-170 -170 340 340">
+    <defs>
+      <linearGradient id="sg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8fd3ff"/><stop offset=".45" stop-color="#6b4cf5"/><stop offset="1" stop-color="#2a0e6e"/></linearGradient>
+      <linearGradient id="sg2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd6a0"/><stop offset=".4" stop-color="#ff5fae"/><stop offset="1" stop-color="#5b1fd0"/></linearGradient>
+      <linearGradient id="sg3" x1=".5" y1="1" x2=".5" y2="0"><stop offset="0" stop-color="#3b5bff"/><stop offset=".55" stop-color="#c25cf0"/><stop offset="1" stop-color="#ffb3d1"/></linearGradient>
+    </defs>
+    <g transform="translate(-14,-8)"><g class="sp-t s1"><polygon points="0,-100 87,50 -87,50" fill="url(#sg1)" stroke="url(#sg1)" stroke-width="70" stroke-linejoin="round"/></g></g>
+    <g transform="translate(16,-4) rotate(40)"><g class="sp-t s2"><polygon points="0,-100 87,50 -87,50" fill="url(#sg2)" stroke="url(#sg2)" stroke-width="70" stroke-linejoin="round"/></g></g>
+    <g transform="translate(0,14) rotate(80)"><g class="sp-t s3"><polygon points="0,-100 87,50 -87,50" fill="url(#sg3)" stroke="url(#sg3)" stroke-width="70" stroke-linejoin="round"/></g></g>
+  </svg></div>
+  <div class="sp-txt"><b>Benefy</b><p>나도 받을 수 있는 돈,<br><em>30초면</em> 알 수 있어요</p></div>
+  <button type="button" class="sp-tap" id="spTap">화면을 터치하세요</button>
+</div>
+<script>
+(function(){
+  var s=document.getElementById('splash'),k='bf_splash',d=new Date().toISOString().slice(0,10);
+  try{if(localStorage.getItem(k)===d||navigator.webdriver||/bot|crawl|spider|lighthouse|google|naver|yeti|bing/i.test(navigator.userAgent))return;localStorage.setItem(k,d)}catch(e){return}
+  s.hidden=false;document.documentElement.classList.add('sp-on');
+  var calm=matchMedia('(prefers-reduced-motion:reduce)').matches,gone=false,timer=setTimeout(function(){go(innerWidth/2,innerHeight/2)},2600);
+  function done(){s.remove();document.documentElement.classList.remove('sp-on')}
+  function go(x,y){if(gone)return;gone=true;clearTimeout(timer);
+    if(calm){s.style.transition='opacity .35s';s.style.opacity=0;setTimeout(done,360);return}
+    var R=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y))+40,t0=0,D=700;s.classList.add('out');
+    function f(ts){t0=t0||ts;var p=Math.min(1,(ts-t0)/D),e=1-Math.pow(1-p,3),r=(R*e).toFixed(1),m='radial-gradient(circle at '+x+'px '+y+'px, transparent '+r+'px, #000 '+(+r+1)+'px)';
+      s.style.webkitMaskImage=m;s.style.maskImage=m;if(p<1)requestAnimationFrame(f);else done()}
+    requestAnimationFrame(f)}
+  s.addEventListener('pointerdown',function(e){go(e.clientX,e.clientY)});
+  document.addEventListener('keydown',function(e){if(!gone&&(e.key==='Enter'||e.key===' '||e.key==='Escape')){e.preventDefault();go(innerWidth/2,innerHeight/2)}});
+})();
+</script>
+{% endif %}
+
+{% if not title and page == 1 %}
 <div class="home-dark">
 <section class="home-hero">
   <div class="hero-art" aria-hidden="true"><svg viewBox="-170 -170 340 340">
