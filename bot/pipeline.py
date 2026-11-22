@@ -262,8 +262,13 @@ def generate(st, picks=None, want=None, announce=False):
         services = [s for s in gov24_all if s.get("서비스ID") and s["서비스ID"] not in used
                     and s.get("지원내용") and s.get("지원대상")]
         services.sort(key=lambda s: int(s.get("조회수") or 0), reverse=True)
+        try:  # 실제 검색 수요(자동완성) 순으로 다시 정렬
+            from . import demand
+            services = demand.rank(services)
+        except Exception as e:
+            print(f"[demand] 건너뜀: {e}")
         keep = ["서비스ID", "서비스명", "서비스분야", "소관기관명", "조회수", "지원대상", "지원내용", "신청방법",
-                "신청기한", "상세조회URL", "사용자구분", "전화문의", "수정일시", "선정기준", "서비스목적요약", "지원유형"]
+                "신청기한", "상세조회URL", "사용자구분", "전화문의", "수정일시", "선정기준", "서비스목적요약", "지원유형", "_q", "_demand"]
         # 이미 게시한 글 중 정부 데이터가 수정된 것은 다시 쓰기 대기열에 넣음
         latest = {x["서비스ID"]: x for x in gov24_all if x.get("서비스ID")}
         for p in config.POSTS_DIR.glob("*.json"):
@@ -280,6 +285,12 @@ def generate(st, picks=None, want=None, announce=False):
             mixed += national[:2] + local[:1]
             national, local = national[2:], local[1:]
         queue = [{k: s.get(k) for k in keep if s.get(k)} for s in mixed[:60]]
+    if picks is None and queue and not any("_demand" in q for q in queue):  # 예전 대기열도 검색 수요 순으로 재정렬
+        try:
+            from . import demand
+            queue = demand.rank(queue)
+        except Exception as e:
+            print(f"[demand] 건너뜀: {e}")
     if picks is not None:  # 요청 글: 대기열·정기 일정은 건드리지 않음
         services, limit = [x for x in picks if x.get("서비스ID") not in used], want
     else:
@@ -456,6 +467,14 @@ def tick():
         if benefit_ready():
             if st.get("post_requests"):
                 handle_requests(st)
+            t = now()
+            if t.hour >= config.NEWS_HOUR_KST and st.get("news_date") != t.strftime("%Y-%m-%d"):
+                st["news_date"] = t.strftime("%Y-%m-%d")
+                try:  # 오늘 뜨는 지원금 뉴스 → 알림 + 정부24에 있으면 대기열 맨 앞
+                    from . import news
+                    news.run(st, notify, gov24, set(st["used_ids"]))
+                except Exception as e:
+                    print(f"[news] 건너뜀: {e}")
             if should_generate(st):
                 generate(st)
             auto_approve(st)

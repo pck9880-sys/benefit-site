@@ -41,8 +41,8 @@ SITE_DESCRIPTION = _env(
 CLAUDE_MODEL = _env("CLAUDE_MODEL", "claude-sonnet-5-5")
 POSTS_PER_DAY = int(_env("POSTS_PER_DAY", "5"))  # SCHEDULE=daily 일 때 하루 생성 수
 SCHEDULE = _env("SCHEDULE", "hourly")  # hourly: 매시간 POSTS_PER_HOUR 개 / daily: 하루 1번 POSTS_PER_DAY 개
-POSTS_PER_HOUR = int(_env("POSTS_PER_HOUR", "2"))  # 한 번 생성할 때 만드는 글 수
-GENERATE_EVERY_HOURS = int(_env("GENERATE_EVERY_HOURS", "4"))  # 몇 시간마다 생성할지
+POSTS_PER_HOUR = int(_env("POSTS_PER_HOUR", "1"))  # 한 번 생성할 때 만드는 글 수
+GENERATE_EVERY_HOURS = int(_env("GENERATE_EVERY_HOURS", "6"))  # 몇 시간마다 생성할지
 SLOWDOWN_AFTER_POSTS = int(_env("SLOWDOWN_AFTER_POSTS", "150"))  # 글이 이만큼 쌓이면 한 번에 1개로 줄임
 REQUIRE_APPROVAL = _env("REQUIRE_APPROVAL", "0") == "1"  # 0이면 승인 없이 바로 게시
 GENERATE_HOUR_KST = int(_env("GENERATE_HOUR_KST", "7"))
@@ -52,6 +52,7 @@ CONTACT_EMAIL = _env("CONTACT_EMAIL", "info17476@naver.com")  # 문의 페이지
 ADSENSE_CLIENT = _env("ADSENSE_CLIENT")  # 예: ca-pub-1234567890123456
 GOOGLE_SITE_VERIFICATION = _env("GOOGLE_SITE_VERIFICATION")
 NAVER_SITE_VERIFICATION = "16819b0acfbad9eb8436a5550510850c86f68b8b"  # benefy.kr (예전 pages.dev 코드 변수는 무시)
+NEWS_HOUR_KST = int(_env("NEWS_HOUR_KST", "8"))  # 지원금 뉴스 감지 시각 (하루 1번)
 BLOG_PER_DAY = int(_env("BLOG_PER_DAY", "2"))  # 하루에 보낼 네이버 블로그용 글 수 (0이면 끔)
 CONTESTS_ON = _env("CONTESTS_ON", "0") == "1"  # 공모전 자동 출품안 (사용자 요청으로 중단, 다시 켜려면 1)
 CONTESTS_PER_DAY = int(_env("CONTESTS_PER_DAY", "3"))  # 하루에 출품안 만들 공모전 수

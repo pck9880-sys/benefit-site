@@ -60,8 +60,12 @@ def write_article(svc, detail):
 
     import anthropic
 
-    keep = {k: v for k, v in {**svc, **detail}.items() if v and k not in ("조회수", "소관기관코드")}
+    keep = {k: v for k, v in {**svc, **detail}.items() if v and k not in ("조회수", "소관기관코드", "_q", "_demand")}
     data_text = "\n".join(f"- {k}: {v}" for k, v in keep.items())
+    queries = svc.get("_q") or []
+    seo = ("\n\n[사람들이 실제로 검색하는 표현]\n" + ", ".join(queries) +
+           "\n제목은 이 중 가장 많이 쓰일 표현(예: '신청 방법', '조건', '지급일')을 자연스럽게 포함하고, "
+           "자주 묻는 질문(FAQ)은 이 검색어들에 답하는 질문으로 만드세요. 공식 데이터에 없는 내용은 지어내지 마세요.") if queries else ""
 
     client = anthropic.Anthropic(api_key=config.ANTHROPIC_API_KEY, max_retries=4)
     res = client.messages.parse(
@@ -70,7 +74,7 @@ def write_article(svc, detail):
         system=SYSTEM,
         output_config={"effort": "low"},
         output_format=Article,
-        messages=[{"role": "user", "content": f"다음 공식 데이터로 안내글을 작성하세요.\n\n{data_text}"}],
+        messages=[{"role": "user", "content": f"다음 공식 데이터로 안내글을 작성하세요.\n\n{data_text}{seo}"}],
     )
     if res.stop_reason == "refusal":
         raise RuntimeError("Claude가 작성을 거절함")
