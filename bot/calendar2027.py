@@ -44,9 +44,8 @@ def mark_svg(size):
 
 
 CSS = f"""
-@font-face{{font-family:P;src:url(file://{FONTS}/NanumSquareRoundR.woff2);font-weight:400}}
-@font-face{{font-family:P;src:url(file://{FONTS}/NanumSquareRoundB.woff2);font-weight:600 700}}
-@font-face{{font-family:P;src:url(file://{FONTS}/NanumSquareRoundEB.woff2);font-weight:800}}
+@font-face{{font-family:P;src:url(file://{FONTS}/NanumSquareNeo-Variable.woff2);font-weight:100 900}}
+@font-face{{font-family:N;src:url(file://{FONTS}/Nunito-900-latin.woff2);font-weight:900}}
 @font-face{{font-family:Q;src:url(file://{FONTS}/quicksand-700.woff2);font-weight:700}}
 *{{box-sizing:border-box;margin:0;padding:0}}body{{font-family:P,sans-serif;-webkit-font-smoothing:antialiased}}
 """
@@ -90,9 +89,9 @@ body{{width:1179px;height:2556px;background:#000;color:#fff;position:relative;ov
 
 
 TYPE_CSS = """
-.num{position:relative;font-family:Q;font-weight:700;font-size:300px;line-height:.82;letter-spacing:-.02em}
+.num{position:relative;font-family:N;font-weight:900;font-size:300px;line-height:.82;letter-spacing:-.02em}
 .wl{font-size:64px;font-weight:800;margin-left:10px;color:#e9e6ff}
-.sub{display:block;margin-top:22px;font-family:Q;font-size:40px;letter-spacing:.22em;color:#8f86c9}
+.sub{display:block;margin-top:22px;font-family:N;font-weight:900;font-size:36px;letter-spacing:.24em;color:#8f86c9}
 /* A 글래스 그라데이션 */
 .A .num{background:linear-gradient(135deg,#8fd3ff 0%,#7a5cff 40%,#ff5fae 75%,#ffd6a0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 2px rgba(150,120,255,.35))}
 .A .num::after{content:attr(data-t);position:absolute;left:0;top:0;background:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,0) 40%);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -121,17 +120,17 @@ def a4_html():
     blocks = ""
     for m in range(1, 13):
         items = "".join(f'<li><b>{n}</b><span>{p} · {t}</span></li>' for n, p, _, t in MONTHS[m])
-        blocks += f'<section><h3>{m}월 <small>{EN[m][:3]}</small></h3><ul>{items}</ul></section>'
+        blocks += f'<section><h3><b>{m:02d}</b>월<small>{EN[m][:3]}</small></h3><ul>{items}</ul></section>'
     return f"""<!DOCTYPE html><html><head><meta charset="utf-8"><style>{CSS}
 @page{{size:A4;margin:0}}
 body{{width:2480px;height:3508px;background:#fff;color:#14152b;padding:170px 150px}}
 header{{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:6px solid #14152b;padding-bottom:40px}}
-header h1{{font-size:120px;font-weight:800;letter-spacing:-.03em;line-height:1.1}}header h1 em{{font-style:normal;color:#5b3fe0}}
+header h1{{font-size:120px;font-weight:800;letter-spacing:-.03em;line-height:1.1}}header h1 em{{font-style:normal;background:linear-gradient(135deg,#6fb8f0,#6b4cf5 45%,#ff5fae 85%);-webkit-background-clip:text;background-clip:text;color:transparent}}
 header p{{font-size:40px;color:#6b6d86;margin-top:16px}}
 .brand{{display:flex;align-items:center;gap:24px;font-family:Q;font-size:64px;color:#14152b}}
 .grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:46px 60px;margin-top:70px}}
 section{{border-top:3px solid #e4e2ef;padding-top:26px;min-height:560px}}
-h3{{font-size:64px;font-weight:800}}h3 small{{font-family:Q;font-size:32px;color:#8f86c9;letter-spacing:.12em;margin-left:10px}}
+h3{{font-size:44px;font-weight:800;display:flex;align-items:baseline;gap:6px}}h3 b{{font-family:N;font-weight:900;font-size:96px;line-height:1;background:linear-gradient(135deg,#6fb8f0,#6b4cf5 45%,#ff5fae 85%);-webkit-background-clip:text;background-clip:text;color:transparent}}h3 small{{font-family:N;font-weight:900;font-size:28px;color:#8f86c9;letter-spacing:.16em;margin-left:12px}}
 ul{{list-style:none;margin-top:20px}}li{{padding:16px 0 16px 34px;position:relative}}
 li::before{{content:"";position:absolute;left:0;top:30px;width:16px;height:16px;border-radius:50%;background:#6b4cf5}}
 li b{{display:block;font-size:38px;font-weight:700;line-height:1.35}}li span{{font-size:32px;color:#6b6d86}}

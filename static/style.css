@@ -731,3 +731,23 @@ html.sp-on,html.sp-on body{overflow:hidden}
 @keyframes spR2{0%,100%{transform:rotateX(0) rotateZ(0)}50%{transform:rotateX(-48deg) rotateZ(18deg)}}
 @keyframes spR3{0%,100%{transform:rotateY(0) rotateZ(0)}50%{transform:rotateY(-42deg) rotateZ(-16deg)}}
 /* 스플래시는 '동작 줄이기' 설정과 관계없이 그대로 재생 (짧은 3초 연출) */
+/* 2027 지원금 달력 */
+.cal27{max-width:960px;margin:18px auto 40px}
+.c27-hero{background:#000;color:#fff;border-radius:22px;padding:34px 26px;text-align:center}
+.c27-chip{display:inline-block;font-size:13px;font-weight:700;color:#b9a8ff;border:1px solid #3a3366;border-radius:999px;padding:4px 12px}
+.c27-hero h1{font-size:40px;margin:12px 0 8px;letter-spacing:-.02em}
+.c27-hero h1 em{font-style:normal;background:linear-gradient(135deg,#8fd3ff,#7a5cff 45%,#ff5fae 85%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.c27-hero p{color:#a9abc8;margin:0 0 18px;line-height:1.6}
+.c27-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.c27-btns .btn{padding:13px 18px;border-radius:12px}
+.c27-hero .btn:not(.ghost){background:#6b4cf5;border-color:#6b4cf5;color:#fff}.c27-hero .btn.ghost{background:transparent;color:#fff;border-color:#3a3c55}
+.c27-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:10px}
+.c27-item{display:block;text-decoration:none;color:var(--ink);text-align:center}
+.c27-item img{display:block;width:100%;height:auto;border-radius:14px;background:#000;box-shadow:0 6px 18px rgba(20,20,40,.12)}
+.c27-item span{display:block;font-size:13px;font-weight:700;margin-top:6px;color:#4f3fd9}
+.c27-a4{display:block;max-width:420px;margin:10px auto 0;text-align:center;text-decoration:none}
+.c27-a4 img{width:100%;height:auto;border:1px solid var(--line);border-radius:10px}.c27-a4 span{display:inline-block;margin-top:8px;font-weight:700;color:#4f3fd9}
+.c27-how{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-top:22px}
+.c27-how h2{font-size:18px;margin:0 0 8px}.c27-how ol{margin:0;padding-left:18px;color:var(--sub);font-size:14.5px;line-height:1.8}.c27-how b{color:var(--ink);margin-right:6px}
+@media(max-width:640px){.c27-grid{grid-template-columns:repeat(3,1fr)}.c27-hero h1{font-size:32px}}
+
+.c27-banner img{object-fit:cover;object-position:top;aspect-ratio:auto}
