@@ -53,6 +53,9 @@ def load_posts():
         d["audiences"] = taxonomy.audiences_of(d)
         d["dl_state"], d["dl_date"] = taxonomy.deadline_info(d["source"].get("deadline"))
         d["key"] = taxonomy.key_facts(d)
+        up = str(d["source"].get("updated") or "")
+        d["data_date"] = f"{up[:4]}.{up[4:6]}.{up[6:8]}" if len(up) >= 8 else d["published_at"][:10].replace("-", ".")
+        d["modified_at"] = (d.get("revisions") or [{}])[-1].get("date") or d["published_at"]
         posts.append(d)
     posts.sort(key=lambda d: d["published_at"], reverse=True)
     return posts
@@ -177,7 +180,7 @@ def build():
     for sp in specials.SPECIALS:  # 특집 (카드뉴스 + 체크리스트)
         write(f"special/{sp['slug']}/index.html", env.get_template("special.html").render(sp=sp, canonical=f"{config.SITE_URL}/special/{sp['slug']}/"))
 
-    for name in ("about", "privacy", "contact"):
+    for name in ("about", "privacy", "contact", "principles"):
         write(f"{name}.html", env.get_template(f"{name}.html").render(canonical=f"{config.SITE_URL}/{name}"))
     write("search/index.html", env.get_template("search.html").render(canonical=f"{config.SITE_URL}/search/",
           audience_list=[(s_, n_) for s_, n_, _, _ in taxonomy.AUDIENCES], region_list=list(taxonomy.REGION_NAMES.items())))

@@ -4,7 +4,7 @@
 {% block ogtype %}article{% endblock %}
 
 {% block head %}
-<script type="application/ld+json">{{ {"@context":"https://schema.org","@type":"Article","headline":a.title,"description":a.description,"datePublished":post.published_at,"dateModified":post.published_at,"mainEntityOfPage":canonical,"publisher":{"@type":"Organization","name":site_name}} | tojson }}</script>
+<script type="application/ld+json">{{ {"@context":"https://schema.org","@type":"Article","headline":a.title,"description":a.description,"datePublished":post.published_at,"dateModified":post.modified_at,"mainEntityOfPage":canonical,"publisher":{"@type":"Organization","name":site_name}} | tojson }}</script>
 {% if faq_ld %}<script type="application/ld+json">{{ faq_ld | safe }}</script>{% endif %}
 {% endblock %}
 {% block main %}
@@ -12,7 +12,9 @@
 <article class="post content">
   <nav class="crumb"><a href="{{ base }}/">홈</a><span>›</span><a href="{{ base }}/c/{{ post.field_slug }}/">{{ post.source.field }}</a></nav>
   <div class="post-head"><span class="tag">{{ post.source.field }}</span>{% if post.dl_state == "closed" %}<span class="st closed">이번 신청 마감</span>{% elif post.dl_state == "always" %}<span class="st always">상시 신청</span>{% elif post.dl_state == "upcoming" %}<span class="st up">D-{{ post.d_day }}</span>{% endif %}
-  <h1>{{ a.title }}</h1><p class="org">{{ post.source.org }}</p></div>
+  <h1>{{ a.title }}</h1>
+  <p class="org">{{ post.source.org }}</p>
+  <p class="trust"><span>공공데이터 기준일 {{ post.data_date }}</span><span>최종 확인 {{ post.date|replace("-", ".") }}</span>{% if post.source.url %}<a href="{{ post.source.url }}" target="_blank" rel="noopener">정부24 원문 ↗</a>{% endif %}</p></div>
   {% set k = post.key %}
   <section class="kv">
     {% if k.amount %}<div class="kv-amt"><small>받을 수 있는 금액·혜택</small><strong>{{ k.amount }}</strong>{% if k.amount_note %}<span>{{ k.amount_note }}</span>{% endif %}</div>{% endif %}
@@ -34,7 +36,10 @@
     {% if a.faq %}<h2 id="faq">자주 묻는 질문</h2>
     <div class="faq">{% for f in a.faq %}<details><summary>{{ f.q }}</summary><p>{{ f.a }}</p></details>{% endfor %}</div>{% endif %}
   </details>
-  <p class="disc">{% if post.source.contact %}문의 {{ post.source.contact }} · {% endif %}행정안전부 공공서비스 정보 기준({{ post.date }}). 실제 지원 여부는 담당 기관에 확인하세요.</p>
+  {% if post.revisions %}<div class="revs"><b>수정 기록</b>{% for r in post.revisions %}<p>{{ r.date }} · {{ r.note }}</p>{% endfor %}</div>{% endif %}
+  <div class="report"><span>금액·기한이 실제와 다른가요?</span><a class="btn ghost" id="rep" data-u="{{ mail_user }}" data-h="{{ mail_host }}" data-t="{{ a.title }}" href="{{ base }}/contact">오류 제보하기</a></div>
+  <p class="disc">{% if post.source.contact %}문의 {{ post.source.contact }} · {% endif %}출처: 행정안전부 「대한민국 공공서비스(혜택) 정보」 · <a href="{{ base }}/principles">편집 원칙</a> · 실제 지원 여부는 담당 기관에 확인하세요.</p>
+  <script>(function(){var r=document.getElementById('rep');if(!r)return;r.href='mailto:'+r.dataset.u+'@'+r.dataset.h+'?subject='+encodeURIComponent('[정보 수정 요청] '+r.dataset.t)+'&body='+encodeURIComponent('페이지: '+location.href+'\n\n다른 부분:\n\n맞는 정보(출처 링크가 있으면 함께):\n')})();</script>
   {% if related %}<section class="related"><h2>함께 보면 좋은 지원제도</h2><ul class="mini-cards">{% for r in related %}<li><a href="{{ base }}/{{ r.url }}">{% if r.key.amount %}<b class="mc-amt">{{ r.key.amount }}</b>{% endif %}<strong>{{ r.article.title }}</strong></a></li>{% endfor %}</ul></section>{% endif %}
 </article>
 {% include "sidebar.html" %}
