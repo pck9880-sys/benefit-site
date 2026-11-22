@@ -121,8 +121,11 @@ ACCOUNT=$(cat "$WORK/upload_account.txt" 2>/dev/null)  # 업로드할 구글 계
 fill() { sed -e "s#{{DIR}}#$DIR#g" -e "s#{{PORT}}#$PORT#g" -e "s#{{MOOD}}#$(cat "$DIR/mood")#g" \
              -e "s#{{MAIN_VOICE}}#$MAIN_VOICE#g" -e "s#{{OUTRO_VOICE}}#$OUTRO_VOICE#g" -e "s#{{PRIVACY}}#$PRIVACY#g" -e "s#{{ACCOUNT}}#$ACCOUNT#g" "$1"; }
 
-# 3) 타입캐스트 더빙 (이미 voice.mp3 가 있으면 건너뜀)
-if [ ! -f "$SRC/voice.mp3" ]; then
+# 3) 타입캐스트 더빙 (이미 voice.mp3 가 있거나, plan keep_audio=원본 소리만 쓰는 편이면 건너뜀)
+NODUB=$(python3 -c "import json,sys;p=json.load(open(sys.argv[1]));print(1 if p.get('keep_audio') and not p.get('intro_voice') else 0)" "$SRC/plan.json")
+if [ "$NODUB" = "1" ]; then
+  echo "[더빙] 원본 소리 편(keep_audio) → 더빙 안 함" >> "$DIR/결과.txt"
+elif [ ! -f "$SRC/voice.mp3" ]; then
   run_claude 더빙 .claude/prompts/shorts-chrome-dub.md
   # 본문 + (0.4초) + 마무리 → voice.mp3 (마무리만 다른 목소리)
   if [ -s "$DIR/더빙용/voice_main.mp3" ] && [ -s "$DIR/더빙용/voice_outro.mp3" ]; then
@@ -142,7 +145,7 @@ fi
 python3 -m bot.thumb "assets/samples/$SLUG" && cp "$SRC/thumb.jpg" "$DIR/thumb.jpg" 2>/dev/null
 t0=$(date +%s)
 PREMIX=0; [ -n "$SONG_FILE" ] && PREMIX=1
-if [ -f "$SRC/voice.mp3" ] && SHORTS_SONG_PREMIX=$PREMIX SHORTS_SONG_FILE="$SONG_FILE" \
+if { [ -f "$SRC/voice.mp3" ] || [ "$NODUB" = "1" ]; } && SHORTS_SONG_PREMIX=$PREMIX SHORTS_SONG_FILE="$SONG_FILE" \
      python3 -c "from bot import shorts; shorts.render_sample('assets/samples/$SLUG')" \
    && cp shorts_sample.mp4 "$DIR/더빙용/영상.mp4" && cp shorts_sample.mp4 "$SRC/final.mp4"; then
   print -r -- '{"total_cost_usd":0,"num_turns":0}' | python3 scripts/mac/usage_log.py "$SLUG" 합성 "$(( $(date +%s) - t0 ))" >/dev/null
