@@ -16,10 +16,11 @@ VF = "crop=ih:ih,scale=1080:1080,fps=30,setsar=1,format=yuv420p,settb=AVTB"
 def build(src, cuts, out, fade=0.6):
     tmp = Path(tempfile.mkdtemp(prefix="mont-"))
     parts = []
-    for i, (s, d) in enumerate(cuts):  # 앞뒤 디졸브 여유만큼 길게 자름
+    for i, c in enumerate(cuts):  # 앞뒤 디졸브 여유만큼 길게 자름. c = (시작, 길이) 또는 (원본, 시작, 길이)
+        csrc, s, d = c if len(c) == 3 else (src, *c)
         L = d + fade
         f = tmp / f"p{i}.mp4"
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{max(0, s - fade / 2):.3f}", "-t", f"{L:.3f}", "-i", str(src),
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{max(0, s - fade / 2):.3f}", "-t", f"{L:.3f}", "-i", str(csrc),
                         "-vf", VF, "-af", "aresample=44100,aformat=channel_layouts=stereo", "-c:v", "libx264", "-preset", "veryfast",
                         "-crf", "18", "-c:a", "aac", "-b:a", "192k", str(f)], check=True)
         parts.append((f, L))
@@ -40,7 +41,8 @@ def build(src, cuts, out, fade=0.6):
     subprocess.run(cmd, check=True)
     # 장면 i 의 시작 = 앞 디졸브의 한가운데 (첫 장면은 0)
     offs, t = [], 0.0
-    for i, (s, d) in enumerate(cuts):
+    for i, c in enumerate(cuts):
+        d = c[-1]
         offs.append(round(0.0 if i == 0 else t + fade / 2, 3))
         t += d
     return offs
@@ -48,4 +50,4 @@ def build(src, cuts, out, fade=0.6):
 
 def durations(cuts, fade=0.6):
     """장면별 보일 길이 (첫 장면은 첫 디졸브 한가운데까지라 fade/2 더 김) — offs 와 짝지어 쓰면 빈틈·겹침 없음."""
-    return [round(d + (fade / 2 if i == 0 else 0), 3) for i, (s, d) in enumerate(cuts)]
+    return [round(c[-1] + (fade / 2 if i == 0 else 0), 3) for i, c in enumerate(cuts)]
