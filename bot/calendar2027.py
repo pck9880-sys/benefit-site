@@ -44,10 +44,9 @@ def mark_svg(size):
 
 
 CSS = f"""
-@font-face{{font-family:P;src:url(file://{FONTS}/Pretendard-Medium.otf);font-weight:400}}
-@font-face{{font-family:P;src:url(file://{FONTS}/Pretendard-SemiBold.otf);font-weight:600}}
-@font-face{{font-family:P;src:url(file://{FONTS}/Pretendard-Bold.otf);font-weight:700}}
-@font-face{{font-family:P;src:url(file://{FONTS}/Pretendard-ExtraBold.otf);font-weight:800}}
+@font-face{{font-family:P;src:url(file://{FONTS}/NanumSquareRoundR.woff2);font-weight:400}}
+@font-face{{font-family:P;src:url(file://{FONTS}/NanumSquareRoundB.woff2);font-weight:600 700}}
+@font-face{{font-family:P;src:url(file://{FONTS}/NanumSquareRoundEB.woff2);font-weight:800}}
 @font-face{{font-family:Q;src:url(file://{FONTS}/quicksand-700.woff2);font-weight:700}}
 *{{box-sizing:border-box;margin:0;padding:0}}body{{font-family:P,sans-serif;-webkit-font-smoothing:antialiased}}
 """
