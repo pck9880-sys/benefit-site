@@ -51,7 +51,7 @@ MAX_MONTHLY_USD = float(_env("MAX_MONTHLY_USD", "80"))  # 월 API 비용 상한
 CONTACT_EMAIL = _env("CONTACT_EMAIL", "info17476@naver.com")  # 문의 페이지에 표시 (스팸 수집기 방지용으로 나눠서 출력)
 ADSENSE_CLIENT = _env("ADSENSE_CLIENT")  # 예: ca-pub-1234567890123456
 GOOGLE_SITE_VERIFICATION = _env("GOOGLE_SITE_VERIFICATION")
-NAVER_SITE_VERIFICATION = _env("NAVER_SITE_VERIFICATION", "16819b0acfbad9eb8436a5550510850c86f68b8b")
+NAVER_SITE_VERIFICATION = "16819b0acfbad9eb8436a5550510850c86f68b8b"  # benefy.kr (예전 pages.dev 코드 변수는 무시)
 BLOG_PER_DAY = int(_env("BLOG_PER_DAY", "2"))  # 하루에 보낼 네이버 블로그용 글 수 (0이면 끔)
 CONTESTS_ON = _env("CONTESTS_ON", "0") == "1"  # 공모전 자동 출품안 (사용자 요청으로 중단, 다시 켜려면 1)
 CONTESTS_PER_DAY = int(_env("CONTESTS_PER_DAY", "3"))  # 하루에 출품안 만들 공모전 수
