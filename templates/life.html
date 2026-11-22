@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}내 인생 지원금 타임라인 · 태어나서 노후까지 받을 수 있는 돈 | {{ site_name }}{% endblock %}
+{% block desc %}출생부터 노후까지, 나이대별로 받을 수 있는 대표 정부 지원금을 스크롤하며 쌓아봐요.{% endblock %}
+{% block main %}
+<div class="life">
+  <div class="life-hd">
+    <span class="chg-chip">스크롤해 보세요 ↓</span>
+    <h1>내 인생, 나라에서<br>얼마나 받을 수 있을까?</h1>
+    <p>태어나서 노후까지 대표 지원금을 나이순으로 쌓아봤어요.</p>
+  </div>
+  <div class="life-sum" id="ls"><small>지금까지 쌓인 지원금</small><strong id="lsn">0원</strong><i><b id="lsb"></b></i></div>
+  <ol class="tl">
+  {% for st in life %}
+    <li class="st" data-v="{{ st['items']|sum(attribute=1) }}">
+      <span class="dot">{{ st.emoji }}</span>
+      <div class="st-b">
+        <small>{{ st.age }}</small><h2>{{ st.title }}</h2>
+        {% for name, v, tag in st['items'] %}<p><span>{{ name }}</span><b>+{{ "{:,}".format(v) }}만 원</b>{% if tag == "조건부" %}<em>조건부</em>{% endif %}</p>{% endfor %}
+        <a href="{{ base }}/{{ st.link }}">자세히 →</a>
+      </div>
+    </li>
+  {% endfor %}
+  </ol>
+  <div class="life-end">
+    <small>조건이 다 맞으면, 평생</small>
+    <strong>약 {{ "%.1f"|format(total / 10000) }}억 원</strong>
+    <span>= 치킨 약 {{ "{:,}".format((total * 10000 / 20000)|int) }}마리 🍗 (1마리 2만 원 기준)</span>
+    <div class="fd-acts"><a class="btn" href="{{ base }}/finder/">내가 받을 수 있는 것만 찾기 →</a><button class="btn ghost" id="lshare">공유하기</button></div>
+  </div>
+  <p class="disc">2026년 기준 금액으로 만든 예시예요. '조건부'는 소득·재산·나이 등 조건을 충족해야 받을 수 있고, 실업급여·육아휴직급여는 월급에 따라, 기초연금은 받는 기간에 따라 달라져요. 실제 금액은 각 안내 페이지와 공식 기관에서 확인하세요.</p>
+</div>
+<script>
+(function(){
+  var st=[].slice.call(document.querySelectorAll('.st')),tot=st.reduce(function(a,s){return a+(+s.dataset.v)},0),cur=0,shown=0,n=document.getElementById('lsn'),bar=document.getElementById('lsb');
+  function fmt(v){return v>=10000?(v/10000).toFixed(2).replace(/\.?0+$/,'')+'억 원':Math.round(v).toLocaleString()+'만 원'}
+  function tick(){shown+=(cur-shown)*0.12;if(Math.abs(cur-shown)<1)shown=cur;n.textContent=fmt(shown);bar.style.width=(shown/tot*100)+'%';if(shown!==cur)requestAnimationFrame(tick)}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!e.target.classList.contains('in')){e.target.classList.add('in');cur+=+e.target.dataset.v;requestAnimationFrame(tick)}})},{threshold:.55});
+  st.forEach(function(s){io.observe(s)});
+  document.getElementById('lshare').onclick=function(){var t='나라에서 평생 받을 수 있는 지원금, 조건이 다 맞으면 약 '+fmt(tot)+'! Benefy에서 확인해 봐';
+    if(navigator.share)navigator.share({title:'내 인생 지원금 타임라인',text:t,url:location.href});else{navigator.clipboard.writeText(t+' '+location.href);this.textContent='링크 복사됨'}};
+})();
+</script>
+{% endblock %}

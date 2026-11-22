@@ -25,6 +25,17 @@ CHANGES_2027 = [  # 2027 달라지는 것 (보건복지부 고시값으로 확�
     {"name": "아동수당 받는 나이", "a": 9, "b": 10, "u": "세 미만", "fa": "만 9세 미만", "fb": "10세 미만", "diff": "+1세",
      "note": "매년 1세씩 늘어 2030년에는 만 13세 미만까지 받아요."},
 ]
+LIFE = [  # 내 인생 지원금 타임라인 (만 원, 확인된 2026 기준값으로 만든 예시)
+    {"age": "0세", "emoji": "👶", "title": "태어나면", "items": [("첫만남이용권 (첫째)", 200, "바우처"), ("부모급여 0세 (월 100만 × 12)", 1200, "현금")], "link": "calc/baby/"},
+    {"age": "1세", "emoji": "🧸", "title": "돌이 지나면", "items": [("부모급여 1세 (월 50만 × 12)", 600, "현금")], "link": "calc/baby/"},
+    {"age": "0~8세", "emoji": "🎒", "title": "어린이 시절 내내", "items": [("아동수당 (월 10만 × 108개월)", 1080, "현금")], "link": "guide/baby/"},
+    {"age": "20대", "emoji": "🏠", "title": "독립해서 월세 살 때", "items": [("청년월세 지원 (월 최대 20만 × 24개월)", 480, "조건부")], "link": "guide/youth/"},
+    {"age": "20~30대", "emoji": "💰", "title": "목돈 모을 때", "items": [("청년미래적금 정부기여금 (우대형 3년)", 216, "조건부")], "link": "calc/youth-savings/"},
+    {"age": "30대", "emoji": "💼", "title": "회사를 그만두게 되면", "items": [("실업급여 (월급 300만 · 150일 예시)", 991, "조건부")], "link": "calc/unemployment/"},
+    {"age": "30대", "emoji": "🍼", "title": "아이를 키우며 휴직하면", "items": [("육아휴직급여 12개월 (최대)", 2310, "조건부")], "link": "calc/parental-leave/"},
+    {"age": "40~50대", "emoji": "🧾", "title": "소득이 적은 해에는", "items": [("근로장려금 (맞벌이 최대, 1년)", 330, "조건부")], "link": "search/?q=근로장려금"},
+    {"age": "65세~", "emoji": "🌿", "title": "어르신이 되면", "items": [("기초연금 (월 최대 34.97만 × 20년 예시)", 8393, "조건부")], "link": "guide/senior/"},
+]
 GUIDES = [  # 생애주기 모음: (주소, 대상 태그, 제목, 한 줄 설명)
     ("youth", ["youth"], "청년이 받을 수 있는 지원금", "만 19~39세 청년 대상 지원제도만 모았어요."),
     ("baby", ["pregnancy", "child"], "임신·출산·육아 지원금", "임신부터 아이 키우는 가정까지 받을 수 있는 혜택이에요."),
@@ -174,6 +185,8 @@ def build():
         write(f"guide/{slug}/index.html", env.get_template("guide.html").render(
             g={"title": title, "desc": desc}, items=items, top=top, canonical=f"{config.SITE_URL}/guide/{slug}/"))
 
+    write("special/life/index.html", env.get_template("life.html").render(life=LIFE, total=sum(v for st in LIFE for _, v, _ in st["items"]),
+          canonical=f"{config.SITE_URL}/special/life/"))
     write("finder/index.html", env.get_template("finder.html").render(canonical=f"{config.SITE_URL}/finder/"))
     write("special/2027-changes/index.html", env.get_template("changes.html").render(items=CHANGES_2027, canonical=f"{config.SITE_URL}/special/2027-changes/"))
     from . import specials
@@ -196,7 +209,7 @@ def build():
 
     # SEO 파일
     from . import specials
-    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/special/2027-changes/", f"{config.SITE_URL}/finder/"] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
+    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/special/2027-changes/", f"{config.SITE_URL}/finder/", f"{config.SITE_URL}/special/life/"] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
     urls += [f"{config.SITE_URL}/", f"{config.SITE_URL}/latest/", f"{config.SITE_URL}/check/", f"{config.SITE_URL}/deadline/"]
     urls += [f"{config.SITE_URL}/c/{s}/" for s, _ in cats]
     urls += [f"{config.SITE_URL}/target/{s}/" for s, _, _ in targets] + [f"{config.SITE_URL}/region/{s}/" for s, _, _ in regions]
