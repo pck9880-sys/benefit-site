@@ -28,7 +28,12 @@ _default_url = f"https://{_repo.split('/')[0]}.github.io/{_repo.split('/')[1]}" 
 CF_PAGES_PROJECT = _env("CF_PAGES_PROJECT", "jiwon-hyetaek")
 if _env("CLOUDFLARE_API_TOKEN"):  # Cloudflare Pages 를 쓰면 그 주소가 기본
     _default_url = f"https://{CF_PAGES_PROJECT}.pages.dev"
+CUSTOM_DOMAIN = _env("CUSTOM_DOMAIN", "benefy.kr")  # 연결된 대표 도메인
+if _env("CLOUDFLARE_API_TOKEN") and CUSTOM_DOMAIN:
+    _default_url = f"https://{CUSTOM_DOMAIN}"
 SITE_URL = _env("SITE_URL", _default_url).rstrip("/")
+if CUSTOM_DOMAIN and ".pages.dev" in SITE_URL:  # 예전 주소로 설정돼 있어도 대표 도메인 사용
+    SITE_URL = f"https://{CUSTOM_DOMAIN}"
 SITE_DESCRIPTION = _env(
     "SITE_DESCRIPTION",
     "내가 받을 수 있는 정부 지원금·혜택을 쉽게 정리합니다. 지원 대상, 금액, 신청 방법까지 한눈에.",
