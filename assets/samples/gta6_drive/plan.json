@@ -1,0 +1,189 @@
+{
+ "topic": "GTA6 바이스시티 드라이브 (낮→노을→밤) — 공식 플레이 영상 원본 소리",
+ "mood": "기본",
+ "kind": "이슈",
+ "caption_style": "mix",
+ "caption_font": "Jua",
+ "title_top": "GTA6 드라이브",
+ "title_bottom": "낮부터 밤까지",
+ "thumb_caption": "실제 플레이 소리 그대로",
+ "intro_post": false,
+ "media_locked": true,
+ "thumb_locked": true,
+ "keep_audio": true,
+ "song": false,
+ "end_comments": false,
+ "outro_custom": true,
+ "outro": "밤의 바이스시티",
+ "durations": [
+  3.7,
+  3.3,
+  4.0,
+  3.5,
+  4.0,
+  4.0,
+  2.5,
+  2.8
+ ],
+ "voices": [
+  "제롬",
+  "제롬"
+ ],
+ "beats": [
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "낮의 바이스시티",
+   "card": "낮의 바이스시티"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "다리 위를 달리고",
+   "card": "다리 위를 달리고"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "해안 도로를 지나",
+   "card": "해안 도로를 지나"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "위에서 보면",
+   "card": "위에서 보면"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "노을이 지면",
+   "card": "노을이 지면"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "빌딩 사이로 해가 지고",
+   "card": "빌딩 사이로 해가 지고"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "밤이 되면",
+   "card": "밤이 되면"
+  }
+ ],
+ "media": [
+  {
+   "video": "d1_day.mp4",
+   "start": 0
+  },
+  {
+   "video": "d2_bridge.mp4",
+   "start": 0
+  },
+  {
+   "video": "d3_coast.mp4",
+   "start": 0
+  },
+  {
+   "video": "d4_air.mp4",
+   "start": 0
+  },
+  {
+   "video": "d5_sunset.mp4",
+   "start": 0
+  },
+  {
+   "video": "d6_sun.mp4",
+   "start": 0
+  },
+  {
+   "video": "d7_night.mp4",
+   "start": 0
+  },
+  {
+   "video": "d8_night2.mp4",
+   "start": 0
+  }
+ ],
+ "gpt_images": [],
+ "yt_title": "GTA6로 바이스시티 드라이브 낮→밤 🌇 #shorts",
+ "description": "록스타게임즈 공식 영상 'Grand Theft Auto VI: An Extended Look'(PS5 실제 캡처) 속 드라이브 장면만 모았음. 낮 시내 → 다리 → 해안 도로 → 노을 → 밤.\n\n영상 출처: Rockstar Games 공식 미디어(rockstargames.com/VI/media) — 게임 원본 소리 그대로, 더빙 없음.\n\n※ 장면 일부는 AI로 만든 이미지임.",
+ "tags": [
+  "GTA6",
+  "GTA",
+  "그타6",
+  "바이스시티",
+  "드라이브",
+  "게임",
+  "플레이영상",
+  "쇼츠",
+  "이슈",
+  "뉴스",
+  "핫이슈",
+  "요즘"
+ ],
+ "sources": [
+  "https://www.rockstargames.com/VI/media"
+ ],
+ "pin_comment": "GTA6 나오면 제일 먼저 드라이브부터 할 사람? 🚗",
+ "credits": [
+  "영상: Rockstar Games 공식 미디어 'Grand Theft Auto VI: An Extended Look'"
+ ],
+ "music_concept": "긴장감 이슈",
+ "question": "",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "outro_spoken": "밤의 바이스시티"
+}

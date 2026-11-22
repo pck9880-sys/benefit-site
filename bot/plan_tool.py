@@ -225,7 +225,7 @@ def check(slug):
             errs.append(f"{k} '{s}' 너무 김 (공백 빼고 9자 이내)")
     beats = [b for b in p.get("beats", []) if b.get("narration", "").strip()]
     p["beats"] = beats
-    lo, hi = 8, 10  # 28초 미만: 문장 8~10개
+    lo, hi = (5, 10) if p.get("keep_audio") else (8, 10)  # 28초 미만: 문장 8~10개 (원본 소리 몰입형은 장면 5개부터)
     if not lo <= len(beats) <= hi:
         errs.append(f"문장 {len(beats)}개 (필요 {lo}~{hi})")
     total = sum(len(re.sub(r"\*\*|\s", "", b["narration"])) for b in beats)
@@ -384,7 +384,7 @@ def check(slug):
                 continue
             b["overlay"], b["overlay_text"], b["overlay_source"] = "none", "", ""
     ec = p.get("end_comments") or []
-    if kind in SCI:
+    if kind in SCI or (p.get("keep_audio") and p.get("end_comments") is False):  # 원본 소리 몰입형은 댓글 카드 없이 끝낼 수 있음
         p["end_comments"] = False
     elif not 3 <= len(ec) <= 5:
         errs.append(f"end_comments {len(ec)}개 (원글 실제 댓글 3~5개)")
