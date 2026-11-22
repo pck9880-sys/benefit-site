@@ -1,0 +1,219 @@
+{
+ "topic": "GTA6 공식 플레이 영상(An Extended Look) 디테일 모음",
+ "mood": "기본",
+ "kind": "이슈",
+ "caption_style": "mix",
+ "caption_font": "Jua",
+ "title_top": "GTA6 디테일",
+ "title_bottom": "수준 미쳤다",
+ "thumb_caption": "실제 플레이 화면",
+ "intro_post": false,
+ "media_locked": true,
+ "thumb_locked": true,
+ "voices": [
+  "제롬",
+  "구리"
+ ],
+ "outro_read": 1,
+ "beats": [
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "GTA6 실제 플레이 화면이 공개됐는데",
+   "card": "GTA6 실제 플레이 화면이 공개됐는데"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "전부 PS5로 직접 찍은 화면임",
+   "card": "전부 PS5로 직접 찍은 화면임"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "숲속엔 멧돼지가 어슬렁거리고",
+   "card": "숲속엔 멧돼지가 어슬렁거리고"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "비포장길엔 흙먼지가 풀풀",
+   "card": "비포장길엔 흙먼지가 풀풀"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "오토바이 뒤에 둘이 타고 시내 질주",
+   "card": "오토바이 뒤에 둘이 타고 시내 질주"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "늪에선 에어보트, 바닷속엔 가오리 떼",
+   "card": "늪에선 에어보트, 바닷속엔 가오리 떼"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "밤엔 네온 빌딩이 번쩍이고",
+   "card": "밤엔 네온 빌딩이 번쩍이고"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "클럽엔 사람들이 꽉 차 있음",
+   "card": "클럽엔 사람들이 꽉 차 있음"
+  },
+  {
+   "twist": false,
+   "visual": "video",
+   "query": "",
+   "ai_prompt": "",
+   "overlay": "none",
+   "overlay_text": "",
+   "overlay_source": "",
+   "voice": "",
+   "caption": "",
+   "narration": "차 불타는 디테일까지 미쳤다",
+   "card": "차 불타는 디테일까지 미쳤다"
+  }
+ ],
+ "media": [
+  {
+   "video": "c1_city.mp4",
+   "start": 0
+  },
+  {
+   "video": "c2_ps5.mp4",
+   "start": 0
+  },
+  {
+   "video": "c3_forest.mp4",
+   "start": 0
+  },
+  {
+   "video": "c4_dirt.mp4",
+   "start": 0
+  },
+  {
+   "video": "c5_moto.mp4",
+   "start": 0
+  },
+  {
+   "video": "c6_sea.mp4",
+   "start": 0
+  },
+  {
+   "video": "c7_neon.mp4",
+   "start": 0
+  },
+  {
+   "video": "c8_club.mp4",
+   "start": 0
+  },
+  {
+   "video": "c9_fire.mp4",
+   "start": 0
+  }
+ ],
+ "gpt_images": [],
+ "end_label": "GTA6 플레이 영상 댓글",
+ "end_comments": [
+  {
+   "text": "물리엔진 현실감 넘치네",
+   "likes": 4
+  },
+  {
+   "text": "그타5도 섬세한 디테일이랑 이스터에그랑 여러요소들 아직 나오는데 진짜 와....",
+   "likes": 7
+  },
+  {
+   "text": "드디어 나왔네 역대급 게임 ㄷ",
+   "likes": 1
+  }
+ ],
+ "yt_title": "GTA6 실제 플레이 디테일 수준ㅋㅋ #shorts",
+ "description": "록스타게임즈가 공개한 공식 영상 'Grand Theft Auto VI: An Extended Look'(PS5 실제 캡처) 속 디테일 장면 모음. 출시일 2026년 11월 19일.\n\n영상 출처: Rockstar Games 공식 미디어(rockstargames.com/VI/media) — 게임사 공식 자료, 원본 소리는 빼고 사용함.\n댓글: 유튜브 GTA6 공식 게임플레이 같이보기 영상의 실제 댓글\n\n※ 장면 일부는 AI로 만든 이미지임.",
+ "tags": [
+  "GTA6",
+  "GTA",
+  "그타6",
+  "락스타",
+  "게임",
+  "플레이영상",
+  "핫이슈",
+  "쇼츠",
+  "이슈",
+  "뉴스",
+  "요즘"
+ ],
+ "sources": [
+  "https://www.rockstargames.com/VI/media"
+ ],
+ "pin_comment": "GTA6에서 제일 먼저 해보고 싶은 거 뭐임? 🎮",
+ "credits": [
+  "영상: Rockstar Games 공식 미디어 'Grand Theft Auto VI: An Extended Look'"
+ ],
+ "music_concept": "긴장감 이슈",
+ "question": "",
+ "character": "",
+ "hook_video": "",
+ "photo_fallbacks": [],
+ "outro_spoken": "GTA6 플레이 영상 댓글. 물리엔진 현실감 넘치네. 님들 생각은 어떰?"
+}
