@@ -52,7 +52,7 @@ CSS = f"""
 """
 
 
-def wallpaper_html(m):
+def wallpaper_html(m, style="C"):
     cal = calendar.Calendar(firstweekday=6)  # 일요일 시작
     weeks = cal.monthdayscalendar(YEAR, m)
     items = MONTHS[m]
@@ -69,8 +69,7 @@ def wallpaper_html(m):
     return f"""<!DOCTYPE html><html><head><meta charset="utf-8"><style>{CSS}
 body{{width:1179px;height:2556px;background:#000;color:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;padding:900px 96px 140px}}
 .hd{{display:flex;justify-content:space-between;align-items:center}}
-.mon b{{display:block;font-size:190px;font-weight:800;letter-spacing:-.04em;line-height:1}}
-.mon span{{display:block;margin-top:16px;font-family:Q;font-size:42px;letter-spacing:.18em;color:#8f86c9}}
+.hd{{align-items:flex-start}}
 .grid{{margin-top:70px;display:grid;grid-template-columns:repeat(7,1fr);row-gap:10px;text-align:center}}
 .grid .h{{font-size:30px;font-weight:600;color:#5d5a78;height:56px;line-height:56px}}
 .grid i{{font-style:normal;font-size:40px;font-weight:600;color:#cfcde6;height:74px;line-height:74px;position:relative;z-index:0}}
@@ -82,12 +81,40 @@ body{{width:1179px;height:2556px;background:#000;color:#fff;position:relative;ov
 .list em{{grid-row:1/3;grid-column:2;align-self:center;font-style:normal;font-size:27px;font-weight:700;color:#b9a8ff;border:1.5px solid #3a3366;border-radius:999px;padding:8px 22px}}
 .foot{{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font-size:27px;color:#55526e}}
 .foot b{{font-family:Q;color:#a99ff0;font-size:34px}}
-</style></head><body>
-<div class="hd"><div class="mon"><b>{m}월</b><span>{EN[m]} {YEAR}</span></div>{mark_svg(210)}</div>
+{TYPE_CSS.replace("{","{{").replace("}","}}") if False else ""}</style><style>""" + TYPE_CSS + f"""</style></head><body>
+{header(m, style)}
 <div class="grid">{"".join(f'<i class="h">{d}</i>' for d in "일월화수목금토")}{cells}</div>
 <ul class="list">{rows}</ul>
 <div class="foot"><span>2026년 일정 기준 예상 · 공고 확인 필수</span><b>benefy.kr</b></div>
 </body></html>"""
+
+
+TYPE_CSS = """
+.num{position:relative;font-family:Q;font-weight:700;font-size:300px;line-height:.82;letter-spacing:-.02em}
+.wl{font-size:64px;font-weight:800;margin-left:10px;color:#e9e6ff}
+.sub{display:block;margin-top:22px;font-family:Q;font-size:40px;letter-spacing:.22em;color:#8f86c9}
+/* A 글래스 그라데이션 */
+.A .num{background:linear-gradient(135deg,#8fd3ff 0%,#7a5cff 40%,#ff5fae 75%,#ffd6a0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 26px rgba(130,100,255,.55))}
+.A .num::after{content:attr(data-t);position:absolute;left:0;top:0;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0) 45%);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* B 네온 아웃라인 */
+.B .num{color:transparent;-webkit-text-stroke:5px #b9a8ff;filter:drop-shadow(0 0 10px rgba(160,130,255,.9)) drop-shadow(0 0 34px rgba(255,95,174,.45))}
+/* C 세 겹 빛 (로고처럼 세 조각이 겹친 숫자) */
+.C .num{color:transparent}
+.C .num i{position:absolute;left:0;top:0;font-style:normal;mix-blend-mode:screen}
+.C .num i:nth-child(1){color:#4f7dff;transform:translate(-10px,-6px)}
+.C .num i:nth-child(2){color:#ff5fae;transform:translate(10px,4px)}
+.C .num i:nth-child(3){color:#8a5cff;transform:translate(0,10px)}
+.C .num{filter:drop-shadow(0 0 22px rgba(140,110,255,.55))}
+"""
+
+
+def header(m, style):
+    n = f"{m:02d}"
+    if style == "C":
+        num = f'<span class="num">{n}<i>{n}</i><i>{n}</i><i>{n}</i></span>'
+    else:
+        num = f'<span class="num" data-t="{n}">{n}</span>'
+    return f'<div class="hd {style}"><div class="mon"><div style="display:flex;align-items:flex-end">{num}<span class="wl">월</span></div><span class="sub">{EN[m]} {YEAR}</span></div>{mark_svg(170)}</div>'
 
 
 def a4_html():
