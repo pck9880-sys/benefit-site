@@ -695,3 +695,5 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 .list-srch button svg{width:20px;height:20px}
 .list-srch a{flex:none;font-size:13.5px;font-weight:700;color:#4f3fd9;padding:0 6px;text-decoration:none}
 .list-srch input::-webkit-search-cancel-button{display:none}
+.list-hubs .hubs{margin:10px 0 0}
+@media(max-width:640px){.list-hubs .hub-chips{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;margin-right:-14px}.list-hubs .hub-chips::-webkit-scrollbar{display:none}.list-hubs .hub-chips a{flex:none}.list-hubs .hubs{padding:12px 14px}.list-hubs h3{font-size:14px;margin:0 0 8px}}
