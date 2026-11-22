@@ -154,7 +154,8 @@ if [ -f "$SRC/voice.mp3" ] && SHORTS_SONG_PREMIX=$PREMIX SHORTS_SONG_FILE="$SONG
     # 2026-11-22 사용자: 웍스 중단 → 카카오톡 '나와의 채팅'으로만 (SHORTS_KAKAO=0 이면 끔, SHORTS_WORKS=1 이면 웍스도)
     PKG=$(ls -dt "$HOME/Library/Mobile Documents/com~apple~CloudDocs/쇼츠업로드/"*/ 2>/dev/null | head -1)
     if [ "${SHORTS_NAVERMAIL:-1}" = "1" ] && [ -n "$PKG" ]; then  # 2026-11-22 사용자: 네이버 메일 '내게쓰기'로 고정
-      python3 "$REPO/scripts/mac/shorts_send_navermail.py" "${PKG}영상.mp4" "$(cat "${PKG}제목.txt")" >> "$DIR/결과.txt" 2>&1
+      python3 "$REPO/scripts/mac/shorts_send_navermail.py" "${PKG}영상.mp4" "$(cat "${PKG}제목.txt")" >> "$DIR/결과.txt" 2>&1 \
+        || SHORTS_WORKS=1  # 메일 실패(미설정 등)면 웍스로 대신 보냄
     fi
     if [ "${SHORTS_TELEGRAM:-0}" = "1" ] && [ -n "$PKG" ]; then  # 텔레그램 (토큰 넣으면 SHORTS_TELEGRAM=1)
       "$REPO/scripts/mac/shorts_send_telegram.sh" "${PKG}영상.mp4" "$(cat "${PKG}제목.txt")" >> "$DIR/결과.txt" 2>&1
