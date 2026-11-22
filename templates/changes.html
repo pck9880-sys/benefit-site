@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}2027년 달라지는 지원금 · 한눈에 비교 | {{ site_name }}{% endblock %}
+{% block desc %}2027년 기준 중위소득 6.7% 인상, 생계급여 기준, 아동수당 연령 확대까지 2026년과 비교해 한눈에 보여드려요.{% endblock %}
+{% block main %}
+<div class="tool chg">
+  <span class="chg-chip">2027년 1월부터</span>
+  <h1 class="tool-h">내년에 달라지는 지원금</h1>
+  <p class="tool-sub">2026년과 비교해서 숫자로 보여드려요.</p>
+  {% for it in items %}
+  <section class="cmp" data-a="{{ it.a }}" data-b="{{ it.b }}">
+    <div class="cmp-h"><b>{{ it.name }}</b><span class="cmp-up">{{ it.diff }}</span></div>
+    <div class="cmp-row"><em>2026</em><div class="bar"><i style="--w:{{ (it.a / it.b * 100)|round(1) }}%"></i></div><span>{{ it.fa }}</span></div>
+    <div class="cmp-row now"><em>2027</em><div class="bar"><i style="--w:100%"></i></div><span class="cnt" data-to="{{ it.b }}" data-u="{{ it.u }}">{{ it.fb }}</span></div>
+    <p>{{ it.note }}</p>
+  </section>
+  {% endfor %}
+  <a class="more-all" href="{{ base }}/calc/median/">2027년 기준으로 우리 집 중위소득 계산하기 →</a>
+  <p class="disc">보건복지부 2027년 기준 중위소득 고시(2026.7.28. 중앙생활보장위원회 의결), 아동수당 단계적 확대 일정 기준. 시행일과 세부 금액은 공식 발표를 확인하세요.</p>
+</div>
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var s=e.target;s.classList.add('go');io.unobserve(s);
+    var c=s.querySelector('.cnt'),to=parseFloat(c.dataset.to),u=c.dataset.u,dec=to%1?1:0,t0=null;
+    function f(t){if(!t0)t0=t;var k=Math.min(1,(t-t0)/1100),v=to*(1-Math.pow(1-k,3));c.textContent=v.toLocaleString(undefined,{minimumFractionDigits:dec,maximumFractionDigits:dec})+u;if(k<1)requestAnimationFrame(f)}
+    if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches)requestAnimationFrame(f)})},{threshold:.4});
+  document.querySelectorAll('.cmp').forEach(function(s){io.observe(s)});
+})();
+</script>
+{% endblock %}

@@ -524,3 +524,20 @@ button.big-ico{border:0;cursor:pointer;pointer-events:auto;color:#fff}
 .sp-banner img{width:84px;height:105px;border-radius:10px;object-fit:cover;flex:none}
 .sp-banner span{display:flex;flex-direction:column;gap:4px}.sp-banner small{color:#b8b0ff;font-weight:700;font-size:12.5px}.sp-banner b{font-size:17px;line-height:1.35}.sp-banner em{font-style:normal;color:#a9abc8;font-size:13.5px}
 @media(min-width:900px){.sp .cn img{flex:0 0 calc(50% - 6px)}}
+
+/* 2027 비교 */
+.chg-chip{display:inline-block;font-weight:800;font-size:13px;color:#4f3fd9;background:var(--accent-soft);border-radius:999px;padding:4px 12px;margin-bottom:8px}
+.cmp{border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:12px}
+.cmp-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.cmp-h b{font-size:16px}
+.cmp-up{font-weight:800;font-size:13px;color:#fff;background:#4f3fd9;border-radius:999px;padding:3px 10px}
+.cmp-row{display:grid;grid-template-columns:44px 1fr 110px;gap:10px;align-items:center;margin:8px 0}
+.cmp-row em{font-style:normal;font-weight:700;color:var(--sub);font-size:13px}
+.cmp-row span{text-align:right;font-weight:700;color:var(--sub);font-size:15px}
+.cmp-row.now span{color:var(--ink);font-weight:850;font-size:19px}
+.bar{height:14px;border-radius:7px;background:#f1f0f6;overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:7px;background:#c9c4e8;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.now .bar i{background:#17183a}
+.cmp.go .bar i{width:var(--w)}
+.cmp p{margin:8px 0 0;font-size:13.5px;color:var(--sub)}
+.chg-banner .chg-n{flex:none;width:84px;height:84px;border-radius:14px;background:#17182a;display:flex;align-items:center;justify-content:center;font-weight:850;font-size:20px;color:#b8b0ff}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}

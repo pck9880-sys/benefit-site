@@ -15,6 +15,16 @@ PER_PAGE = 12
 HOME_LATEST = 6
 CALCS = [("calc/", "calc_index.html"), ("calc/median/", "calc_median.html"), ("calc/unemployment/", "calc_unemp.html"), ("calc/parental-leave/", "calc_parental.html"), ("calc/baby/", "calc_baby.html"),
          ("calc/severance/", "calc_severance.html"), ("calc/youth-savings/", "calc_youthsave.html")]
+CHANGES_2027 = [  # 2027 달라지는 것 (보건복지부 고시값으로 확인)
+    {"name": "기준 중위소득 (1인 가구)", "a": 256.4, "b": 273.6, "u": "만 원", "fa": "256.4만 원", "fb": "273.6만 원", "diff": "+6.7%",
+     "note": "월 2,564,238원 → 2,736,042원. 각종 복지 지원의 기준이 되는 금액이에요."},
+    {"name": "기준 중위소득 (4인 가구)", "a": 649.5, "b": 693.0, "u": "만 원", "fa": "649.5만 원", "fb": "693.0만 원", "diff": "+6.7%",
+     "note": "월 6,494,738원 → 6,929,885원. 제도 도입 이후 가장 큰 인상이에요."},
+    {"name": "생계급여 기준 (4인 가구)", "a": 207.8, "b": 221.8, "u": "만 원", "fa": "207.8만 원", "fb": "221.8만 원", "diff": "+14만 원",
+     "note": "중위소득 32%. 소득인정액이 이보다 적으면 차액을 생계급여로 받아요."},
+    {"name": "아동수당 받는 나이", "a": 9, "b": 10, "u": "세 미만", "fa": "만 9세 미만", "fb": "10세 미만", "diff": "+1세",
+     "note": "매년 1세씩 늘어 2030년에는 만 13세 미만까지 받아요."},
+]
 GUIDES = [  # 생애주기 모음: (주소, 대상 태그, 제목, 한 줄 설명)
     ("youth", ["youth"], "청년이 받을 수 있는 지원금", "만 19~39세 청년 대상 지원제도만 모았어요."),
     ("baby", ["pregnancy", "child"], "임신·출산·육아 지원금", "임신부터 아이 키우는 가정까지 받을 수 있는 혜택이에요."),
@@ -161,6 +171,7 @@ def build():
         write(f"guide/{slug}/index.html", env.get_template("guide.html").render(
             g={"title": title, "desc": desc}, items=items, top=top, canonical=f"{config.SITE_URL}/guide/{slug}/"))
 
+    write("special/2027-changes/index.html", env.get_template("changes.html").render(items=CHANGES_2027, canonical=f"{config.SITE_URL}/special/2027-changes/"))
     from . import specials
     for sp in specials.SPECIALS:  # 특집 (카드뉴스 + 체크리스트)
         write(f"special/{sp['slug']}/index.html", env.get_template("special.html").render(sp=sp, canonical=f"{config.SITE_URL}/special/{sp['slug']}/"))
@@ -181,7 +192,7 @@ def build():
 
     # SEO 파일
     from . import specials
-    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
+    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/special/2027-changes/"] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
     urls += [f"{config.SITE_URL}/", f"{config.SITE_URL}/latest/", f"{config.SITE_URL}/check/", f"{config.SITE_URL}/deadline/"]
     urls += [f"{config.SITE_URL}/c/{s}/" for s, _ in cats]
     urls += [f"{config.SITE_URL}/target/{s}/" for s, _, _ in targets] + [f"{config.SITE_URL}/region/{s}/" for s, _, _ in regions]
