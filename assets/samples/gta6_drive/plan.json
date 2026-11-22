@@ -16,14 +16,14 @@
  "outro_custom": true,
  "outro": "현실보다 그래픽 좋음 ㅋㅋ",
  "durations": [
-  3.7,
+  4.0,
   3.3,
   4.0,
   3.5,
   4.0,
   4.0,
   2.5,
-  2.8
+  2.6
  ],
  "voices": [
   "제롬",
@@ -124,36 +124,36 @@
  ],
  "media": [
   {
-   "video": "d1_day.mp4",
-   "start": 0
+   "video": "montage.mp4",
+   "start": 0.0
   },
   {
-   "video": "d2_bridge.mp4",
-   "start": 0
+   "video": "montage.mp4",
+   "start": 4.0
   },
   {
-   "video": "d3_coast.mp4",
-   "start": 0
+   "video": "montage.mp4",
+   "start": 7.3
   },
   {
-   "video": "d4_air.mp4",
-   "start": 0
+   "video": "montage.mp4",
+   "start": 11.3
   },
   {
-   "video": "d5_sunset.mp4",
-   "start": 0
+   "video": "montage.mp4",
+   "start": 14.8
   },
   {
-   "video": "d6_sun.mp4",
-   "start": 0
+   "video": "montage.mp4",
+   "start": 18.8
   },
   {
-   "video": "d7_night.mp4",
-   "start": 0
+   "video": "montage.mp4",
+   "start": 22.8
   },
   {
-   "video": "d8_night2.mp4",
-   "start": 0
+   "video": "montage.mp4",
+   "start": 25.3
   }
  ],
  "gpt_images": [],
