@@ -153,7 +153,10 @@ if [ -f "$SRC/voice.mp3" ] && SHORTS_SONG_PREMIX=$PREMIX SHORTS_SONG_FILE="$SONG
     python3 "$REPO/scripts/mac/shorts_deliver.py" "$DIR" "$SLUG" >> "$DIR/결과.txt" 2>&1
     # 2026-11-22 사용자: 웍스 중단 → 카카오톡 '나와의 채팅'으로만 (SHORTS_KAKAO=0 이면 끔, SHORTS_WORKS=1 이면 웍스도)
     PKG=$(ls -dt "$HOME/Library/Mobile Documents/com~apple~CloudDocs/쇼츠업로드/"*/ 2>/dev/null | head -1)
-    if [ "${SHORTS_KAKAO:-1}" = "1" ] && [ -n "$PKG" ]; then
+    if [ "${SHORTS_TELEGRAM:-1}" = "1" ] && [ -n "$PKG" ]; then  # 2026-11-22 사용자: 텔레그램으로 전달
+      "$REPO/scripts/mac/shorts_send_telegram.sh" "${PKG}영상.mp4" "$(cat "${PKG}제목.txt")" >> "$DIR/결과.txt" 2>&1
+    fi
+    if [ "${SHORTS_KAKAO:-0}" = "1" ] && [ -n "$PKG" ]; then
       "$REPO/scripts/mac/shorts_send_kakao.sh" "${PKG}영상.mp4" "$(cat "${PKG}제목.txt")" >> "$DIR/결과.txt" 2>&1
     fi
     if [ "${SHORTS_WORKS:-0}" = "1" ]; then
