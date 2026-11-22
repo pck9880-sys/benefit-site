@@ -6,20 +6,15 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="spWave" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence id="spWt" type="fractalNoise" baseFrequency=".012 .018" numOctaves="2" seed="7"/><feDisplacementMap id="spWd" in="SourceGraphic" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
 <div class="splash" id="splash" aria-hidden="true" hidden>
   <div class="sp-stage">
-    <div class="sp-mark" aria-hidden="true"><svg viewBox="-170 -170 340 340"><defs>
-      <linearGradient id="sg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8fd3ff"/><stop offset=".45" stop-color="#6b4cf5"/><stop offset="1" stop-color="#2a0e6e"/></linearGradient>
-      <linearGradient id="sg2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd6a0"/><stop offset=".4" stop-color="#ff5fae"/><stop offset="1" stop-color="#5b1fd0"/></linearGradient>
-      <linearGradient id="sg3" x1=".5" y1="1" x2=".5" y2="0"><stop offset="0" stop-color="#3b5bff"/><stop offset=".55" stop-color="#c25cf0"/><stop offset="1" stop-color="#ffb3d1"/></linearGradient></defs>
-      <g transform="translate(-14,-8)"><g class="sp-p sp-p1"><polygon points="0,-100 87,50 -87,50" fill="url(#sg1)" stroke="url(#sg1)" stroke-width="70" stroke-linejoin="round"/></g></g>
-      <g transform="translate(16,-4) rotate(40)"><g class="sp-p sp-p2"><polygon points="0,-100 87,50 -87,50" fill="url(#sg2)" stroke="url(#sg2)" stroke-width="70" stroke-linejoin="round"/></g></g>
-      <g transform="translate(0,14) rotate(80)"><g class="sp-p sp-p3"><polygon points="0,-100 87,50 -87,50" fill="url(#sg3)" stroke="url(#sg3)" stroke-width="70" stroke-linejoin="round"/></g></g></svg></div>
+    <div class="sp-mark" aria-hidden="true"><div class="sp-p sp-p1"><svg viewBox="-170 -170 340 340"><defs><linearGradient id="sg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8fd3ff"/><stop offset=".45" stop-color="#6b4cf5"/><stop offset="1" stop-color="#2a0e6e"/></linearGradient></defs><g transform="translate(-14,-8)"><polygon points="0,-100 87,50 -87,50" fill="url(#sg1)" stroke="url(#sg1)" stroke-width="70" stroke-linejoin="round"/></g></svg></div><div class="sp-p sp-p2"><svg viewBox="-170 -170 340 340"><defs><linearGradient id="sg2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd6a0"/><stop offset=".4" stop-color="#ff5fae"/><stop offset="1" stop-color="#5b1fd0"/></linearGradient></defs><g transform="translate(16,-4) rotate(40)"><polygon points="0,-100 87,50 -87,50" fill="url(#sg2)" stroke="url(#sg2)" stroke-width="70" stroke-linejoin="round"/></g></svg></div><div class="sp-p sp-p3"><svg viewBox="-170 -170 340 340"><defs><linearGradient id="sg3" x1=".5" y1="1" x2=".5" y2="0"><stop offset="0" stop-color="#3b5bff"/><stop offset=".55" stop-color="#c25cf0"/><stop offset="1" stop-color="#ffb3d1"/></linearGradient></defs><g transform="translate(0,14) rotate(80)"><polygon points="0,-100 87,50 -87,50" fill="url(#sg3)" stroke="url(#sg3)" stroke-width="70" stroke-linejoin="round"/></g></svg></div></div>
     <div class="sp-txt"><b>Benefy</b><p>나도 받을 수 있는 돈,<br><em>30초면</em> 알 수 있어요</p></div>
   </div>
 </div>
 <script>
 (function(){
   var s=document.getElementById('splash');
-  if(navigator.webdriver||/bot|crawl|spider|slurp|lighthouse|google|naver|yeti|bing|daum/i.test(navigator.userAgent))return;
+  var ua=navigator.userAgent;if(navigator.webdriver||/bot\b|bot\/|crawler|spider|slurp|lighthouse|Yeti|Daumoa|Googlebot|bingbot|Mediapartners/i.test(ua))return;
+  var wk=/iP(hone|ad|od)/.test(ua)||(/Safari/.test(ua)&&!/Chrome|Chromium|CriOS|Edg|Android/.test(ua));  // 사파리 계열: 물결 필터 대신 크기 변화만
   s.hidden=false;document.documentElement.classList.add('sp-on');
   var calm=matchMedia('(prefers-reduced-motion:reduce)').matches,gone=false,auto=setTimeout(go,2600);
   function fin(){s.remove();document.documentElement.classList.remove('sp-on')}
@@ -29,7 +24,7 @@
     var m=s.querySelector('.sp-mark'),st=s.querySelector('.sp-stage'),wd=document.getElementById('spWd'),W=innerWidth,H=innerHeight,r=m.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
     m.animate([{transform:'scale(1)',opacity:1},{transform:'scale(.55)',opacity:0}],{duration:620,easing:'cubic-bezier(.4,0,.7,.4)',fill:'forwards'});
     s.querySelector('.sp-txt').animate([{opacity:1},{opacity:0}],{duration:300,fill:'forwards'});
-    st.style.filter='url(#spWave)';
+    if(!wk)st.style.filter='url(#spWave)';
     var t0=0,D=1050,Rm=Math.hypot(Math.max(cx,W-cx),Math.max(cy,H-cy))*1.25;
     requestAnimationFrame(function f(ts){t0=t0||ts;var q=Math.min(1,(ts-t0)/D),e=q<.18?0:ease((q-.18)/.82),R=Rm*e,wob=(1-e)*.18,
       rx=R*(1+wob*Math.sin(ts/110)),ry=R*(1+wob*Math.cos(ts/95)),fe=Math.max(60,R*.55);
