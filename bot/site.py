@@ -266,8 +266,8 @@ def build():
     from . import specials
     urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/special/2027-changes/", f"{config.SITE_URL}/finder/", f"{config.SITE_URL}/special/life/", f"{config.SITE_URL}/special/2027-calendar/", f"{config.SITE_URL}/fun/", f"{config.SITE_URL}/fun/type/", f"{config.SITE_URL}/fun/missed/", f"{config.SITE_URL}/fun/bingo/", f"{config.SITE_URL}/fun/16/", f"{config.SITE_URL}/special/year-end-tax/"] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
     urls += [f"{config.SITE_URL}/", f"{config.SITE_URL}/latest/", f"{config.SITE_URL}/check/", f"{config.SITE_URL}/deadline/"]
-    urls += [f"{config.SITE_URL}/c/{s}/" for s, _ in cats]
-    urls += [f"{config.SITE_URL}/target/{s}/" for s, _, _ in targets] + [f"{config.SITE_URL}/region/{s}/" for s, _, _ in regions]
+    urls += [f"{config.SITE_URL}/c/{s}/" for s, v in cats if len(v["posts"]) >= 3]
+    urls += [f"{config.SITE_URL}/target/{s}/" for s, _, _ in targets if len(target_items[s]) >= 3] + [f"{config.SITE_URL}/region/{s}/" for s, _, _ in regions if len(region_items[s]) >= 3]
     urls += [f"{config.SITE_URL}/{d['url']}" for d in posts]
     write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
           + "\n".join(f"<url><loc>{escape(u)}</loc></url>" for u in urls) + "\n</urlset>\n")

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{% if title %}{{ title }} 지원제도 모음 | {% endif %}{{ site_name }}{% if page > 1 %} ({{ page }}페이지){% endif %}{% endblock %}
+{% block head %}{% if title and total < 3 %}<meta name="robots" content="noindex,follow">{% endif %}{% endblock %}
 {% block bodyclass %}{% if not title and page == 1 %}is-home{% endif %}{% endblock %}
 {% block main %}
 {% if not title and page == 1 %}
