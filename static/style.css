@@ -849,3 +849,4 @@ html.sp-on,html.sp-on body{overflow:hidden}
 .tabbar .tb-fun{color:#c0399a!important}
 @media(max-width:1179px){.tabbar a{font-size:10px;letter-spacing:-.02em}}
 @media(min-width:900px){main.wrap:has(>.fz){padding-bottom:0!important;margin-bottom:0!important}.fz{margin-bottom:0}}
+.fz-bingo{max-width:440px;margin-left:auto;margin-right:auto}
