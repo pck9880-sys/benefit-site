@@ -158,7 +158,7 @@ def build():
     for slug, v in cats:
         paginate(v["posts"], f"c/{slug}/", v["name"])
     for slug, name, _ in targets:
-        paginate(target_items[slug], f"target/{slug}/", name)
+        paginate(target_items[slug], f"target/{slug}/", f"{name} 대상")
     for slug, name, _ in regions:
         paginate(region_items[slug], f"region/{slug}/", name)
 
