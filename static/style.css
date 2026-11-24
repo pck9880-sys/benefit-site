@@ -932,3 +932,7 @@ html.sp-on,html.sp-on body{overflow:hidden}
 .ye-res{margin-top:16px;padding:20px;border-radius:18px;background:linear-gradient(135deg,#1d1150,#3a1f9e);color:#fff;animation:fzin .4s both}
 .ye-res small{color:#c9c0f5;font-weight:700}.ye-res strong{display:block;font-size:34px;font-weight:900}.ye-res ul{margin:8px 0;padding-left:18px;line-height:1.8;font-weight:700}.ye-res p{color:#d6d0f5;font-size:13.5px;line-height:1.6}
 @media(max-width:640px){.ye-time{grid-template-columns:1fr 1fr}.ye-time li:last-child{grid-column:1/-1}.ye-list summary i{display:none}.ye-list details p{padding-left:16px}.ye-dday b{font-size:32px}}
+.ptools{margin:28px 0}.ptools h2{font-size:19px;margin:0 0 10px}
+.ptools div{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.ptools a{position:relative;display:flex;flex-direction:column;gap:2px;padding:14px 36px 14px 16px;border-radius:14px;text-decoration:none;color:#fff;background:linear-gradient(135deg,#1d1150,#3a1f9e);transition:transform .15s}
+.ptools a:hover{transform:translateY(-2px)}.ptools b{font-size:15px}.ptools small{color:#c9c0f5;font-weight:600}.ptools i{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-style:normal;color:#ffb3d9;font-weight:800}

@@ -15,6 +15,26 @@ PER_PAGE = 12
 HOME_LATEST = 6
 CALCS = [("calc/", "calc_index.html"), ("calc/median/", "calc_median.html"), ("calc/unemployment/", "calc_unemp.html"), ("calc/parental-leave/", "calc_parental.html"), ("calc/baby/", "calc_baby.html"),
          ("calc/severance/", "calc_severance.html"), ("calc/youth-savings/", "calc_youthsave.html")]
+TOOL_RULES = [  # 글 제목·요약 키워드 → 관련 도구 (내부 링크)
+    (("실업", "구직급여", "실직"), "calc/unemployment/", "실업급여 계산기", "하루 얼마, 며칠 받는지"),
+    (("퇴직",), "calc/severance/", "퇴직금 계산기", "세후 실수령액까지"),
+    (("육아휴직", "육아기"), "calc/parental-leave/", "육아휴직급여 계산기", "6+6 포함 월별 금액"),
+    (("출산", "임신", "임산부", "아동수당", "부모급여", "첫만남", "영아", "산후"), "calc/baby/", "출산·육아 지원금 계산기", "우리 아이가 받는 총액"),
+    (("적금", "도약계좌", "저축계좌", "미래적금"), "calc/youth-savings/", "청년미래적금 계산기", "만기 수령액·정부기여금"),
+    (("중위소득", "기초생활", "생계급여", "주거급여", "의료급여", "교육급여", "차상위", "저소득"), "calc/median/", "기준 중위소득 계산기", "우리 집은 몇 %일까"),
+    (("연말정산", "세액공제", "소득공제", "근로장려금", "자녀장려금"), "special/year-end-tax/", "연말정산 놓치는 공제 TOP 10", "13월의 월급 체크리스트"),
+]
+
+
+def tools_for(d):
+    txt = " ".join(str(x) for x in (d["article"].get("title", ""), d["article"].get("description", ""), d.get("name", "")))
+    out = [(u, t, s) for keys, u, t, s in TOOL_RULES if any(k in txt for k in keys)][:2]
+    if len(out) < 2:
+        out.append(("finder/", "30초 지원금 진단", "나는 1년에 얼마 받을까"))
+    out.append(("fun/16/", "지원금 성향 16유형", "나의 젤리 캐릭터와 찰떡 지원금"))
+    return out[:3]
+
+
 CHANGES_2027 = [  # 2027 달라지는 것 (보건복지부 고시값으로 확인)
     {"name": "기준 중위소득 (1인 가구)", "a": 256.4, "b": 273.6, "u": "만 원", "fa": "256.4만 원", "fb": "273.6만 원", "diff": "+6.7%",
      "note": "월 2,564,238원 → 2,736,042원. 각종 복지 지원의 기준이 되는 금액이에요."},
@@ -139,7 +159,7 @@ def build():
         if len(related) < 4:
             related += [x for x in posts if x["id"] != d["id"] and x not in related][:4 - len(related)]
         write(d["url"] + ".html", env.get_template("post.html").render(post=d, a=d["article"], body_top=body_top, body_bottom=body_bottom, toc=toc, read_min=read_min,
-                                                             related=related, faq_ld=faq_ld, canonical=f"{config.SITE_URL}/{d['url']}"))
+                                                             related=related, tools=tools_for(d), faq_ld=faq_ld, canonical=f"{config.SITE_URL}/{d['url']}"))
 
     # 목록 페이지 (페이지네이션)
     def paginate(items, prefix, title, tmpl_name="list.html"):
@@ -194,6 +214,12 @@ def build():
            ("missed", "fun/missed/", "내가 놓친 돈 영수증 · 아직 안 받은 지원금", "받을 수 있는데 아직 신청하지 않은 지원금을 영수증으로 뽑아드려요."),
            ("p16", "fun/16/", "지원금 성향 16유형 테스트 · MBTI로 보는 나의 젤리 캐릭터", "12문항으로 알아보는 지원금 성향 16유형. 유형별 젤리 캐릭터와 찰떡 지원금 TOP 3를 알려드려요."),
            ("bingo", "fun/bingo/", "지원금 빙고 · 받아본 혜택 체크하고 친구와 대결", "받아본 정부 지원금을 체크해 빙고를 완성하고 친구와 비교해요.")]
+    import re as _re
+    for k, nm, q in _re.findall(r"\n (\w{4}):\['([^']+)','([^']+)',", (config.ROOT / "templates" / "fun.html").read_text(encoding="utf-8")):
+        write(f"fun/16/{k}/index.html", env.get_template("fun.html").render(
+            f={"mode": "p16", "preset": k, "og": f"/static/types/og/{k}.png", "title": f"{k} {nm} · 지원금 성향 16유형",
+               "desc": f"{k} 유형은 '{nm}'! \"{q}\" 나의 지원금 젤리 캐릭터와 찰떡 지원금 TOP 3를 확인해 보세요."},
+            canonical=f"{config.SITE_URL}/fun/16/{k}/"))
     for mode, rel, title, desc in FUN:
         write(rel + "index.html", env.get_template("fun.html").render(f={"mode": mode, "title": title, "desc": desc}, canonical=f"{config.SITE_URL}/{rel}"))
     YE_SCHED = [("1월 15일", "간소화 서비스 오픈", "홈택스에서 공제 자료 조회·내려받기"),
@@ -264,7 +290,7 @@ def build():
 
     # SEO 파일
     from . import specials
-    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/special/2027-changes/", f"{config.SITE_URL}/finder/", f"{config.SITE_URL}/special/life/", f"{config.SITE_URL}/special/2027-calendar/", f"{config.SITE_URL}/fun/", f"{config.SITE_URL}/fun/type/", f"{config.SITE_URL}/fun/missed/", f"{config.SITE_URL}/fun/bingo/", f"{config.SITE_URL}/fun/16/", f"{config.SITE_URL}/special/year-end-tax/"] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
+    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/special/2027-changes/", f"{config.SITE_URL}/finder/", f"{config.SITE_URL}/special/life/", f"{config.SITE_URL}/special/2027-calendar/", f"{config.SITE_URL}/fun/", f"{config.SITE_URL}/fun/type/", f"{config.SITE_URL}/fun/missed/", f"{config.SITE_URL}/fun/bingo/", f"{config.SITE_URL}/fun/16/", f"{config.SITE_URL}/special/year-end-tax/"] + [f"{config.SITE_URL}/fun/16/{k}/" for k in ("ENTJ","INTJ","INTP","ENTP","INFJ","INFP","ENFP","ENFJ","ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP")] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
     urls += [f"{config.SITE_URL}/", f"{config.SITE_URL}/latest/", f"{config.SITE_URL}/check/", f"{config.SITE_URL}/deadline/"]
     urls += [f"{config.SITE_URL}/c/{s}/" for s, v in cats if len(v["posts"]) >= 3]
     urls += [f"{config.SITE_URL}/target/{s}/" for s, _, _ in targets if len(target_items[s]) >= 3] + [f"{config.SITE_URL}/region/{s}/" for s, _, _ in regions if len(region_items[s]) >= 3]
