@@ -7,11 +7,33 @@
 
 {% if f.mode == 'hub' %}
   <h1 class="fz-ttl" data-slot>혜택 놀이터</h1>
-  <p class="fz-sub">30초면 끝나는 지원금 놀이 3종</p>
+  <p class="fz-sub">30초면 끝나는 지원금 놀이 4종</p>
   <div class="fz-hub">
     <a href="{{ base }}/fun/type/"><span><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18l-5-3-5 3 1.4-5.2L4 9l5.8-.7z"/></svg></span><b>지원금 유형 테스트</b><small>8문항 · 나는 어떤 혜택형?</small><i class="ar">→</i></a>
     <a href="{{ base }}/fun/missed/"><span><svg class="ic" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z M9 8h6 M9 12h6 M9 16h3"/></svg></span><b>내가 놓친 돈 영수증</b><small>아직 안 받은 돈 계산서</small><i class="ar">→</i></a>
     <a href="{{ base }}/fun/bingo/"><span><svg class="ic" viewBox="0 0 24 24"><path d="M4 4h16v16H4z M4 9.3h16 M4 14.7h16 M9.3 4v16 M14.7 4v16"/></svg></span><b>지원금 빙고</b><small>받아본 혜택 체크 · 친구와 대결</small><i class="ar">→</i></a>
+    <a href="{{ base }}/fun/16/" class="hub16"><span><img src="{{ base }}/static/types/ENFP.webp" alt="" width="56" height="56"></span><b>지원금 성향 16유형</b><small>MBTI로 보는 나의 젤리 캐릭터</small><i class="ar">→</i></a>
+  </div>
+
+{% elif f.mode == 'p16' %}
+  <div id="pq">
+    <h1 class="fz-ttl">나의 지원금<br>젤리 캐릭터</h1><p class="fz-sub">12문항 · 16유형 · MBTI로 보는 지원금 성향</p>
+    <div class="p16-pick"><small>내 유형을 이미 알아요</small><div id="pk"></div></div>
+    <div class="fz-card">
+      <div class="fz-step" id="ps">Q1 / 12</div><div class="fz-bar"><i id="pb"></i></div>
+      <h2 class="fz-q" id="pqq"></h2><div class="fz-opts" id="po"></div>
+    </div>
+  </div>
+  <div id="pr" hidden>
+    <div class="p16-card">
+      <div class="p16-code" id="pc"></div>
+      <img id="pi" alt="" width="400" height="400">
+      <h1 class="fz-ttl" id="pn"></h1><p class="p16-q" id="pqt"></p>
+      <ul class="p16-tr" id="ptr"></ul>
+      <div class="p16-h">찰떡 지원금 TOP 3</div><ul class="p16-bn" id="pbn"></ul>
+      <div class="p16-m"><a id="pm1"></a><a id="pm2"></a></div>
+    </div>
+    <button class="fz-btn sub" id="pre" type="button" style="margin-top:14px">다시 하기</button>
   </div>
 
 {% elif f.mode == 'type' %}
@@ -29,18 +51,31 @@
 
 {% elif f.mode == 'missed' %}
   <h1 class="fz-ttl">놓친 돈 영수증</h1>
-  <div id="me" hidden><p class="fz-sub">30초 진단을 먼저 하면<br>아직 안 받은 돈을 영수증으로 뽑아드려요</p>
-    <a class="fz-btn" href="{{ base }}/finder/?to=missed">30초 진단 하러 가기 ▶</a></div>
+  <div id="mc">
+    <p class="fz-sub">해당되는데 <b>아직 안 받은</b> 지원금을 체크하세요</p>
+    <ul class="mc-list" id="mcl"></ul>
+    <div class="mc-sum">체크 <b id="mcn">0</b>개 · 예상 <b id="mcv">0원</b></div>
+    <button class="fz-btn" id="mgo" type="button" disabled>영수증 뽑기</button>
+    <p class="fz-note">30초 진단을 했다면 내 결과가 먼저 나와요 · <a href="{{ base }}/finder/">30초 진단</a></p>
+  </div>
   <div id="mf" hidden>
     <div class="fz-rcpt"><div class="rh">BENEFY RECEIPT</div><div class="rs" id="md"></div><hr>
       <div id="ml"></div><hr><div class="rt"><span>TOTAL</span><b id="mt">0원</b></div><em class="rst" id="mst">아직 늦지 않았어요!</em></div>
-    <p class="fz-note">지갑에서 '신청 완료'로 체크하지 않은 지원금이에요 · <a href="{{ base }}/wallet/">지갑 열기</a></p>
+    <div class="mc-next"><a class="fz-btn" id="mapply" href="{{ base }}/wallet/">지갑에 담고 신청 체크하기</a><button class="fz-btn sub" id="mback" type="button">체크 다시 하기</button></div>
   </div>
 
 {% elif f.mode == 'bingo' %}
   <h1 class="fz-ttl">혜택 BINGO!</h1><p class="fz-sub" id="bvs">받아본 지원금을 체크해요</p>
   <div class="fz-bingo" id="bg"></div>
   <div class="fz-bc" id="bc">0 BINGO</div>
+  <div class="bg-fin" id="bfin" hidden>
+    <b>빙고 완성!</b><p>2줄 빙고를 달성했어요. 다음 미션도 도전해 보세요</p>
+    <a href="{{ base }}/fun/missed/"><i>1</i><span><b>아직 안 받은 칸 정리</b><small>놓친 돈 영수증 뽑기</small></span></a>
+    <a href="{{ base }}/finder/"><i>2</i><span><b>내가 받을 돈 계산</b><small>30초 진단으로 금액 확인</small></span></a>
+    <a href="{{ base }}/fun/16/"><i>3</i><span><b>내 젤리 캐릭터 찾기</b><small>지원금 성향 16유형</small></span></a>
+    <button class="fz-btn sub" id="breset" type="button">빙고판 새로 하기</button>
+  </div>
+  <div class="bg-pop" id="bpop" hidden><div><span id="bpn">한줄</span><b>빙고!</b></div></div>
 {% endif %}
 
   <div class="fz-acts" id="fa" hidden>
@@ -94,21 +129,71 @@ if(MODE==='type'){
  if(r&&T[r]){var bn=document.createElement('p');bn.className='fz-sub';bn.innerHTML='친구는 <b>'+esc(T[r][1])+'</b>이 나왔어요. 나는?';$('tq').insertBefore(bn,$('tq').querySelector('.fz-card'))}
 }
 
+
+/* ---------- 16유형 ---------- */
+if(MODE==='p16'){
+ var D={
+ ENTJ:['지원금 CEO형','혜택도 전략이다',['신청 일정을 표로 관리해요','조건이 안 되면 되는 방법을 찾아요','친구 신청까지 대신 챙겨요'],['청년도약계좌','근로장려금','국민내일배움카드'],'INFP','ISFP'],
+ INTJ:['계획형 전략가','마감 3주 전에 서류 끝',['체크리스트는 완벽하게','장기 적립형 혜택을 좋아해요','즉흥 신청은 사절'],['청년도약계좌','주택청약','연말정산'],'ENFP','ESFP'],
+ INTP:['계산기 박사','중복 수령 되는지부터 계산',['실수령액을 직접 계산해요','조건표를 끝까지 읽어요','신청은 계산 끝나고'],['근로장려금','연말정산','K-패스'],'ENTJ','ESFJ'],
+ ENTP:['꿀팁 토론가','새 제도는 내가 제일 먼저',['단톡방 꿀팁 공유왕','될지 몰라도 일단 신청','제도 허점도 찾아내요'],['K-패스','문화누리카드','청년수당'],'INFJ','ISFJ'],
+ INFJ:['미래 설계자','조금씩, 꾸준히, 멀리',['작은 혜택도 모아서 키워요','노후·자산에 관심이 많아요','남몰래 주변을 도와요'],['청년도약계좌','주택청약','기초연금'],'ENTP','ESTP'],
+ INFP:['감성 문화인','지원금으로 전시 보러 가요',['마음에 드는 혜택만 골라요','신청은 마감 직전에','문화 혜택이 최애'],['문화누리카드','K-패스','청년월세'],'ENTJ','ESTJ'],
+ ENFP:['아이디어 뱅크','새 혜택 탐색이 취미',['3개를 동시에 신청해요','정리는 나중에','신기한 지원금 발견왕'],['청년수당','국민내일배움카드','K-패스'],'INTJ','ISTJ'],
+ ENFJ:['응원 리더','우리 가족 혜택은 내가',['부모님 혜택까지 챙겨요','주변에 신청을 권해요','단톡방 리더'],['기초연금','아동수당','부모급여'],'ISFP','ISTP'],
+ ISTJ:['서류 장인','신청 첫날 9시 접속',['서류는 빠짐없이','영수증은 다 보관','규정대로 정확하게'],['근로장려금','주거급여','연말정산'],'ESFP','ENFP'],
+ ISFJ:['살림 지킴이','생활비는 1원도 소중해',['가족 혜택을 먼저 챙겨요','바우처를 꼼꼼히 써요','조용히 다 받아요'],['에너지바우처','아동수당','주거급여'],'ESTP','ENTP'],
+ ESTJ:['마감 사령관','마감일은 달력에 빨간펜',['가족 신청을 지휘해요','놓치는 꼴 못 봐요','일정 관리 끝판왕'],['부모급여','근로장려금','자녀장려금'],'ISFP','INFP'],
+ ESFJ:['나눔 반장','좋은 혜택은 다 같이',['동네 혜택 소식통','함께 받으면 두 배','선물처럼 공유해요'],['첫만남이용권','아동수당','문화누리카드'],'ISTP','INTP'],
+ ISTP:['실속 해결사','필요한 것만 딱',['최단 루트로 신청해요','환급형 혜택을 좋아해요','쓸데없는 서류는 패스'],['K-패스','근로장려금','국민내일배움카드'],'ESFJ','ENFJ'],
+ ISFP:['감성 바우처러','바우처로 소확행',['예쁜 혜택 카드 수집가','조용히 알뜰하게','작은 행복 찾기 달인'],['문화누리카드','에너지바우처','K-패스'],'ESTJ','ENTJ'],
+ ESTP:['혜택 사냥꾼','즉시 지급이 최고',['숨은 혜택 발견왕','생각보다 행동이 먼저','빠른 지급형 선호'],['청년월세','실업급여','근로장려금'],'ISFJ','INFJ'],
+ ESFP:['혜택 탐험가','놀면서 받는 지원금',['K-패스로 여기저기','지역 축제 혜택 단골','즐거운 혜택이 최애'],['K-패스','문화누리카드','청년수당'],'ISTJ','INTJ']};
+ var Q=[['E','I','주말에 쉬는 방법은?','친구 만나서 충전','집에서 혼자 충전'],['S','N','새 지원금 소식을 보면?','조건부터 꼼꼼히 확인','이걸로 뭘 할지 상상'],['T','F','친구가 신청을 놓쳤다면?','다음 신청 방법을 알려줌','일단 속상한 마음 위로'],['J','P','신청 마감이 2주 남았다면?','오늘 바로 신청','마감 즈음에 신청'],
+  ['E','I','좋은 혜택을 알게 되면?','단톡방에 바로 공유','조용히 나만 신청'],['S','N','설명서를 읽을 때 나는?','처음부터 차례대로','필요한 부분만 골라서'],['T','F','지원금을 고르는 기준은?','받는 금액이 큰 것','나에게 의미 있는 것'],['J','P','여행 갈 때 나는?','일정표부터 만든다','가서 정한다'],
+  ['E','I','설명회가 열린다면?','직접 가서 질문','온라인 자료로 충분'],['S','N','더 끌리는 혜택은?','지금 바로 받는 현금','미래를 위한 적립형'],['T','F','신청이 거절되면?','이유를 분석한다','기분이 한동안 다운'],['J','P','내 지원금 서류함은?','폴더별로 정리','어딘가에 다 있음']];
+ var sc={},i=0,B2=BASE;
+ $('pk').innerHTML=Object.keys(D).map(function(k){return '<button type="button" data-k="'+k+'">'+k+'</button>'}).join('');
+ $('pk').onclick=function(e){var b=e.target.closest('button');if(b)res(b.dataset.k)};
+ function draw(){var q=Q[i];$('ps').textContent='Q'+(i+1)+' / '+Q.length;$('pb').style.width=((i+1)/Q.length*100)+'%';$('pqq').textContent=q[2];
+  $('po').innerHTML='<button type="button" data-k="'+q[0]+'">'+q[3]+'</button><button type="button" data-k="'+q[1]+'">'+q[4]+'</button>'}
+ $('po').onclick=function(e){var b=e.target.closest('button');if(!b)return;sc[b.dataset.k]=(sc[b.dataset.k]||0)+1;b.classList.add('on');setTimeout(function(){if(++i<Q.length)draw();else res()},180)};
+ function code(){return [['E','I'],['S','N'],['T','F'],['J','P']].map(function(a){return (sc[a[0]]||0)>=(sc[a[1]]||0)?a[0]:a[1]}).join('')}
+ function res(k){k=k||code();var d=D[k];$('pq').hidden=true;$('pr').hidden=false;
+  $('pc').textContent=k;$('pi').src=B2+'/static/types/'+k+'.webp';$('pn').textContent=d[0];$('pqt').textContent='"'+d[1]+'"';
+  $('ptr').innerHTML=d[2].map(function(t){return '<li>'+esc(t)+'</li>'}).join('');
+  $('pbn').innerHTML=d[3].map(function(t,n){return '<li><a href="'+B2+'/search/?q='+encodeURIComponent(t)+'"><i>'+(n+1)+'</i>'+esc(t)+'<em>→</em></a></li>'}).join('');
+  $('pm1').innerHTML='<img src="'+B2+'/static/types/'+d[4]+'.webp" alt=""><small>찰떡궁합</small><b>'+d[4]+'</b>';$('pm1').href='?r='+d[4];
+  $('pm2').innerHTML='<img src="'+B2+'/static/types/'+d[5]+'.webp" alt=""><small>환장궁합</small><b>'+d[5]+'</b>';$('pm2').href='?r='+d[5];
+  var im=new Image();im.src=$('pi').src;
+  done({k:k+' · 지원금 성향',big:d[0],img:im,lines:d[3].map(function(t,n){return ['찰떡 지원금 '+(n+1),t]})},'나는 지원금 성향 '+k+' "'+d[0]+'"래! 너는? 🫧',location.origin+B2+'/fun/16/?r='+k);window.scrollTo(0,0)}
+ $('pre').onclick=function(){sc={};i=0;$('pr').hidden=true;$('pq').hidden=false;$('fa').hidden=true;draw()};
+ var r=(new URLSearchParams(location.search).get('r')||'').toUpperCase();draw();if(D[r])res(r);
+}
+
 /* ---------- 놓친 돈 ---------- */
 if(MODE==='missed'){
+ var BASEL=[['청년월세 지원',240,'19~34세 무주택 월세'],['근로장려금',165,'일하는 저소득 가구'],['자녀장려금',100,'18세 미만 자녀 가구'],['K-패스 환급',22,'대중교통 월 15회 이상'],['에너지바우처',31,'취약계층 냉난방비'],['문화누리카드',14,'기초·차상위 6세 이상'],['청년도약계좌 기여금',40,'19~34세 적금'],['국민내일배움카드',300,'직업훈련비'],['주거급여',200,'중위소득 48% 이하'],['아동수당',120,'8세 미만 아동'],['부모급여',1200,'0~1세 아동'],['기초연금',400,'65세 이상 소득하위 70%']];
  var W;try{W=JSON.parse(localStorage.getItem('bf_wallet')||'null')}catch(e){}
- if(!W||!W.it||!W.it.length){$('me').hidden=false}else{
-  $('mf').hidden=false;W.done=W.done||{};var it=W.it.filter(function(x){return !W.done[x.n]}),tot=0;
-  it.forEach(function(x){tot+=x.v});var no=String(Math.floor(Math.random()*900000)+100000);
-  $('md').textContent=new Date().toISOString().slice(0,10).replace(/-/g,'.')+' · No.'+no;
-  $('ml').innerHTML=it.length?it.map(function(x){return '<div class="rr"><span>'+esc(x.n)+'</span><b>'+(x.v*10000).toLocaleString()+'</b></div>'}).join(''):'<div class="rr"><span>놓친 돈 없음 🎉</span><b>0</b></div>';
-  if(!it.length)$('mst').textContent='전부 챙겼어요! 대단해요';
-  // 777 롤링
+ var L2=(W&&W.it&&W.it.length)?W.it.map(function(x){return [x.n,x.v,x.w||x.note||'내 진단 결과']}):BASEL,ck={};
+ if(W&&W.it&&W.it.length){W.done=W.done||{};L2.forEach(function(x,i){if(!W.done[x[0]])ck[i]=1})}
+ function won(v){return (v*10000).toLocaleString()+'원'}
+ function drawC(){var n=0,t=0;L2.forEach(function(x,i){if(ck[i]){n++;t+=x[1]}});
+  $('mcl').innerHTML=L2.map(function(x,i){return '<li class="'+(ck[i]?'on':'')+'" data-i="'+i+'"><i></i><span><b>'+esc(x[0])+'</b><small>'+esc(x[2])+'</small></span><em>'+x[1].toLocaleString()+'만</em></li>'}).join('');
+  $('mcn').textContent=n;$('mcv').textContent=won(t);$('mgo').disabled=!n}
+ $('mcl').onclick=function(e){var li=e.target.closest('li');if(!li)return;var i=+li.dataset.i;if(ck[i])delete ck[i];else ck[i]=1;drawC()};
+ drawC();
+ $('mgo').onclick=function(){var it=L2.filter(function(x,i){return ck[i]}),tot=0;it.forEach(function(x){tot+=x[1]});
+  $('mc').hidden=true;$('mf').hidden=false;var rc=document.querySelector('.fz-rcpt');rc.style.animation='none';void rc.offsetWidth;rc.style.animation='';
+  $('md').textContent=new Date().toISOString().slice(0,10).replace(/-/g,'.')+' · No.'+(Math.floor(Math.random()*900000)+100000);
+  $('ml').innerHTML=it.map(function(x){return '<div class="rr"><span>'+esc(x[0])+'</span><b>'+(x[1]*10000).toLocaleString()+'</b></div>'}).join('');
   var el=$('mt'),T0=null,D=1400,end=tot*10000;
   function step(ts){T0=T0||ts;var p=Math.min(1,(ts-T0)/D),e=1-Math.pow(1-p,3);el.textContent=(p<1?Math.floor(end*e+Math.random()*9999*(1-p)):end).toLocaleString()+'원';if(p<1)requestAnimationFrame(step)}
   requestAnimationFrame(step);
-  done({k:'BENEFY RECEIPT · 놓친 돈',big:(end).toLocaleString()+'원',lines:it.slice(0,5).map(function(x){return [x.n,(x.v*10000).toLocaleString()]})},
-   '나 지원금 '+end.toLocaleString()+'원 놓치고 있었대 😱 너도 영수증 뽑아봐 🧾',location.origin+BASE+'/fun/missed/')}
+  if(!(W&&W.it&&W.it.length))try{localStorage.setItem('bf_wallet',JSON.stringify({date:new Date().toISOString().slice(0,10),tot:tot,it:it.map(function(x){return {n:x[0],v:x[1],note:x[2],l:'search/?q='+encodeURIComponent(x[0].split(' ')[0])}}),done:{}}))}catch(e){}
+  done({k:'BENEFY RECEIPT · 놓친 돈',big:end.toLocaleString()+'원',lines:it.slice(0,5).map(function(x){return [x[0],(x[1]*10000).toLocaleString()]})},
+   '나 지원금 '+end.toLocaleString()+'원 놓치고 있었대 😱 너도 영수증 뽑아봐 🧾',location.origin+BASE+'/fun/missed/');window.scrollTo(0,0)};
+ $('mback').onclick=function(){$('mf').hidden=true;$('mc').hidden=false;$('fa').hidden=true};
 }
 
 /* ---------- 빙고 ---------- */
@@ -118,12 +203,18 @@ if(MODE==='bingo'){
  var L=[];for(var a=0;a<5;a++){L.push([0,1,2,3,4].map(function(c){return a*5+c}));L.push([0,1,2,3,4].map(function(c){return c*5+a}))}
  L.push([0,6,12,18,24]);L.push([4,8,12,16,20]);
  var vs=parseInt(new URLSearchParams(location.search).get('vs')||'',10);if(vs>=0&&!isNaN(vs))$('bvs').innerHTML='친구는 <b>'+vs+' BINGO</b>! 이길 수 있을까?';
- function draw(){var n=L.filter(function(l){return l.every(function(i){return on[i]})}).length,cnt=Object.keys(on).length-1;
+ var prevN=-1;
+ function pop(n){var p=$('bpop');$('bpn').textContent=n>=2?'두줄':'한줄';p.hidden=false;p.classList.remove('go');void p.offsetWidth;p.classList.add('go');
+  for(var k=0;k<26;k++){var c=document.createElement('i');c.className='cf';c.style.left=(Math.random()*100)+'%';c.style.background=['#8fd3ff','#6b4cf5','#ff5fae','#ffd6a0'][k%4];c.style.animationDelay=(Math.random()*.3)+'s';c.style.setProperty('--x',(Math.random()*200-100)+'px');p.appendChild(c)}
+  setTimeout(function(){p.hidden=true;p.querySelectorAll('.cf').forEach(function(c){c.remove()});if(n>=2)$('bfin').hidden=false},1700)}
+ function draw(){var n=Math.min(2,L.filter(function(l){return l.every(function(i){return on[i]})}).length),cnt=Object.keys(on).length-1;
+  if(prevN>=0&&n>prevN)pop(n);prevN=n;
   $('bg').innerHTML=B.map(function(t,i){return '<button type="button" data-i="'+i+'" class="'+(on[i]?'on':'')+(i===12?' free':'')+'">'+t+'</button>'}).join('');
-  $('bc').textContent=n?n+' BINGO!':cnt+'칸 체크';$('bc').classList.toggle('hit',n>0);
+  $('bc').textContent=n>=2?'두줄 빙고 달성!':n?'한줄 빙고! 한 줄 더!':cnt+'칸 체크 · 한 줄을 채워보세요';$('bg').classList.toggle('lock',n>=2);if(n>=2&&prevN===n&&!$('bpop').classList.contains('go'))$('bfin').hidden=false;$('bc').classList.toggle('hit',n>0);
   done({k:'BENEFY BINGO',big:n+' BINGO',lines:[['체크한 혜택',cnt+'개'],['다음 목표',(n+1)+' BINGO']]},'나 지원금 빙고 '+n+'줄 완성! 너는 몇 줄이야? 🎯',location.origin+BASE+'/fun/bingo/?vs='+n)}
- $('bg').onclick=function(e){var b=e.target.closest('button');if(!b)return;var i=+b.dataset.i;if(i===12)return;if(on[i])delete on[i];else on[i]=1;
+ $('bg').onclick=function(e){var b=e.target.closest('button');if(!b)return;var i=+b.dataset.i;if(i===12||$('bg').classList.contains('lock'))return;if(on[i])delete on[i];else on[i]=1;
   localStorage.setItem('bf_bingo',JSON.stringify(on));draw()};
+ $('breset').onclick=function(){on={12:1};localStorage.removeItem('bf_bingo');$('bfin').hidden=true;prevN=0;draw()};
  draw()}
 
 /* ---------- 결과 카드 이미지 ---------- */
@@ -131,12 +222,14 @@ function card(){var c=$('fcv'),x=c.getContext('2d'),F='"Pretendard Variable",Pre
  var g=x.createRadialGradient(540,0,0,540,0,1300);g.addColorStop(0,'#1d1150');g.addColorStop(.45,'#0b0628');g.addColorStop(1,'#040210');x.fillStyle=g;x.fillRect(0,0,1080,1350);
  var cl=['#ff5fae','#ffd6a0','#8fd3ff'];
  [[120,260,9],[960,220,11],[880,520,7],[90,900,8],[1000,1000,9]].forEach(function(d,i){x.fillStyle=cl[i%3];x.beginPath();x.arc(d[0],d[1],d[2],0,7);x.fill()});
- x.textAlign='center';x.fillStyle='#ff5fae';x.font='800 36px '+F;x.fillText(CARD.k,540,250);
+ x.textAlign='center';x.fillStyle='#ff5fae';x.font='800 36px '+F;
+ if(CARD.img&&CARD.img.complete){x.fillText(CARD.k,540,110);x.drawImage(CARD.img,330,130,420,420);x.save();x.translate(0,300);}else x.fillText(CARD.k,540,250);
  var gt=x.createLinearGradient(0,330,0,480);gt.addColorStop(0,'#fff');gt.addColorStop(1,'#ffb3d9');x.fillStyle=gt;
  var s=104;x.font='900 '+s+'px '+F;while(x.measureText(CARD.big).width>960&&s>50){s-=6;x.font='900 '+s+'px '+F}x.fillText(CARD.big,540,470);
- x.fillStyle='rgba(255,255,255,.08)';x.beginPath();x.roundRect?x.roundRect(90,560,900,520,40):x.rect(90,560,900,520);x.fill();
+ x.fillStyle='rgba(255,255,255,.08)';x.beginPath();var bh=100+CARD.lines.length*90;x.roundRect?x.roundRect(90,560,900,bh,40):x.rect(90,560,900,bh);x.fill();
  CARD.lines.forEach(function(l,i){var y=660+i*90;x.textAlign='left';x.fillStyle='#d6d0f5';x.font='700 42px '+F;x.fillText(l[0],150,y);x.textAlign='right';x.fillStyle='#c7b6ff';x.font='800 44px '+F;x.fillText(l[1],930,y)});
- x.textAlign='center';x.fillStyle='#cbbcff';x.font='700 38px '+F;x.fillText('나도 해보기 → benefy.kr/fun',540,1240);return c}
+ if(CARD.img&&CARD.img.complete)x.restore();
+ x.textAlign='center';x.fillStyle='#cbbcff';x.font='700 38px '+F;x.fillText('나도 해보기 → benefy.kr/fun',540,1290);return c}
 if(MODE!=='hub'){$('fsave').onclick=function(){var b=this;(document.fonts?document.fonts.ready:Promise.resolve()).then(function(){card().toBlob(function(blob){
  var f=new File([blob],'benefy-'+MODE+'.png',{type:'image/png'});
  if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],text:SHARE.t+' '+SHARE.u}).catch(function(){});
