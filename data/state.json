@@ -91,7 +91,7 @@
    "address": true,
    "birth": true
   },
-  "at": "2026-11-25T07:40+09:00"
+  "at": "2026-11-25T08:32+09:00"
  },
  "contest_last_date": "2026-11-20",
  "blog_date": "2026-11-25",
@@ -428,13 +428,15 @@
   }
  ],
  "adsense_alert_sent": true,
- "news_date": "2026-11-24",
+ "news_date": "2026-11-25",
  "news_sent": [
   "7b36fad7ab",
   "7abb26ec1a",
+  "c0ac84f7d9",
   "0aebc6e4dc",
+  "4552ab8194",
+  "020129dfee",
   "cd99cdf374",
-  "99599f0286",
-  "c0ac84f7d9"
+  "99599f0286"
  ]
 }
