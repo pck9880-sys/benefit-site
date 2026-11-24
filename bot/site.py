@@ -188,9 +188,10 @@ def build():
     write("special/life/index.html", env.get_template("life.html").render(life=LIFE, total=sum(v for st in LIFE for _, v, _ in st["items"]),
           canonical=f"{config.SITE_URL}/special/life/"))
     write("special/2027-calendar/index.html", env.get_template("calendar2027.html").render(canonical=f"{config.SITE_URL}/special/2027-calendar/"))
-    FUN = [("hub", "fun/", "혜택 놀이터 · 지원금 유형 테스트 · 놓친 돈 영수증 · 빙고", "지원금 유형 테스트, 놓친 돈 영수증, 지원금 빙고. 30초면 끝나는 지원금 놀이."),
+    FUN = [("hub", "fun/", "혜택 놀이터 · 지원금 성향 16유형 · 유형 테스트 · 놓친 돈 영수증 · 빙고", "지원금 유형 테스트, 놓친 돈 영수증, 지원금 빙고. 30초면 끝나는 지원금 놀이."),
            ("type", "fun/type/", "지원금 유형 테스트 · 나의 지원금 캐릭터는?", "8문항으로 알아보는 나의 지원금 캐릭터. 결과에 맞는 혜택도 추천해요."),
            ("missed", "fun/missed/", "내가 놓친 돈 영수증 · 아직 안 받은 지원금", "받을 수 있는데 아직 신청하지 않은 지원금을 영수증으로 뽑아드려요."),
+           ("p16", "fun/16/", "지원금 성향 16유형 테스트 · MBTI로 보는 나의 젤리 캐릭터", "12문항으로 알아보는 지원금 성향 16유형. 유형별 젤리 캐릭터와 찰떡 지원금 TOP 3를 알려드려요."),
            ("bingo", "fun/bingo/", "지원금 빙고 · 받아본 혜택 체크하고 친구와 대결", "받아본 정부 지원금을 체크해 빙고를 완성하고 친구와 비교해요.")]
     for mode, rel, title, desc in FUN:
         write(rel + "index.html", env.get_template("fun.html").render(f={"mode": mode, "title": title, "desc": desc}, canonical=f"{config.SITE_URL}/{rel}"))
@@ -217,7 +218,7 @@ def build():
 
     # SEO 파일
     from . import specials
-    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/special/2027-changes/", f"{config.SITE_URL}/finder/", f"{config.SITE_URL}/special/life/", f"{config.SITE_URL}/special/2027-calendar/", f"{config.SITE_URL}/fun/", f"{config.SITE_URL}/fun/type/", f"{config.SITE_URL}/fun/missed/", f"{config.SITE_URL}/fun/bingo/"] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
+    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/special/2027-changes/", f"{config.SITE_URL}/finder/", f"{config.SITE_URL}/special/life/", f"{config.SITE_URL}/special/2027-calendar/", f"{config.SITE_URL}/fun/", f"{config.SITE_URL}/fun/type/", f"{config.SITE_URL}/fun/missed/", f"{config.SITE_URL}/fun/bingo/", f"{config.SITE_URL}/fun/16/"] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
     urls += [f"{config.SITE_URL}/", f"{config.SITE_URL}/latest/", f"{config.SITE_URL}/check/", f"{config.SITE_URL}/deadline/"]
     urls += [f"{config.SITE_URL}/c/{s}/" for s, _ in cats]
     urls += [f"{config.SITE_URL}/target/{s}/" for s, _, _ in targets] + [f"{config.SITE_URL}/region/{s}/" for s, _, _ in regions]
