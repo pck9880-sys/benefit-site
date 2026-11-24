@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block title %}{{ f.title }} | {{ site_name }}{% endblock %}
+{% block desc %}{{ f.desc }}{% endblock %}
+{% block main %}
+<div class="fz" data-mode="{{ f.mode }}">
+  <div class="fz-chip"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4z M10 7v10"/></svg>BENEFY FESTIVAL</div>
+
+{% if f.mode == 'hub' %}
+  <h1 class="fz-ttl" data-slot>혜택 놀이터</h1>
+  <p class="fz-sub">30초면 끝나는 지원금 놀이 3종</p>
+  <div class="fz-hub">
+    <a href="{{ base }}/fun/type/"><span><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18l-5-3-5 3 1.4-5.2L4 9l5.8-.7z"/></svg></span><b>지원금 유형 테스트</b><small>8문항 · 나는 어떤 혜택형?</small><i class="ar">→</i></a>
+    <a href="{{ base }}/fun/missed/"><span><svg class="ic" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z M9 8h6 M9 12h6 M9 16h3"/></svg></span><b>내가 놓친 돈 영수증</b><small>아직 안 받은 돈 계산서</small><i class="ar">→</i></a>
+    <a href="{{ base }}/fun/bingo/"><span><svg class="ic" viewBox="0 0 24 24"><path d="M4 4h16v16H4z M4 9.3h16 M4 14.7h16 M9.3 4v16 M14.7 4v16"/></svg></span><b>지원금 빙고</b><small>받아본 혜택 체크 · 친구와 대결</small><i class="ar">→</i></a>
+  </div>
+
+{% elif f.mode == 'type' %}
+  <div id="tq">
+    <h1 class="fz-ttl">나의 지원금<br>캐릭터는?</h1><p class="fz-sub">8문항 · 30초 · 결과 카드 공유</p>
+    <div class="fz-card">
+      <div class="fz-step" id="ts">Q1 / 8</div><div class="fz-bar"><i id="tb"></i></div>
+      <h2 class="fz-q" id="tqq"></h2><div class="fz-opts" id="to"></div>
+    </div>
+  </div>
+  <div id="tr" hidden>
+    <p class="fz-sub">당신의 지원금 캐릭터는</p>
+    <div class="fz-res"><span id="re"></span><h1 class="fz-ttl" id="rn"></h1><p id="rd"></p><ul id="rl"></ul></div>
+  </div>
+
+{% elif f.mode == 'missed' %}
+  <h1 class="fz-ttl">놓친 돈 영수증</h1>
+  <div id="me" hidden><p class="fz-sub">30초 진단을 먼저 하면<br>아직 안 받은 돈을 영수증으로 뽑아드려요</p>
+    <a class="fz-btn" href="{{ base }}/finder/?to=missed">30초 진단 하러 가기 ▶</a></div>
+  <div id="mf" hidden>
+    <div class="fz-rcpt"><div class="rh">BENEFY RECEIPT</div><div class="rs" id="md"></div><hr>
+      <div id="ml"></div><hr><div class="rt"><span>TOTAL</span><b id="mt">0원</b></div><em class="rst" id="mst">아직 늦지 않았어요!</em></div>
+    <p class="fz-note">지갑에서 '신청 완료'로 체크하지 않은 지원금이에요 · <a href="{{ base }}/wallet/">지갑 열기</a></p>
+  </div>
+
+{% elif f.mode == 'bingo' %}
+  <h1 class="fz-ttl">혜택 BINGO!</h1><p class="fz-sub" id="bvs">받아본 지원금을 체크해요</p>
+  <div class="fz-bingo" id="bg"></div>
+  <div class="fz-bc" id="bc">0 BINGO</div>
+{% endif %}
+
+  <div class="fz-acts" id="fa" hidden>
+    <button class="fz-btn" id="fsave" type="button"><svg class="ic" viewBox="0 0 24 24"><path d="M12 4v11 M7 10l5 5 5-5 M5 20h14"/></svg>결과 이미지 저장 · 공유</button>
+    <button class="fz-btn sub" id="fshare" type="button"><svg class="ic" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>친구에게 링크 보내기</button>
+  </div>
+  {% if f.mode != 'hub' %}<a class="fz-more" href="{{ base }}/fun/"><svg class="ic" viewBox="0 0 24 24"><path d="M4 4h7v7H4z M13 4h7v7h-7z M4 13h7v7H4z M13 13h7v7h-7z"/></svg>다른 놀이 보기</a>{% endif %}
+  <canvas id="fcv" width="1080" height="1350" hidden></canvas>
+</div>
+<script>
+(function(){
+var MODE='{{ f.mode }}',$=function(x){return document.getElementById(x)},esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+var CARD=null,SHARE={t:'',u:location.origin+BASE+'/fun/'+MODE+'/'};
+function done(card,t,u){CARD=card;SHARE.t=t;if(u)SHARE.u=u;$('fa').hidden=false}
+
+/* ---------- 777 슬롯 타이틀 ---------- */
+document.querySelectorAll('[data-slot]').forEach(function(h){var txt=h.textContent,P='혜택놀이터지원금빙고돈축제777',k=0;h.setAttribute('aria-label',txt);h.innerHTML='';
+ txt.split('').forEach(function(ch){if(ch===' '){h.appendChild(document.createTextNode(' '));return}
+  var r=document.createElement('span'),c=document.createElement('i'),n=8+k*3,html='';r.className='sl';r.setAttribute('aria-hidden','true');
+  for(var j=0;j<n;j++)html+='<b>'+P[Math.floor(Math.random()*P.length)]+'</b>';c.innerHTML=html+'<b>'+ch+'</b>';r.appendChild(c);h.appendChild(r);
+  c.style.transition='transform '+(0.9+k*0.18)+'s cubic-bezier(.15,.75,.25,1.12) '+(0.15+k*0.05)+'s';
+  requestAnimationFrame(function(){requestAnimationFrame(function(){c.style.transform='translateY(-'+n*1.15+'em)'})});k++})});
+
+/* ---------- 유형 테스트 ---------- */
+if(MODE==='type'){
+ var T={
+  y:['M13 2 4 14h7l-1 8 9-12h-7z','청년혜택 풀코스형','청년이라서 받을 수 있는 건 다 챙기는 타입! 월세·교통·저축까지 풀코스로 노려봐요.',[['청년월세 지원','search/?q=청년월세'],['청년도약계좌','search/?q=청년도약계좌'],['K-패스','search/?q=K-패스']]],
+  w:['M3 7h18v12H3z M9 7V4h6v3 M3 12h18','근로장려금 수집가형','성실하게 일한 만큼 돌려받는 타입. 장려금·환급은 놓치지 마세요.',[['근로장려금','search/?q=근로장려금'],['자녀장려금','search/?q=자녀장려금'],['국민내일배움카드','search/?q=국민내일배움카드']]],
+  k:['M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z','육아 혜택 마스터형','아이와 함께 받는 혜택이 가장 큰 타입. 출생부터 순서대로 챙겨요.',[['부모급여','search/?q=부모급여'],['아동수당','search/?q=아동수당'],['첫만남이용권','search/?q=첫만남이용권']]],
+  h:['M3 11 12 4l9 7v9H3z M9 20v-6h6v6','내 집 지킴이 주거형','주거비가 가장 큰 고민인 타입. 월세·전세 지원부터 확인해요.',[['주거급여','search/?q=주거급여'],['청년월세 지원','search/?q=청년월세'],['전세대출','search/?q=전세']]],
+  l:['M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z M15 9.5c0-1-1.3-1.8-3-1.8s-3 .8-3 1.8 1.3 1.5 3 1.8 3 .8 3 1.8-1.3 1.8-3 1.8-3-.8-3-1.8 M12 6v12','알뜰 생활비형','생활비를 조금씩 아끼는 게 특기인 타입. 바우처·환급형 혜택이 딱이에요.',[['에너지바우처','search/?q=에너지바우처'],['문화누리카드','search/?q=문화누리카드'],['K-패스','search/?q=K-패스']]],
+  s:['M5 19C5 9 12 5 20 4c-1 8-5 15-15 15z M5 19l8-8','든든 노후 준비형','앞으로를 차근차근 준비하는 타입. 연금·건강 혜택을 먼저 봐요.',[['기초연금','search/?q=기초연금'],['국민연금','search/?q=국민연금'],['건강검진','search/?q=건강검진']]]};
+ var Q=[['월급날, 가장 먼저 하는 일은?',[['적금부터 넣는다','s'],['장바구니 결제','l'],['월세·관리비 이체','h'],['가계부 정리','w']]],
+  ['요즘 가장 큰 지출은?',[['집세','h'],['아이 관련','k'],['교통·통신','y'],['장보기·생활비','l']]],
+  ['지금 내 상황에 가까운 건?',[['사회초년생','y'],['직장 n년차','w'],['육아 중','k'],['은퇴 준비','s']]],
+  ['주말에 주로 하는 일은?',[['자기계발','y'],['가족 나들이','k'],['영화·전시','l'],['집에서 휴식','h']]],
+  ['갑자기 100만 원이 생긴다면?',[['저축·투자','s'],['보증금에 보탠다','h'],['아이 용품','k'],['여행','y']]],
+  ['나를 가장 잘 표현하는 말은?',[['성실한 일꾼','w'],['알뜰한 살림꾼','l'],['도전하는 청년','y'],['미래 설계자','s']]],
+  ['정부 지원금, 받아본 적 있다면?',[['교통·문화 바우처','l'],['장려금·환급','w'],['출산·육아','k'],['아직 없어요','y']]],
+  ['가장 듣고 싶은 소식은?',[['월세 지원 확정','h'],['환급금 입금','w'],['육아수당 인상','k'],['연금 인상','s']]]];
+ var sc={},i=0;
+ function draw(){var q=Q[i];$('ts').textContent='Q'+(i+1)+' / '+Q.length;$('tb').style.width=((i+1)/Q.length*100)+'%';$('tqq').textContent=q[0];
+  $('to').innerHTML=q[1].map(function(o,n){return '<button type="button" data-k="'+o[1]+'">'+o[0]+'</button>'}).join('')}
+ $('to').onclick=function(e){var b=e.target.closest('button');if(!b)return;sc[b.dataset.k]=(sc[b.dataset.k]||0)+1;b.classList.add('on');
+  setTimeout(function(){if(++i<Q.length)draw();else res()},180)};
+ function res(k){k=k||Object.keys(sc).sort(function(a,b){return sc[b]-sc[a]})[0]||'l';var t=T[k];$('tq').hidden=true;$('tr').hidden=false;
+  $('re').innerHTML='<svg viewBox="0 0 24 24"><path d="'+t[0]+'"/></svg>';$('rn').textContent=t[1];$('rd').textContent=t[2];
+  $('rl').innerHTML=t[3].map(function(x){return '<li><a href="'+BASE+'/'+x[1]+'">'+esc(x[0])+' →</a></li>'}).join('');
+  done({k:'나의 지원금 캐릭터',big:t[1],lines:t[3].map(function(x){return ['추천',x[0]]})},'나는 "'+t[1]+'"래! 너는 무슨 지원금 캐릭터야? 🎪',location.origin+BASE+'/fun/type/?r='+k);window.scrollTo(0,0)}
+ var r=new URLSearchParams(location.search).get('r');draw();
+ if(r&&T[r]){var bn=document.createElement('p');bn.className='fz-sub';bn.innerHTML='친구는 <b>'+esc(T[r][1])+'</b>이 나왔어요. 나는?';$('tq').insertBefore(bn,$('tq').querySelector('.fz-card'))}
+}
+
+/* ---------- 놓친 돈 ---------- */
+if(MODE==='missed'){
+ var W;try{W=JSON.parse(localStorage.getItem('bf_wallet')||'null')}catch(e){}
+ if(!W||!W.it||!W.it.length){$('me').hidden=false}else{
+  $('mf').hidden=false;W.done=W.done||{};var it=W.it.filter(function(x){return !W.done[x.n]}),tot=0;
+  it.forEach(function(x){tot+=x.v});var no=String(Math.floor(Math.random()*900000)+100000);
+  $('md').textContent=new Date().toISOString().slice(0,10).replace(/-/g,'.')+' · No.'+no;
+  $('ml').innerHTML=it.length?it.map(function(x){return '<div class="rr"><span>'+esc(x.n)+'</span><b>'+(x.v*10000).toLocaleString()+'</b></div>'}).join(''):'<div class="rr"><span>놓친 돈 없음 🎉</span><b>0</b></div>';
+  if(!it.length)$('mst').textContent='전부 챙겼어요! 대단해요';
+  // 777 롤링
+  var el=$('mt'),T0=null,D=1400,end=tot*10000;
+  function step(ts){T0=T0||ts;var p=Math.min(1,(ts-T0)/D),e=1-Math.pow(1-p,3);el.textContent=(p<1?Math.floor(end*e+Math.random()*9999*(1-p)):end).toLocaleString()+'원';if(p<1)requestAnimationFrame(step)}
+  requestAnimationFrame(step);
+  done({k:'BENEFY RECEIPT · 놓친 돈',big:(end).toLocaleString()+'원',lines:it.slice(0,5).map(function(x){return [x.n,(x.v*10000).toLocaleString()]})},
+   '나 지원금 '+end.toLocaleString()+'원 놓치고 있었대 😱 너도 영수증 뽑아봐 🧾',location.origin+BASE+'/fun/missed/')}
+}
+
+/* ---------- 빙고 ---------- */
+if(MODE==='bingo'){
+ var B='청년월세,K-패스,근로장려금,문화누리카드,에너지바우처,내일배움카드,청년도약계좌,첫만남이용권,아동수당,부모급여,실업급여,주거급여,FREE,기초연금,건강검진,학자금대출,전세대출,난임지원,산후도우미,교육급여,통신비감면,자녀장려금,청년수당,연말정산환급,유류세환급'.split(',');
+ var on;try{on=JSON.parse(localStorage.getItem('bf_bingo')||'null')}catch(e){}on=on||{12:1};on[12]=1;
+ var L=[];for(var a=0;a<5;a++){L.push([0,1,2,3,4].map(function(c){return a*5+c}));L.push([0,1,2,3,4].map(function(c){return c*5+a}))}
+ L.push([0,6,12,18,24]);L.push([4,8,12,16,20]);
+ var vs=parseInt(new URLSearchParams(location.search).get('vs')||'',10);if(vs>=0&&!isNaN(vs))$('bvs').innerHTML='친구는 <b>'+vs+' BINGO</b>! 이길 수 있을까?';
+ function draw(){var n=L.filter(function(l){return l.every(function(i){return on[i]})}).length,cnt=Object.keys(on).length-1;
+  $('bg').innerHTML=B.map(function(t,i){return '<button type="button" data-i="'+i+'" class="'+(on[i]?'on':'')+(i===12?' free':'')+'">'+t+'</button>'}).join('');
+  $('bc').textContent=n?n+' BINGO!':cnt+'칸 체크';$('bc').classList.toggle('hit',n>0);
+  done({k:'BENEFY BINGO',big:n+' BINGO',lines:[['체크한 혜택',cnt+'개'],['다음 목표',(n+1)+' BINGO']]},'나 지원금 빙고 '+n+'줄 완성! 너는 몇 줄이야? 🎯',location.origin+BASE+'/fun/bingo/?vs='+n)}
+ $('bg').onclick=function(e){var b=e.target.closest('button');if(!b)return;var i=+b.dataset.i;if(i===12)return;if(on[i])delete on[i];else on[i]=1;
+  localStorage.setItem('bf_bingo',JSON.stringify(on));draw()};
+ draw()}
+
+/* ---------- 결과 카드 이미지 ---------- */
+function card(){var c=$('fcv'),x=c.getContext('2d'),F='"Pretendard Variable",Pretendard,"Apple SD Gothic Neo",sans-serif';
+ var g=x.createRadialGradient(540,0,0,540,0,1300);g.addColorStop(0,'#1d1150');g.addColorStop(.45,'#0b0628');g.addColorStop(1,'#040210');x.fillStyle=g;x.fillRect(0,0,1080,1350);
+ var cl=['#ff5fae','#ffd6a0','#8fd3ff'];
+ [[120,260,9],[960,220,11],[880,520,7],[90,900,8],[1000,1000,9]].forEach(function(d,i){x.fillStyle=cl[i%3];x.beginPath();x.arc(d[0],d[1],d[2],0,7);x.fill()});
+ x.textAlign='center';x.fillStyle='#ff5fae';x.font='800 36px '+F;x.fillText(CARD.k,540,250);
+ var gt=x.createLinearGradient(0,330,0,480);gt.addColorStop(0,'#fff');gt.addColorStop(1,'#ffb3d9');x.fillStyle=gt;
+ var s=104;x.font='900 '+s+'px '+F;while(x.measureText(CARD.big).width>960&&s>50){s-=6;x.font='900 '+s+'px '+F}x.fillText(CARD.big,540,470);
+ x.fillStyle='rgba(255,255,255,.08)';x.beginPath();x.roundRect?x.roundRect(90,560,900,520,40):x.rect(90,560,900,520);x.fill();
+ CARD.lines.forEach(function(l,i){var y=660+i*90;x.textAlign='left';x.fillStyle='#d6d0f5';x.font='700 42px '+F;x.fillText(l[0],150,y);x.textAlign='right';x.fillStyle='#c7b6ff';x.font='800 44px '+F;x.fillText(l[1],930,y)});
+ x.textAlign='center';x.fillStyle='#cbbcff';x.font='700 38px '+F;x.fillText('나도 해보기 → benefy.kr/fun',540,1240);return c}
+if(MODE!=='hub'){$('fsave').onclick=function(){var b=this;(document.fonts?document.fonts.ready:Promise.resolve()).then(function(){card().toBlob(function(blob){
+ var f=new File([blob],'benefy-'+MODE+'.png',{type:'image/png'});
+ if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],text:SHARE.t+' '+SHARE.u}).catch(function(){});
+ else{var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=f.name;a.click();b.textContent='이미지 저장됨 ✓'}},'image/png')})};
+$('fshare').onclick=function(){var b=this;if(navigator.share)navigator.share({text:SHARE.t,url:SHARE.u}).catch(function(){});
+ else navigator.clipboard.writeText(SHARE.t+' '+SHARE.u).then(function(){b.textContent='링크 복사됨 ✓'})}};
+})();
+</script>
+{% endblock %}
