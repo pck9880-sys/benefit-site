@@ -22,7 +22,7 @@ TELEGRAM_BOT_TOKEN = _env("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = _env("TELEGRAM_CHAT_ID")  # 비워두면 봇에 처음 메시지 보낸 사람으로 자동 등록
 
 # --- 일반 설정 (GitHub Variables) ---
-SITE_NAME = _env("SITE_NAME", "Benefy 정부혜택 한눈에")
+SITE_NAME = "Benefy 베네피 · 정부혜택 한눈에"  # 브랜드 검색용 한글명 포함 (예전 변수 무시)
 _repo = os.environ.get("GITHUB_REPOSITORY", "")
 _default_url = f"https://{_repo.split('/')[0]}.github.io/{_repo.split('/')[1]}" if "/" in _repo else "http://localhost:8000"
 CF_PAGES_PROJECT = _env("CF_PAGES_PROJECT", "jiwon-hyetaek")
