@@ -850,3 +850,8 @@ html.sp-on,html.sp-on body{overflow:hidden}
 @media(max-width:1179px){.tabbar a{font-size:10px;letter-spacing:-.02em}}
 @media(min-width:900px){main.wrap:has(>.fz){padding-bottom:0!important;margin-bottom:0!important}.fz{margin-bottom:0}}
 .fz-bingo{max-width:440px;margin-left:auto;margin-right:auto}
+@media(min-width:900px){main.wrap:has(>.fz)+.ftr{margin-top:0}}
+.fun-banner{background:radial-gradient(80% 120% at 100% 0%,rgba(255,95,174,.22),transparent 60%),linear-gradient(135deg,#1d1150,#0b0628)}
+.fun-banner .chg-n{display:grid;place-items:center;width:64px;height:64px;flex:none;border-radius:20px;background:linear-gradient(135deg,#8fd3ff,#6b4cf5 45%,#ff5fae);box-shadow:0 6px 18px rgba(194,92,240,.45)}
+.fun-banner .chg-n svg{width:34px;height:34px;fill:none;stroke:#fff;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.fun-banner small{color:#ffb3d9!important}
