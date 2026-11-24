@@ -1,0 +1,13 @@
+{% if seo %}
+<article class="cseo">
+  {% for h, p in seo.secs %}<section><h2>{{ h }}</h2><p>{{ p }}</p></section>{% endfor %}
+  <section><h2>계산 예시</h2>
+    <div class="cseo-tw"><table class="cseo-t"><thead><tr>{% for c in seo.ex_head %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+    <tbody>{% for r in seo.ex %}<tr>{% for c in r %}<td>{{ c }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div>
+    <p class="cseo-n">2026년 기준 예상값이에요. 실제 금액은 개인 상황에 따라 달라질 수 있어요.</p></section>
+  <section><h2>자주 묻는 질문</h2>
+    {% for q, a in seo.faq %}<details class="cseo-q"{% if loop.first %} open{% endif %}><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</section>
+  <section><h2>함께 보면 좋은 것</h2><div class="cseo-rel">{% for href, t in seo.rel %}<a href="{{ base }}/{{ href }}">{{ t }} →</a>{% endfor %}</div></section>
+</article>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{% for q, a in seo.faq %}{"@type":"Question","name":{{ q|tojson }},"acceptedAnswer":{"@type":"Answer","text":{{ a|tojson }}}}{% if not loop.last %},{% endif %}{% endfor %}]}</script>
+{% endif %}

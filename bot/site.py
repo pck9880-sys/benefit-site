@@ -177,7 +177,8 @@ def build():
 
     # 도구 · 생애주기 모음
     for rel, tmpl in CALCS:
-        write(f"{rel}index.html", env.get_template(tmpl).render(canonical=f"{config.SITE_URL}/{rel}"))
+        from .calcseo import CALC_SEO
+        write(f"{rel}index.html", env.get_template(tmpl).render(canonical=f"{config.SITE_URL}/{rel}", seo=CALC_SEO.get(rel)))
     for slug, aud, title, desc in GUIDES:
         items = [d for d in posts if set(aud) & set(d["audiences"]) and d["dl_state"] != "closed"]
         items.sort(key=lambda d: (not d["key"]["amount"], d["dl_state"] != "upcoming"))
@@ -195,6 +196,51 @@ def build():
            ("bingo", "fun/bingo/", "지원금 빙고 · 받아본 혜택 체크하고 친구와 대결", "받아본 정부 지원금을 체크해 빙고를 완성하고 친구와 비교해요.")]
     for mode, rel, title, desc in FUN:
         write(rel + "index.html", env.get_template("fun.html").render(f={"mode": mode, "title": title, "desc": desc}, canonical=f"{config.SITE_URL}/{rel}"))
+    YE_SCHED = [("1월 15일", "간소화 서비스 오픈", "홈택스에서 공제 자료 조회·내려받기"),
+                ("1월 20일", "추가·수정 자료 반영", "병원·카드사가 늦게 낸 자료까지 확정"),
+                ("1~2월", "회사에 서류 제출", "회사마다 마감일이 달라요"),
+                ("2~3월", "환급금 입금", "보통 2월 또는 3월 월급과 함께"),
+                ("5월", "놓친 공제 추가 신청", "종합소득세 신고 또는 5년 안에 경정청구")]
+    YE_ITEMS = [
+        {"t": "월세 세액공제", "who": "무주택 세대주 · 총급여 8천만 원 이하", "amt": "월세 15~17%",
+         "how": "1년 월세(연 1,000만 원 한도)의 15%, 총급여 5,500만 원 이하면 17%를 세금에서 빼줘요. 연 월세 600만 원이면 최대 약 100만 원이에요. 전입신고가 된 주소여야 하고 임대차계약서와 이체 내역이 필요해요.",
+         "miss": "간소화 자료에 나오지 않아서 직접 서류를 내야 해요. 집주인 동의는 필요 없어요."},
+        {"t": "부양가족 인적공제", "who": "소득 적은 부모님·형제·자녀가 있다면", "amt": "1인당 150만 원 공제",
+         "how": "연 소득 100만 원 이하(근로소득만 있으면 총급여 500만 원 이하)인 가족 1명당 150만 원을 소득에서 빼줘요. 따로 사는 부모님도 실제로 부양하면 넣을 수 있어요(만 60세 이상).",
+         "miss": "형제끼리 중복으로 넣으면 안 돼서, 서로 미루다 아무도 안 넣는 경우가 많아요."},
+        {"t": "의료비 세액공제", "who": "병원비가 총급여 3%를 넘었다면", "amt": "초과분 15~30%",
+         "how": "총급여의 3%를 넘게 쓴 의료비의 15%(난임 시술 30%, 미숙아·선천성 이상아 20%)를 공제해요. 부양가족이 아니어도 내가 낸 가족 의료비는 넣을 수 있어요.",
+         "miss": "안경·콘택트렌즈(1인 50만 원 한도)는 간소화에 안 나와서 안경점 영수증을 따로 받아야 해요. 실손보험으로 돌려받은 금액은 빼야 해요."},
+        {"t": "청년 중소기업 취업자 감면", "who": "만 15~34세에 중소기업 취업", "amt": "소득세 90% 감면",
+         "how": "취업일부터 5년 동안 소득세의 90%를 감면받아요(연 200만 원 한도). 군 복무 기간만큼 나이 기준이 늘어나요.",
+         "miss": "회사에 감면 신청서를 내야 적용돼요. 지난 5년 치도 경정청구로 돌려받을 수 있어요."},
+        {"t": "신용·체크카드 소득공제", "who": "카드 사용액이 총급여 25%를 넘었다면", "amt": "15~40% 공제",
+         "how": "총급여 25%를 넘게 쓴 금액에서 신용카드 15%, 체크카드·현금영수증 30%, 전통시장·대중교통 40%를 공제해요. 총급여 7천만 원 이하면 도서·공연·영화 등 문화비도 30%예요.",
+         "miss": "가족 카드 사용액도 부양가족 요건을 채우면 합칠 수 있는데 빠뜨리기 쉬워요."},
+        {"t": "연금저축·IRP 세액공제", "who": "노후 대비 계좌에 넣었다면", "amt": "최대 148.5만 원",
+         "how": "연금저축과 IRP를 합쳐 연 900만 원까지 넣은 금액의 16.5%(총급여 5,500만 원 초과는 13.2%)를 돌려받아요.",
+         "miss": "12월 31일까지 넣은 금액만 올해 공제돼요. 연말에 한 번 더 확인하세요."},
+        {"t": "주택청약 소득공제", "who": "무주택 세대주 · 총급여 7천만 원 이하", "amt": "납입액 40%",
+         "how": "주택청약종합저축에 넣은 돈(연 300만 원 한도)의 40%를 소득에서 빼줘요. 연 300만 원이면 120만 원 공제예요.",
+         "miss": "은행에 '무주택 확인서'를 내야 공제 자료가 나와요. 안 냈다면 지금 은행 앱에서 신청하세요."},
+        {"t": "교육비 세액공제", "who": "본인·자녀 학비, 학원비(취학 전)", "amt": "15%",
+         "how": "본인 대학원·직업훈련비는 한도 없이, 자녀는 초중고 1인 300만 원·대학생 900만 원까지 15%를 공제해요. 취학 전 아이 학원비·체육시설비도 들어가요.",
+         "miss": "교복(50만 원)·체험학습비(30만 원)·취학 전 학원비는 간소화에 빠질 때가 많아요."},
+        {"t": "기부금·고향사랑기부", "who": "기부나 고향사랑기부를 했다면", "amt": "10만 원까지 전액",
+         "how": "고향사랑기부는 10만 원까지 낸 돈을 전액 세금에서 돌려받고 답례품도 받아요. 일반 기부금은 15%(1천만 원 초과분 30%)예요.",
+         "miss": "종교단체·소규모 단체 기부금은 간소화에 안 나올 수 있어서 영수증을 따로 받아야 해요."},
+        {"t": "중도 입사·퇴사자 합산", "who": "올해 회사를 옮겼다면", "amt": "놓치면 환급 0원",
+         "how": "이전 회사의 근로소득 원천징수영수증을 지금 회사에 내야 1년 소득이 합쳐져 제대로 정산돼요. 연말에 회사를 안 다니고 있다면 5월 종합소득세 신고로 직접 환급받아요.",
+         "miss": "이전 회사 소득을 안 합치면 공제가 적게 들어가거나 나중에 추가 세금이 나올 수 있어요."},
+    ]
+    YE_FAQ = [
+        ("연말정산 간소화 서비스는 언제 열리나요?", "보통 1월 15일에 홈택스·손택스에서 열려요. 병원·카드사의 추가 자료는 1월 20일쯤 확정돼요."),
+        ("놓친 공제는 나중에 받을 수 없나요?", "5월 종합소득세 신고 기간에 추가로 신청하거나, 5년 안에 경정청구를 하면 돌려받을 수 있어요."),
+        ("환급금은 언제 들어오나요?", "회사마다 다르지만 보통 2월이나 3월 월급과 함께 들어와요."),
+        ("월세 세액공제는 집주인 동의가 필요한가요?", "필요 없어요. 임대차계약서, 주민등록등본, 월세 이체 내역만 있으면 돼요."),
+        ("맞벌이 부부는 누가 공제받는 게 유리한가요?", "의료비처럼 총급여 기준을 넘어야 하는 공제는 급여가 적은 쪽, 신용카드는 보통 급여가 많은 쪽이 유리해요. 부양가족은 두 사람 중 한 명만 넣을 수 있어요."),
+    ]
+    write("special/year-end-tax/index.html", env.get_template("yearend.html").render(sched=YE_SCHED, items=YE_ITEMS, faq=YE_FAQ, canonical=f"{config.SITE_URL}/special/year-end-tax/"))
     write("wallet/index.html", env.get_template("wallet.html").render(canonical=f"{config.SITE_URL}/wallet/"))
     write("finder/index.html", env.get_template("finder.html").render(canonical=f"{config.SITE_URL}/finder/"))
     write("special/2027-changes/index.html", env.get_template("changes.html").render(items=CHANGES_2027, canonical=f"{config.SITE_URL}/special/2027-changes/"))
@@ -218,7 +264,7 @@ def build():
 
     # SEO 파일
     from . import specials
-    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/special/2027-changes/", f"{config.SITE_URL}/finder/", f"{config.SITE_URL}/special/life/", f"{config.SITE_URL}/special/2027-calendar/", f"{config.SITE_URL}/fun/", f"{config.SITE_URL}/fun/type/", f"{config.SITE_URL}/fun/missed/", f"{config.SITE_URL}/fun/bingo/", f"{config.SITE_URL}/fun/16/"] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
+    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/special/2027-changes/", f"{config.SITE_URL}/finder/", f"{config.SITE_URL}/special/life/", f"{config.SITE_URL}/special/2027-calendar/", f"{config.SITE_URL}/fun/", f"{config.SITE_URL}/fun/type/", f"{config.SITE_URL}/fun/missed/", f"{config.SITE_URL}/fun/bingo/", f"{config.SITE_URL}/fun/16/", f"{config.SITE_URL}/special/year-end-tax/"] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
     urls += [f"{config.SITE_URL}/", f"{config.SITE_URL}/latest/", f"{config.SITE_URL}/check/", f"{config.SITE_URL}/deadline/"]
     urls += [f"{config.SITE_URL}/c/{s}/" for s, _ in cats]
     urls += [f"{config.SITE_URL}/target/{s}/" for s, _, _ in targets] + [f"{config.SITE_URL}/region/{s}/" for s, _, _ in regions]
