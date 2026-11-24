@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ f.title }} | {{ site_name }}{% endblock %}
 {% block desc %}{{ f.desc }}{% endblock %}
+{% block ogimg %}{% if f.og %}{{ site_url }}{{ f.og }}{% else %}{{ super() }}{% endif %}{% endblock %}
 {% block main %}
 <div class="fz" data-mode="{{ f.mode }}">
   <div class="fz-chip"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4z M10 7v10"/></svg>BENEFY FESTIVAL</div>
@@ -163,12 +164,12 @@ if(MODE==='p16'){
   $('pc').textContent=k;$('pi').src=B2+'/static/types/'+k+'.webp';$('pn').textContent=d[0];$('pqt').textContent='"'+d[1]+'"';
   $('ptr').innerHTML=d[2].map(function(t){return '<li>'+esc(t)+'</li>'}).join('');
   $('pbn').innerHTML=d[3].map(function(t,n){return '<li><a href="'+B2+'/search/?q='+encodeURIComponent(t)+'"><i>'+(n+1)+'</i>'+esc(t)+'<em>→</em></a></li>'}).join('');
-  $('pm1').innerHTML='<img src="'+B2+'/static/types/'+d[4]+'.webp" alt=""><small>찰떡궁합</small><b>'+d[4]+'</b>';$('pm1').href='?r='+d[4];
-  $('pm2').innerHTML='<img src="'+B2+'/static/types/'+d[5]+'.webp" alt=""><small>환장궁합</small><b>'+d[5]+'</b>';$('pm2').href='?r='+d[5];
+  $('pm1').innerHTML='<img src="'+B2+'/static/types/'+d[4]+'.webp" alt=""><small>찰떡궁합</small><b>'+d[4]+'</b>';$('pm1').href=B2+'/fun/16/'+d[4]+'/';
+  $('pm2').innerHTML='<img src="'+B2+'/static/types/'+d[5]+'.webp" alt=""><small>환장궁합</small><b>'+d[5]+'</b>';$('pm2').href=B2+'/fun/16/'+d[5]+'/';
   var im=new Image();im.src=$('pi').src;
-  done({k:k+' · 지원금 성향',big:d[0],img:im,lines:d[3].map(function(t,n){return ['찰떡 지원금 '+(n+1),t]})},'나는 지원금 성향 '+k+' "'+d[0]+'"래! 너는? 🫧',location.origin+B2+'/fun/16/?r='+k);window.scrollTo(0,0)}
- $('pre').onclick=function(){sc={};i=0;$('pr').hidden=true;$('pq').hidden=false;$('fa').hidden=true;draw()};
- var r=(new URLSearchParams(location.search).get('r')||'').toUpperCase();draw();if(D[r])res(r);
+  done({k:k+' · 지원금 성향',big:d[0],img:im,lines:d[3].map(function(t,n){return ['찰떡 지원금 '+(n+1),t]})},'나는 지원금 성향 '+k+' "'+d[0]+'"래! 너는? 🫧',location.origin+B2+'/fun/16/'+k+'/');window.scrollTo(0,0)}
+ $('pre').onclick=function(){if('{{ f.preset or '' }}'){location.href=B2+'/fun/16/';return}sc={};i=0;$('pr').hidden=true;$('pq').hidden=false;$('fa').hidden=true;draw()};
+ var r=('{{ f.preset or '' }}'||new URLSearchParams(location.search).get('r')||'').toUpperCase();draw();if(D[r])res(r);
 }
 
 /* ---------- 놓친 돈 ---------- */

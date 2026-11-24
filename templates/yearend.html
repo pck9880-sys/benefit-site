@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}2026 연말정산 놓치기 쉬운 공제 TOP 10 · 13월의 월급 체크리스트 | {{ site_name }}{% endblock %}
+{% block desc %}월세 세액공제, 부양가족, 의료비, 청년 중소기업 감면까지. 2027년 1월 연말정산 전에 놓치기 쉬운 공제 10가지를 체크리스트로 확인하세요.{% endblock %}
+{% block main %}
+<div class="tool ye">
+  <span class="chg-chip">2026년 귀속 · 2027년 1월 연말정산</span>
+  <h1 class="tool-h">13월의 월급, 놓치는 공제 없나요?</h1>
+  <p class="tool-sub">나에게 해당되는 것만 체크하면 챙길 공제를 정리해 드려요.</p>
+
+  <div class="ye-dday"><div><small>간소화 서비스 열리기까지</small><b id="ydd">D-</b></div><p>2027년 1월 15일 홈택스 오픈 예정</p></div>
+
+  <ol class="ye-time">
+    {% for d, t, s in sched %}<li><b>{{ d }}</b><span>{{ t }}</span><small>{{ s }}</small></li>{% endfor %}
+  </ol>
+
+  <h2 class="ye-h">놓치기 쉬운 공제 TOP 10</h2>
+  <ul class="ye-list" id="yl">
+    {% for it in items %}
+    <li data-i="{{ loop.index0 }}">
+      <button type="button" class="ye-ck" aria-label="해당돼요"></button>
+      <details><summary><em>{{ loop.index }}</em><span><b>{{ it.t }}</b><small>{{ it.who }}</small></span><i>{{ it.amt }}</i></summary>
+        <p>{{ it.how }}</p><p class="ye-tip"><b>놓치는 이유</b> {{ it.miss }}</p></details>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <div class="ye-res" id="yr" hidden>
+    <small>내가 챙길 공제</small><strong><span id="yn">0</span>개</strong>
+    <ul id="yrl"></ul>
+    <p>1월 15일 간소화 자료를 내려받은 뒤, 위 항목이 빠지지 않았는지 꼭 확인하세요. 월세·안경·중도 입사 자료는 간소화에 안 나와서 직접 챙겨야 해요.</p>
+    <button class="btn" type="button" id="ycal">📅 1월 15일 알림 캘린더에 넣기</button>
+  </div>
+
+  <h2 class="ye-h">자주 묻는 질문</h2>
+  {% for q, a in faq %}<details class="cseo-q"><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}
+
+  <p class="disc">2026년 귀속 연말정산 기준으로 정리한 참고 정보예요. 공제 요건과 한도는 세법 개정에 따라 바뀔 수 있으니 국세청 홈택스와 회사 안내를 우선으로 확인하세요.</p>
+  <p class="srcs">공식 출처 · <a href="https://www.hometax.go.kr" target="_blank" rel="noopener">국세청 홈택스 ↗</a> · <a href="https://www.nts.go.kr" target="_blank" rel="noopener">국세청 ↗</a> · 기준 확인 2026.11</p>
+</div>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{% for q, a in faq %}{"@type":"Question","name":{{ q|tojson }},"acceptedAnswer":{"@type":"Answer","text":{{ a|tojson }}}}{% if not loop.last %},{% endif %}{% endfor %}]}</script>
+<script>
+(function(){
+  var $=function(x){return document.getElementById(x)},T=[{% for it in items %}{{ it.t|tojson }}{% if not loop.last %},{% endif %}{% endfor %}];
+  var d=Math.ceil((new Date('2027-01-15T00:00:00+09:00')-new Date())/864e5);$('ydd').textContent=d>0?'D-'+d:'오픈!';
+  var ck={};try{ck=JSON.parse(localStorage.getItem('bf_ye')||'{}')}catch(e){}
+  function draw(){var n=0,h='';document.querySelectorAll('#yl li').forEach(function(li){var i=li.dataset.i,on=!!ck[i];li.classList.toggle('on',on);if(on){n++;h+='<li>'+T[i]+'</li>'}});
+    $('yr').hidden=!n;$('yn').textContent=n;$('yrl').innerHTML=h;localStorage.setItem('bf_ye',JSON.stringify(ck))}
+  $('yl').addEventListener('click',function(e){var b=e.target.closest('.ye-ck');if(!b)return;var i=b.parentNode.dataset.i;if(ck[i])delete ck[i];else ck[i]=1;draw()});
+  $('ycal').onclick=function(){if(window.bfCal)bfCal('연말정산 간소화 서비스 오픈','2027-01-15',location.href);else location.href='https://www.hometax.go.kr'};
+  draw();
+})();
+</script>
+{% endblock %}

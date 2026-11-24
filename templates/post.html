@@ -44,6 +44,7 @@
   <div class="report"><span>금액·기한이 실제와 다른가요?</span><a class="btn ghost" id="rep" data-u="{{ mail_user }}" data-h="{{ mail_host }}" data-t="{{ a.title }}" href="{{ base }}/contact">오류 제보하기</a></div>
   <p class="disc">{% if post.source.contact %}문의 {{ post.source.contact }} · {% endif %}출처: 행정안전부 「대한민국 공공서비스(혜택) 정보」 · <a href="{{ base }}/principles">편집 원칙</a> · 실제 지원 여부는 담당 기관에 확인하세요.</p>
   <script>(function(){var r=document.getElementById('rep');if(!r)return;r.href='mailto:'+r.dataset.u+'@'+r.dataset.h+'?subject='+encodeURIComponent('[정보 수정 요청] '+r.dataset.t)+'&body='+encodeURIComponent('페이지: '+location.href+'\n\n다른 부분:\n\n맞는 정보(출처 링크가 있으면 함께):\n')})();</script>
+  {% if tools %}<section class="ptools"><h2>이 글과 함께 쓰면 좋은 도구</h2><div>{% for u, t, sub in tools %}<a href="{{ base }}/{{ u }}"><b>{{ t }}</b><small>{{ sub }}</small><i>→</i></a>{% endfor %}</div></section>{% endif %}
   {% if related %}<section class="related"><h2>함께 보면 좋은 지원제도</h2><ul class="mini-cards">{% for r in related %}<li><a href="{{ base }}/{{ r.url }}">{% if r.key.amount %}<b class="mc-amt">{{ r.key.amount }}</b>{% endif %}<strong>{{ r.article.title }}</strong></a></li>{% endfor %}</ul></section>{% endif %}
 </article>
 {% include "sidebar.html" %}

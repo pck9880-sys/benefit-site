@@ -16,7 +16,7 @@
 <meta property="og:url" content="{{ canonical }}">
 <meta property="og:type" content="{% block ogtype %}website{% endblock %}">
 <meta property="og:locale" content="ko_KR">
-<meta property="og:image" content="{{ site_url }}/static/img/brand/og.png">
+<meta property="og:image" content="{% block ogimg %}{{ site_url }}/static/img/brand/og.png{% endblock %}">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="{{ base }}/static/favicon.svg" type="image/svg+xml">
@@ -27,7 +27,7 @@
 {% if naver_verify %}<meta name="naver-site-verification" content="{{ naver_verify }}">{% endif %}
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="{{ base }}/static/style.css?v=54">
+<link rel="stylesheet" href="{{ base }}/static/style.css?v=56">
 {% if adsense %}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ adsense }}" crossorigin="anonymous"></script>{% endif %}
 <script>window.BASE="{{ base }}";</script>
 {% block head %}{% endblock %}
