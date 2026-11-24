@@ -188,7 +188,7 @@ def build():
     write("special/life/index.html", env.get_template("life.html").render(life=LIFE, total=sum(v for st in LIFE for _, v, _ in st["items"]),
           canonical=f"{config.SITE_URL}/special/life/"))
     write("special/2027-calendar/index.html", env.get_template("calendar2027.html").render(canonical=f"{config.SITE_URL}/special/2027-calendar/"))
-    FUN = [("hub", "fun/", "베네피 혜택 축제 · 지원금 놀이 3종", "지원금 유형 테스트, 놓친 돈 영수증, 지원금 빙고. 30초면 끝나는 지원금 놀이."),
+    FUN = [("hub", "fun/", "혜택 놀이터 · 지원금 유형 테스트 · 놓친 돈 영수증 · 빙고", "지원금 유형 테스트, 놓친 돈 영수증, 지원금 빙고. 30초면 끝나는 지원금 놀이."),
            ("type", "fun/type/", "지원금 유형 테스트 · 나의 지원금 캐릭터는?", "8문항으로 알아보는 나의 지원금 캐릭터. 결과에 맞는 혜택도 추천해요."),
            ("missed", "fun/missed/", "내가 놓친 돈 영수증 · 아직 안 받은 지원금", "받을 수 있는데 아직 신청하지 않은 지원금을 영수증으로 뽑아드려요."),
            ("bingo", "fun/bingo/", "지원금 빙고 · 받아본 혜택 체크하고 친구와 대결", "받아본 정부 지원금을 체크해 빙고를 완성하고 친구와 비교해요.")]

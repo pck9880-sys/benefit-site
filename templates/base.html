@@ -27,7 +27,7 @@
 {% if naver_verify %}<meta name="naver-site-verification" content="{{ naver_verify }}">{% endif %}
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="{{ base }}/static/style.css?v=50">
+<link rel="stylesheet" href="{{ base }}/static/style.css?v=51">
 {% if adsense %}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ adsense }}" crossorigin="anonymous"></script>{% endif %}
 <script>window.BASE="{{ base }}";</script>
 {% block head %}{% endblock %}
@@ -74,6 +74,7 @@
   <a href="{{ base }}/" data-tab="/"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>홈</span></a>
   <a href="{{ base }}/latest/" data-tab="/latest/"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/></svg><span>지원금</span></a>
   <a href="{{ base }}/finder/" data-tab="/finder/" class="tb-main"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>30초 진단</span></a>
+  <a href="{{ base }}/fun/" data-tab="/fun/" class="tb-main tb-fun"><svg viewBox="0 0 24 24"><path d="M4 10h16v10H4zM3 7h18v3H3zM12 7v13M12 7c-1.5-3-5-3.5-5-1.2C7 7 10 7 12 7zm0 0c1.5-3 5-3.5 5-1.2C17 7 14 7 12 7z"/></svg><span>혜택 놀이터</span></a>
   <a href="{{ base }}/wallet/" data-tab="/wallet/"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M16 13h2M3 10h18M7 6V4h10v2"/></svg><span>지갑</span></a>
   <a href="{{ base }}/calc/" data-tab="/calc/"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg><span>계산기</span></a>
 </nav>

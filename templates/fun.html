@@ -6,7 +6,7 @@
   <div class="fz-chip">🎪 BENEFY FESTIVAL</div>
 
 {% if f.mode == 'hub' %}
-  <h1 class="fz-ttl">베네피 혜택 축제</h1>
+  <h1 class="fz-ttl">혜택 놀이터</h1>
   <p class="fz-sub">30초면 끝나는 지원금 놀이 3종</p>
   <div class="fz-hub">
     <a href="{{ base }}/fun/type/"><span>🎭</span><b>지원금 유형 테스트</b><small>8문항 · 나는 어떤 혜택형?</small></a>
@@ -43,7 +43,7 @@
   <div class="fz-bc" id="bc">0 BINGO</div>
 {% endif %}
 
-  <div class="fz-acts" id="fa" {% if f.mode in ('type','missed','bingo') %}hidden{% endif %}>
+  <div class="fz-acts" id="fa" hidden>
     <button class="fz-btn" id="fsave" type="button">📸 결과 이미지 저장 · 공유</button>
     <button class="fz-btn sub" id="fshare" type="button">💬 친구에게 링크 보내기</button>
   </div>
@@ -129,12 +129,12 @@ function card(){var c=$('fcv'),x=c.getContext('2d'),F='"Pretendard Variable",Pre
  x.fillStyle='rgba(255,255,255,.08)';x.beginPath();x.roundRect?x.roundRect(90,560,900,520,40):x.rect(90,560,900,520);x.fill();
  CARD.lines.forEach(function(l,i){var y=660+i*90;x.textAlign='left';x.fillStyle='#d6d0f5';x.font='700 42px '+F;x.fillText(l[0],150,y);x.textAlign='right';x.fillStyle='#ffd84a';x.font='800 44px '+F;x.fillText(l[1],930,y)});
  x.textAlign='center';x.fillStyle='#cbbcff';x.font='700 38px '+F;x.fillText('나도 해보기 → benefy.kr/fun',540,1240);return c}
-$('fsave').onclick=function(){var b=this;(document.fonts?document.fonts.ready:Promise.resolve()).then(function(){card().toBlob(function(blob){
+if(MODE!=='hub'){$('fsave').onclick=function(){var b=this;(document.fonts?document.fonts.ready:Promise.resolve()).then(function(){card().toBlob(function(blob){
  var f=new File([blob],'benefy-'+MODE+'.png',{type:'image/png'});
  if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],text:SHARE.t+' '+SHARE.u}).catch(function(){});
  else{var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=f.name;a.click();b.textContent='이미지 저장됨 ✓'}},'image/png')})};
 $('fshare').onclick=function(){var b=this;if(navigator.share)navigator.share({text:SHARE.t,url:SHARE.u}).catch(function(){});
- else navigator.clipboard.writeText(SHARE.t+' '+SHARE.u).then(function(){b.textContent='링크 복사됨 ✓'})};
+ else navigator.clipboard.writeText(SHARE.t+' '+SHARE.u).then(function(){b.textContent='링크 복사됨 ✓'})}};
 })();
 </script>
 {% endblock %}

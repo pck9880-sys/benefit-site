@@ -804,3 +804,6 @@ html.sp-on,html.sp-on body{overflow:hidden}
 .fz-bingo button.free{font-size:14px}
 .fz-bc{margin-top:16px;font-size:26px;font-weight:900;color:#cbbcff}.fz-bc.hit{color:#ffd84a;animation:fzpop .5s both}
 @media(min-width:700px){.fz{padding:44px 40px 40px}.fz-ttl{font-size:44px}.fz-bingo button{font-size:13px}}
+.tabbar .tb-fun svg{background:linear-gradient(135deg,#ff5fae,#ff8a3d)!important;box-shadow:0 4px 12px rgba(255,95,174,.35)!important}
+.tabbar .tb-fun{color:#e0408a!important}
+@media(max-width:1179px){.tabbar a{font-size:10px;letter-spacing:-.02em}}
