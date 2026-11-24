@@ -764,3 +764,43 @@ html.sp-on,html.sp-on body{overflow:hidden}
   .tabbar .tb-main svg{color:#fff;background:#6b4cf5;border-radius:50%;padding:5px;width:32px;height:32px;box-shadow:0 4px 12px rgba(107,76,245,.35)}
   .tabbar .tb-main:hover svg{background:#5a3de6}
 }
+/* ===== 혜택 축제 (fun) ===== */
+.fz{position:relative;max-width:520px;margin:18px auto 40px;padding:34px 20px 30px;border-radius:32px;color:#fff;overflow:hidden;text-align:center;
+ background:radial-gradient(120% 70% at 50% 0%,#5a1fd6 0%,#22086b 45%,#0b0326 100%)}
+.fz:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 12% 14%,#ffd84a 0 4px,transparent 5px),radial-gradient(circle at 86% 9%,#ff5fae 0 5px,transparent 6px),radial-gradient(circle at 72% 28%,#5fe1ff 0 3px,transparent 4px),radial-gradient(circle at 22% 42%,#ff5fae 0 3px,transparent 4px),radial-gradient(circle at 92% 58%,#ffd84a 0 4px,transparent 5px),radial-gradient(circle at 6% 76%,#5fe1ff 0 4px,transparent 5px)}
+.fz>*{position:relative}
+.fz-chip{display:inline-block;background:#ff5fae;font:800 12px/1 inherit;font-weight:800;font-size:12px;padding:7px 13px;border-radius:99px}
+.fz-ttl{margin:16px 0 0;font-size:38px;line-height:1.15;font-weight:900;letter-spacing:-.02em;background:linear-gradient(#fff,#ffd84a);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 18px rgba(255,216,74,.3))}
+.fz-sub{margin:8px 0 0;color:#cbbcff;font-weight:700;font-size:15px;line-height:1.5}.fz-sub b{color:#ffd84a}
+.fz-card{margin:22px 0;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.18);border-radius:24px;padding:20px;text-align:left}
+.fz-step{font-weight:800;font-size:13px;color:#ffd84a}.fz-bar{height:8px;background:rgba(255,255,255,.15);border-radius:9px;margin:8px 0 14px}
+.fz-bar i{display:block;height:100%;width:12%;background:linear-gradient(90deg,#ff5fae,#ffd84a);border-radius:9px;transition:width .3s}
+.fz-q{margin:0;font-size:21px;line-height:1.35}
+.fz-opts{display:grid;gap:9px;margin-top:16px}.fz-opts button{font:inherit;font-weight:700;font-size:15px;text-align:left;color:#fff;background:rgba(255,255,255,.12);border:0;border-radius:14px;padding:14px;cursor:pointer;transition:transform .12s,background .12s}
+.fz-opts button:hover,.fz-opts button.on{background:#fff;color:#2a0e6e}.fz-opts button:active{transform:scale(.97)}
+.fz-btn{display:block;width:100%;box-sizing:border-box;margin-top:14px;border:0;border-radius:18px;padding:17px;font:inherit;font-weight:800;font-size:17px;cursor:pointer;text-decoration:none;
+ background:linear-gradient(90deg,#ffd84a,#ff8a3d);color:#2a0a00;box-shadow:0 6px 0 #b4561a,0 0 24px rgba(255,180,60,.45)}
+.fz-btn:active{transform:translateY(4px);box-shadow:0 2px 0 #b4561a}
+.fz-btn.sub{background:rgba(255,255,255,.12);color:#fff;box-shadow:0 6px 0 rgba(0,0,0,.35)}
+.fz-acts{margin-top:18px}.fz-more{display:inline-block;margin-top:20px;color:#cbbcff;font-weight:700;font-size:14px}
+.fz-hub{display:grid;gap:12px;margin-top:24px}.fz-hub a{display:grid;grid-template-columns:54px 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center;text-align:left;text-decoration:none;color:#fff;background:rgba(255,255,255,.09);border:1.5px solid rgba(255,255,255,.18);border-radius:22px;padding:16px;transition:transform .15s}
+.fz-hub a:hover{transform:translateY(-3px);border-color:#ffd84a}.fz-hub span{grid-row:span 2;font-size:38px;text-align:center}.fz-hub b{font-size:18px}.fz-hub small{color:#cbbcff;font-weight:700}
+.fz-res{margin-top:16px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.18);border-radius:24px;padding:24px 20px}
+.fz-res>span{font-size:64px;display:block;animation:fzpop .6s cubic-bezier(.3,1.6,.5,1) both}.fz-res .fz-ttl{margin-top:4px;font-size:32px}
+.fz-res p{color:#e4ddff;font-weight:700;line-height:1.55}.fz-res ul{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:8px}
+.fz-res a{display:block;background:#fff;color:#2a0e6e;border-radius:14px;padding:12px;font-weight:800;text-decoration:none}
+@keyframes fzpop{from{transform:scale(.3) rotate(-20deg);opacity:0}}
+.fz-rcpt{margin:20px 12px 0;background:#fffdf5;color:#222;padding:22px 20px 34px;text-align:left;font-weight:700;font-size:15px;transform:rotate(-1.5deg);box-shadow:0 12px 30px rgba(0,0,0,.45);
+ -webkit-mask:radial-gradient(circle 7px at 50% 100%,transparent 98%,#000) 0 0/18px 100% repeat-x;mask:radial-gradient(circle 7px at 50% 100%,transparent 98%,#000) 0 0/18px 100% repeat-x;animation:fzprint .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes fzprint{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
+.fz-rcpt .rh{text-align:center;font-size:20px;font-weight:900;letter-spacing:.04em}.fz-rcpt .rs{text-align:center;color:#888;font-size:12px}
+.fz-rcpt hr{border:0;border-top:2px dashed #ccc;margin:12px 0}.fz-rcpt .rr{display:flex;justify-content:space-between;gap:10px;margin:8px 0}
+.fz-rcpt .rt{display:flex;justify-content:space-between;align-items:end}.fz-rcpt .rt b{font-size:28px;font-weight:900;color:#e0245e;font-variant-numeric:tabular-nums}
+.fz-rcpt .rst{display:inline-block;margin-top:12px;font-style:normal;font-size:12px;font-weight:900;color:#fff;background:#e0245e;padding:5px 10px;border-radius:6px;transform:rotate(-5deg)}
+.fz-note{color:#cbbcff;font-size:13px;margin-top:18px}.fz-note a{color:#ffd84a}
+.fz-bingo{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:20px}
+.fz-bingo button{aspect-ratio:1;border:0;border-radius:12px;padding:2px;font:inherit;font-weight:800;font-size:10.5px;line-height:1.2;overflow-wrap:anywhere;color:#fff;background:rgba(255,255,255,.1);cursor:pointer;word-break:keep-all;transition:transform .15s}
+.fz-bingo button.on{background:linear-gradient(135deg,#ff5fae,#ffd84a);color:#2a0a00;box-shadow:0 0 14px rgba(255,140,170,.55);animation:fzpop .35s both}
+.fz-bingo button.free{font-size:14px}
+.fz-bc{margin-top:16px;font-size:26px;font-weight:900;color:#cbbcff}.fz-bc.hit{color:#ffd84a;animation:fzpop .5s both}
+@media(min-width:700px){.fz{padding:44px 40px 40px}.fz-ttl{font-size:44px}.fz-bingo button{font-size:13px}}
