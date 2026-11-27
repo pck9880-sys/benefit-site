@@ -76,7 +76,14 @@ def make(d, path):
     y += 30
     amt = k.get("amount") or "혜택 내용은 본문 확인"
     fa = _font(FB, 96 if len(amt) <= 10 else 66)
-    dr.text((68, y), amt, font=fa, fill=(255, 255, 255))
+    import re as _re
+    x = 68
+    for part in _re.split(r"([0-9][0-9,.]*)", amt):  # 숫자는 흰색, '최대·월·만 원' 같은 말은 옅게
+        if not part:
+            continue
+        num = bool(_re.match(r"[0-9]", part))
+        dr.text((x, y), part, font=fa, fill=(255, 255, 255) if num else (120, 122, 132))
+        x += dr.textlength(part, font=fa)
     if k.get("amount_note"):
         dr.text((72, y + (114 if len(amt) <= 10 else 84)), k["amount_note"][:30], font=_font(FS, 24), fill=gray)
     by = 500
