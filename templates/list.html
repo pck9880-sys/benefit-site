@@ -89,6 +89,7 @@
 {% if title or page > 1 %}
 <div class="layout">
   <section class="content" id="latest">
+    {% if prefix == 'latest/' and page == 1 and news %}<div class="lt-news"><b>오늘의 지원금 뉴스</b><ul>{% for t, src, l in news[:3] %}<li><a href="{{ l }}" target="_blank" rel="noopener nofollow">{{ t }}</a></li>{% endfor %}</ul><a href="{{ base }}/updates/">뉴스·업데이트 더 보기 →</a></div>{% endif %}
     <div class="sec-h"><h2>{% if title %}{{ title }}{% else %}최신 지원제도 안내{% endif %}</h2><span>총 {{ total }}건</span></div>
     <ul class="cards">
     {% for p in posts %}
