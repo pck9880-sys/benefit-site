@@ -78,12 +78,22 @@ def make(d, path):
     fa = _font(FB, 96 if len(amt) <= 10 else 66)
     import re as _re
     x = 68
-    for part in _re.split(r"([0-9][0-9,.]*)", amt):  # 숫자는 흰색, '최대·월·만 원' 같은 말은 옅게
+    for part in _re.split(r"([0-9][0-9,.]*)", amt):  # 글자는 흰색, 숫자만 빛줄기 색 그라데이션
         if not part:
             continue
-        num = bool(_re.match(r"[0-9]", part))
-        dr.text((x, y), part, font=fa, fill=(255, 255, 255) if num else (120, 122, 132))
-        x += dr.textlength(part, font=fa)
+        w = dr.textlength(part, font=fa)
+        if _re.match(r"[0-9]", part):
+            m = Image.new("L", (W, H), 0)
+            ImageDraw.Draw(m).text((x, y), part, font=fa, fill=255)
+            g = Image.new("RGB", (W, H))
+            gd = ImageDraw.Draw(g)
+            for gx in range(int(x), int(x + w) + 1):
+                t = (gx - x) / max(1, w)
+                gd.line([(gx, 0), (gx, H)], fill=(int(120 + 135 * t), int(175 - 60 * t), int(255 - 185 * t)))
+            im.paste(g, (0, 0), m)
+        else:
+            dr.text((x, y), part, font=fa, fill=(255, 255, 255))
+        x += w
     if k.get("amount_note"):
         dr.text((72, y + (114 if len(amt) <= 10 else 84)), k["amount_note"][:30], font=_font(FS, 24), fill=gray)
     by = 500
