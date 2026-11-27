@@ -9,6 +9,7 @@
 {% endblock %}
 {% block bodyclass %}is-post{% endblock %}
 {% block actionbar %}<div class="actbar">{% if post.source.apply_url %}<a class="btn ghost" href="{{ base }}/finder/">30초 진단</a><a class="btn" href="{{ post.source.apply_url }}" target="_blank" rel="noopener nofollow">온라인 신청하기 ↗</a>{% elif post.source.url %}<a class="btn ghost" href="{{ base }}/finder/">30초 진단</a><a class="btn" href="{{ post.source.url }}" target="_blank" rel="noopener">정부24에서 신청 방법 ↗</a>{% endif %}</div>{% endblock %}
+{% block ogimg %}{% if post.card %}{{ site_url }}/{{ post.card }}{% else %}{{ super() }}{% endif %}{% endblock %}
 {% block main %}
 <div class="layout">
 <article class="post content">
@@ -17,6 +18,7 @@
   <h1>{{ a.title }}</h1>
   <p class="org">{{ post.source.org }}</p>
   <p class="trust"><span>공공데이터 기준일 {{ post.data_date }}</span><span>최종 확인 {{ post.date|replace("-", ".") }}</span>{% if post.source.url %}<a href="{{ post.source.url }}" target="_blank" rel="noopener">정부24 원문 ↗</a>{% endif %}</p></div>
+  {% if post.card %}<figure class="pcard"><img src="{{ base }}/{{ post.card }}" alt="{{ a.title }} 요약: {{ post.key.amount or '' }} · {{ post.key.target or '' }}" width="1200" height="630"></figure>{% endif %}
   {% set k = post.key %}
   <section class="kv">
     {% if k.amount %}<div class="kv-amt"><small>받을 수 있는 금액·혜택</small><strong>{{ k.amount }}</strong>{% if k.amount_note %}<span>{{ k.amount_note }}</span>{% endif %}</div>{% endif %}

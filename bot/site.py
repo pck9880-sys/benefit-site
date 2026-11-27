@@ -137,6 +137,13 @@ def build():
     shutil.copytree(config.ROOT / "static", out / "static")
 
     posts = load_posts()
+    try:  # 글마다 요약 카드 이미지
+        from . import cards
+        for d in posts:
+            cards.make(d, out / "static" / "cards" / f"{d['id']}.webp")
+            d["card"] = f"static/cards/{d['id']}.webp"
+    except Exception as e:
+        print(f"[cards] 건너뜀: {e}")
     fields = {}
     for d in posts:
         fields.setdefault(d["field_slug"], {"name": d["source"].get("field") or "기타", "posts": []})["posts"].append(d)

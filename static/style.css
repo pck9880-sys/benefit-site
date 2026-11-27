@@ -950,3 +950,4 @@ html.sp-on,html.sp-on body{overflow:hidden}
 .upd-log em.chg{background:#fff0f7;color:#c0399a}.upd-log a{color:inherit;font-weight:700;text-decoration:none}
 .lt-news{margin:0 0 16px;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,#1d1150,#3a1f9e);color:#fff}
 .lt-news b{font-size:13px;color:#ffb3d9}.lt-news ul{list-style:none;padding:0;margin:6px 0 0;display:grid;gap:6px}.lt-news a{color:#fff;text-decoration:none;font-weight:700;font-size:14px}.lt-news>a{display:inline-block;margin-top:8px;color:#c9c0f5;font-size:13px}
+.pcard{margin:14px 0 18px}.pcard img{display:block;width:100%;height:auto;border-radius:16px;box-shadow:0 8px 24px rgba(29,17,80,.18)}
