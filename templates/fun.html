@@ -206,7 +206,7 @@ if(MODE==='bingo'){
  var vs=parseInt(new URLSearchParams(location.search).get('vs')||'',10);if(vs>=0&&!isNaN(vs))$('bvs').innerHTML='친구는 <b>'+vs+' BINGO</b>! 이길 수 있을까?';
  var prevN=-1;
  function pop(n){var p=$('bpop');$('bpn').textContent=n>=2?'두줄':'한줄';p.hidden=false;p.classList.remove('go');void p.offsetWidth;p.classList.add('go');
-  for(var k=0;k<26;k++){var c=document.createElement('i');c.className='cf';c.style.left=(Math.random()*100)+'%';c.style.background=['#8fd3ff','#6b4cf5','#ff5fae','#ffd6a0'][k%4];c.style.animationDelay=(Math.random()*.3)+'s';c.style.setProperty('--x',(Math.random()*200-100)+'px');p.appendChild(c)}
+  for(var k=0;k<26;k++){var c=document.createElement('i');c.className='cf';c.style.left=(Math.random()*100)+'%';c.style.background=['#b9adff','#6b4cf5','#8f7bff','#c9bfff'][k%4];c.style.animationDelay=(Math.random()*.3)+'s';c.style.setProperty('--x',(Math.random()*200-100)+'px');p.appendChild(c)}
   setTimeout(function(){p.hidden=true;p.querySelectorAll('.cf').forEach(function(c){c.remove()});if(n>=2)$('bfin').hidden=false},1700)}
  function draw(){var n=Math.min(2,L.filter(function(l){return l.every(function(i){return on[i]})}).length),cnt=Object.keys(on).length-1;
   if(prevN>=0&&n>prevN)pop(n);prevN=n;
@@ -220,12 +220,12 @@ if(MODE==='bingo'){
 
 /* ---------- 결과 카드 이미지 ---------- */
 function card(){var c=$('fcv'),x=c.getContext('2d'),F='"Pretendard Variable",Pretendard,"Apple SD Gothic Neo",sans-serif';
- var g=x.createRadialGradient(540,0,0,540,0,1300);g.addColorStop(0,'#1d1150');g.addColorStop(.45,'#0b0628');g.addColorStop(1,'#040210');x.fillStyle=g;x.fillRect(0,0,1080,1350);
- var cl=['#ff5fae','#ffd6a0','#8fd3ff'];
+ var g=x.createRadialGradient(540,0,0,540,0,1300);g.addColorStop(0,'#121019');g.addColorStop(.45,'#0b0628');g.addColorStop(1,'#040210');x.fillStyle=g;x.fillRect(0,0,1080,1350);
+ var cl=['#8f7bff','#c9bfff','#b9adff'];
  [[120,260,9],[960,220,11],[880,520,7],[90,900,8],[1000,1000,9]].forEach(function(d,i){x.fillStyle=cl[i%3];x.beginPath();x.arc(d[0],d[1],d[2],0,7);x.fill()});
- x.textAlign='center';x.fillStyle='#ff5fae';x.font='800 36px '+F;
+ x.textAlign='center';x.fillStyle='#8f7bff';x.font='800 36px '+F;
  if(CARD.img&&CARD.img.complete){x.fillText(CARD.k,540,110);x.drawImage(CARD.img,330,130,420,420);x.save();x.translate(0,300);}else x.fillText(CARD.k,540,250);
- var gt=x.createLinearGradient(0,330,0,480);gt.addColorStop(0,'#fff');gt.addColorStop(1,'#ffb3d9');x.fillStyle=gt;
+ var gt=x.createLinearGradient(0,330,0,480);gt.addColorStop(0,'#fff');gt.addColorStop(1,'#b9adff');x.fillStyle=gt;
  var s=104;x.font='900 '+s+'px '+F;while(x.measureText(CARD.big).width>960&&s>50){s-=6;x.font='900 '+s+'px '+F}x.fillText(CARD.big,540,470);
  x.fillStyle='rgba(255,255,255,.08)';x.beginPath();var bh=100+CARD.lines.length*90;x.roundRect?x.roundRect(90,560,900,bh,40):x.rect(90,560,900,bh);x.fill();
  CARD.lines.forEach(function(l,i){var y=660+i*90;x.textAlign='left';x.fillStyle='#d6d0f5';x.font='700 42px '+F;x.fillText(l[0],150,y);x.textAlign='right';x.fillStyle='#c7b6ff';x.font='800 44px '+F;x.fillText(l[1],930,y)});
