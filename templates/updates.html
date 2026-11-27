@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}베네피 소식 · 오늘의 지원금 뉴스와 이번 주 업데이트 | {{ site_name }}{% endblock %}
+{% block desc %}오늘 나온 지원금 뉴스 헤드라인과 베네피에 새로 올라오거나 내용이 바뀐 지원제도를 날짜별로 모아 보여드려요.{% endblock %}
+{% block main %}<div class="tool upd">
+  <span class="chg-chip">매일 자동 업데이트 · {{ today }}</span>
+  <h1 class="tool-h">베네피 소식</h1>
+  <p class="tool-sub">오늘의 지원금 뉴스와 사이트에 새로 올라온 것, 바뀐 것을 모았어요.</p>
+  {% if news %}<h2>오늘의 지원금 뉴스</h2>
+  <ul class="upd-news">{% for t, src, l in news %}<li><a href="{{ l }}" target="_blank" rel="noopener nofollow">{{ t }}<small>{{ src }} · 원문 기사 ↗</small></a></li>{% endfor %}</ul>
+  <p class="disc">구글 뉴스에서 지원금 관련 헤드라인을 자동으로 모아요. 기사 내용은 각 언론사 원문에서 확인하세요.</p>{% endif %}
+  <h2>최근 업데이트</h2>
+  <ul class="upd-log">{% for e in log %}<li><time>{{ e.d }}</time><em class="{{ e.cls }}">{{ e.kind }}</em><a href="{{ base }}/{{ e.url }}">{{ e.title }}</a></li>{% endfor %}</ul>
+</div>{% endblock %}

@@ -59,3 +59,11 @@ window.bfCal=function(title,date,url){
   }};
 document.addEventListener('click',function(ev){var b=ev.target.closest('[data-cal]');if(!b)return;ev.preventDefault();
   var c=bfCal(b.dataset.t,b.dataset.cal,b.dataset.u||location.href);if(b.dataset.k==='g')window.open(c.google,'_blank','noopener');else c.ics()});
+/* 도움이 됐어요: 실제 누른 수만 표시 */
+(function(){var w=document.querySelector('.helpful');if(!w)return;var id=w.dataset.id,b=w.querySelector('.hp-btn'),n=w.querySelector('.hp-n'),K='bf_hp_'+id;
+ function show(v){if(typeof v==='number'&&v>0)n.textContent=' '+v}
+ if(localStorage.getItem(K)){b.classList.add('on')}
+ fetch('/api/helpful?id='+encodeURIComponent(id)).then(function(r){return r.json()}).then(function(d){show(d.n)}).catch(function(){});
+ b.onclick=function(){if(b.classList.contains('on'))return;b.classList.add('on','pop');localStorage.setItem(K,1);
+  fetch('/api/helpful',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({id:id})}).then(function(r){return r.json()}).then(function(d){show(d.n)}).catch(function(){});
+  var t=w.querySelector('span');t.textContent='알려주셔서 고마워요!'}})();

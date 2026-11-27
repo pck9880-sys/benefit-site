@@ -92,6 +92,28 @@ def load_posts():
     return posts
 
 
+
+def news_items(limit=8):
+    """오늘의 지원금 뉴스 헤드라인. 실패하면 마지막 캐시 사용."""
+    import json as _j
+    cache = config.DATA_DIR / "news_cache.json"
+    items = []
+    if not config.MOCK:
+        try:
+            from .news import headlines
+            for t, l in headlines()[:40]:
+                title, _, src = t.rpartition(" - ")
+                items.append([title or t, src or "뉴스", l])
+        except Exception:
+            items = []
+    if items:
+        items = items[:limit]
+        cache.write_text(_j.dumps(items, ensure_ascii=False), encoding="utf-8")
+    elif cache.exists():
+        items = _j.loads(cache.read_text(encoding="utf-8"))
+    return items
+
+
 def build():
     base_path = urlparse(config.SITE_URL).path.rstrip("/")  # GitHub Pages 하위경로 대응
     env = Environment(loader=FileSystemLoader(config.ROOT / "templates"), autoescape=True)
@@ -121,6 +143,7 @@ def build():
     cats = sorted(fields.items(), key=lambda kv: -len(kv[1]["posts"]))
     env.globals["categories"] = [(k, v["name"], len(v["posts"])) for k, v in cats]
     env.globals["recent"] = posts[:6]
+    env.globals["news"] = news_items()
     # 대상별·지역별·마감 분류 (모든 페이지 사이드바에서 쓰므로 먼저 계산)
     from datetime import date
     today = date.today()
@@ -267,6 +290,18 @@ def build():
         ("맞벌이 부부는 누가 공제받는 게 유리한가요?", "의료비처럼 총급여 기준을 넘어야 하는 공제는 급여가 적은 쪽, 신용카드는 보통 급여가 많은 쪽이 유리해요. 부양가족은 두 사람 중 한 명만 넣을 수 있어요."),
     ]
     write("special/year-end-tax/index.html", env.get_template("yearend.html").render(sched=YE_SCHED, items=YE_ITEMS, faq=YE_FAQ, canonical=f"{config.SITE_URL}/special/year-end-tax/"))
+    _log = []
+    for d in posts:
+        t = d["article"]["title"]
+        _log.append((d["published_at"][:10], "새 지원금", "", t, d["url"]))
+        if d.get("updated_at"):
+            _log.append((d["updated_at"][:10], "정보 변경", "chg", t, d["url"]))
+        if d.get("rewritten_at"):
+            _log.append((d["rewritten_at"][:10], "내용 보강", "", t, d["url"]))
+    _log.sort(key=lambda e: e[0], reverse=True)
+    write("updates/index.html", env.get_template("updates.html").render(
+        log=[{"d": e[0][5:].replace("-", "."), "kind": e[1], "cls": e[2], "title": e[3], "url": e[4]} for e in _log[:60]],
+        today=datetime.now().strftime("%Y.%m.%d") if "datetime" in globals() else "", canonical=f"{config.SITE_URL}/updates/"))
     write("wallet/index.html", env.get_template("wallet.html").render(canonical=f"{config.SITE_URL}/wallet/"))
     write("finder/index.html", env.get_template("finder.html").render(canonical=f"{config.SITE_URL}/finder/"))
     write("special/2027-changes/index.html", env.get_template("changes.html").render(items=CHANGES_2027, canonical=f"{config.SITE_URL}/special/2027-changes/"))
@@ -290,7 +325,7 @@ def build():
 
     # SEO 파일
     from . import specials
-    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/special/2027-changes/", f"{config.SITE_URL}/finder/", f"{config.SITE_URL}/special/life/", f"{config.SITE_URL}/special/2027-calendar/", f"{config.SITE_URL}/fun/", f"{config.SITE_URL}/fun/type/", f"{config.SITE_URL}/fun/missed/", f"{config.SITE_URL}/fun/bingo/", f"{config.SITE_URL}/fun/16/", f"{config.SITE_URL}/special/year-end-tax/"] + [f"{config.SITE_URL}/fun/16/{k}/" for k in ("ENTJ","INTJ","INTP","ENTP","INFJ","INFP","ENFP","ENFJ","ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP")] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
+    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/special/2027-changes/", f"{config.SITE_URL}/finder/", f"{config.SITE_URL}/special/life/", f"{config.SITE_URL}/special/2027-calendar/", f"{config.SITE_URL}/fun/", f"{config.SITE_URL}/fun/type/", f"{config.SITE_URL}/fun/missed/", f"{config.SITE_URL}/fun/bingo/", f"{config.SITE_URL}/fun/16/", f"{config.SITE_URL}/special/year-end-tax/", f"{config.SITE_URL}/updates/"] + [f"{config.SITE_URL}/fun/16/{k}/" for k in ("ENTJ","INTJ","INTP","ENTP","INFJ","INFP","ENFP","ENFJ","ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP")] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
     urls += [f"{config.SITE_URL}/", f"{config.SITE_URL}/latest/", f"{config.SITE_URL}/check/", f"{config.SITE_URL}/deadline/"]
     urls += [f"{config.SITE_URL}/c/{s}/" for s, v in cats if len(v["posts"]) >= 3]
     urls += [f"{config.SITE_URL}/target/{s}/" for s, _, _ in targets if len(target_items[s]) >= 3] + [f"{config.SITE_URL}/region/{s}/" for s, _, _ in regions if len(region_items[s]) >= 3]

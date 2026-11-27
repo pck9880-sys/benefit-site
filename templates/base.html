@@ -80,6 +80,6 @@
 </nav>
 {% block actionbar %}{% endblock %}
 <script>(function(){var p=location.pathname.replace(window.BASE,'')||'/',best=null;document.querySelectorAll('.tabbar a').forEach(function(a){var t=a.dataset.tab;if((t==='/'&&(p==='/'||p==='/index.html'))||(t!=='/'&&p.indexOf(t)===0)||(t==='/latest/'&&/^\/(search|c|target|region|deadline|guide|posts)\//.test(p)))best=a});if(best)best.classList.add('on');document.querySelectorAll('.tabbar a').forEach(function(a){a.addEventListener('click',function(e){if(e.metaKey||e.ctrlKey)return;e.preventDefault();a.classList.remove('tap');void a.offsetWidth;a.classList.add('tap');setTimeout(function(){location.href=a.href},170)})})})();</script>
-<script src="{{ base }}/static/site.js?v=8" defer></script>
+<script src="{{ base }}/static/site.js?v=9" defer></script>
 </body>
 </html>
