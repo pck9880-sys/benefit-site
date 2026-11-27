@@ -4,7 +4,7 @@
 {% block head %}<meta name="robots" content="noindex">{% endblock %}
 {% block main %}
 <div class="tool wl">
-  <span class="chg-chip">💼 내 지원금 지갑</span>
+  <span class="chg-chip">내 지원금 지갑</span>
   <div id="wl-empty" hidden>
     <h1 class="tool-h">아직 지갑이 비어 있어요</h1>
     <p class="tool-p">30초 진단을 하면 받을 수 있는 지원금이 여기에 저장돼요.</p>
@@ -30,10 +30,10 @@
     var tot=0,done=0;W.it.forEach(function(x){tot+=x.v;if(W.done[x.n])done+=x.v});
     $('wd').textContent=won(done);$('wt').textContent=won(tot);$('wb').style.width=(tot?done/tot*100:0)+'%';
     var left=W.it.filter(function(x){return !W.done[x.n]}).length;
-    $('wm').textContent=left?'남은 지원금 '+left+'가지 · 하나씩 체크해 보세요':'전부 신청 완료! 🎉';
+    $('wm').textContent=left?'남은 지원금 '+left+'가지 · 하나씩 체크해 보세요':'전부 신청 완료!';
     $('wl').innerHTML=W.it.map(function(x,i){var d=!!W.done[x.n],cal=x.dd&&x.dd>=today;
       return '<li class="'+(d?'done':'')+'"><label><input type="checkbox" data-i="'+i+'"'+(d?' checked':'')+'><span><b>'+esc(x.n)+'</b><small>'+esc(x.w||x.note)+(x.c?' · 조건부':'')+'</small></span><strong>'+x.v.toLocaleString()+'만</strong></label>'
-        +'<div class="wl-acts"><a href="'+BASE+'/'+x.l+'">자세히 →</a>'+(cal&&!d?'<button type="button" data-cal="'+x.dd+'" data-t="'+esc(x.n)+'" data-u="'+location.origin+BASE+'/'+x.l+'" data-k="g">📅 구글 캘린더</button><button type="button" data-cal="'+x.dd+'" data-t="'+esc(x.n)+'" data-u="'+location.origin+BASE+'/'+x.l+'">📅 아이폰·기타</button>':'')+'</div></li>'}).join('');
+        +'<div class="wl-acts"><a href="'+BASE+'/'+x.l+'">자세히 →</a>'+(cal&&!d?'<button type="button" data-cal="'+x.dd+'" data-t="'+esc(x.n)+'" data-u="'+location.origin+BASE+'/'+x.l+'" data-k="g">구글 캘린더</button><button type="button" data-cal="'+x.dd+'" data-t="'+esc(x.n)+'" data-u="'+location.origin+BASE+'/'+x.l+'">아이폰·기타</button>':'')+'</div></li>'}).join('');
   }
   $('wl').addEventListener('change',function(e){var i=e.target.dataset.i;if(i==null)return;var n=W.it[i].n;if(e.target.checked)W.done[n]=1;else delete W.done[n];
     localStorage.setItem('bf_wallet',JSON.stringify(W));draw()});

@@ -5,7 +5,7 @@
 <div class="tool fd">
   <div class="fd-top"><span class="chg-chip">30초 진단 · 회원가입 없음</span><span class="fd-step" id="fs">1 / 7</span></div>
   <div class="fd-bar"><i id="fb"></i></div>
-  <div class="vs-ban" id="vsb" hidden>🤝 친구는 1년에 최대 <b id="vsn"></b>이 나왔어요. 나는 얼마일까?</div>
+  <div class="vs-ban" id="vsb" hidden>친구는 1년에 최대 <b id="vsn"></b>이 나왔어요. 나는 얼마일까?</div>
   <section class="fd-q on" data-q="age"><h1 class="tool-h">나이가 어떻게 되세요?</h1>
     <div class="fd-opts"><button data-v="y">19~34세</button><button data-v="y2">35~39세</button><button data-v="m">40~64세</button><button data-v="s">65세 이상</button></div></section>
   <section class="fd-q" data-q="region"><h1 class="tool-h">어디에 사세요?</h1>
@@ -26,8 +26,8 @@
     <div class="dg-hero"><small>조건이 맞으면, 1년에 최대</small><strong id="dgn">0원</strong><span id="dgc"></span></div>
     <div class="vs-box" id="vsx" hidden></div>
     <ol class="dg-list" id="dgl"></ol>
-    <a class="wl-go" href="{{ base }}/wallet/">💼 내 지원금 지갑에 저장됐어요 · 신청 체크하러 가기 →</a>
-    <a class="wl-go" href="{{ base }}/fun/missed/">🧾 아직 안 받은 돈, 영수증으로 뽑아보기 →</a>
+    <a class="wl-go" href="{{ base }}/wallet/">내 지원금 지갑에 저장됐어요 · 신청 체크하러 가기 →</a>
+    <a class="wl-go" href="{{ base }}/fun/missed/">아직 안 받은 돈, 영수증으로 뽑아보기 →</a>
     <div class="fd-acts"><button class="btn" id="dgvs">친구랑 비교하기</button><button class="btn ghost" id="dgsave">결과 카드 저장</button></div>
     <div class="fd-acts"><a class="btn ghost" href="https://www.gov.kr/portal/rcvfvrSvc/main" target="_blank" rel="noopener">정부 '보조금24'에서 정확히 조회 ↗</a><button class="btn ghost" id="fagain">다시 하기</button></div>
     <canvas id="dgcv" width="1080" height="1350" hidden></canvas>
@@ -103,7 +103,7 @@
     slot($('dgn'),TOT);
     try{var old=JSON.parse(localStorage.getItem('bf_wallet')||'{}'),done={};IT.forEach(function(x){if(old.done&&old.done[x.n])done[x.n]=1});
       localStorage.setItem('bf_wallet',JSON.stringify({date:new Date().toISOString().slice(0,10),tot:TOT,it:IT,done:done}))}catch(e){}
-    if(VS){var mx=Math.max(VS,TOT,1);$('vsx').hidden=false;$('vsx').innerHTML='<div><span>나</span><i><b style="width:'+(TOT/mx*100)+'%"></b></i><strong>'+won(TOT)+'</strong></div><div class="fr"><span>친구</span><i><b style="width:'+(VS/mx*100)+'%"></b></i><strong>'+won(VS)+'</strong></div><p>'+(TOT>VS?'내가 '+won(TOT-VS)+' 더 받을 수 있어요 🎉':TOT<VS?'친구가 '+won(VS-TOT)+' 더 많아요. 놓친 게 없는지 아래를 확인해 보세요':'친구랑 똑같아요!')+'</p>'}
+    if(VS){var mx=Math.max(VS,TOT,1);$('vsx').hidden=false;$('vsx').innerHTML='<div><span>나</span><i><b style="width:'+(TOT/mx*100)+'%"></b></i><strong>'+won(TOT)+'</strong></div><div class="fr"><span>친구</span><i><b style="width:'+(VS/mx*100)+'%"></b></i><strong>'+won(VS)+'</strong></div><p>'+(TOT>VS?'내가 '+won(TOT-VS)+' 더 받을 수 있어요':TOT<VS?'친구가 '+won(VS-TOT)+' 더 많아요. 놓친 게 없는지 아래를 확인해 보세요':'친구랑 똑같아요!')+'</p>'}
     $('dgl').innerHTML=IT.map(function(x){return '<li><a href="'+BASE+'/'+x.l+'"><span><b>'+x.n+'</b><small>'+x.note+(x.c?' · <em>조건부</em>':'')+'</small></span><strong>+'+x.v.toLocaleString()+'만</strong></a></li>'}).join('');
     more();
   }

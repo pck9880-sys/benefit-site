@@ -33,7 +33,7 @@
       {% elif post.source.url %}<a class="btn" href="{{ post.source.url }}" target="_blank" rel="noopener">정부24에서 신청 방법 보기</a>{% endif %}
     </div>
   </section>
-  {% if post.dl_state == "upcoming" and post.dl_date %}<div class="cal-row"><span>📅 마감 {{ post.dl_date }} · 캘린더에 저장하면 3일 전에 알려줘요</span><button type="button" class="btn ghost" data-cal="{{ post.dl_date }}" data-t="{{ post.source.name or a.title }}" data-u="{{ canonical }}" data-k="g">구글 캘린더</button><button type="button" class="btn ghost" data-cal="{{ post.dl_date }}" data-t="{{ post.source.name or a.title }}" data-u="{{ canonical }}">아이폰·기타</button></div>{% endif %}
+  {% if post.dl_state == "upcoming" and post.dl_date %}<div class="cal-row"><span>마감 {{ post.dl_date }} · 캘린더에 저장하면 3일 전에 알려줘요</span><button type="button" class="btn ghost" data-cal="{{ post.dl_date }}" data-t="{{ post.source.name or a.title }}" data-u="{{ canonical }}" data-k="g">구글 캘린더</button><button type="button" class="btn ghost" data-cal="{{ post.dl_date }}" data-t="{{ post.source.name or a.title }}" data-u="{{ canonical }}">아이폰·기타</button></div>{% endif %}
   <a class="post-dg" href="{{ base }}/finder/">나는 이것 말고 얼마나 더 받을 수 있을까?<span>30초 진단 →</span></a>
   {{ ad("inline", 0) }}
   <details class="more-d">

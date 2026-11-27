@@ -42,22 +42,12 @@
 {% if not title and page == 1 %}
 <div class="home-dark">
 <section class="home-hero">
-  <div class="hero-art" aria-hidden="true"><svg viewBox="-170 -170 340 340">
-    <defs>
-      <linearGradient id="hg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8fd3ff"/><stop offset=".45" stop-color="#6b4cf5"/><stop offset="1" stop-color="#2a0e6e"/></linearGradient>
-      <linearGradient id="hg2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd6a0"/><stop offset=".4" stop-color="#ff5fae"/><stop offset="1" stop-color="#5b1fd0"/></linearGradient>
-      <linearGradient id="hg3" x1=".5" y1="1" x2=".5" y2="0"><stop offset="0" stop-color="#3b5bff"/><stop offset=".55" stop-color="#c25cf0"/><stop offset="1" stop-color="#ffb3d1"/></linearGradient>
-    </defs>
-    <g class="ha-all">
-      <g transform="translate(-14,-8)"><g class="ha t1"><polygon points="0,-100 87,50 -87,50" fill="url(#hg1)" stroke="url(#hg1)" stroke-width="70" stroke-linejoin="round"/></g></g>
-      <g transform="translate(16,-4) rotate(40)"><g class="ha t2"><polygon points="0,-100 87,50 -87,50" fill="url(#hg2)" stroke="url(#hg2)" stroke-width="70" stroke-linejoin="round"/></g></g>
-      <g transform="translate(0,14) rotate(80)"><g class="ha t3"><polygon points="0,-100 87,50 -87,50" fill="url(#hg3)" stroke="url(#hg3)" stroke-width="70" stroke-linejoin="round"/></g></g>
-    </g></svg></div>
+  <div class="door" aria-hidden="true"><i class="door-slit"></i><i class="door-floor"></i></div>
   <p class="hh-kick">공공데이터 기반 · 매일 업데이트 · 총 {{ total }}건</p>
-  <h1>나도 받을 수 있는 돈,<br><b>30초면</b> 알 수 있어요</h1>
+  <h1>나도 받을 수 있는 돈,<br>30초면 알 수 있어요</h1>
   <div class="dg-cta"><a class="btn" href="{{ base }}/finder/">내 지원금 금액 확인하기 →</a><small>질문 7개 · 회원가입 없음</small></div>
   <form class="big-srch" id="f2" action="{{ base }}/search/" role="search"><input id="q2" name="q" type="search" enterkeyhint="search" placeholder="또는 직접 검색: 청년 월세, 근로장려금…" aria-label="지원금 검색" autocomplete="off"><button type="submit" class="big-ico" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button><div id="results2"></div></form>
-  <div class="quick"><a class="qk qk-flt" href="{{ base }}/search/">⚙ 조건으로 찾기</a><span>많이 찾는</span>{% for k in ["청년 월세", "근로장려금", "에너지바우처", "내일배움카드", "육아휴직", "주거급여"] %}<button type="button" class="qk">{{ k }}</button>{% endfor %}</div>
+  <div class="quick"><a class="qk qk-flt" href="{{ base }}/search/">조건으로 찾기</a><span>많이 찾는</span>{% for k in ["청년 월세", "근로장려금", "에너지바우처", "내일배움카드", "육아휴직", "주거급여"] %}<button type="button" class="qk">{{ k }}</button>{% endfor %}</div>
 </section>
 <div class="home-row">
   <section class="hbox" id="cats">
@@ -77,12 +67,12 @@
 <a class="sp-banner chg-banner fun-banner" href="{{ base }}/fun/"><span class="chg-n"><svg viewBox="0 0 24 24"><path d="M4 10h16v10H4zM3 7h18v3H3zM12 7v13M12 7c-1.5-3-5-3.5-5-1.2C7 7 10 7 12 7zm0 0c1.5-3 5-3.5 5-1.2C17 7 14 7 12 7z"/></svg></span><span><small>NEW · 혜택 놀이터</small><b>유형 테스트 · 놓친 돈 영수증 · 지원금 빙고</b><em>놀러 가기 →</em></span></a>
 <a class="sp-banner c27-banner" href="{{ base }}/special/2027-calendar/"><img src="{{ base }}/static/calendar2027/thumb/01.webp" alt="" width="360" height="780" loading="lazy"><span><small>무료 배포 · 폰 배경화면</small><b>2027 지원금 달력, 잠금화면에 띄워두세요</b><em>받으러 가기 →</em></span></a>
 <a class="sp-banner" href="{{ base }}/special/winter-heating/"><img src="{{ base }}/static/cardnews/winter-heating/1.webp" alt="" width="1080" height="1350" loading="lazy"><span><small>겨울 특집 · 카드뉴스</small><b>올겨울 난방비, 나라에서 받을 수 있는 4가지</b><em>넘겨보기 →</em></span></a>
-<a class="sp-banner chg-banner" href="{{ base }}/special/life/"><span class="chg-n">👶→🌿</span><span><small>재미로 보는 지원금</small><b>내 인생, 나라에서 얼마나 받을 수 있을까?</b><em>스크롤해서 쌓아보기 →</em></span></a>
+<a class="sp-banner chg-banner" href="{{ base }}/special/life/"><span class="chg-n">0→100</span><span><small>재미로 보는 지원금</small><b>내 인생, 나라에서 얼마나 받을 수 있을까?</b><em>스크롤해서 쌓아보기 →</em></span></a>
 <a class="sp-banner chg-banner" href="{{ base }}/special/2027-changes/"><span class="chg-n">+6.7%</span><span><small>2027년 달라지는 것</small><b>내년 중위소득·생계급여·아동수당, 숫자로 비교</b><em>보러 가기 →</em></span></a>
 </div>
 
 {% else %}
-<form class="list-srch" action="{{ base }}/search/" role="search"><input name="q" type="search" enterkeyhint="search" placeholder="지원금 이름이나 키워드로 검색" aria-label="지원금 검색" autocomplete="off"><button type="submit" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button><a href="{{ base }}/search/">⚙ 조건</a></form>
+<form class="list-srch" action="{{ base }}/search/" role="search"><input name="q" type="search" enterkeyhint="search" placeholder="지원금 이름이나 키워드로 검색" aria-label="지원금 검색" autocomplete="off"><button type="submit" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button><a href="{{ base }}/search/">조건</a></form>
 {% if prefix == "latest/" and page == 1 %}<div class="list-hubs">{% if targets %}<section class="hubs"><h3>대상별로 찾기</h3><div class="hub-chips">{% for s, n, c in targets %}<a href="{{ base }}/target/{{ s }}/">{{ n }} <em>{{ c }}</em></a>{% endfor %}</div></section>{% endif %}
 {% set local_regions = regions | rejectattr(0, "equalto", "national") | list %}
 {% if local_regions %}<section class="hubs"><h3>지역별로 찾기</h3><div class="hub-chips">{% for s, n, c in local_regions %}<a href="{{ base }}/region/{{ s }}/">{{ n }} <em>{{ c }}</em></a>{% endfor %}</div></section>{% endif %}</div>{% endif %}
