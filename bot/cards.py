@@ -24,7 +24,7 @@ def _background():
         base += 5
         # 벽 반사광 (문틈 주변이 아주 은은하게)
         d = np.sqrt(((xx - 1000) / 420) ** 2 + ((yy - 250) / 360) ** 2)
-        base += (np.clip(1 - d, 0, 1) ** 2)[..., None] * np.array([22, 30, 52], "float32")
+        base += (np.clip(1 - d, 0, 1) ** 2)[..., None] * np.array([30, 24, 62], "float32")
         # 바닥 빛 (문틈 아래에서 왼쪽 아래로 퍼지는 사다리꼴)
         top, bot = 470, H
         t = np.clip((yy - top) / (bot - top), 0, 1)
@@ -34,10 +34,10 @@ def _background():
         spread = np.clip(1 - (1010 - xx) / np.maximum(1, 1010 - left), 0, 1)
         floor = inside * (spread ** 1.6) * (1 - t * 0.55)
         fl = Image.fromarray((np.clip(floor, 0, 1) * 255).astype("uint8")).filter(ImageFilter.GaussianBlur(10))
-        base += (np.asarray(fl, "float32") / 255)[..., None] * np.array([62, 84, 140], "float32")
+        base += (np.asarray(fl, "float32") / 255)[..., None] * np.array([70, 56, 150], "float32")
         # 문틈 빛줄기: 위 파랑 → 아래 주황
         k = np.clip((yy - 60) / 410, 0, 1)
-        col = np.stack([90 + 165 * k, 160 - 70 * k, 255 - 205 * k], -1)
+        col = np.stack([170 - 63 * k, 158 - 82 * k, 255 - 10 * k], -1)  # 키 컬러(#6b4cf5) 계열 빛
         core = np.exp(-((xx - 1003) / 5.5) ** 2) * ((yy > 60) & (yy < 470))
         halo = np.exp(-((xx - 1003) / 46) ** 2) * np.exp(-(np.clip(np.abs(yy - 265) - 205, 0, None) / 30) ** 2)
         base += core[..., None] * col * 1.0 + halo[..., None] * col * 0.35
@@ -89,7 +89,7 @@ def make(d, path):
             gd = ImageDraw.Draw(g)
             for gx in range(int(x), int(x + w) + 1):
                 t = (gx - x) / max(1, w)
-                gd.line([(gx, 0), (gx, H)], fill=(int(120 + 135 * t), int(175 - 60 * t), int(255 - 185 * t)))
+                gd.line([(gx, 0), (gx, H)], fill=(int(200 - 76 * t), int(190 - 94 * t), 255))
             im.paste(g, (0, 0), m)
         else:
             dr.text((x, y), part, font=fa, fill=(255, 255, 255))
