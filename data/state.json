@@ -100,7 +100,7 @@
    "address": true,
    "birth": true
   },
-  "at": "2026-11-27T20:22+09:00"
+  "at": "2026-11-27T21:25+09:00"
  },
  "contest_last_date": "2026-11-20",
  "blog_date": "2026-11-27",
@@ -269,7 +269,7 @@
    "artist": "Pokki DJ"
   }
  ],
- "kpi_last_date": "2026-11-26",
+ "kpi_last_date": "2026-11-27",
  "contest_retry": [
   {
    "id": "202611190019",
