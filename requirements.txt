@@ -3,3 +3,5 @@ pydantic>=2
 requests
 jinja2
 markdown
+pillow
+numpy

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ g.title }} | {{ site_name }}{% endblock %}
+{% block desc %}{{ g.desc }}{% endblock %}
+{% block ogtype %}article{% endblock %}
+{% block main %}
+<article class="tool pil">
+  <span class="chg-chip">{{ g.chip }}</span>
+  <h1 class="tool-h">{{ g.title }}</h1>
+  <p class="pil-by">글 · 베네피 운영자 · {{ g.date }} · 읽는 데 {{ g.min }}분</p>
+  <p class="pil-lead">{{ g.lead }}</p>
+  <nav class="pil-toc"><b>목차</b><ol>{% for s in g.secs %}<li><a href="#s{{ loop.index }}">{{ s.h }}</a></li>{% endfor %}</ol></nav>
+  {% for s in g.secs %}
+  <section id="s{{ loop.index }}" class="pil-s">
+    <h2><em>{{ loop.index }}</em>{{ s.h }}</h2>
+    {% for p in s.p %}<p>{{ p }}</p>{% endfor %}
+    {% if s.tip %}<p class="pil-tip"><b>이렇게 하세요</b>{{ s.tip }}</p>{% endif %}
+    {% if s.link %}<a class="pil-link" href="{{ base }}/{{ s.link[0] }}">{{ s.link[1] }} →</a>{% endif %}
+  </section>
+  {% endfor %}
+  {% if g.note %}<aside class="pil-note"><b>운영자 메모</b><p>{{ g.note }}</p></aside>{% endif %}
+  <p class="disc">이 글은 운영자가 정리한 일반 안내예요. 제도별 세부 조건은 각 지원금 글과 담당 기관의 공식 안내를 확인하세요.</p>
+</article>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":{{ g.title|tojson }},"description":{{ g.desc|tojson }},"datePublished":{{ g.date_iso|tojson }},"author":{"@type":"Person","name":"베네피 운영자"},"publisher":{"@type":"Organization","name":"Benefy"}}</script>
+{% endblock %}

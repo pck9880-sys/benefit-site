@@ -137,6 +137,13 @@ def build():
     shutil.copytree(config.ROOT / "static", out / "static")
 
     posts = load_posts()
+    try:  # 글마다 요약 카드 이미지
+        from . import cards
+        for d in posts:
+            cards.make(d, out / "static" / "cards" / f"{d['id']}.webp")
+            d["card"] = f"static/cards/{d['id']}.webp"
+    except Exception as e:
+        print(f"[cards] 건너뜀: {e}")
     fields = {}
     for d in posts:
         fields.setdefault(d["field_slug"], {"name": d["source"].get("field") or "기타", "posts": []})["posts"].append(d)
@@ -302,6 +309,9 @@ def build():
     write("updates/index.html", env.get_template("updates.html").render(
         log=[{"d": e[0][5:].replace("-", "."), "kind": e[1], "cls": e[2], "title": e[3], "url": e[4]} for e in _log[:60]],
         today=datetime.now().strftime("%Y.%m.%d") if "datetime" in globals() else "", canonical=f"{config.SITE_URL}/updates/"))
+    from .pillars import PILLARS
+    for g in PILLARS:
+        write(f"tips/{g['slug']}/index.html", env.get_template("pillar.html").render(g=g, canonical=f"{config.SITE_URL}/tips/{g['slug']}/"))
     write("wallet/index.html", env.get_template("wallet.html").render(canonical=f"{config.SITE_URL}/wallet/"))
     write("finder/index.html", env.get_template("finder.html").render(canonical=f"{config.SITE_URL}/finder/"))
     write("special/2027-changes/index.html", env.get_template("changes.html").render(items=CHANGES_2027, canonical=f"{config.SITE_URL}/special/2027-changes/"))
@@ -325,7 +335,7 @@ def build():
 
     # SEO 파일
     from . import specials
-    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/special/2027-changes/", f"{config.SITE_URL}/finder/", f"{config.SITE_URL}/special/life/", f"{config.SITE_URL}/special/2027-calendar/", f"{config.SITE_URL}/fun/", f"{config.SITE_URL}/fun/type/", f"{config.SITE_URL}/fun/missed/", f"{config.SITE_URL}/fun/bingo/", f"{config.SITE_URL}/fun/16/", f"{config.SITE_URL}/special/year-end-tax/", f"{config.SITE_URL}/updates/"] + [f"{config.SITE_URL}/fun/16/{k}/" for k in ("ENTJ","INTJ","INTP","ENTP","INFJ","INFP","ENFP","ENFJ","ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP")] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
+    urls = [f"{config.SITE_URL}/{rel}" for rel, _ in CALCS] + [f"{config.SITE_URL}/special/{sp['slug']}/" for sp in specials.SPECIALS] + [f"{config.SITE_URL}/special/2027-changes/", f"{config.SITE_URL}/finder/", f"{config.SITE_URL}/special/life/", f"{config.SITE_URL}/special/2027-calendar/", f"{config.SITE_URL}/fun/", f"{config.SITE_URL}/fun/type/", f"{config.SITE_URL}/fun/missed/", f"{config.SITE_URL}/fun/bingo/", f"{config.SITE_URL}/fun/16/", f"{config.SITE_URL}/special/year-end-tax/", f"{config.SITE_URL}/updates/", f"{config.SITE_URL}/tips/mistakes/"] + [f"{config.SITE_URL}/fun/16/{k}/" for k in ("ENTJ","INTJ","INTP","ENTP","INFJ","INFP","ENFP","ENFJ","ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP")] + [f"{config.SITE_URL}/guide/{g[0]}/" for g in GUIDES]
     urls += [f"{config.SITE_URL}/", f"{config.SITE_URL}/latest/", f"{config.SITE_URL}/check/", f"{config.SITE_URL}/deadline/"]
     urls += [f"{config.SITE_URL}/c/{s}/" for s, v in cats if len(v["posts"]) >= 3]
     urls += [f"{config.SITE_URL}/target/{s}/" for s, _, _ in targets if len(target_items[s]) >= 3] + [f"{config.SITE_URL}/region/{s}/" for s, _, _ in regions if len(region_items[s]) >= 3]
